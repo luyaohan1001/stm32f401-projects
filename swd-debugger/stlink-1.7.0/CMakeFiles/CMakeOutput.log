@@ -1,0 +1,485 @@
+The system is: Linux - 4.15.0-175-generic - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/bin/cc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/3.20.5/CompilerIdC/a.out"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_aca6f/fast && /usr/bin/make  -f CMakeFiles/cmTC_aca6f.dir/build.make CMakeFiles/cmTC_aca6f.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc   -v -o CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.20/Modules/CMakeCCompilerABI.c
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+OFFLOAD_TARGET_NAMES=nvptx-none
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 7.5.0-3ubuntu1~18.04' --with-bugurl=file:///usr/share/doc/gcc-7/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-7 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/cc1 -quiet -v -imultiarch x86_64-linux-gnu /usr/share/cmake-3.20/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -version -fstack-protector-strong -Wformat -Wformat-security -o /tmp/ccFP89sF.s
+GNU C11 (Ubuntu 7.5.0-3ubuntu1~18.04) version 7.5.0 (x86_64-linux-gnu)
+	compiled by GNU C version 7.5.0, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version isl-0.19-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/include/x86_64-linux-gnu"
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/7/../../../../x86_64-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/x86_64-linux-gnu/7/include
+ /usr/local/include
+ /usr/lib/gcc/x86_64-linux-gnu/7/include-fixed
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+End of search list.
+GNU C11 (Ubuntu 7.5.0-3ubuntu1~18.04) version 7.5.0 (x86_64-linux-gnu)
+	compiled by GNU C version 7.5.0, GMP version 6.1.2, MPFR version 4.0.1, MPC version 1.1.0, isl version isl-0.19-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: b62ed4a2880cd4159476ea8293b72fa8
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o /tmp/ccFP89sF.s
+GNU assembler version 2.30 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.30
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+Linking C executable cmTC_aca6f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aca6f.dir/link.txt --verbose=1
+/usr/bin/cc  -v CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -o cmTC_aca6f 
+Using built-in specs.
+COLLECT_GCC=/usr/bin/cc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper
+OFFLOAD_TARGET_NAMES=nvptx-none
+OFFLOAD_TARGET_DEFAULT=1
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion='Ubuntu 7.5.0-3ubuntu1~18.04' --with-bugurl=file:///usr/share/doc/gcc-7/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-7 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu
+Thread model: posix
+gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) 
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_aca6f' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccQy2WAD.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_aca6f /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_aca6f' '-mtune=generic' '-march=x86-64'
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/lib/gcc/x86_64-linux-gnu/7/include]
+    add: [/usr/local/include]
+    add: [/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed]
+    add: [/usr/include/x86_64-linux-gnu]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/usr/lib/gcc/x86_64-linux-gnu/7/include] ==> [/usr/lib/gcc/x86_64-linux-gnu/7/include]
+  collapse include dir [/usr/local/include] ==> [/usr/local/include]
+  collapse include dir [/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed] ==> [/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed]
+  collapse include dir [/usr/include/x86_64-linux-gnu] ==> [/usr/include/x86_64-linux-gnu]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/usr/lib/gcc/x86_64-linux-gnu/7/include;/usr/local/include;/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed;/usr/include/x86_64-linux-gnu;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make -f Makefile cmTC_aca6f/fast && /usr/bin/make  -f CMakeFiles/cmTC_aca6f.dir/build.make CMakeFiles/cmTC_aca6f.dir/build]
+  ignore line: [make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.20/Modules/CMakeCCompilerABI.c]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/cc]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 7.5.0-3ubuntu1~18.04' --with-bugurl=file:///usr/share/doc/gcc-7/README.Bugs --enable-languages=c ada c++ go brig d fortran objc obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-7 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32 m64 mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/7/cc1 -quiet -v -imultiarch x86_64-linux-gnu /usr/share/cmake-3.20/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -version -fstack-protector-strong -Wformat -Wformat-security -o /tmp/ccFP89sF.s]
+  ignore line: [GNU C11 (Ubuntu 7.5.0-3ubuntu1~18.04) version 7.5.0 (x86_64-linux-gnu)]
+  ignore line: [	compiled by GNU C version 7.5.0  GMP version 6.1.2  MPFR version 4.0.1  MPC version 1.1.0  isl version isl-0.19-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/usr/local/include/x86_64-linux-gnu"]
+  ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-linux-gnu/7/../../../../x86_64-linux-gnu/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/7/include]
+  ignore line: [ /usr/local/include]
+  ignore line: [ /usr/lib/gcc/x86_64-linux-gnu/7/include-fixed]
+  ignore line: [ /usr/include/x86_64-linux-gnu]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (Ubuntu 7.5.0-3ubuntu1~18.04) version 7.5.0 (x86_64-linux-gnu)]
+  ignore line: [	compiled by GNU C version 7.5.0  GMP version 6.1.2  MPFR version 4.0.1  MPC version 1.1.0  isl version isl-0.19-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: b62ed4a2880cd4159476ea8293b72fa8]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o /tmp/ccFP89sF.s]
+  ignore line: [GNU assembler version 2.30 (x86_64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.30]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [Linking C executable cmTC_aca6f]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aca6f.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc  -v CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -o cmTC_aca6f ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/usr/bin/cc]
+  ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper]
+  ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none]
+  ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+  ignore line: [Target: x86_64-linux-gnu]
+  ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 7.5.0-3ubuntu1~18.04' --with-bugurl=file:///usr/share/doc/gcc-7/README.Bugs --enable-languages=c ada c++ go brig d fortran objc obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-7 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-bootstrap --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32 m64 mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04) ]
+  ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/]
+  ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/7/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/7/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_aca6f' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccQy2WAD.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o cmTC_aca6f /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/x86_64-linux-gnu/7 -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/7/../../.. CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccQy2WAD.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--build-id] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-znow] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_aca6f] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/7] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib]
+    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [-L/lib/../lib] ==> dir [/lib/../lib]
+    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
+    arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+    arg [-L/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..]
+    arg [CMakeFiles/cmTC_aca6f.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--push-state] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--pop-state] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--push-state] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--pop-state] ==> ignore
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o]
+    arg [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o] ==> obj [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o]
+  collapse obj [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o] ==> [/usr/lib/x86_64-linux-gnu/Scrt1.o]
+  collapse obj [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crti.o] ==> [/usr/lib/x86_64-linux-gnu/crti.o]
+  collapse obj [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/crtn.o] ==> [/usr/lib/x86_64-linux-gnu/crtn.o]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/7] ==> [/usr/lib/gcc/x86_64-linux-gnu/7]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../../../lib] ==> [/usr/lib]
+  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/lib/../lib] ==> [/lib]
+  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+  collapse library dir [/usr/lib/gcc/x86_64-linux-gnu/7/../../..] ==> [/usr/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit objs: [/usr/lib/x86_64-linux-gnu/Scrt1.o;/usr/lib/x86_64-linux-gnu/crti.o;/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o;/usr/lib/gcc/x86_64-linux-gnu/7/crtendS.o;/usr/lib/x86_64-linux-gnu/crtn.o]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/7;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib]
+  implicit fwks: []
+
+
+Performing C SOURCE FILE Test C_SUPPORTS_STD_GNU11 succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_1c2f1/fast && /usr/bin/make  -f CMakeFiles/cmTC_1c2f1.dir/build.make CMakeFiles/cmTC_1c2f1.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1c2f1.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_STD_GNU11  -std=gnu11 -o CMakeFiles/cmTC_1c2f1.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_1c2f1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1c2f1.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_1c2f1.dir/src.c.o -o cmTC_1c2f1 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WALL succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_29e65/fast && /usr/bin/make  -f CMakeFiles/cmTC_29e65.dir/build.make CMakeFiles/cmTC_29e65.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_29e65.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WALL  -std=gnu11    -Wall -o CMakeFiles/cmTC_29e65.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_29e65
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_29e65.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11  CMakeFiles/cmTC_29e65.dir/src.c.o -o cmTC_29e65 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WEXTRA succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_580e4/fast && /usr/bin/make  -f CMakeFiles/cmTC_580e4.dir/build.make CMakeFiles/cmTC_580e4.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_580e4.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WEXTRA  -std=gnu11 -Wall    -Wextra -o CMakeFiles/cmTC_580e4.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_580e4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_580e4.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall  CMakeFiles/cmTC_580e4.dir/src.c.o -o cmTC_580e4 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WSHADOW succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_ba061/fast && /usr/bin/make  -f CMakeFiles/cmTC_ba061.dir/build.make CMakeFiles/cmTC_ba061.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ba061.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WSHADOW  -std=gnu11 -Wall -Wextra    -Wshadow -o CMakeFiles/cmTC_ba061.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_ba061
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ba061.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra  CMakeFiles/cmTC_ba061.dir/src.c.o -o cmTC_ba061 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_D_FORTIFY_SOURCE_2 succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_103b1/fast && /usr/bin/make  -f CMakeFiles/cmTC_103b1.dir/build.make CMakeFiles/cmTC_103b1.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_103b1.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_D_FORTIFY_SOURCE_2 -D_FORTIFY_SOURCE=2  -std=gnu11 -Wall -Wextra -Wshadow  -o CMakeFiles/cmTC_103b1.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_103b1
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_103b1.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow  CMakeFiles/cmTC_103b1.dir/src.c.o -o cmTC_103b1 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_FSTRICT_ALIASING succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_0c0dc/fast && /usr/bin/make  -f CMakeFiles/cmTC_0c0dc.dir/build.make CMakeFiles/cmTC_0c0dc.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0c0dc.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_FSTRICT_ALIASING  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2    -fstrict-aliasing -o CMakeFiles/cmTC_0c0dc.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_0c0dc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0c0dc.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2  CMakeFiles/cmTC_0c0dc.dir/src.c.o -o cmTC_0c0dc 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WUNDEF succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_ac3ed/fast && /usr/bin/make  -f CMakeFiles/cmTC_ac3ed.dir/build.make CMakeFiles/cmTC_ac3ed.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ac3ed.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WUNDEF  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing    -Wundef -o CMakeFiles/cmTC_ac3ed.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_ac3ed
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ac3ed.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing  CMakeFiles/cmTC_ac3ed.dir/src.c.o -o cmTC_ac3ed 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WFORMAT succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_84507/fast && /usr/bin/make  -f CMakeFiles/cmTC_84507.dir/build.make CMakeFiles/cmTC_84507.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_84507.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WFORMAT  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef    -Wformat -o CMakeFiles/cmTC_84507.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_84507
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_84507.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef  CMakeFiles/cmTC_84507.dir/src.c.o -o cmTC_84507 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WFORMAT_SECURITY succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_742f8/fast && /usr/bin/make  -f CMakeFiles/cmTC_742f8.dir/build.make CMakeFiles/cmTC_742f8.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_742f8.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WFORMAT_SECURITY  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat    -Wformat-security -o CMakeFiles/cmTC_742f8.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_742f8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_742f8.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat  CMakeFiles/cmTC_742f8.dir/src.c.o -o cmTC_742f8 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WMAYBE_UNINITIALIZED succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_cbf4c/fast && /usr/bin/make  -f CMakeFiles/cmTC_cbf4c.dir/build.make CMakeFiles/cmTC_cbf4c.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cbf4c.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WMAYBE_UNINITIALIZED  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security    -Wmaybe-uninitialized -o CMakeFiles/cmTC_cbf4c.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cbf4c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cbf4c.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security  CMakeFiles/cmTC_cbf4c.dir/src.c.o -o cmTC_cbf4c 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WIMPLICIT_FUNCTION_DECLARATION succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_cac85/fast && /usr/bin/make  -f CMakeFiles/cmTC_cac85.dir/build.make CMakeFiles/cmTC_cac85.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cac85.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WIMPLICIT_FUNCTION_DECLARATION  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized    -Wimplicit-function-declaration -o CMakeFiles/cmTC_cac85.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cac85
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cac85.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized  CMakeFiles/cmTC_cac85.dir/src.c.o -o cmTC_cac85 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WREDUNDANT_DECLS succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_7a84c/fast && /usr/bin/make  -f CMakeFiles/cmTC_7a84c.dir/build.make CMakeFiles/cmTC_7a84c.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7a84c.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WREDUNDANT_DECLS  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration    -Wredundant-decls -o CMakeFiles/cmTC_7a84c.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_7a84c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7a84c.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration  CMakeFiles/cmTC_7a84c.dir/src.c.o -o cmTC_7a84c 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_FPIC succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_5c1fd/fast && /usr/bin/make  -f CMakeFiles/cmTC_5c1fd.dir/build.make CMakeFiles/cmTC_5c1fd.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5c1fd.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_FPIC  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls    -fPIC -o CMakeFiles/cmTC_5c1fd.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_5c1fd
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5c1fd.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls  CMakeFiles/cmTC_5c1fd.dir/src.c.o -o cmTC_5c1fd 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_O2 succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_cd20f/fast && /usr/bin/make  -f CMakeFiles/cmTC_cd20f.dir/build.make CMakeFiles/cmTC_cd20f.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cd20f.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_O2  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC    -O2 -o CMakeFiles/cmTC_cd20f.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cd20f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd20f.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC  CMakeFiles/cmTC_cd20f.dir/src.c.o -o cmTC_cd20f 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test C_SUPPORTS_WERROR succeeded with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_9260f/fast && /usr/bin/make  -f CMakeFiles/cmTC_9260f.dir/build.make CMakeFiles/cmTC_9260f.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9260f.dir/src.c.o
+/usr/bin/cc -DC_SUPPORTS_WERROR  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2    -Werror -o CMakeFiles/cmTC_9260f.dir/src.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_9260f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9260f.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2  CMakeFiles/cmTC_9260f.dir/src.c.o -o cmTC_9260f 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main(void) { return 0; }
+Determining if the include file sys/mman.h exists passed with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_d7105/fast && /usr/bin/make  -f CMakeFiles/cmTC_d7105.dir/build.make CMakeFiles/cmTC_d7105.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d7105.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2 -Werror  -o CMakeFiles/cmTC_d7105.dir/CheckIncludeFile.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_d7105
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d7105.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2 -Werror  CMakeFiles/cmTC_d7105.dir/CheckIncludeFile.c.o -o cmTC_d7105 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the include file sys/time.h exists passed with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_2b82a/fast && /usr/bin/make  -f CMakeFiles/cmTC_2b82a.dir/build.make CMakeFiles/cmTC_2b82a.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2b82a.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2 -Werror  -o CMakeFiles/cmTC_2b82a.dir/CheckIncludeFile.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_2b82a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2b82a.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2 -Werror  CMakeFiles/cmTC_2b82a.dir/CheckIncludeFile.c.o -o cmTC_2b82a 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the include file unistd.h exists passed with the following output:
+Change Dir: /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_8ecd4/fast && /usr/bin/make  -f CMakeFiles/cmTC_8ecd4.dir/build.make CMakeFiles/cmTC_8ecd4.dir/build
+make[1]: Entering directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8ecd4.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2 -Werror  -o CMakeFiles/cmTC_8ecd4.dir/CheckIncludeFile.c.o -c /home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_8ecd4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8ecd4.dir/link.txt --verbose=1
+/usr/bin/cc  -std=gnu11 -Wall -Wextra -Wshadow -D_FORTIFY_SOURCE=2 -fstrict-aliasing -Wundef -Wformat -Wformat-security -Wmaybe-uninitialized -Wimplicit-function-declaration -Wredundant-decls -fPIC -O2 -Werror  CMakeFiles/cmTC_8ecd4.dir/CheckIncludeFile.c.o -o cmTC_8ecd4 
+make[1]: Leaving directory '/home/luyaohan1001/Projects/stm32f401-projects/swd-debugger/stlink-1.7.0/CMakeFiles/CMakeTmp'
+
+
+
