@@ -1,44 +1,94 @@
+/**
+  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********
+  * @file      :     nRF24.c
+  * @author    :     Luyao Han
+  * @email     :     luyaohan1001@gmail.com
+  * @brief     :     C library for Nordic nRF24L01 2.4GHz wireless transceiver.
+  * @date      :     04-21-2022
+  * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
+  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
+
+/* Includes -------------------------------------------------------------------*/
 #include "nRF24.h"
 
+/* GPIO Operations --------------------------------------------------------*/
+/* SCK    PA8  */
+/* MOSI   PB10 */
+/* CSN    PB4  */
+/* CE     PB5  */
+/* MISO   PA10 */
 
-
-
-/* Pin Wiggling Macros --------------------------------------------------------*/
-
-// SCK    PA8
-// MOSI   PB10
-// CSN    PB4
-// CE     PB5
-
-// MISO   PA10
-
+/**
+	* @brief Set high on SCK pin of SPI bus.
+	* @param None
+	* @retval None
+	*/
 void SPI_SCK_1(){
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);	
 }
+
+/**
+	* @brief Set low on SCK pin of SPI bus.
+	* @param None
+	* @retval None
+	*/
 void SPI_SCK_0(){
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);	
 } 
 
+/**
+	* @brief Set high on MOSI pin of SPI bus.
+	* @param None
+	* @retval None
+	*/
 void SPI_MOSI_1(){
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);	
 }
+
+/**
+	* @brief Set low on MOSI pin of SPI bus.
+	* @param None
+	* @retval None
+	*/
 void SPI_MOSI_0(){
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);	
 }
 
+/**
+	* @brief Set high on CS pin of SPI bus.
+	* @param None
+	* @retval None
+	*/
 void SPI_CS_1() {
 		/* CS High == CSN Low */
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);	
 }
+
+/**
+	* @brief Set low on CS pin of SPI bus.
+	* @param None
+	* @retval None
+	*/
 void SPI_CS_0(){
 		/* CS Low == CSN High */
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
 }
 
+/**
+	* @brief Set high on Chip-Enable pin of nRF24L01.
+	* @param None
+	* @retval None
+	*/
 void SPI_CE_1(){
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);	
 }
 
+
+/**
+	* @brief Set low on Chip-Enable pin of nRF24L01.
+	* @param None
+	* @retval None
+	*/
 void SPI_CE_0(){
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 }
@@ -48,9 +98,11 @@ GPIO_PinState SPI_READ_MISO(){
 }
 
 
+/* SPI Operations -------------------------------------------------------------------------------*/
 void spi_delay() {
 	HAL_Delay(1);
 }
+
 
 void gpio_clockout_8_bits(uint8_t txData) {
   spi_delay();
@@ -121,6 +173,9 @@ void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data){
 
 // nRF24 Specific
 bool spi_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data){
+
+    char message[64] = {'\0'};
+
     spi_write_register(reg, num_bytes, writing_data); 
 
     uint8_t read_data[num_bytes];
@@ -130,11 +185,18 @@ bool spi_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writin
     for (int i = 0; i < num_bytes; ++i) {
       // if there's any mismatch between written data and read data from the register.
       if (read_data[i] != writing_data[i]) {
-        char message[] = "Problem writing to SPI register";
+				strcpy(message, "Problem writing to SPI register -- ");
+				HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
+				sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i]);
 				HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
         return true;
-      } 
-  }
+      } else {
+				strcpy(message, "Success writing to SPI register -- ");
+				HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
+				sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i]);
+				HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
+  		}
+	}
   return false;
 }
 

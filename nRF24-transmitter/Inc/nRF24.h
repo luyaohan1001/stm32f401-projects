@@ -1,3 +1,13 @@
+/**
+  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********
+  * @file      :     nRF24.h
+  * @author    :     Luyao Han
+  * @email     :     luyaohan1001@gmail.com
+  * @brief     :     C library header for Nordic nRF24L01 2.4GHz wireless transceiver.
+  * @date      :     04-21-2022
+  * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
+  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
+
 #ifndef __NRF24_H
 #define __NRF24_H
 
@@ -5,9 +15,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
-
-
-
 
 #define TX_ADR_WIDTH  5        
 #define RX_ADR_WIDTH  5       
@@ -78,10 +85,6 @@ uint8_t nRF24_get_CONFIG();
 bool nRF24_tx_self_test();
 void nRF24_configure_tx_mode();
 void nRF24_keep_sending();
-
-
-
-
 
 
 
