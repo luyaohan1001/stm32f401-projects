@@ -186,7 +186,7 @@ void spi_delay()
   * @brief      Read a bytes from the SPI target device register.
   * @param[in]  reg SPI target device register to write to.
   * @param[in]  num_bytes Number of bytes needed to write to that address.
-  * @param[in]  pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
+  * @param[out] pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
   * @retval     none.
   */
 void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
