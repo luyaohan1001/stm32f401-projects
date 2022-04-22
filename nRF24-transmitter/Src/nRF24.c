@@ -112,7 +112,7 @@ void gpio_clockout_8_bits(uint8_t txData)
 {
   spi_delay();
   for (int i = 0; i < 8; ++i) 
-	{
+  {
       SPI_SCK_0();
       spi_delay();
       if(txData & 0x80) // MSBit first
@@ -169,12 +169,12 @@ void spi_delay()
 }
 
 /**
-	* @brief      Read a bytes from the SPI target device register.
-	* @param[in]  reg SPI target device register to write to.
-	* @param[in]  num_bytes Number of bytes needed to write to that address.
-	* @param[in]  pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
-	* @retval     none.
-	*/
+  * @brief      Read a bytes from the SPI target device register.
+  * @param[in]  reg SPI target device register to write to.
+  * @param[in]  num_bytes Number of bytes needed to write to that address.
+  * @param[in]  pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
+  * @retval     none.
+  */
 void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
 {
   // Select chip
@@ -184,7 +184,7 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
   gpio_clockout_8_bits(reg);
   // Read value
   for (int i = 0; i < num_bytes; ++i) 
-	{
+  {
     pbuf[i] = gpio_clockin_8_bits();
   }
   
@@ -193,12 +193,12 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
 }
 
 /**
-	* @brief      Write a number of bytes to the spi target device register.
-	* @param[in]  reg spi target device register to write to.
-	* @param[in]  num_bytes number of bytes needed to write to that address.
-	* @param[in]  writing_data A pointer pointing to a memory location storing the data to write.
-	* @retval     none.
-	*/
+  * @brief      Write a number of bytes to the spi target device register.
+  * @param[in]  reg spi target device register to write to.
+  * @param[in]  num_bytes number of bytes needed to write to that address.
+  * @param[in]  writing_data A pointer pointing to a memory location storing the data to write.
+  * @retval     none.
+  */
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
 {
   // Select chip (CSN LOW)
@@ -208,7 +208,7 @@ void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
   gpio_clockout_8_bits(reg);  // W_REGISTER_MASK is specifc to nRF24.
   // Write value
   for (int i = 0; i < num_bytes; ++i)
-	{
+  {
     uint8_t writing_byte = writing_data[i];
     gpio_clockout_8_bits(writing_byte);
   }
@@ -262,10 +262,10 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writ
     // reg & ~ W_REGISTER_MASK is a reverse operation of reg | W_REGISTER_MASK
     spi_read_register(R_REGISTER_MASK | (reg & ~W_REGISTER_MASK), num_bytes, read_data);
     for (int i = 0; i < num_bytes; ++i) 
-		{
+    {
       // if there's any mismatch between written data and read data from the register.
       if (read_data[i] != writing_data[i]) 
-			{
+      {
         strcpy(message, "Problem writing to SPI register -- ");
         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
         sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i]);
@@ -404,11 +404,11 @@ bool nRF24_tx_self_test()
 }
 
 /**
-	* @brief  Configure nRF24 to work in TX (transmit) mode.
-	* @param  None.
-	* @retval None.
-	* @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending data.
-	*/
+  * @brief  Configure nRF24 to work in TX (transmit) mode.
+  * @param  None.
+  * @retval None.
+  * @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending data.
+  */
 void nRF24_configure_tx_mode() 
 {
     nRF24_CE_0();
@@ -444,10 +444,10 @@ void nRF24_configure_tx_mode()
 
 
 /**
-	* @brief  Make nRF24 keep sending data.
-	* @param  None.
-	* @retval None.
-	*/
+  * @brief  Make nRF24 keep sending data.
+  * @param  None.
+  * @retval None.
+  */
 void nRF24_keep_sending() 
 {
   uint8_t payload[] = {0xBE, 0xEF, 0xCA, 0xFE}; // clock in a payload, TX FIFO not empty 
@@ -456,7 +456,7 @@ void nRF24_keep_sending()
   
   spi_write_register(W_TX_PAYLOAD, 4, (uint8_t*) payload);
 
-	/* fire out the transmit packet */
+  /* fire out the transmit packet */
   nRF24_CE_1(); 
 
   uint8_t stat = nRF24_get_STATUS();
@@ -469,7 +469,7 @@ void nRF24_keep_sending()
     strcpy(debug_msg, "nRF24 send successful.\n");
     HAL_UART_Transmit(&huart2, (uint8_t*)debug_msg, strlen(debug_msg), 100);
   } 
-	else 
+  else 
   {
     strcpy(debug_msg, "nRF24 send failed.\n");
     HAL_UART_Transmit(&huart2, (uint8_t*)debug_msg, strlen(debug_msg), 100);

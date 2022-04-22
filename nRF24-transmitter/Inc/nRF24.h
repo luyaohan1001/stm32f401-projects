@@ -59,8 +59,8 @@
 extern UART_HandleTypeDef huart2;
 
 /**
-	* @brief Following functions operates GPIO pins on the SPI bus.
-	*/
+  * @brief Following functions operates GPIO pins on the SPI bus.
+  */
 void SPI_SCK_1();
 void SPI_SCK_0();
 void SPI_MOSI_1();
@@ -73,15 +73,15 @@ void gpio_clockout_8_bits(uint8_t txData);
 uint8_t gpio_clockin_8_bits();
 
 /**
-	* @brief Following functions conducts spi operations.
-	*/
+  * @brief Following functions conducts spi operations.
+  */
 void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf);
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data);
 
 
 /**
-	* @brief Following functions are nRF24-specific operations.
-	*/
+  * @brief Following functions are nRF24-specific operations.
+  */
 void nRF24_CE_1();
 void nRF24_CE_0();
 bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data);
