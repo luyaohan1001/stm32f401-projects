@@ -23,7 +23,7 @@
   * @brief Set high on SCK pin of SPI bus.
   * @param None
   * @retval None */
-void SPI_SCK_1()
+__inline__ void SPI_SCK_1()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);  
 }
@@ -33,7 +33,7 @@ void SPI_SCK_1()
   * @param None
   * @retval None
   */
-void SPI_SCK_0()
+__inline__ void SPI_SCK_0()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);  
 } 
@@ -43,7 +43,7 @@ void SPI_SCK_0()
   * @param None
   * @retval None
   */
-void SPI_MOSI_1()
+__inline__ void SPI_MOSI_1()
 {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);  
 }
@@ -53,7 +53,7 @@ void SPI_MOSI_1()
   * @param None
   * @retval None
   */
-void SPI_MOSI_0()
+__inline__ void SPI_MOSI_0()
 {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);  
 }
@@ -63,7 +63,7 @@ void SPI_MOSI_0()
   * @param None
   * @retval None
   */
-void SPI_CS_1() 
+__inline__ void SPI_CS_1() 
 {
     /* CS High == CSN Low */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);  
@@ -74,7 +74,7 @@ void SPI_CS_1()
   * @param None
   * @retval None
   */
-void SPI_CS_0()
+__inline__ void SPI_CS_0()
 {
     /* CS Low == CSN High */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
@@ -86,14 +86,14 @@ void SPI_CS_0()
   * @param  None
   * @retval None
   */
-GPIO_PinState SPI_READ_MISO()
+__inline__ GPIO_PinState SPI_READ_MISO()
 {
   return HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 }
 
 /**
   * @brief      Clock out (write) 8 bits on MOSI of SPI bus on SCK high.
-  * @param[in]  txData One byte of data to transmit.
+  * @param[in]  tx_data One byte of data to transmit.
   * @retval     None.
   * @note  
   *   Endianess: Most Significant Bit First. Cn: Command Bits. Sn: Status Register bits. Dn: data bits.
@@ -108,19 +108,19 @@ GPIO_PinState SPI_READ_MISO()
   *   Pulse#     1     2     3     4     5     6     7     8         9     10    11    12    13    14   15     16
   *
   */
-void gpio_clockout_8_bits(uint8_t txData) 
+void gpio_clockout_8_bits(uint8_t tx_data) 
 {
   spi_delay();
   for (int i = 0; i < 8; ++i) 
   {
       SPI_SCK_0();
       spi_delay();
-      if(txData & 0x80) // MSBit first
+      if(tx_data & 0x80) // MSBit first
           SPI_MOSI_1();
       else
           SPI_MOSI_0();
       SPI_SCK_1(); // clock data
-      txData = txData << 1; // load next MSB
+      tx_data = tx_data << 1; // load next MSB
       spi_delay();
   }
   SPI_SCK_0();
@@ -143,7 +143,7 @@ void gpio_clockout_8_bits(uint8_t txData)
   */
 uint8_t gpio_clockin_8_bits(void)
 {
-  uint8_t rxData = 0;
+  uint8_t rx_data = 0;
 
   spi_delay();
   for (int i=0; i < 8; ++i) 
@@ -153,12 +153,12 @@ uint8_t gpio_clockin_8_bits(void)
       SPI_MOSI_0();
       SPI_SCK_1();
       spi_delay();
-      rxData = rxData << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 times.
-      rxData |= SPI_READ_MISO();
+      rx_data = rx_data << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 times.
+      rx_data |= SPI_READ_MISO();
       spi_delay();
   }
   SPI_SCK_0();
-  return rxData;
+  return rx_data;
 }
   
 
@@ -196,10 +196,10 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
   * @brief      Write a number of bytes to the spi target device register.
   * @param[in]  reg spi target device register to write to.
   * @param[in]  num_bytes number of bytes needed to write to that address.
-  * @param[in]  writing_data A pointer pointing to a memory location storing the data to write.
+  * @param[in]  p_writing_data A pointer pointing to a memory location storing the data to write.
   * @retval     none.
   */
-void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
+void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 {
   // Select chip (CSN LOW)
   SPI_CS_1();
@@ -209,7 +209,7 @@ void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
   // Write value
   for (int i = 0; i < num_bytes; ++i)
   {
-    uint8_t writing_byte = writing_data[i];
+    uint8_t writing_byte = p_writing_data[i];
     gpio_clockout_8_bits(writing_byte);
   }
 
@@ -247,34 +247,34 @@ void nRF24_CE_0()
   * @brief      Write to a register on target device through SPI. Read the same registers after write to confirm that the write has been successful.
   * @param[in]  reg The device register to write value to.
   * @param[in]  num_bytes Number of bytes to write.
-  * @param[in]  writing_data Data to write.
+  * @param[in]  p_writing_data Data to write.
   * @retval     Boolean. 1 for mistakes happen. 0 for success.
   */
-bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
+bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 {
 
     char message[64] = {'\0'};
 
-    spi_write_register(reg, num_bytes, writing_data); 
+    spi_write_register(reg, num_bytes, p_writing_data); 
 
     uint8_t read_data[num_bytes];
 
-    // reg & ~ W_REGISTER_MASK is a reverse operation of reg | W_REGISTER_MASK
+    // reg & ~ W_REGISTER_MASK is a reverse operation of reg | W_REGISTER_MASK, essentially get rid of Write Regiter Mask and add a Read Register Mask.
     spi_read_register(R_REGISTER_MASK | (reg & ~W_REGISTER_MASK), num_bytes, read_data);
     for (int i = 0; i < num_bytes; ++i) 
     {
       // if there's any mismatch between written data and read data from the register.
-      if (read_data[i] != writing_data[i]) 
+      if (read_data[i] != p_writing_data[i]) 
       {
         strcpy(message, "Problem writing to SPI register -- ");
         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
-        sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i]);
+        sprintf(message, "p_writing_data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_data[i]);
         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
         return true;
       } else {
         strcpy(message, "Success writing to SPI register -- ");
         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
-        sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i]);
+        sprintf(message, "p_writing_data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_data[i]);
         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
       }
   }
@@ -456,7 +456,7 @@ void nRF24_keep_sending()
   
   spi_write_register(W_TX_PAYLOAD, 4, (uint8_t*) payload);
 
-  /* fire out the transmit packet */
+  /* Fire out the transmit packet */
   nRF24_CE_1(); 
 
   uint8_t stat = nRF24_get_STATUS();

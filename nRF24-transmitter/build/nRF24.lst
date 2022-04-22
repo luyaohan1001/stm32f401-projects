@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccehh4cg.s 			page 1
+ARM GAS  /tmp/ccJN1dG0.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -52,13 +52,13 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   23:Src/nRF24.c   ****   * @brief Set high on SCK pin of SPI bus.
   24:Src/nRF24.c   ****   * @param None
   25:Src/nRF24.c   ****   * @retval None */
-  26:Src/nRF24.c   **** void SPI_SCK_1()
+  26:Src/nRF24.c   **** __inline__ void SPI_SCK_1()
   27:Src/nRF24.c   **** {
   28              		.loc 1 27 0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccehh4cg.s 			page 2
+ARM GAS  /tmp/ccJN1dG0.s 			page 2
 
 
   32 0000 08B5     		push	{r3, lr}
@@ -96,7 +96,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   33:Src/nRF24.c   ****   * @param None
   34:Src/nRF24.c   ****   * @retval None
   35:Src/nRF24.c   ****   */
-  36:Src/nRF24.c   **** void SPI_SCK_0()
+  36:Src/nRF24.c   **** __inline__ void SPI_SCK_0()
   37:Src/nRF24.c   **** {
   61              		.loc 1 37 0
   62              		.cfi_startproc
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   77              	.L8:
   78              		.align	2
   79              	.L7:
-ARM GAS  /tmp/ccehh4cg.s 			page 3
+ARM GAS  /tmp/ccJN1dG0.s 			page 3
 
 
   80 0010 00000240 		.word	1073872896
@@ -140,7 +140,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   43:Src/nRF24.c   ****   * @param None
   44:Src/nRF24.c   ****   * @retval None
   45:Src/nRF24.c   ****   */
-  46:Src/nRF24.c   **** void SPI_MOSI_1()
+  46:Src/nRF24.c   **** __inline__ void SPI_MOSI_1()
   47:Src/nRF24.c   **** {
   94              		.loc 1 47 0
   95              		.cfi_startproc
@@ -178,13 +178,13 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   50:Src/nRF24.c   **** 
   51:Src/nRF24.c   **** /**
   52:Src/nRF24.c   ****   * @brief Set low on MOSI pin of SPI bus.
-ARM GAS  /tmp/ccehh4cg.s 			page 4
+ARM GAS  /tmp/ccJN1dG0.s 			page 4
 
 
   53:Src/nRF24.c   ****   * @param None
   54:Src/nRF24.c   ****   * @retval None
   55:Src/nRF24.c   ****   */
-  56:Src/nRF24.c   **** void SPI_MOSI_0()
+  56:Src/nRF24.c   **** __inline__ void SPI_MOSI_0()
   57:Src/nRF24.c   **** {
  127              		.loc 1 57 0
  128              		.cfi_startproc
@@ -225,7 +225,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   63:Src/nRF24.c   ****   * @param None
   64:Src/nRF24.c   ****   * @retval None
   65:Src/nRF24.c   ****   */
-  66:Src/nRF24.c   **** void SPI_CS_1() 
+  66:Src/nRF24.c   **** __inline__ void SPI_CS_1() 
   67:Src/nRF24.c   **** {
  160              		.loc 1 67 0
  161              		.cfi_startproc
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  168              		.cfi_offset 14, -4
   68:Src/nRF24.c   ****     /* CS High == CSN Low */
   69:Src/nRF24.c   ****     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);  
-ARM GAS  /tmp/ccehh4cg.s 			page 5
+ARM GAS  /tmp/ccJN1dG0.s 			page 5
 
 
  169              		.loc 1 69 0
@@ -270,7 +270,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   74:Src/nRF24.c   ****   * @param None
   75:Src/nRF24.c   ****   * @retval None
   76:Src/nRF24.c   ****   */
-  77:Src/nRF24.c   **** void SPI_CS_0()
+  77:Src/nRF24.c   **** __inline__ void SPI_CS_0()
   78:Src/nRF24.c   **** {
  193              		.loc 1 78 0
  194              		.cfi_startproc
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  214              	.LFE136:
  216              		.section	.text.SPI_READ_MISO,"ax",%progbits
  217              		.align	1
-ARM GAS  /tmp/ccehh4cg.s 			page 6
+ARM GAS  /tmp/ccJN1dG0.s 			page 6
 
 
  218              		.global	SPI_READ_MISO
@@ -316,7 +316,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   86:Src/nRF24.c   ****   * @param  None
   87:Src/nRF24.c   ****   * @retval None
   88:Src/nRF24.c   ****   */
-  89:Src/nRF24.c   **** GPIO_PinState SPI_READ_MISO()
+  89:Src/nRF24.c   **** __inline__ GPIO_PinState SPI_READ_MISO()
   90:Src/nRF24.c   **** {
  226              		.loc 1 90 0
  227              		.cfi_startproc
@@ -354,11 +354,11 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
   93:Src/nRF24.c   **** 
   94:Src/nRF24.c   **** /**
   95:Src/nRF24.c   ****   * @brief      Clock out (write) 8 bits on MOSI of SPI bus on SCK high.
-  96:Src/nRF24.c   ****   * @param[in]  txData One byte of data to transmit.
+  96:Src/nRF24.c   ****   * @param[in]  tx_data One byte of data to transmit.
   97:Src/nRF24.c   ****   * @retval     None.
   98:Src/nRF24.c   ****   * @note  
   99:Src/nRF24.c   ****   *   Endianess: Most Significant Bit First. Cn: Command Bits. Sn: Status Register bits. Dn: data b
-ARM GAS  /tmp/ccehh4cg.s 			page 7
+ARM GAS  /tmp/ccJN1dG0.s 			page 7
 
 
  100:Src/nRF24.c   ****   *
@@ -372,19 +372,19 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  108:Src/nRF24.c   ****   *   Pulse#     1     2     3     4     5     6     7     8         9     10    11    12    13    
  109:Src/nRF24.c   ****   *
  110:Src/nRF24.c   ****   */
- 111:Src/nRF24.c   **** void gpio_clockout_8_bits(uint8_t txData) 
+ 111:Src/nRF24.c   **** void gpio_clockout_8_bits(uint8_t tx_data) 
  112:Src/nRF24.c   **** {
  113:Src/nRF24.c   ****   spi_delay();
  114:Src/nRF24.c   ****   for (int i = 0; i < 8; ++i) 
- 115:Src/nRF24.c   **** 	{
+ 115:Src/nRF24.c   ****   {
  116:Src/nRF24.c   ****       SPI_SCK_0();
  117:Src/nRF24.c   ****       spi_delay();
- 118:Src/nRF24.c   ****       if(txData & 0x80) // MSBit first
+ 118:Src/nRF24.c   ****       if(tx_data & 0x80) // MSBit first
  119:Src/nRF24.c   ****           SPI_MOSI_1();
  120:Src/nRF24.c   ****       else
  121:Src/nRF24.c   ****           SPI_MOSI_0();
  122:Src/nRF24.c   ****       SPI_SCK_1(); // clock data
- 123:Src/nRF24.c   ****       txData = txData << 1; // load next MSB
+ 123:Src/nRF24.c   ****       tx_data = tx_data << 1; // load next MSB
  124:Src/nRF24.c   ****       spi_delay();
  125:Src/nRF24.c   ****   }
  126:Src/nRF24.c   ****   SPI_SCK_0();
@@ -407,7 +407,7 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  143:Src/nRF24.c   ****   */
  144:Src/nRF24.c   **** uint8_t gpio_clockin_8_bits(void)
  145:Src/nRF24.c   **** {
- 146:Src/nRF24.c   ****   uint8_t rxData = 0;
+ 146:Src/nRF24.c   ****   uint8_t rx_data = 0;
  147:Src/nRF24.c   **** 
  148:Src/nRF24.c   ****   spi_delay();
  149:Src/nRF24.c   ****   for (int i=0; i < 8; ++i) 
@@ -417,15 +417,15 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  153:Src/nRF24.c   ****       SPI_MOSI_0();
  154:Src/nRF24.c   ****       SPI_SCK_1();
  155:Src/nRF24.c   ****       spi_delay();
- 156:Src/nRF24.c   ****       rxData = rxData << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 tim
-ARM GAS  /tmp/ccehh4cg.s 			page 8
+ 156:Src/nRF24.c   ****       rx_data = rx_data << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 t
+ARM GAS  /tmp/ccJN1dG0.s 			page 8
 
 
- 157:Src/nRF24.c   ****       rxData |= SPI_READ_MISO();
+ 157:Src/nRF24.c   ****       rx_data |= SPI_READ_MISO();
  158:Src/nRF24.c   ****       spi_delay();
  159:Src/nRF24.c   ****   }
  160:Src/nRF24.c   ****   SPI_SCK_0();
- 161:Src/nRF24.c   ****   return rxData;
+ 161:Src/nRF24.c   ****   return rx_data;
  162:Src/nRF24.c   **** }
  163:Src/nRF24.c   ****   
  164:Src/nRF24.c   **** 
@@ -476,357 +476,498 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  299              		.loc 1 113 0
  300 0004 FFF7FEFF 		bl	spi_delay
  301              	.LVL9:
- 302              	.LBB2:
- 114:Src/nRF24.c   **** 	{
-ARM GAS  /tmp/ccehh4cg.s 			page 9
+ 302              	.LBB35:
+ 114:Src/nRF24.c   ****   {
+ARM GAS  /tmp/ccJN1dG0.s 			page 9
 
 
  303              		.loc 1 114 0
  304 0008 0025     		movs	r5, #0
- 305 000a 08E0     		b	.L32
+ 305 000a 10E0     		b	.L32
  306              	.LVL10:
  307              	.L38:
- 119:Src/nRF24.c   ****       else
- 308              		.loc 1 119 0
- 309 000c FFF7FEFF 		bl	SPI_MOSI_1
- 310              	.LVL11:
- 311              	.L34:
- 122:Src/nRF24.c   ****       txData = txData << 1; // load next MSB
- 312              		.loc 1 122 0 discriminator 2
- 313 0010 FFF7FEFF 		bl	SPI_SCK_1
- 314              	.LVL12:
+ 308              	.LBB36:
+ 309              	.LBB37:
+  48:Src/nRF24.c   **** }
+ 310              		.loc 1 48 0
+ 311 000c 0122     		movs	r2, #1
+ 312 000e 4FF48061 		mov	r1, #1024
+ 313 0012 1448     		ldr	r0, .L39
+ 314 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 315              	.LVL11:
+ 316              	.L34:
+ 317              	.LBE37:
+ 318              	.LBE36:
+ 319              	.LBB38:
+ 320              	.LBB39:
+  28:Src/nRF24.c   **** }
+ 321              		.loc 1 28 0 discriminator 2
+ 322 0018 0122     		movs	r2, #1
+ 323 001a 4FF48071 		mov	r1, #256
+ 324 001e 1248     		ldr	r0, .L39+4
+ 325 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 326              	.LVL12:
+ 327              	.LBE39:
+ 328              	.LBE38:
  123:Src/nRF24.c   ****       spi_delay();
- 315              		.loc 1 123 0 discriminator 2
- 316 0014 6400     		lsls	r4, r4, #1
- 317              	.LVL13:
- 318 0016 E4B2     		uxtb	r4, r4
- 319              	.LVL14:
+ 329              		.loc 1 123 0 discriminator 2
+ 330 0024 6400     		lsls	r4, r4, #1
+ 331              	.LVL13:
+ 332 0026 E4B2     		uxtb	r4, r4
+ 333              	.LVL14:
  124:Src/nRF24.c   ****   }
- 320              		.loc 1 124 0 discriminator 2
- 321 0018 FFF7FEFF 		bl	spi_delay
- 322              	.LVL15:
- 114:Src/nRF24.c   **** 	{
- 323              		.loc 1 114 0 discriminator 2
- 324 001c 0135     		adds	r5, r5, #1
- 325              	.LVL16:
- 326              	.L32:
- 114:Src/nRF24.c   **** 	{
- 327              		.loc 1 114 0 is_stmt 0 discriminator 1
- 328 001e 072D     		cmp	r5, #7
- 329 0020 09DC     		bgt	.L37
- 116:Src/nRF24.c   ****       spi_delay();
- 330              		.loc 1 116 0 is_stmt 1
- 331 0022 FFF7FEFF 		bl	SPI_SCK_0
- 332              	.LVL17:
- 117:Src/nRF24.c   ****       if(txData & 0x80) // MSBit first
- 333              		.loc 1 117 0
- 334 0026 FFF7FEFF 		bl	spi_delay
- 335              	.LVL18:
+ 334              		.loc 1 124 0 discriminator 2
+ 335 0028 FFF7FEFF 		bl	spi_delay
+ 336              	.LVL15:
+ 114:Src/nRF24.c   ****   {
+ 337              		.loc 1 114 0 discriminator 2
+ 338 002c 0135     		adds	r5, r5, #1
+ 339              	.LVL16:
+ 340              	.L32:
+ 114:Src/nRF24.c   ****   {
+ 341              		.loc 1 114 0 is_stmt 0 discriminator 1
+ 342 002e 072D     		cmp	r5, #7
+ 343 0030 11DC     		bgt	.L37
+ 344              	.LBB40:
+ 345              	.LBB41:
+  38:Src/nRF24.c   **** } 
+ 346              		.loc 1 38 0 is_stmt 1
+ 347 0032 0022     		movs	r2, #0
+ 348 0034 4FF48071 		mov	r1, #256
+ 349 0038 0B48     		ldr	r0, .L39+4
+ 350 003a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 351              	.LVL17:
+ 352              	.LBE41:
+ARM GAS  /tmp/ccJN1dG0.s 			page 10
+
+
+ 353              	.LBE40:
+ 117:Src/nRF24.c   ****       if(tx_data & 0x80) // MSBit first
+ 354              		.loc 1 117 0
+ 355 003e FFF7FEFF 		bl	spi_delay
+ 356              	.LVL18:
  118:Src/nRF24.c   ****           SPI_MOSI_1();
- 336              		.loc 1 118 0
- 337 002a 14F0800F 		tst	r4, #128
- 338 002e EDD1     		bne	.L38
- 121:Src/nRF24.c   ****       SPI_SCK_1(); // clock data
- 339              		.loc 1 121 0
- 340 0030 FFF7FEFF 		bl	SPI_MOSI_0
- 341              	.LVL19:
- 342 0034 ECE7     		b	.L34
- 343              	.L37:
- 344              	.LBE2:
- 126:Src/nRF24.c   **** }
- 345              		.loc 1 126 0
- 346 0036 FFF7FEFF 		bl	SPI_SCK_0
- 347              	.LVL20:
- 348 003a 38BD     		pop	{r3, r4, r5, pc}
-ARM GAS  /tmp/ccehh4cg.s 			page 10
+ 357              		.loc 1 118 0
+ 358 0042 14F0800F 		tst	r4, #128
+ 359 0046 E1D1     		bne	.L38
+ 360              	.LBB42:
+ 361              	.LBB43:
+  58:Src/nRF24.c   **** }
+ 362              		.loc 1 58 0
+ 363 0048 0022     		movs	r2, #0
+ 364 004a 4FF48061 		mov	r1, #1024
+ 365 004e 0548     		ldr	r0, .L39
+ 366 0050 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 367              	.LVL19:
+ 368 0054 E0E7     		b	.L34
+ 369              	.L37:
+ 370              	.LBE43:
+ 371              	.LBE42:
+ 372              	.LBE35:
+ 373              	.LBB44:
+ 374              	.LBB45:
+  38:Src/nRF24.c   **** } 
+ 375              		.loc 1 38 0
+ 376 0056 0022     		movs	r2, #0
+ 377 0058 4FF48071 		mov	r1, #256
+ 378 005c 0248     		ldr	r0, .L39+4
+ 379 005e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 380              	.LVL20:
+ 381 0062 38BD     		pop	{r3, r4, r5, pc}
+ 382              	.LVL21:
+ 383              	.L40:
+ 384              		.align	2
+ 385              	.L39:
+ 386 0064 00040240 		.word	1073873920
+ 387 0068 00000240 		.word	1073872896
+ 388              	.LBE45:
+ 389              	.LBE44:
+ 390              		.cfi_endproc
+ 391              	.LFE138:
+ 393              		.section	.text.gpio_clockin_8_bits,"ax",%progbits
+ 394              		.align	1
+ 395              		.global	gpio_clockin_8_bits
+ 396              		.syntax unified
+ 397              		.thumb
+ 398              		.thumb_func
+ 399              		.fpu fpv4-sp-d16
+ 401              	gpio_clockin_8_bits:
+ 402              	.LFB139:
+ 145:Src/nRF24.c   ****   uint8_t rx_data = 0;
+ 403              		.loc 1 145 0
+ 404              		.cfi_startproc
+ 405              		@ args = 0, pretend = 0, frame = 0
+ 406              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccJN1dG0.s 			page 11
 
 
- 349              		.cfi_endproc
- 350              	.LFE138:
- 352              		.section	.text.gpio_clockin_8_bits,"ax",%progbits
- 353              		.align	1
- 354              		.global	gpio_clockin_8_bits
- 355              		.syntax unified
- 356              		.thumb
- 357              		.thumb_func
- 358              		.fpu fpv4-sp-d16
- 360              	gpio_clockin_8_bits:
- 361              	.LFB139:
- 145:Src/nRF24.c   ****   uint8_t rxData = 0;
- 362              		.loc 1 145 0
- 363              		.cfi_startproc
- 364              		@ args = 0, pretend = 0, frame = 0
- 365              		@ frame_needed = 0, uses_anonymous_args = 0
- 366 0000 38B5     		push	{r3, r4, r5, lr}
- 367              	.LCFI9:
- 368              		.cfi_def_cfa_offset 16
- 369              		.cfi_offset 3, -16
- 370              		.cfi_offset 4, -12
- 371              		.cfi_offset 5, -8
- 372              		.cfi_offset 14, -4
- 373              	.LVL21:
+ 407 0000 70B5     		push	{r4, r5, r6, lr}
+ 408              	.LCFI9:
+ 409              		.cfi_def_cfa_offset 16
+ 410              		.cfi_offset 4, -16
+ 411              		.cfi_offset 5, -12
+ 412              		.cfi_offset 6, -8
+ 413              		.cfi_offset 14, -4
+ 414              	.LVL22:
  148:Src/nRF24.c   ****   for (int i=0; i < 8; ++i) 
- 374              		.loc 1 148 0
- 375 0002 FFF7FEFF 		bl	spi_delay
- 376              	.LVL22:
- 377              	.LBB3:
+ 415              		.loc 1 148 0
+ 416 0002 FFF7FEFF 		bl	spi_delay
+ 417              	.LVL23:
+ 418              	.LBB46:
  149:Src/nRF24.c   ****   {
- 378              		.loc 1 149 0
- 379 0006 0025     		movs	r5, #0
- 380              	.LBE3:
+ 419              		.loc 1 149 0
+ 420 0006 0026     		movs	r6, #0
+ 421              	.LBE46:
  146:Src/nRF24.c   **** 
- 381              		.loc 1 146 0
- 382 0008 2C46     		mov	r4, r5
- 383              	.LBB4:
+ 422              		.loc 1 146 0
+ 423 0008 3446     		mov	r4, r6
+ 424              	.LBB55:
  149:Src/nRF24.c   ****   {
- 384              		.loc 1 149 0
- 385 000a 12E0     		b	.L40
- 386              	.LVL23:
- 387              	.L41:
- 151:Src/nRF24.c   ****       spi_delay();
- 388              		.loc 1 151 0 discriminator 3
- 389 000c FFF7FEFF 		bl	SPI_SCK_0
- 390              	.LVL24:
+ 425              		.loc 1 149 0
+ 426 000a 22E0     		b	.L42
+ 427              	.LVL24:
+ 428              	.L43:
+ 429              	.LBB47:
+ 430              	.LBB48:
+  38:Src/nRF24.c   **** } 
+ 431              		.loc 1 38 0
+ 432 000c 164D     		ldr	r5, .L45
+ 433 000e 0022     		movs	r2, #0
+ 434 0010 4FF48071 		mov	r1, #256
+ 435 0014 2846     		mov	r0, r5
+ 436 0016 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 437              	.LVL25:
+ 438              	.LBE48:
+ 439              	.LBE47:
  152:Src/nRF24.c   ****       SPI_MOSI_0();
- 391              		.loc 1 152 0 discriminator 3
- 392 0010 FFF7FEFF 		bl	spi_delay
- 393              	.LVL25:
- 153:Src/nRF24.c   ****       SPI_SCK_1();
- 394              		.loc 1 153 0 discriminator 3
- 395 0014 FFF7FEFF 		bl	SPI_MOSI_0
- 396              	.LVL26:
- 154:Src/nRF24.c   ****       spi_delay();
- 397              		.loc 1 154 0 discriminator 3
- 398 0018 FFF7FEFF 		bl	SPI_SCK_1
-ARM GAS  /tmp/ccehh4cg.s 			page 11
+ 440              		.loc 1 152 0
+ 441 001a FFF7FEFF 		bl	spi_delay
+ 442              	.LVL26:
+ 443              	.LBB49:
+ 444              	.LBB50:
+  58:Src/nRF24.c   **** }
+ 445              		.loc 1 58 0
+ 446 001e 0022     		movs	r2, #0
+ 447 0020 4FF48061 		mov	r1, #1024
+ 448 0024 1148     		ldr	r0, .L45+4
+ 449 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 450              	.LVL27:
+ 451              	.LBE50:
+ 452              	.LBE49:
+ 453              	.LBB51:
+ 454              	.LBB52:
+  28:Src/nRF24.c   **** }
+ 455              		.loc 1 28 0
+ARM GAS  /tmp/ccJN1dG0.s 			page 12
 
 
- 399              	.LVL27:
- 155:Src/nRF24.c   ****       rxData = rxData << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 tim
- 400              		.loc 1 155 0 discriminator 3
- 401 001c FFF7FEFF 		bl	spi_delay
- 402              	.LVL28:
- 156:Src/nRF24.c   ****       rxData |= SPI_READ_MISO();
- 403              		.loc 1 156 0 discriminator 3
- 404 0020 6400     		lsls	r4, r4, #1
- 405              	.LVL29:
- 406 0022 E4B2     		uxtb	r4, r4
- 407              	.LVL30:
+ 456 002a 0122     		movs	r2, #1
+ 457 002c 4FF48071 		mov	r1, #256
+ 458 0030 2846     		mov	r0, r5
+ 459 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 460              	.LVL28:
+ 461              	.LBE52:
+ 462              	.LBE51:
+ 155:Src/nRF24.c   ****       rx_data = rx_data << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 t
+ 463              		.loc 1 155 0
+ 464 0036 FFF7FEFF 		bl	spi_delay
+ 465              	.LVL29:
+ 156:Src/nRF24.c   ****       rx_data |= SPI_READ_MISO();
+ 466              		.loc 1 156 0
+ 467 003a 6400     		lsls	r4, r4, #1
+ 468              	.LVL30:
+ 469 003c E4B2     		uxtb	r4, r4
+ 470              	.LVL31:
+ 471              	.LBB53:
+ 472              	.LBB54:
+  91:Src/nRF24.c   **** }
+ 473              		.loc 1 91 0
+ 474 003e 4FF48061 		mov	r1, #1024
+ 475 0042 2846     		mov	r0, r5
+ 476 0044 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 477              	.LVL32:
+ 478              	.LBE54:
+ 479              	.LBE53:
  157:Src/nRF24.c   ****       spi_delay();
- 408              		.loc 1 157 0 discriminator 3
- 409 0024 FFF7FEFF 		bl	SPI_READ_MISO
- 410              	.LVL31:
- 411 0028 0443     		orrs	r4, r4, r0
- 412              	.LVL32:
- 413 002a E4B2     		uxtb	r4, r4
- 414              	.LVL33:
+ 480              		.loc 1 157 0
+ 481 0048 0443     		orrs	r4, r4, r0
+ 482              	.LVL33:
+ 483 004a E4B2     		uxtb	r4, r4
+ 484              	.LVL34:
  158:Src/nRF24.c   ****   }
- 415              		.loc 1 158 0 discriminator 3
- 416 002c FFF7FEFF 		bl	spi_delay
- 417              	.LVL34:
+ 485              		.loc 1 158 0
+ 486 004c FFF7FEFF 		bl	spi_delay
+ 487              	.LVL35:
  149:Src/nRF24.c   ****   {
- 418              		.loc 1 149 0 discriminator 3
- 419 0030 0135     		adds	r5, r5, #1
- 420              	.LVL35:
- 421              	.L40:
+ 488              		.loc 1 149 0
+ 489 0050 0136     		adds	r6, r6, #1
+ 490              	.LVL36:
+ 491              	.L42:
  149:Src/nRF24.c   ****   {
- 422              		.loc 1 149 0 is_stmt 0 discriminator 1
- 423 0032 072D     		cmp	r5, #7
- 424 0034 EADD     		ble	.L41
- 425              	.LBE4:
- 160:Src/nRF24.c   ****   return rxData;
- 426              		.loc 1 160 0 is_stmt 1
- 427 0036 FFF7FEFF 		bl	SPI_SCK_0
- 428              	.LVL36:
+ 492              		.loc 1 149 0 is_stmt 0 discriminator 1
+ 493 0052 072E     		cmp	r6, #7
+ 494 0054 DADD     		ble	.L43
+ 495              	.LBE55:
+ 496              	.LBB56:
+ 497              	.LBB57:
+  38:Src/nRF24.c   **** } 
+ 498              		.loc 1 38 0 is_stmt 1
+ 499 0056 0022     		movs	r2, #0
+ 500 0058 4FF48071 		mov	r1, #256
+ 501 005c 0248     		ldr	r0, .L45
+ 502 005e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 503              	.LVL37:
+ 504              	.LBE57:
+ARM GAS  /tmp/ccJN1dG0.s 			page 13
+
+
+ 505              	.LBE56:
  162:Src/nRF24.c   ****   
- 429              		.loc 1 162 0
- 430 003a 2046     		mov	r0, r4
- 431 003c 38BD     		pop	{r3, r4, r5, pc}
- 432              		.cfi_endproc
- 433              	.LFE139:
- 435              		.section	.text.spi_read_register,"ax",%progbits
- 436              		.align	1
- 437              		.global	spi_read_register
- 438              		.syntax unified
- 439              		.thumb
- 440              		.thumb_func
- 441              		.fpu fpv4-sp-d16
- 443              	spi_read_register:
- 444              	.LFB141:
+ 506              		.loc 1 162 0
+ 507 0062 2046     		mov	r0, r4
+ 508 0064 70BD     		pop	{r4, r5, r6, pc}
+ 509              	.LVL38:
+ 510              	.L46:
+ 511 0066 00BF     		.align	2
+ 512              	.L45:
+ 513 0068 00000240 		.word	1073872896
+ 514 006c 00040240 		.word	1073873920
+ 515              		.cfi_endproc
+ 516              	.LFE139:
+ 518              		.section	.text.spi_read_register,"ax",%progbits
+ 519              		.align	1
+ 520              		.global	spi_read_register
+ 521              		.syntax unified
+ 522              		.thumb
+ 523              		.thumb_func
+ 524              		.fpu fpv4-sp-d16
+ 526              	spi_read_register:
+ 527              	.LFB141:
  169:Src/nRF24.c   **** }
  170:Src/nRF24.c   **** 
  171:Src/nRF24.c   **** /**
- 172:Src/nRF24.c   **** 	* @brief      Read a bytes from the SPI target device register.
- 173:Src/nRF24.c   **** 	* @param[in]  reg SPI target device register to write to.
-ARM GAS  /tmp/ccehh4cg.s 			page 12
-
-
- 174:Src/nRF24.c   **** 	* @param[in]  num_bytes Number of bytes needed to write to that address.
- 175:Src/nRF24.c   **** 	* @param[in]  pbuf A pointer pointing to a memory location that can store the data read from the S
- 176:Src/nRF24.c   **** 	* @retval     none.
- 177:Src/nRF24.c   **** 	*/
+ 172:Src/nRF24.c   ****   * @brief      Read a bytes from the SPI target device register.
+ 173:Src/nRF24.c   ****   * @param[in]  reg SPI target device register to write to.
+ 174:Src/nRF24.c   ****   * @param[in]  num_bytes Number of bytes needed to write to that address.
+ 175:Src/nRF24.c   ****   * @param[in]  pbuf A pointer pointing to a memory location that can store the data read from the 
+ 176:Src/nRF24.c   ****   * @retval     none.
+ 177:Src/nRF24.c   ****   */
  178:Src/nRF24.c   **** void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
  179:Src/nRF24.c   **** {
- 445              		.loc 1 179 0
- 446              		.cfi_startproc
- 447              		@ args = 0, pretend = 0, frame = 0
- 448              		@ frame_needed = 0, uses_anonymous_args = 0
- 449              	.LVL37:
- 450 0000 70B5     		push	{r4, r5, r6, lr}
- 451              	.LCFI10:
- 452              		.cfi_def_cfa_offset 16
- 453              		.cfi_offset 4, -16
- 454              		.cfi_offset 5, -12
- 455              		.cfi_offset 6, -8
- 456              		.cfi_offset 14, -4
- 457 0002 0446     		mov	r4, r0
- 458 0004 0D46     		mov	r5, r1
- 459 0006 1646     		mov	r6, r2
+ 528              		.loc 1 179 0
+ 529              		.cfi_startproc
+ 530              		@ args = 0, pretend = 0, frame = 0
+ 531              		@ frame_needed = 0, uses_anonymous_args = 0
+ 532              	.LVL39:
+ 533 0000 70B5     		push	{r4, r5, r6, lr}
+ 534              	.LCFI10:
+ 535              		.cfi_def_cfa_offset 16
+ 536              		.cfi_offset 4, -16
+ 537              		.cfi_offset 5, -12
+ 538              		.cfi_offset 6, -8
+ 539              		.cfi_offset 14, -4
+ 540 0002 0446     		mov	r4, r0
+ 541 0004 0D46     		mov	r5, r1
+ 542 0006 1646     		mov	r6, r2
+ 543              	.LBB58:
+ 544              	.LBB59:
+  69:Src/nRF24.c   **** }
+ 545              		.loc 1 69 0
+ 546 0008 0022     		movs	r2, #0
+ 547              	.LVL40:
+ 548 000a 1021     		movs	r1, #16
+ 549              	.LVL41:
+ 550 000c 0948     		ldr	r0, .L51
+ARM GAS  /tmp/ccJN1dG0.s 			page 14
+
+
+ 551              	.LVL42:
+ 552 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 553              	.LVL43:
+ 554              	.LBE59:
+ 555              	.LBE58:
  180:Src/nRF24.c   ****   // Select chip
  181:Src/nRF24.c   ****   SPI_CS_1();
- 460              		.loc 1 181 0
- 461 0008 FFF7FEFF 		bl	SPI_CS_1
- 462              	.LVL38:
  182:Src/nRF24.c   ****   
  183:Src/nRF24.c   ****   // Write register address to read.
  184:Src/nRF24.c   ****   gpio_clockout_8_bits(reg);
- 463              		.loc 1 184 0
- 464 000c 2046     		mov	r0, r4
- 465 000e FFF7FEFF 		bl	gpio_clockout_8_bits
- 466              	.LVL39:
- 467              	.LBB5:
+ 556              		.loc 1 184 0
+ 557 0012 2046     		mov	r0, r4
+ 558 0014 FFF7FEFF 		bl	gpio_clockout_8_bits
+ 559              	.LVL44:
+ 560              	.LBB60:
  185:Src/nRF24.c   ****   // Read value
  186:Src/nRF24.c   ****   for (int i = 0; i < num_bytes; ++i) 
- 468              		.loc 1 186 0
- 469 0012 0024     		movs	r4, #0
- 470 0014 03E0     		b	.L44
- 471              	.LVL40:
- 472              	.L45:
- 187:Src/nRF24.c   **** 	{
+ 561              		.loc 1 186 0
+ 562 0018 0024     		movs	r4, #0
+ 563 001a 03E0     		b	.L48
+ 564              	.LVL45:
+ 565              	.L49:
+ 187:Src/nRF24.c   ****   {
  188:Src/nRF24.c   ****     pbuf[i] = gpio_clockin_8_bits();
- 473              		.loc 1 188 0 discriminator 3
- 474 0016 FFF7FEFF 		bl	gpio_clockin_8_bits
- 475              	.LVL41:
- 476 001a 3055     		strb	r0, [r6, r4]
- 186:Src/nRF24.c   **** 	{
- 477              		.loc 1 186 0 discriminator 3
- 478 001c 0134     		adds	r4, r4, #1
- 479              	.LVL42:
- 480              	.L44:
- 186:Src/nRF24.c   **** 	{
- 481              		.loc 1 186 0 is_stmt 0 discriminator 1
- 482 001e AC42     		cmp	r4, r5
- 483 0020 F9DB     		blt	.L45
- 484              	.LBE5:
-ARM GAS  /tmp/ccehh4cg.s 			page 13
+ 566              		.loc 1 188 0 discriminator 3
+ 567 001c FFF7FEFF 		bl	gpio_clockin_8_bits
+ 568              	.LVL46:
+ 569 0020 3055     		strb	r0, [r6, r4]
+ 186:Src/nRF24.c   ****   {
+ 570              		.loc 1 186 0 discriminator 3
+ 571 0022 0134     		adds	r4, r4, #1
+ 572              	.LVL47:
+ 573              	.L48:
+ 186:Src/nRF24.c   ****   {
+ 574              		.loc 1 186 0 is_stmt 0 discriminator 1
+ 575 0024 AC42     		cmp	r4, r5
+ 576 0026 F9DB     		blt	.L49
+ 577              	.LBE60:
+ 578              	.LBB61:
+ 579              	.LBB62:
+  80:Src/nRF24.c   **** }
+ 580              		.loc 1 80 0 is_stmt 1
+ 581 0028 0122     		movs	r2, #1
+ 582 002a 1021     		movs	r1, #16
+ 583 002c 0148     		ldr	r0, .L51
+ 584 002e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 585              	.LVL48:
+ 586 0032 70BD     		pop	{r4, r5, r6, pc}
+ 587              	.LVL49:
+ 588              	.L52:
+ 589              		.align	2
+ 590              	.L51:
+ 591 0034 00040240 		.word	1073873920
+ 592              	.LBE62:
+ 593              	.LBE61:
+ 594              		.cfi_endproc
+ 595              	.LFE141:
+ARM GAS  /tmp/ccJN1dG0.s 			page 15
 
 
+ 597              		.section	.text.spi_write_register,"ax",%progbits
+ 598              		.align	1
+ 599              		.global	spi_write_register
+ 600              		.syntax unified
+ 601              		.thumb
+ 602              		.thumb_func
+ 603              		.fpu fpv4-sp-d16
+ 605              	spi_write_register:
+ 606              	.LFB142:
  189:Src/nRF24.c   ****   }
  190:Src/nRF24.c   ****   
  191:Src/nRF24.c   ****   // Deselect chip
  192:Src/nRF24.c   ****   SPI_CS_0();
- 485              		.loc 1 192 0 is_stmt 1
- 486 0022 FFF7FEFF 		bl	SPI_CS_0
- 487              	.LVL43:
- 488 0026 70BD     		pop	{r4, r5, r6, pc}
- 489              		.cfi_endproc
- 490              	.LFE141:
- 492              		.section	.text.spi_write_register,"ax",%progbits
- 493              		.align	1
- 494              		.global	spi_write_register
- 495              		.syntax unified
- 496              		.thumb
- 497              		.thumb_func
- 498              		.fpu fpv4-sp-d16
- 500              	spi_write_register:
- 501              	.LFB142:
  193:Src/nRF24.c   **** }
  194:Src/nRF24.c   **** 
  195:Src/nRF24.c   **** /**
- 196:Src/nRF24.c   **** 	* @brief      Write a number of bytes to the spi target device register.
- 197:Src/nRF24.c   **** 	* @param[in]  reg spi target device register to write to.
- 198:Src/nRF24.c   **** 	* @param[in]  num_bytes number of bytes needed to write to that address.
- 199:Src/nRF24.c   **** 	* @param[in]  writing_data A pointer pointing to a memory location storing the data to write.
- 200:Src/nRF24.c   **** 	* @retval     none.
- 201:Src/nRF24.c   **** 	*/
- 202:Src/nRF24.c   **** void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
+ 196:Src/nRF24.c   ****   * @brief      Write a number of bytes to the spi target device register.
+ 197:Src/nRF24.c   ****   * @param[in]  reg spi target device register to write to.
+ 198:Src/nRF24.c   ****   * @param[in]  num_bytes number of bytes needed to write to that address.
+ 199:Src/nRF24.c   ****   * @param[in]  p_writing_data A pointer pointing to a memory location storing the data to write.
+ 200:Src/nRF24.c   ****   * @retval     none.
+ 201:Src/nRF24.c   ****   */
+ 202:Src/nRF24.c   **** void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
  203:Src/nRF24.c   **** {
- 502              		.loc 1 203 0
- 503              		.cfi_startproc
- 504              		@ args = 0, pretend = 0, frame = 0
- 505              		@ frame_needed = 0, uses_anonymous_args = 0
- 506              	.LVL44:
- 507 0000 70B5     		push	{r4, r5, r6, lr}
- 508              	.LCFI11:
- 509              		.cfi_def_cfa_offset 16
- 510              		.cfi_offset 4, -16
- 511              		.cfi_offset 5, -12
- 512              		.cfi_offset 6, -8
- 513              		.cfi_offset 14, -4
- 514 0002 0446     		mov	r4, r0
- 515 0004 0D46     		mov	r5, r1
- 516 0006 1646     		mov	r6, r2
+ 607              		.loc 1 203 0
+ 608              		.cfi_startproc
+ 609              		@ args = 0, pretend = 0, frame = 0
+ 610              		@ frame_needed = 0, uses_anonymous_args = 0
+ 611              	.LVL50:
+ 612 0000 70B5     		push	{r4, r5, r6, lr}
+ 613              	.LCFI11:
+ 614              		.cfi_def_cfa_offset 16
+ 615              		.cfi_offset 4, -16
+ 616              		.cfi_offset 5, -12
+ 617              		.cfi_offset 6, -8
+ 618              		.cfi_offset 14, -4
+ 619 0002 0446     		mov	r4, r0
+ 620 0004 0D46     		mov	r5, r1
+ 621 0006 1646     		mov	r6, r2
+ 622              	.LBB63:
+ 623              	.LBB64:
+  69:Src/nRF24.c   **** }
+ 624              		.loc 1 69 0
+ 625 0008 0022     		movs	r2, #0
+ 626              	.LVL51:
+ 627 000a 1021     		movs	r1, #16
+ 628              	.LVL52:
+ 629 000c 0948     		ldr	r0, .L57
+ 630              	.LVL53:
+ 631 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 632              	.LVL54:
+ 633              	.LBE64:
+ 634              	.LBE63:
  204:Src/nRF24.c   ****   // Select chip (CSN LOW)
  205:Src/nRF24.c   ****   SPI_CS_1();
- 517              		.loc 1 205 0
- 518 0008 FFF7FEFF 		bl	SPI_CS_1
- 519              	.LVL45:
  206:Src/nRF24.c   **** 
  207:Src/nRF24.c   ****   // Write chip register 
+ARM GAS  /tmp/ccJN1dG0.s 			page 16
+
+
  208:Src/nRF24.c   ****   gpio_clockout_8_bits(reg);  // W_REGISTER_MASK is specifc to nRF24.
- 520              		.loc 1 208 0
- 521 000c 2046     		mov	r0, r4
- 522 000e FFF7FEFF 		bl	gpio_clockout_8_bits
- 523              	.LVL46:
-ARM GAS  /tmp/ccehh4cg.s 			page 14
-
-
- 524              	.LBB6:
+ 635              		.loc 1 208 0
+ 636 0012 2046     		mov	r0, r4
+ 637 0014 FFF7FEFF 		bl	gpio_clockout_8_bits
+ 638              	.LVL55:
+ 639              	.LBB65:
  209:Src/nRF24.c   ****   // Write value
  210:Src/nRF24.c   ****   for (int i = 0; i < num_bytes; ++i)
- 525              		.loc 1 210 0
- 526 0012 0024     		movs	r4, #0
- 527 0014 03E0     		b	.L48
- 528              	.LVL47:
- 529              	.L49:
- 530              	.LBB7:
- 211:Src/nRF24.c   **** 	{
- 212:Src/nRF24.c   ****     uint8_t writing_byte = writing_data[i];
+ 640              		.loc 1 210 0
+ 641 0018 0024     		movs	r4, #0
+ 642 001a 03E0     		b	.L54
+ 643              	.LVL56:
+ 644              	.L55:
+ 645              	.LBB66:
+ 211:Src/nRF24.c   ****   {
+ 212:Src/nRF24.c   ****     uint8_t writing_byte = p_writing_data[i];
  213:Src/nRF24.c   ****     gpio_clockout_8_bits(writing_byte);
- 531              		.loc 1 213 0 discriminator 3
- 532 0016 305D     		ldrb	r0, [r6, r4]	@ zero_extendqisi2
- 533 0018 FFF7FEFF 		bl	gpio_clockout_8_bits
- 534              	.LVL48:
- 535              	.LBE7:
- 210:Src/nRF24.c   **** 	{
- 536              		.loc 1 210 0 discriminator 3
- 537 001c 0134     		adds	r4, r4, #1
- 538              	.LVL49:
- 539              	.L48:
- 210:Src/nRF24.c   **** 	{
- 540              		.loc 1 210 0 is_stmt 0 discriminator 1
- 541 001e AC42     		cmp	r4, r5
- 542 0020 F9DB     		blt	.L49
- 543              	.LBE6:
+ 646              		.loc 1 213 0 discriminator 3
+ 647 001c 305D     		ldrb	r0, [r6, r4]	@ zero_extendqisi2
+ 648 001e FFF7FEFF 		bl	gpio_clockout_8_bits
+ 649              	.LVL57:
+ 650              	.LBE66:
+ 210:Src/nRF24.c   ****   {
+ 651              		.loc 1 210 0 discriminator 3
+ 652 0022 0134     		adds	r4, r4, #1
+ 653              	.LVL58:
+ 654              	.L54:
+ 210:Src/nRF24.c   ****   {
+ 655              		.loc 1 210 0 is_stmt 0 discriminator 1
+ 656 0024 AC42     		cmp	r4, r5
+ 657 0026 F9DB     		blt	.L55
+ 658              	.LBE65:
+ 659              	.LBB67:
+ 660              	.LBB68:
+  80:Src/nRF24.c   **** }
+ 661              		.loc 1 80 0 is_stmt 1
+ 662 0028 0122     		movs	r2, #1
+ 663 002a 1021     		movs	r1, #16
+ 664 002c 0148     		ldr	r0, .L57
+ 665 002e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 666              	.LVL59:
+ 667 0032 70BD     		pop	{r4, r5, r6, pc}
+ 668              	.LVL60:
+ 669              	.L58:
+ 670              		.align	2
+ 671              	.L57:
+ 672 0034 00040240 		.word	1073873920
+ 673              	.LBE68:
+ 674              	.LBE67:
+ 675              		.cfi_endproc
+ 676              	.LFE142:
+ 678              		.section	.text.nRF24_CE_1,"ax",%progbits
+ 679              		.align	1
+ 680              		.global	nRF24_CE_1
+ 681              		.syntax unified
+ 682              		.thumb
+ 683              		.thumb_func
+ARM GAS  /tmp/ccJN1dG0.s 			page 17
+
+
+ 684              		.fpu fpv4-sp-d16
+ 686              	nRF24_CE_1:
+ 687              	.LFB143:
  214:Src/nRF24.c   ****   }
  215:Src/nRF24.c   **** 
  216:Src/nRF24.c   ****   // Deselect chip (CSN HIGH)
  217:Src/nRF24.c   ****   SPI_CS_0();
- 544              		.loc 1 217 0 is_stmt 1
- 545 0022 FFF7FEFF 		bl	SPI_CS_0
- 546              	.LVL50:
- 547 0026 70BD     		pop	{r4, r5, r6, pc}
- 548              		.cfi_endproc
- 549              	.LFE142:
- 551              		.section	.text.nRF24_CE_1,"ax",%progbits
- 552              		.align	1
- 553              		.global	nRF24_CE_1
- 554              		.syntax unified
- 555              		.thumb
- 556              		.thumb_func
- 557              		.fpu fpv4-sp-d16
- 559              	nRF24_CE_1:
- 560              	.LFB143:
  218:Src/nRF24.c   **** }
  219:Src/nRF24.c   **** 
  220:Src/nRF24.c   **** 
@@ -838,88 +979,85 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  226:Src/nRF24.c   ****   * @param None
  227:Src/nRF24.c   ****   * @retval None
  228:Src/nRF24.c   ****   */
-ARM GAS  /tmp/ccehh4cg.s 			page 15
-
-
  229:Src/nRF24.c   **** void nRF24_CE_1()
  230:Src/nRF24.c   **** {
- 561              		.loc 1 230 0
- 562              		.cfi_startproc
- 563              		@ args = 0, pretend = 0, frame = 0
- 564              		@ frame_needed = 0, uses_anonymous_args = 0
- 565 0000 08B5     		push	{r3, lr}
- 566              	.LCFI12:
- 567              		.cfi_def_cfa_offset 8
- 568              		.cfi_offset 3, -8
- 569              		.cfi_offset 14, -4
+ 688              		.loc 1 230 0
+ 689              		.cfi_startproc
+ 690              		@ args = 0, pretend = 0, frame = 0
+ 691              		@ frame_needed = 0, uses_anonymous_args = 0
+ 692 0000 08B5     		push	{r3, lr}
+ 693              	.LCFI12:
+ 694              		.cfi_def_cfa_offset 8
+ 695              		.cfi_offset 3, -8
+ 696              		.cfi_offset 14, -4
  231:Src/nRF24.c   ****     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);  
- 570              		.loc 1 231 0
- 571 0002 0122     		movs	r2, #1
- 572 0004 2021     		movs	r1, #32
- 573 0006 0248     		ldr	r0, .L53
- 574 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 575              	.LVL51:
- 576 000c 08BD     		pop	{r3, pc}
- 577              	.L54:
- 578 000e 00BF     		.align	2
- 579              	.L53:
- 580 0010 00040240 		.word	1073873920
- 581              		.cfi_endproc
- 582              	.LFE143:
- 584              		.section	.text.nRF24_CE_0,"ax",%progbits
- 585              		.align	1
- 586              		.global	nRF24_CE_0
- 587              		.syntax unified
- 588              		.thumb
- 589              		.thumb_func
- 590              		.fpu fpv4-sp-d16
- 592              	nRF24_CE_0:
- 593              	.LFB144:
+ 697              		.loc 1 231 0
+ 698 0002 0122     		movs	r2, #1
+ 699 0004 2021     		movs	r1, #32
+ 700 0006 0248     		ldr	r0, .L61
+ 701 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 702              	.LVL61:
+ 703 000c 08BD     		pop	{r3, pc}
+ 704              	.L62:
+ 705 000e 00BF     		.align	2
+ 706              	.L61:
+ 707 0010 00040240 		.word	1073873920
+ 708              		.cfi_endproc
+ 709              	.LFE143:
+ 711              		.section	.text.nRF24_CE_0,"ax",%progbits
+ 712              		.align	1
+ 713              		.global	nRF24_CE_0
+ 714              		.syntax unified
+ 715              		.thumb
+ 716              		.thumb_func
+ 717              		.fpu fpv4-sp-d16
+ 719              	nRF24_CE_0:
+ 720              	.LFB144:
  232:Src/nRF24.c   **** }
  233:Src/nRF24.c   **** 
  234:Src/nRF24.c   **** 
  235:Src/nRF24.c   **** /**
  236:Src/nRF24.c   ****   * @brief Set low on Chip-Enable pin of nRF24L01.
+ARM GAS  /tmp/ccJN1dG0.s 			page 18
+
+
  237:Src/nRF24.c   ****   * @param None
  238:Src/nRF24.c   ****   * @retval None
  239:Src/nRF24.c   ****   */
  240:Src/nRF24.c   **** void nRF24_CE_0()
  241:Src/nRF24.c   **** {
- 594              		.loc 1 241 0
- 595              		.cfi_startproc
- 596              		@ args = 0, pretend = 0, frame = 0
- 597              		@ frame_needed = 0, uses_anonymous_args = 0
- 598 0000 08B5     		push	{r3, lr}
- 599              	.LCFI13:
- 600              		.cfi_def_cfa_offset 8
- 601              		.cfi_offset 3, -8
- 602              		.cfi_offset 14, -4
+ 721              		.loc 1 241 0
+ 722              		.cfi_startproc
+ 723              		@ args = 0, pretend = 0, frame = 0
+ 724              		@ frame_needed = 0, uses_anonymous_args = 0
+ 725 0000 08B5     		push	{r3, lr}
+ 726              	.LCFI13:
+ 727              		.cfi_def_cfa_offset 8
+ 728              		.cfi_offset 3, -8
+ 729              		.cfi_offset 14, -4
  242:Src/nRF24.c   ****     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
- 603              		.loc 1 242 0
- 604 0002 0022     		movs	r2, #0
- 605 0004 2021     		movs	r1, #32
-ARM GAS  /tmp/ccehh4cg.s 			page 16
-
-
- 606 0006 0248     		ldr	r0, .L57
- 607 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 608              	.LVL52:
- 609 000c 08BD     		pop	{r3, pc}
- 610              	.L58:
- 611 000e 00BF     		.align	2
- 612              	.L57:
- 613 0010 00040240 		.word	1073873920
- 614              		.cfi_endproc
- 615              	.LFE144:
- 617              		.section	.text.nRF24_verified_write_register,"ax",%progbits
- 618              		.align	1
- 619              		.global	nRF24_verified_write_register
- 620              		.syntax unified
- 621              		.thumb
- 622              		.thumb_func
- 623              		.fpu fpv4-sp-d16
- 625              	nRF24_verified_write_register:
- 626              	.LFB145:
+ 730              		.loc 1 242 0
+ 731 0002 0022     		movs	r2, #0
+ 732 0004 2021     		movs	r1, #32
+ 733 0006 0248     		ldr	r0, .L65
+ 734 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 735              	.LVL62:
+ 736 000c 08BD     		pop	{r3, pc}
+ 737              	.L66:
+ 738 000e 00BF     		.align	2
+ 739              	.L65:
+ 740 0010 00040240 		.word	1073873920
+ 741              		.cfi_endproc
+ 742              	.LFE144:
+ 744              		.section	.text.nRF24_verified_write_register,"ax",%progbits
+ 745              		.align	1
+ 746              		.global	nRF24_verified_write_register
+ 747              		.syntax unified
+ 748              		.thumb
+ 749              		.thumb_func
+ 750              		.fpu fpv4-sp-d16
+ 752              	nRF24_verified_write_register:
+ 753              	.LFB145:
  243:Src/nRF24.c   **** }
  244:Src/nRF24.c   **** 
  245:Src/nRF24.c   **** 
@@ -927,240 +1065,240 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  247:Src/nRF24.c   ****   * @brief      Write to a register on target device through SPI. Read the same registers after wri
  248:Src/nRF24.c   ****   * @param[in]  reg The device register to write value to.
  249:Src/nRF24.c   ****   * @param[in]  num_bytes Number of bytes to write.
- 250:Src/nRF24.c   ****   * @param[in]  writing_data Data to write.
+ 250:Src/nRF24.c   ****   * @param[in]  p_writing_data Data to write.
  251:Src/nRF24.c   ****   * @retval     Boolean. 1 for mistakes happen. 0 for success.
  252:Src/nRF24.c   ****   */
- 253:Src/nRF24.c   **** bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
+ 253:Src/nRF24.c   **** bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
  254:Src/nRF24.c   **** {
- 627              		.loc 1 254 0
- 628              		.cfi_startproc
- 629              		@ args = 0, pretend = 0, frame = 64
- 630              		@ frame_needed = 1, uses_anonymous_args = 0
- 631              	.LVL53:
- 632 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
- 633              	.LCFI14:
- 634              		.cfi_def_cfa_offset 32
- 635              		.cfi_offset 4, -32
- 636              		.cfi_offset 5, -28
- 637              		.cfi_offset 6, -24
- 638              		.cfi_offset 7, -20
- 639              		.cfi_offset 8, -16
- 640              		.cfi_offset 9, -12
- 641              		.cfi_offset 10, -8
- 642              		.cfi_offset 14, -4
- 643 0004 90B0     		sub	sp, sp, #64
- 644              	.LCFI15:
- 645              		.cfi_def_cfa_offset 96
- 646 0006 00AF     		add	r7, sp, #0
- 647              	.LCFI16:
- 648              		.cfi_def_cfa_register 7
- 649 0008 0546     		mov	r5, r0
- 650 000a 0C46     		mov	r4, r1
- 651 000c 9046     		mov	r8, r2
+ 754              		.loc 1 254 0
+ 755              		.cfi_startproc
+ 756              		@ args = 0, pretend = 0, frame = 64
+ 757              		@ frame_needed = 1, uses_anonymous_args = 0
+ 758              	.LVL63:
+ 759 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 760              	.LCFI14:
+ 761              		.cfi_def_cfa_offset 32
+ARM GAS  /tmp/ccJN1dG0.s 			page 19
+
+
+ 762              		.cfi_offset 4, -32
+ 763              		.cfi_offset 5, -28
+ 764              		.cfi_offset 6, -24
+ 765              		.cfi_offset 7, -20
+ 766              		.cfi_offset 8, -16
+ 767              		.cfi_offset 9, -12
+ 768              		.cfi_offset 10, -8
+ 769              		.cfi_offset 14, -4
+ 770 0004 90B0     		sub	sp, sp, #64
+ 771              	.LCFI15:
+ 772              		.cfi_def_cfa_offset 96
+ 773 0006 00AF     		add	r7, sp, #0
+ 774              	.LCFI16:
+ 775              		.cfi_def_cfa_register 7
+ 776 0008 0546     		mov	r5, r0
+ 777 000a 0C46     		mov	r4, r1
+ 778 000c 9046     		mov	r8, r2
  255:Src/nRF24.c   **** 
-ARM GAS  /tmp/ccehh4cg.s 			page 17
-
-
  256:Src/nRF24.c   ****     char message[64] = {'\0'};
- 652              		.loc 1 256 0
- 653 000e 4022     		movs	r2, #64
- 654              	.LVL54:
- 655 0010 0021     		movs	r1, #0
- 656              	.LVL55:
- 657 0012 3846     		mov	r0, r7
- 658              	.LVL56:
- 659 0014 FFF7FEFF 		bl	memset
- 660              	.LVL57:
+ 779              		.loc 1 256 0
+ 780 000e 4022     		movs	r2, #64
+ 781              	.LVL64:
+ 782 0010 0021     		movs	r1, #0
+ 783              	.LVL65:
+ 784 0012 3846     		mov	r0, r7
+ 785              	.LVL66:
+ 786 0014 FFF7FEFF 		bl	memset
+ 787              	.LVL67:
  257:Src/nRF24.c   **** 
- 258:Src/nRF24.c   ****     spi_write_register(reg, num_bytes, writing_data); 
- 661              		.loc 1 258 0
- 662 0018 4246     		mov	r2, r8
- 663 001a 2146     		mov	r1, r4
- 664 001c 2846     		mov	r0, r5
- 665 001e FFF7FEFF 		bl	spi_write_register
- 666              	.LVL58:
+ 258:Src/nRF24.c   ****     spi_write_register(reg, num_bytes, p_writing_data); 
+ 788              		.loc 1 258 0
+ 789 0018 4246     		mov	r2, r8
+ 790 001a 2146     		mov	r1, r4
+ 791 001c 2846     		mov	r0, r5
+ 792 001e FFF7FEFF 		bl	spi_write_register
+ 793              	.LVL68:
  259:Src/nRF24.c   **** 
  260:Src/nRF24.c   ****     uint8_t read_data[num_bytes];
- 667              		.loc 1 260 0
- 668 0022 A246     		mov	r10, r4
- 669              	.LVL59:
- 670 0024 E31D     		adds	r3, r4, #7
- 671 0026 23F00703 		bic	r3, r3, #7
- 672 002a ADEB030D 		sub	sp, sp, r3
- 673 002e E946     		mov	r9, sp
- 674              	.LVL60:
+ 794              		.loc 1 260 0
+ 795 0022 A246     		mov	r10, r4
+ 796              	.LVL69:
+ 797 0024 E31D     		adds	r3, r4, #7
+ 798 0026 23F00703 		bic	r3, r3, #7
+ 799 002a ADEB030D 		sub	sp, sp, r3
+ 800 002e E946     		mov	r9, sp
+ 801              	.LVL70:
  261:Src/nRF24.c   **** 
- 262:Src/nRF24.c   ****     // reg & ~ W_REGISTER_MASK is a reverse operation of reg | W_REGISTER_MASK
+ 262:Src/nRF24.c   ****     // reg & ~ W_REGISTER_MASK is a reverse operation of reg | W_REGISTER_MASK, essentially get rid
  263:Src/nRF24.c   ****     spi_read_register(R_REGISTER_MASK | (reg & ~W_REGISTER_MASK), num_bytes, read_data);
- 675              		.loc 1 263 0
- 676 0030 6A46     		mov	r2, sp
- 677 0032 2146     		mov	r1, r4
- 678 0034 05F0DF00 		and	r0, r5, #223
- 679 0038 FFF7FEFF 		bl	spi_read_register
- 680              	.LVL61:
- 681              	.LBB8:
+ 802              		.loc 1 263 0
+ 803 0030 6A46     		mov	r2, sp
+ 804 0032 2146     		mov	r1, r4
+ 805 0034 05F0DF00 		and	r0, r5, #223
+ 806 0038 FFF7FEFF 		bl	spi_read_register
+ 807              	.LVL71:
+ 808              	.LBB69:
  264:Src/nRF24.c   ****     for (int i = 0; i < num_bytes; ++i) 
- 682              		.loc 1 264 0
- 683 003c 0026     		movs	r6, #0
- 684              	.LVL62:
- 685              	.L60:
- 686              		.loc 1 264 0 is_stmt 0 discriminator 1
- 687 003e 5645     		cmp	r6, r10
- 688 0040 54DA     		bge	.L65
- 265:Src/nRF24.c   **** 		{
+ARM GAS  /tmp/ccJN1dG0.s 			page 20
+
+
+ 809              		.loc 1 264 0
+ 810 003c 0026     		movs	r6, #0
+ 811              	.LVL72:
+ 812              	.L68:
+ 813              		.loc 1 264 0 is_stmt 0 discriminator 1
+ 814 003e 5645     		cmp	r6, r10
+ 815 0040 54DA     		bge	.L73
+ 265:Src/nRF24.c   ****     {
  266:Src/nRF24.c   ****       // if there's any mismatch between written data and read data from the register.
- 267:Src/nRF24.c   ****       if (read_data[i] != writing_data[i]) 
- 689              		.loc 1 267 0 is_stmt 1
- 690 0042 19F80620 		ldrb	r2, [r9, r6]	@ zero_extendqisi2
- 691 0046 08EB0604 		add	r4, r8, r6
- 692 004a 18F80630 		ldrb	r3, [r8, r6]	@ zero_extendqisi2
- 693 004e 9A42     		cmp	r2, r3
- 694 0050 24D1     		bne	.L66
- 268:Src/nRF24.c   **** 			{
+ 267:Src/nRF24.c   ****       if (read_data[i] != p_writing_data[i]) 
+ 816              		.loc 1 267 0 is_stmt 1
+ 817 0042 19F80620 		ldrb	r2, [r9, r6]	@ zero_extendqisi2
+ 818 0046 08EB0604 		add	r4, r8, r6
+ 819 004a 18F80630 		ldrb	r3, [r8, r6]	@ zero_extendqisi2
+ 820 004e 9A42     		cmp	r2, r3
+ 821 0050 24D1     		bne	.L74
+ 268:Src/nRF24.c   ****       {
  269:Src/nRF24.c   ****         strcpy(message, "Problem writing to SPI register -- ");
-ARM GAS  /tmp/ccehh4cg.s 			page 18
-
-
  270:Src/nRF24.c   ****         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
- 271:Src/nRF24.c   ****         sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i])
+ 271:Src/nRF24.c   ****         sprintf(message, "p_writing_data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_da
  272:Src/nRF24.c   ****         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
  273:Src/nRF24.c   ****         return true;
  274:Src/nRF24.c   ****       } else {
  275:Src/nRF24.c   ****         strcpy(message, "Success writing to SPI register -- ");
- 695              		.loc 1 275 0 discriminator 2
- 696 0052 3C46     		mov	r4, r7
- 697 0054 284D     		ldr	r5, .L67
- 698 0056 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 699 0058 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 700 005a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 701 005c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 702 005e 2B68     		ldr	r3, [r5]
- 703 0060 2360     		str	r3, [r4]
+ 822              		.loc 1 275 0 discriminator 2
+ 823 0052 3C46     		mov	r4, r7
+ 824 0054 284D     		ldr	r5, .L75
+ 825 0056 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 826 0058 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 827 005a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 828 005c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 829 005e 2B68     		ldr	r3, [r5]
+ 830 0060 2360     		str	r3, [r4]
  276:Src/nRF24.c   ****         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
- 704              		.loc 1 276 0 discriminator 2
- 705 0062 3846     		mov	r0, r7
- 706 0064 FFF7FEFF 		bl	strlen
- 707              	.LVL63:
- 708 0068 244C     		ldr	r4, .L67+4
- 709 006a 6423     		movs	r3, #100
- 710 006c 82B2     		uxth	r2, r0
- 711 006e 3946     		mov	r1, r7
- 712 0070 2046     		mov	r0, r4
- 713 0072 FFF7FEFF 		bl	HAL_UART_Transmit
- 714              	.LVL64:
- 277:Src/nRF24.c   ****         sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i])
- 715              		.loc 1 277 0 discriminator 2
- 716 0076 19F80630 		ldrb	r3, [r9, r6]	@ zero_extendqisi2
- 717 007a 18F80620 		ldrb	r2, [r8, r6]	@ zero_extendqisi2
- 718 007e 2049     		ldr	r1, .L67+8
- 719 0080 3846     		mov	r0, r7
- 720 0082 FFF7FEFF 		bl	sprintf
- 721              	.LVL65:
+ 831              		.loc 1 276 0 discriminator 2
+ 832 0062 3846     		mov	r0, r7
+ 833 0064 FFF7FEFF 		bl	strlen
+ 834              	.LVL73:
+ 835 0068 244C     		ldr	r4, .L75+4
+ 836 006a 6423     		movs	r3, #100
+ 837 006c 82B2     		uxth	r2, r0
+ 838 006e 3946     		mov	r1, r7
+ 839 0070 2046     		mov	r0, r4
+ 840 0072 FFF7FEFF 		bl	HAL_UART_Transmit
+ 841              	.LVL74:
+ 277:Src/nRF24.c   ****         sprintf(message, "p_writing_data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_da
+ 842              		.loc 1 277 0 discriminator 2
+ 843 0076 19F80630 		ldrb	r3, [r9, r6]	@ zero_extendqisi2
+ 844 007a 18F80620 		ldrb	r2, [r8, r6]	@ zero_extendqisi2
+ 845 007e 2049     		ldr	r1, .L75+8
+ 846 0080 3846     		mov	r0, r7
+ 847 0082 FFF7FEFF 		bl	sprintf
+ 848              	.LVL75:
  278:Src/nRF24.c   ****         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
- 722              		.loc 1 278 0 discriminator 2
- 723 0086 3846     		mov	r0, r7
- 724 0088 FFF7FEFF 		bl	strlen
- 725              	.LVL66:
- 726 008c 6423     		movs	r3, #100
- 727 008e 82B2     		uxth	r2, r0
- 728 0090 3946     		mov	r1, r7
- 729 0092 2046     		mov	r0, r4
- 730 0094 FFF7FEFF 		bl	HAL_UART_Transmit
- 731              	.LVL67:
- 264:Src/nRF24.c   **** 		{
- 732              		.loc 1 264 0 discriminator 2
- 733 0098 0136     		adds	r6, r6, #1
- 734              	.LVL68:
- 735 009a D0E7     		b	.L60
- 736              	.L66:
+ 849              		.loc 1 278 0 discriminator 2
+ 850 0086 3846     		mov	r0, r7
+ 851 0088 FFF7FEFF 		bl	strlen
+ARM GAS  /tmp/ccJN1dG0.s 			page 21
+
+
+ 852              	.LVL76:
+ 853 008c 6423     		movs	r3, #100
+ 854 008e 82B2     		uxth	r2, r0
+ 855 0090 3946     		mov	r1, r7
+ 856 0092 2046     		mov	r0, r4
+ 857 0094 FFF7FEFF 		bl	HAL_UART_Transmit
+ 858              	.LVL77:
+ 264:Src/nRF24.c   ****     {
+ 859              		.loc 1 264 0 discriminator 2
+ 860 0098 0136     		adds	r6, r6, #1
+ 861              	.LVL78:
+ 862 009a D0E7     		b	.L68
+ 863              	.L74:
  269:Src/nRF24.c   ****         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
- 737              		.loc 1 269 0
- 738 009c 3D46     		mov	r5, r7
- 739 009e DFF864E0 		ldr	lr, .L67+12
- 740 00a2 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
-ARM GAS  /tmp/ccehh4cg.s 			page 19
-
-
- 741 00a6 0FC5     		stmia	r5!, {r0, r1, r2, r3}
- 742 00a8 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
- 743 00ac 0FC5     		stmia	r5!, {r0, r1, r2, r3}
- 744 00ae DEF80030 		ldr	r3, [lr]
- 745 00b2 2B60     		str	r3, [r5]
- 270:Src/nRF24.c   ****         sprintf(message, "writing_data: <%02x> read_data: <%02x>\n", writing_data[i], read_data[i])
- 746              		.loc 1 270 0
- 747 00b4 3846     		mov	r0, r7
- 748 00b6 FFF7FEFF 		bl	strlen
- 749              	.LVL69:
- 750 00ba 104D     		ldr	r5, .L67+4
- 751 00bc 6423     		movs	r3, #100
- 752 00be 82B2     		uxth	r2, r0
- 753 00c0 3946     		mov	r1, r7
- 754 00c2 2846     		mov	r0, r5
- 755 00c4 FFF7FEFF 		bl	HAL_UART_Transmit
- 756              	.LVL70:
+ 864              		.loc 1 269 0
+ 865 009c 3D46     		mov	r5, r7
+ 866 009e DFF864E0 		ldr	lr, .L75+12
+ 867 00a2 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 868 00a6 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 869 00a8 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 870 00ac 0FC5     		stmia	r5!, {r0, r1, r2, r3}
+ 871 00ae DEF80030 		ldr	r3, [lr]
+ 872 00b2 2B60     		str	r3, [r5]
+ 270:Src/nRF24.c   ****         sprintf(message, "p_writing_data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_da
+ 873              		.loc 1 270 0
+ 874 00b4 3846     		mov	r0, r7
+ 875 00b6 FFF7FEFF 		bl	strlen
+ 876              	.LVL79:
+ 877 00ba 104D     		ldr	r5, .L75+4
+ 878 00bc 6423     		movs	r3, #100
+ 879 00be 82B2     		uxth	r2, r0
+ 880 00c0 3946     		mov	r1, r7
+ 881 00c2 2846     		mov	r0, r5
+ 882 00c4 FFF7FEFF 		bl	HAL_UART_Transmit
+ 883              	.LVL80:
  271:Src/nRF24.c   ****         HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
- 757              		.loc 1 271 0
- 758 00c8 19F80630 		ldrb	r3, [r9, r6]	@ zero_extendqisi2
- 759 00cc 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
- 760 00ce 0C49     		ldr	r1, .L67+8
- 761 00d0 3846     		mov	r0, r7
- 762 00d2 FFF7FEFF 		bl	sprintf
- 763              	.LVL71:
+ 884              		.loc 1 271 0
+ 885 00c8 19F80630 		ldrb	r3, [r9, r6]	@ zero_extendqisi2
+ 886 00cc 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 887 00ce 0C49     		ldr	r1, .L75+8
+ 888 00d0 3846     		mov	r0, r7
+ 889 00d2 FFF7FEFF 		bl	sprintf
+ 890              	.LVL81:
  272:Src/nRF24.c   ****         return true;
- 764              		.loc 1 272 0
- 765 00d6 3846     		mov	r0, r7
- 766 00d8 FFF7FEFF 		bl	strlen
- 767              	.LVL72:
- 768 00dc 6423     		movs	r3, #100
- 769 00de 82B2     		uxth	r2, r0
- 770 00e0 3946     		mov	r1, r7
- 771 00e2 2846     		mov	r0, r5
- 772 00e4 FFF7FEFF 		bl	HAL_UART_Transmit
- 773              	.LVL73:
+ 891              		.loc 1 272 0
+ 892 00d6 3846     		mov	r0, r7
+ 893 00d8 FFF7FEFF 		bl	strlen
+ 894              	.LVL82:
+ 895 00dc 6423     		movs	r3, #100
+ 896 00de 82B2     		uxth	r2, r0
+ 897 00e0 3946     		mov	r1, r7
+ 898 00e2 2846     		mov	r0, r5
+ 899 00e4 FFF7FEFF 		bl	HAL_UART_Transmit
+ 900              	.LVL83:
  273:Src/nRF24.c   ****       } else {
- 774              		.loc 1 273 0
- 775 00e8 0120     		movs	r0, #1
- 776 00ea 00E0     		b	.L62
- 777              	.L65:
- 778              	.LBE8:
+ 901              		.loc 1 273 0
+ 902 00e8 0120     		movs	r0, #1
+ARM GAS  /tmp/ccJN1dG0.s 			page 22
+
+
+ 903 00ea 00E0     		b	.L70
+ 904              	.L73:
+ 905              	.LBE69:
  279:Src/nRF24.c   ****       }
  280:Src/nRF24.c   ****   }
  281:Src/nRF24.c   ****   return false;
- 779              		.loc 1 281 0
- 780 00ec 0020     		movs	r0, #0
- 781              	.L62:
+ 906              		.loc 1 281 0
+ 907 00ec 0020     		movs	r0, #0
+ 908              	.L70:
  282:Src/nRF24.c   **** }
- 782              		.loc 1 282 0
- 783 00ee 4037     		adds	r7, r7, #64
- 784              	.LCFI17:
- 785              		.cfi_def_cfa_offset 32
- 786 00f0 BD46     		mov	sp, r7
- 787              	.LCFI18:
- 788              		.cfi_def_cfa_register 13
- 789              		@ sp needed
-ARM GAS  /tmp/ccehh4cg.s 			page 20
-
-
- 790 00f2 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
- 791              	.LVL74:
- 792              	.L68:
- 793 00f6 00BF     		.align	2
- 794              	.L67:
- 795 00f8 4C000000 		.word	.LC5
- 796 00fc 00000000 		.word	huart2
- 797 0100 24000000 		.word	.LC4
- 798 0104 00000000 		.word	.LC3
- 799              		.cfi_endproc
- 800              	.LFE145:
- 802              		.section	.text.nRF24_get_STATUS,"ax",%progbits
- 803              		.align	1
- 804              		.global	nRF24_get_STATUS
- 805              		.syntax unified
- 806              		.thumb
- 807              		.thumb_func
- 808              		.fpu fpv4-sp-d16
- 810              	nRF24_get_STATUS:
- 811              	.LFB146:
+ 909              		.loc 1 282 0
+ 910 00ee 4037     		adds	r7, r7, #64
+ 911              	.LCFI17:
+ 912              		.cfi_def_cfa_offset 32
+ 913 00f0 BD46     		mov	sp, r7
+ 914              	.LCFI18:
+ 915              		.cfi_def_cfa_register 13
+ 916              		@ sp needed
+ 917 00f2 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 918              	.LVL84:
+ 919              	.L76:
+ 920 00f6 00BF     		.align	2
+ 921              	.L75:
+ 922 00f8 50000000 		.word	.LC5
+ 923 00fc 00000000 		.word	huart2
+ 924 0100 24000000 		.word	.LC4
+ 925 0104 00000000 		.word	.LC3
+ 926              		.cfi_endproc
+ 927              	.LFE145:
+ 929              		.section	.text.nRF24_get_STATUS,"ax",%progbits
+ 930              		.align	1
+ 931              		.global	nRF24_get_STATUS
+ 932              		.syntax unified
+ 933              		.thumb
+ 934              		.thumb_func
+ 935              		.fpu fpv4-sp-d16
+ 937              	nRF24_get_STATUS:
+ 938              	.LFB146:
  283:Src/nRF24.c   **** 
  284:Src/nRF24.c   **** 
  285:Src/nRF24.c   **** /**
@@ -1170,49 +1308,49 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  289:Src/nRF24.c   ****   */
  290:Src/nRF24.c   **** uint8_t nRF24_get_STATUS(void) 
  291:Src/nRF24.c   **** {
- 812              		.loc 1 291 0
- 813              		.cfi_startproc
- 814              		@ args = 0, pretend = 0, frame = 8
- 815              		@ frame_needed = 0, uses_anonymous_args = 0
- 816 0000 00B5     		push	{lr}
- 817              	.LCFI19:
- 818              		.cfi_def_cfa_offset 4
- 819              		.cfi_offset 14, -4
- 820 0002 83B0     		sub	sp, sp, #12
- 821              	.LCFI20:
- 822              		.cfi_def_cfa_offset 16
+ 939              		.loc 1 291 0
+ 940              		.cfi_startproc
+ 941              		@ args = 0, pretend = 0, frame = 8
+ 942              		@ frame_needed = 0, uses_anonymous_args = 0
+ 943 0000 00B5     		push	{lr}
+ 944              	.LCFI19:
+ 945              		.cfi_def_cfa_offset 4
+ 946              		.cfi_offset 14, -4
+ 947 0002 83B0     		sub	sp, sp, #12
+ 948              	.LCFI20:
+ARM GAS  /tmp/ccJN1dG0.s 			page 23
+
+
+ 949              		.cfi_def_cfa_offset 16
  292:Src/nRF24.c   ****   uint8_t stat;
  293:Src/nRF24.c   ****   spi_read_register(R_REGISTER_MASK + STATUS, 1, &stat);
- 823              		.loc 1 293 0
- 824 0004 0DF10702 		add	r2, sp, #7
- 825 0008 0121     		movs	r1, #1
- 826 000a 0720     		movs	r0, #7
- 827 000c FFF7FEFF 		bl	spi_read_register
- 828              	.LVL75:
+ 950              		.loc 1 293 0
+ 951 0004 0DF10702 		add	r2, sp, #7
+ 952 0008 0121     		movs	r1, #1
+ 953 000a 0720     		movs	r0, #7
+ 954 000c FFF7FEFF 		bl	spi_read_register
+ 955              	.LVL85:
  294:Src/nRF24.c   ****   // Serial.print("- STATUS: "); Serial.println(stat,HEX);
  295:Src/nRF24.c   ****   return stat;
  296:Src/nRF24.c   **** }
- 829              		.loc 1 296 0
- 830 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
- 831 0014 03B0     		add	sp, sp, #12
- 832              	.LCFI21:
- 833              		.cfi_def_cfa_offset 4
- 834              		@ sp needed
-ARM GAS  /tmp/ccehh4cg.s 			page 21
-
-
- 835 0016 5DF804FB 		ldr	pc, [sp], #4
- 836              		.cfi_endproc
- 837              	.LFE146:
- 839              		.section	.text.nRF24_get_FIFO_STATUS,"ax",%progbits
- 840              		.align	1
- 841              		.global	nRF24_get_FIFO_STATUS
- 842              		.syntax unified
- 843              		.thumb
- 844              		.thumb_func
- 845              		.fpu fpv4-sp-d16
- 847              	nRF24_get_FIFO_STATUS:
- 848              	.LFB147:
+ 956              		.loc 1 296 0
+ 957 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 958 0014 03B0     		add	sp, sp, #12
+ 959              	.LCFI21:
+ 960              		.cfi_def_cfa_offset 4
+ 961              		@ sp needed
+ 962 0016 5DF804FB 		ldr	pc, [sp], #4
+ 963              		.cfi_endproc
+ 964              	.LFE146:
+ 966              		.section	.text.nRF24_get_FIFO_STATUS,"ax",%progbits
+ 967              		.align	1
+ 968              		.global	nRF24_get_FIFO_STATUS
+ 969              		.syntax unified
+ 970              		.thumb
+ 971              		.thumb_func
+ 972              		.fpu fpv4-sp-d16
+ 974              	nRF24_get_FIFO_STATUS:
+ 975              	.LFB147:
  297:Src/nRF24.c   **** 
  298:Src/nRF24.c   **** /**
  299:Src/nRF24.c   ****   * @brief      Read 'FIFO_STATUS' register from nRF24.
@@ -1221,49 +1359,49 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  302:Src/nRF24.c   ****   */
  303:Src/nRF24.c   **** uint8_t nRF24_get_FIFO_STATUS() 
  304:Src/nRF24.c   **** {
- 849              		.loc 1 304 0
- 850              		.cfi_startproc
- 851              		@ args = 0, pretend = 0, frame = 8
- 852              		@ frame_needed = 0, uses_anonymous_args = 0
- 853 0000 00B5     		push	{lr}
- 854              	.LCFI22:
- 855              		.cfi_def_cfa_offset 4
- 856              		.cfi_offset 14, -4
- 857 0002 83B0     		sub	sp, sp, #12
- 858              	.LCFI23:
- 859              		.cfi_def_cfa_offset 16
+ 976              		.loc 1 304 0
+ 977              		.cfi_startproc
+ 978              		@ args = 0, pretend = 0, frame = 8
+ 979              		@ frame_needed = 0, uses_anonymous_args = 0
+ 980 0000 00B5     		push	{lr}
+ 981              	.LCFI22:
+ 982              		.cfi_def_cfa_offset 4
+ 983              		.cfi_offset 14, -4
+ 984 0002 83B0     		sub	sp, sp, #12
+ 985              	.LCFI23:
+ 986              		.cfi_def_cfa_offset 16
  305:Src/nRF24.c   ****   uint8_t fifo_status;
  306:Src/nRF24.c   ****   spi_read_register(R_REGISTER_MASK + FIFO_STATUS, 1, &fifo_status);
- 860              		.loc 1 306 0
- 861 0004 0DF10702 		add	r2, sp, #7
- 862 0008 0121     		movs	r1, #1
- 863 000a 1720     		movs	r0, #23
- 864 000c FFF7FEFF 		bl	spi_read_register
- 865              	.LVL76:
+ 987              		.loc 1 306 0
+ 988 0004 0DF10702 		add	r2, sp, #7
+ 989 0008 0121     		movs	r1, #1
+ 990 000a 1720     		movs	r0, #23
+ 991 000c FFF7FEFF 		bl	spi_read_register
+ 992              	.LVL86:
+ARM GAS  /tmp/ccJN1dG0.s 			page 24
+
+
  307:Src/nRF24.c   ****   // Serial.print("- FIFO STATUS: "); Serial.println(fifo_status,HEX);
  308:Src/nRF24.c   ****   return fifo_status;
  309:Src/nRF24.c   **** }
- 866              		.loc 1 309 0
- 867 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
- 868 0014 03B0     		add	sp, sp, #12
- 869              	.LCFI24:
- 870              		.cfi_def_cfa_offset 4
- 871              		@ sp needed
- 872 0016 5DF804FB 		ldr	pc, [sp], #4
- 873              		.cfi_endproc
- 874              	.LFE147:
- 876              		.section	.text.nRF24_get_CONFIG,"ax",%progbits
- 877              		.align	1
- 878              		.global	nRF24_get_CONFIG
- 879              		.syntax unified
- 880              		.thumb
- 881              		.thumb_func
-ARM GAS  /tmp/ccehh4cg.s 			page 22
-
-
- 882              		.fpu fpv4-sp-d16
- 884              	nRF24_get_CONFIG:
- 885              	.LFB148:
+ 993              		.loc 1 309 0
+ 994 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 995 0014 03B0     		add	sp, sp, #12
+ 996              	.LCFI24:
+ 997              		.cfi_def_cfa_offset 4
+ 998              		@ sp needed
+ 999 0016 5DF804FB 		ldr	pc, [sp], #4
+ 1000              		.cfi_endproc
+ 1001              	.LFE147:
+ 1003              		.section	.text.nRF24_get_CONFIG,"ax",%progbits
+ 1004              		.align	1
+ 1005              		.global	nRF24_get_CONFIG
+ 1006              		.syntax unified
+ 1007              		.thumb
+ 1008              		.thumb_func
+ 1009              		.fpu fpv4-sp-d16
+ 1011              	nRF24_get_CONFIG:
+ 1012              	.LFB148:
  310:Src/nRF24.c   **** 
  311:Src/nRF24.c   **** /**
  312:Src/nRF24.c   ****   * @brief      Read 'CONFIG' register from nRF24.
@@ -1272,55 +1410,55 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  315:Src/nRF24.c   ****   */
  316:Src/nRF24.c   **** uint8_t nRF24_get_CONFIG() 
  317:Src/nRF24.c   **** {
- 886              		.loc 1 317 0
- 887              		.cfi_startproc
- 888              		@ args = 0, pretend = 0, frame = 8
- 889              		@ frame_needed = 0, uses_anonymous_args = 0
- 890 0000 00B5     		push	{lr}
- 891              	.LCFI25:
- 892              		.cfi_def_cfa_offset 4
- 893              		.cfi_offset 14, -4
- 894 0002 83B0     		sub	sp, sp, #12
- 895              	.LCFI26:
- 896              		.cfi_def_cfa_offset 16
+ 1013              		.loc 1 317 0
+ 1014              		.cfi_startproc
+ 1015              		@ args = 0, pretend = 0, frame = 8
+ 1016              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1017 0000 00B5     		push	{lr}
+ 1018              	.LCFI25:
+ 1019              		.cfi_def_cfa_offset 4
+ 1020              		.cfi_offset 14, -4
+ 1021 0002 83B0     		sub	sp, sp, #12
+ 1022              	.LCFI26:
+ 1023              		.cfi_def_cfa_offset 16
  318:Src/nRF24.c   ****   uint8_t config_reg;
  319:Src/nRF24.c   ****   spi_read_register(R_REGISTER_MASK + CONFIG, 1, &config_reg);
- 897              		.loc 1 319 0
- 898 0004 0DF10702 		add	r2, sp, #7
- 899 0008 0121     		movs	r1, #1
- 900 000a 0020     		movs	r0, #0
- 901 000c FFF7FEFF 		bl	spi_read_register
- 902              	.LVL77:
+ 1024              		.loc 1 319 0
+ 1025 0004 0DF10702 		add	r2, sp, #7
+ 1026 0008 0121     		movs	r1, #1
+ 1027 000a 0020     		movs	r0, #0
+ 1028 000c FFF7FEFF 		bl	spi_read_register
+ 1029              	.LVL87:
  320:Src/nRF24.c   ****   // Serial.print("- CONFIG: "); Serial.println(config_reg,HEX);
  321:Src/nRF24.c   ****   return config_reg;
  322:Src/nRF24.c   **** }
- 903              		.loc 1 322 0
- 904 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
- 905 0014 03B0     		add	sp, sp, #12
- 906              	.LCFI27:
- 907              		.cfi_def_cfa_offset 4
- 908              		@ sp needed
- 909 0016 5DF804FB 		ldr	pc, [sp], #4
- 910              		.cfi_endproc
- 911              	.LFE148:
- 913              		.section	.text.nRF24_tx_self_test,"ax",%progbits
- 914              		.align	1
- 915              		.global	nRF24_tx_self_test
- 916              		.syntax unified
- 917              		.thumb
- 918              		.thumb_func
- 919              		.fpu fpv4-sp-d16
- 921              	nRF24_tx_self_test:
- 922              	.LFB149:
+ 1030              		.loc 1 322 0
+ 1031 0010 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 1032 0014 03B0     		add	sp, sp, #12
+ 1033              	.LCFI27:
+ 1034              		.cfi_def_cfa_offset 4
+ 1035              		@ sp needed
+ARM GAS  /tmp/ccJN1dG0.s 			page 25
+
+
+ 1036 0016 5DF804FB 		ldr	pc, [sp], #4
+ 1037              		.cfi_endproc
+ 1038              	.LFE148:
+ 1040              		.section	.text.nRF24_tx_self_test,"ax",%progbits
+ 1041              		.align	1
+ 1042              		.global	nRF24_tx_self_test
+ 1043              		.syntax unified
+ 1044              		.thumb
+ 1045              		.thumb_func
+ 1046              		.fpu fpv4-sp-d16
+ 1048              	nRF24_tx_self_test:
+ 1049              	.LFB149:
  323:Src/nRF24.c   **** 
  324:Src/nRF24.c   **** /**  
  325:Src/nRF24.c   ****  *  @brief:  Test nRF24 transmitter function without a receiver.
  326:Src/nRF24.c   ****  *  @note:  
  327:Src/nRF24.c   ****  *      
  328:Src/nRF24.c   ****  *      Steps: 1. Disable Auto Acknowledgement, disable Auto Retransmit.
-ARM GAS  /tmp/ccehh4cg.s 			page 23
-
-
  329:Src/nRF24.c   ****  *             2. TX_DS (in STATUS register) is expected to be set when data has been clock into TX
  330:Src/nRF24.c   ****  *             3. Check if STATUS = 0x2E, if so we have a working TX module.
  331:Src/nRF24.c   ****  *            
@@ -1347,174 +1485,174 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  352:Src/nRF24.c   ****  */
  353:Src/nRF24.c   **** bool nRF24_tx_self_test() 
  354:Src/nRF24.c   **** {
- 923              		.loc 1 354 0
- 924              		.cfi_startproc
- 925              		@ args = 0, pretend = 0, frame = 272
- 926              		@ frame_needed = 0, uses_anonymous_args = 0
- 927 0000 30B5     		push	{r4, r5, lr}
- 928              	.LCFI28:
- 929              		.cfi_def_cfa_offset 12
- 930              		.cfi_offset 4, -12
- 931              		.cfi_offset 5, -8
- 932              		.cfi_offset 14, -4
- 933 0002 C5B0     		sub	sp, sp, #276
- 934              	.LCFI29:
- 935              		.cfi_def_cfa_offset 288
+ 1050              		.loc 1 354 0
+ 1051              		.cfi_startproc
+ 1052              		@ args = 0, pretend = 0, frame = 272
+ 1053              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1054 0000 30B5     		push	{r4, r5, lr}
+ 1055              	.LCFI28:
+ 1056              		.cfi_def_cfa_offset 12
+ 1057              		.cfi_offset 4, -12
+ 1058              		.cfi_offset 5, -8
+ 1059              		.cfi_offset 14, -4
+ 1060 0002 C5B0     		sub	sp, sp, #276
+ 1061              	.LCFI29:
+ 1062              		.cfi_def_cfa_offset 288
+ARM GAS  /tmp/ccJN1dG0.s 			page 26
+
+
  355:Src/nRF24.c   **** 
  356:Src/nRF24.c   ****   char message1[] = "---- nrf24 tx self test. ----\n";
- 936              		.loc 1 356 0
- 937 0004 3CAC     		add	r4, sp, #240
- 938 0006 3F4D     		ldr	r5, .L80
- 939 0008 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 940 000a 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 941 000c 95E80F00 		ldm	r5, {r0, r1, r2, r3}
- 942 0010 07C4     		stmia	r4!, {r0, r1, r2}
- 943 0012 24F8023B 		strh	r3, [r4], #2	@ movhi
- 944 0016 1B0C     		lsrs	r3, r3, #16
- 945 0018 2370     		strb	r3, [r4]
+ 1063              		.loc 1 356 0
+ 1064 0004 3CAC     		add	r4, sp, #240
+ 1065 0006 3F4D     		ldr	r5, .L88
+ 1066 0008 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 1067 000a 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 1068 000c 95E80F00 		ldm	r5, {r0, r1, r2, r3}
+ 1069 0010 07C4     		stmia	r4!, {r0, r1, r2}
+ 1070 0012 24F8023B 		strh	r3, [r4], #2	@ movhi
+ 1071 0016 1B0C     		lsrs	r3, r3, #16
+ 1072 0018 2370     		strb	r3, [r4]
  357:Src/nRF24.c   ****   HAL_UART_Transmit(&huart2, (uint8_t*)message1, strlen(message1), 100);
- 946              		.loc 1 357 0
- 947 001a 3CA8     		add	r0, sp, #240
- 948 001c FFF7FEFF 		bl	strlen
- 949              	.LVL78:
- 950 0020 394C     		ldr	r4, .L80+4
-ARM GAS  /tmp/ccehh4cg.s 			page 24
-
-
- 951 0022 6423     		movs	r3, #100
- 952 0024 82B2     		uxth	r2, r0
- 953 0026 3CA9     		add	r1, sp, #240
- 954 0028 2046     		mov	r0, r4
- 955 002a FFF7FEFF 		bl	HAL_UART_Transmit
- 956              	.LVL79:
+ 1073              		.loc 1 357 0
+ 1074 001a 3CA8     		add	r0, sp, #240
+ 1075 001c FFF7FEFF 		bl	strlen
+ 1076              	.LVL88:
+ 1077 0020 394C     		ldr	r4, .L88+4
+ 1078 0022 6423     		movs	r3, #100
+ 1079 0024 82B2     		uxth	r2, r0
+ 1080 0026 3CA9     		add	r1, sp, #240
+ 1081 0028 2046     		mov	r0, r4
+ 1082 002a FFF7FEFF 		bl	HAL_UART_Transmit
+ 1083              	.LVL89:
  358:Src/nRF24.c   **** 
  359:Src/nRF24.c   ****   char message2[] = "---- This test to verifies function of a tranmitter send without a receiver. -
- 957              		.loc 1 359 0
- 958 002e 5322     		movs	r2, #83
- 959 0030 3649     		ldr	r1, .L80+8
- 960 0032 27A8     		add	r0, sp, #156
- 961 0034 FFF7FEFF 		bl	memcpy
- 962              	.LVL80:
+ 1084              		.loc 1 359 0
+ 1085 002e 5322     		movs	r2, #83
+ 1086 0030 3649     		ldr	r1, .L88+8
+ 1087 0032 27A8     		add	r0, sp, #156
+ 1088 0034 FFF7FEFF 		bl	memcpy
+ 1089              	.LVL90:
  360:Src/nRF24.c   ****   HAL_UART_Transmit(&huart2, (uint8_t*)message2, strlen(message2), 100);
- 963              		.loc 1 360 0
- 964 0038 27A8     		add	r0, sp, #156
- 965 003a FFF7FEFF 		bl	strlen
- 966              	.LVL81:
- 967 003e 6423     		movs	r3, #100
- 968 0040 82B2     		uxth	r2, r0
- 969 0042 27A9     		add	r1, sp, #156
- 970 0044 2046     		mov	r0, r4
- 971 0046 FFF7FEFF 		bl	HAL_UART_Transmit
- 972              	.LVL82:
+ 1090              		.loc 1 360 0
+ 1091 0038 27A8     		add	r0, sp, #156
+ 1092 003a FFF7FEFF 		bl	strlen
+ 1093              	.LVL91:
+ 1094 003e 6423     		movs	r3, #100
+ 1095 0040 82B2     		uxth	r2, r0
+ 1096 0042 27A9     		add	r1, sp, #156
+ 1097 0044 2046     		mov	r0, r4
+ 1098 0046 FFF7FEFF 		bl	HAL_UART_Transmit
+ 1099              	.LVL92:
  361:Src/nRF24.c   **** 
  362:Src/nRF24.c   ****   uint8_t nRF24_status = 0x00;
  363:Src/nRF24.c   **** 
  364:Src/nRF24.c   ****   // Note that if we reset the nRF connected without re-poweron the chip, initial value of register
  365:Src/nRF24.c   ****   // [Current State: Power-on reset 100 ms] 
  366:Src/nRF24.c   ****   nRF24_CE_0();
- 973              		.loc 1 366 0
- 974 004a FFF7FEFF 		bl	nRF24_CE_0
- 975              	.LVL83:
+ 1100              		.loc 1 366 0
+ 1101 004a FFF7FEFF 		bl	nRF24_CE_0
+ 1102              	.LVL93:
  367:Src/nRF24.c   ****   // [Current State: (RF transmission is) Power Down (But SPI is alive.)]
  368:Src/nRF24.c   ****   uint8_t writing_byte = 0x00;
- 976              		.loc 1 368 0
- 977 004e 44AC     		add	r4, sp, #272
- 978 0050 0023     		movs	r3, #0
- 979 0052 04F8753D 		strb	r3, [r4, #-117]!
+ 1103              		.loc 1 368 0
+ 1104 004e 44AC     		add	r4, sp, #272
+ 1105 0050 0023     		movs	r3, #0
+ARM GAS  /tmp/ccJN1dG0.s 			page 27
+
+
+ 1106 0052 04F8753D 		strb	r3, [r4, #-117]!
  369:Src/nRF24.c   ****   nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);        // disable auto 
- 980              		.loc 1 369 0
- 981 0056 2246     		mov	r2, r4
- 982 0058 0121     		movs	r1, #1
- 983 005a 2120     		movs	r0, #33
- 984 005c FFF7FEFF 		bl	nRF24_verified_write_register
- 985              	.LVL84:
+ 1107              		.loc 1 369 0
+ 1108 0056 2246     		mov	r2, r4
+ 1109 0058 0121     		movs	r1, #1
+ 1110 005a 2120     		movs	r0, #33
+ 1111 005c FFF7FEFF 		bl	nRF24_verified_write_register
+ 1112              	.LVL94:
  370:Src/nRF24.c   ****   nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);    // disable RX da
- 986              		.loc 1 370 0
- 987 0060 2246     		mov	r2, r4
- 988 0062 0121     		movs	r1, #1
- 989 0064 2220     		movs	r0, #34
- 990 0066 FFF7FEFF 		bl	nRF24_verified_write_register
- 991              	.LVL85:
+ 1113              		.loc 1 370 0
+ 1114 0060 2246     		mov	r2, r4
+ 1115 0062 0121     		movs	r1, #1
+ 1116 0064 2220     		movs	r0, #34
+ 1117 0066 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1118              	.LVL95:
  371:Src/nRF24.c   ****   nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);   // disable autom
- 992              		.loc 1 371 0
- 993 006a 2246     		mov	r2, r4
-ARM GAS  /tmp/ccehh4cg.s 			page 25
-
-
- 994 006c 0121     		movs	r1, #1
- 995 006e 2420     		movs	r0, #36
- 996 0070 FFF7FEFF 		bl	nRF24_verified_write_register
- 997              	.LVL86:
+ 1119              		.loc 1 371 0
+ 1120 006a 2246     		mov	r2, r4
+ 1121 006c 0121     		movs	r1, #1
+ 1122 006e 2420     		movs	r0, #36
+ 1123 0070 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1124              	.LVL96:
  372:Src/nRF24.c   ****   writing_byte = 0x0E;
- 998              		.loc 1 372 0
- 999 0074 0E23     		movs	r3, #14
- 1000 0076 8DF89B30 		strb	r3, [sp, #155]
+ 1125              		.loc 1 372 0
+ 1126 0074 0E23     		movs	r3, #14
+ 1127 0076 8DF89B30 		strb	r3, [sp, #155]
  373:Src/nRF24.c   ****   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       // PWR_UP = 1 PR
- 1001              		.loc 1 373 0
- 1002 007a 2246     		mov	r2, r4
- 1003 007c 0121     		movs	r1, #1
- 1004 007e 2020     		movs	r0, #32
- 1005 0080 FFF7FEFF 		bl	nRF24_verified_write_register
- 1006              	.LVL87:
+ 1128              		.loc 1 373 0
+ 1129 007a 2246     		mov	r2, r4
+ 1130 007c 0121     		movs	r1, #1
+ 1131 007e 2020     		movs	r0, #32
+ 1132 0080 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1133              	.LVL97:
  374:Src/nRF24.c   **** 
  375:Src/nRF24.c   ****   // PWR_UP=1, state transition to [Standby-I]
  376:Src/nRF24.c   ****   uint8_t test_payload[4] = {0xC0, 0xFE, 0xBE, 0xEF}; // clock in a payload, now TX FIFO not empty 
- 1007              		.loc 1 376 0
- 1008 0084 224B     		ldr	r3, .L80+12
- 1009 0086 1B68     		ldr	r3, [r3]
- 1010 0088 44AA     		add	r2, sp, #272
- 1011 008a 42F87C3D 		str	r3, [r2, #-124]!
+ 1134              		.loc 1 376 0
+ 1135 0084 224B     		ldr	r3, .L88+12
+ 1136 0086 1B68     		ldr	r3, [r3]
+ 1137 0088 44AA     		add	r2, sp, #272
+ 1138 008a 42F87C3D 		str	r3, [r2, #-124]!
  377:Src/nRF24.c   ****   spi_write_register(W_TX_PAYLOAD, 4, test_payload);
- 1012              		.loc 1 377 0
- 1013 008e 0421     		movs	r1, #4
- 1014 0090 A020     		movs	r0, #160
- 1015 0092 FFF7FEFF 		bl	spi_write_register
- 1016              	.LVL88:
+ 1139              		.loc 1 377 0
+ 1140 008e 0421     		movs	r1, #4
+ 1141 0090 A020     		movs	r0, #160
+ 1142 0092 FFF7FEFF 		bl	spi_write_register
+ 1143              	.LVL98:
  378:Src/nRF24.c   ****   nRF24_CE_1(); // Chip Enable. Fire the packet out on the antenna!
- 1017              		.loc 1 378 0
- 1018 0096 FFF7FEFF 		bl	nRF24_CE_1
- 1019              	.LVL89:
+ 1144              		.loc 1 378 0
+ 1145 0096 FFF7FEFF 		bl	nRF24_CE_1
+ 1146              	.LVL99:
  379:Src/nRF24.c   ****   
  380:Src/nRF24.c   ****   // TX FIFO not empty AND CE = 1, state transition to [TX MODE]
  381:Src/nRF24.c   ****   nRF24_status = nRF24_get_STATUS();
- 1020              		.loc 1 381 0
- 1021 009a FFF7FEFF 		bl	nRF24_get_STATUS
- 1022              	.LVL90:
- 1023 009e 0546     		mov	r5, r0
- 1024              	.LVL91:
+ 1147              		.loc 1 381 0
+ 1148 009a FFF7FEFF 		bl	nRF24_get_STATUS
+ 1149              	.LVL100:
+ARM GAS  /tmp/ccJN1dG0.s 			page 28
+
+
+ 1150 009e 0546     		mov	r5, r0
+ 1151              	.LVL101:
  382:Src/nRF24.c   ****   spi_delay(1);
- 1025              		.loc 1 382 0
- 1026 00a0 0120     		movs	r0, #1
- 1027 00a2 FFF7FEFF 		bl	spi_delay
- 1028              	.LVL92:
+ 1152              		.loc 1 382 0
+ 1153 00a0 0120     		movs	r0, #1
+ 1154 00a2 FFF7FEFF 		bl	spi_delay
+ 1155              	.LVL102:
  383:Src/nRF24.c   **** 
  384:Src/nRF24.c   ****   // CE=0, state transition -> now return to [Standby-I]. 
  385:Src/nRF24.c   ****   nRF24_CE_0();
- 1029              		.loc 1 385 0
- 1030 00a6 FFF7FEFF 		bl	nRF24_CE_0
- 1031              	.LVL93:
+ 1156              		.loc 1 385 0
+ 1157 00a6 FFF7FEFF 		bl	nRF24_CE_0
+ 1158              	.LVL103:
  386:Src/nRF24.c   ****   // PWR_UP = 0, state transition -> now return to [Power Down]
  387:Src/nRF24.c   ****   writing_byte = 0x08; // write default value for CONFIG register (writing_byte = 0)
- 1032              		.loc 1 387 0
- 1033 00aa 0823     		movs	r3, #8
- 1034 00ac 8DF89B30 		strb	r3, [sp, #155]
-ARM GAS  /tmp/ccehh4cg.s 			page 26
-
-
+ 1159              		.loc 1 387 0
+ 1160 00aa 0823     		movs	r3, #8
+ 1161 00ac 8DF89B30 		strb	r3, [sp, #155]
  388:Src/nRF24.c   ****   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       
- 1035              		.loc 1 388 0
- 1036 00b0 2246     		mov	r2, r4
- 1037 00b2 0121     		movs	r1, #1
- 1038 00b4 2020     		movs	r0, #32
- 1039 00b6 FFF7FEFF 		bl	nRF24_verified_write_register
- 1040              	.LVL94:
+ 1162              		.loc 1 388 0
+ 1163 00b0 2246     		mov	r2, r4
+ 1164 00b2 0121     		movs	r1, #1
+ 1165 00b4 2020     		movs	r0, #32
+ 1166 00b6 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1167              	.LVL104:
  389:Src/nRF24.c   **** 
  390:Src/nRF24.c   ****   // Now the chip is back to power down mode, check test result. 
  391:Src/nRF24.c   ****   if (nRF24_status & 0x2E) 
- 1041              		.loc 1 391 0
- 1042 00ba 15F02E0F 		tst	r5, #46
- 1043 00be 10D1     		bne	.L79
- 1044              	.LBB9:
+ 1168              		.loc 1 391 0
+ 1169 00ba 15F02E0F 		tst	r5, #46
+ 1170 00be 10D1     		bne	.L87
+ 1171              	.LBB70:
  392:Src/nRF24.c   ****   {
  393:Src/nRF24.c   ****     char message3[] = "\n > nRF24 transmission self-test has passed. STATUS has value of 0x2E, TX_D
  394:Src/nRF24.c   ****     HAL_UART_Transmit(&huart2, (uint8_t*)message3, strlen(message3), 100);
@@ -1523,612 +1661,616 @@ ARM GAS  /tmp/ccehh4cg.s 			page 1
  397:Src/nRF24.c   ****   else 
  398:Src/nRF24.c   ****   {
  399:Src/nRF24.c   ****     char message4[] = "\n > nRF24 transmission self-test has failed. STATUS is expected 0x2E.";
- 1045              		.loc 1 399 0
- 1046 00c0 4622     		movs	r2, #70
- 1047 00c2 1449     		ldr	r1, .L80+16
- 1048 00c4 01A8     		add	r0, sp, #4
- 1049 00c6 FFF7FEFF 		bl	memcpy
- 1050              	.LVL95:
+ 1172              		.loc 1 399 0
+ 1173 00c0 4622     		movs	r2, #70
+ 1174 00c2 1449     		ldr	r1, .L88+16
+ 1175 00c4 01A8     		add	r0, sp, #4
+ 1176 00c6 FFF7FEFF 		bl	memcpy
+ 1177              	.LVL105:
  400:Src/nRF24.c   ****     HAL_UART_Transmit(&huart2, (uint8_t*)message4, strlen(message4), 100);
- 1051              		.loc 1 400 0
- 1052 00ca 01A8     		add	r0, sp, #4
- 1053 00cc FFF7FEFF 		bl	strlen
- 1054              	.LVL96:
- 1055 00d0 6423     		movs	r3, #100
- 1056 00d2 82B2     		uxth	r2, r0
- 1057 00d4 01A9     		add	r1, sp, #4
- 1058 00d6 0C48     		ldr	r0, .L80+4
- 1059 00d8 FFF7FEFF 		bl	HAL_UART_Transmit
- 1060              	.LVL97:
+ 1178              		.loc 1 400 0
+ 1179 00ca 01A8     		add	r0, sp, #4
+ 1180 00cc FFF7FEFF 		bl	strlen
+ 1181              	.LVL106:
+ 1182 00d0 6423     		movs	r3, #100
+ 1183 00d2 82B2     		uxth	r2, r0
+ 1184 00d4 01A9     		add	r1, sp, #4
+ 1185 00d6 0C48     		ldr	r0, .L88+4
+ 1186 00d8 FFF7FEFF 		bl	HAL_UART_Transmit
+ 1187              	.LVL107:
+ARM GAS  /tmp/ccJN1dG0.s 			page 29
+
+
  401:Src/nRF24.c   ****     return false;
- 1061              		.loc 1 401 0
- 1062 00dc 0020     		movs	r0, #0
- 1063              	.L77:
- 1064              	.LBE9:
+ 1188              		.loc 1 401 0
+ 1189 00dc 0020     		movs	r0, #0
+ 1190              	.L85:
+ 1191              	.LBE70:
  402:Src/nRF24.c   ****   }
  403:Src/nRF24.c   ****   
  404:Src/nRF24.c   **** }
- 1065              		.loc 1 404 0 discriminator 1
- 1066 00de 45B0     		add	sp, sp, #276
- 1067              	.LCFI30:
- 1068              		.cfi_remember_state
- 1069              		.cfi_def_cfa_offset 12
- 1070              		@ sp needed
- 1071 00e0 30BD     		pop	{r4, r5, pc}
- 1072              	.LVL98:
- 1073              	.L79:
- 1074              	.LCFI31:
-ARM GAS  /tmp/ccehh4cg.s 			page 27
-
-
- 1075              		.cfi_restore_state
- 1076              	.LBB10:
+ 1192              		.loc 1 404 0 discriminator 1
+ 1193 00de 45B0     		add	sp, sp, #276
+ 1194              	.LCFI30:
+ 1195              		.cfi_remember_state
+ 1196              		.cfi_def_cfa_offset 12
+ 1197              		@ sp needed
+ 1198 00e0 30BD     		pop	{r4, r5, pc}
+ 1199              	.LVL108:
+ 1200              	.L87:
+ 1201              	.LCFI31:
+ 1202              		.cfi_restore_state
+ 1203              	.LBB71:
  393:Src/nRF24.c   ****     HAL_UART_Transmit(&huart2, (uint8_t*)message3, strlen(message3), 100);
- 1077              		.loc 1 393 0
- 1078 00e2 9022     		movs	r2, #144
- 1079 00e4 0C49     		ldr	r1, .L80+20
- 1080 00e6 01A8     		add	r0, sp, #4
- 1081 00e8 FFF7FEFF 		bl	memcpy
- 1082              	.LVL99:
+ 1204              		.loc 1 393 0
+ 1205 00e2 9022     		movs	r2, #144
+ 1206 00e4 0C49     		ldr	r1, .L88+20
+ 1207 00e6 01A8     		add	r0, sp, #4
+ 1208 00e8 FFF7FEFF 		bl	memcpy
+ 1209              	.LVL109:
  394:Src/nRF24.c   ****     return true;
- 1083              		.loc 1 394 0
- 1084 00ec 01A8     		add	r0, sp, #4
- 1085 00ee FFF7FEFF 		bl	strlen
- 1086              	.LVL100:
- 1087 00f2 6423     		movs	r3, #100
- 1088 00f4 82B2     		uxth	r2, r0
- 1089 00f6 01A9     		add	r1, sp, #4
- 1090 00f8 0348     		ldr	r0, .L80+4
- 1091 00fa FFF7FEFF 		bl	HAL_UART_Transmit
- 1092              	.LVL101:
+ 1210              		.loc 1 394 0
+ 1211 00ec 01A8     		add	r0, sp, #4
+ 1212 00ee FFF7FEFF 		bl	strlen
+ 1213              	.LVL110:
+ 1214 00f2 6423     		movs	r3, #100
+ 1215 00f4 82B2     		uxth	r2, r0
+ 1216 00f6 01A9     		add	r1, sp, #4
+ 1217 00f8 0348     		ldr	r0, .L88+4
+ 1218 00fa FFF7FEFF 		bl	HAL_UART_Transmit
+ 1219              	.LVL111:
  395:Src/nRF24.c   ****   } 
- 1093              		.loc 1 395 0
- 1094 00fe 0120     		movs	r0, #1
- 1095 0100 EDE7     		b	.L77
- 1096              	.L81:
- 1097 0102 00BF     		.align	2
- 1098              	.L80:
- 1099 0104 00000000 		.word	.LC6
- 1100 0108 00000000 		.word	huart2
- 1101 010c 20000000 		.word	.LC7
- 1102 0110 00000000 		.word	.LANCHOR0
- 1103 0114 74000000 		.word	.LC9
- 1104 0118 BC000000 		.word	.LC8
- 1105              	.LBE10:
- 1106              		.cfi_endproc
- 1107              	.LFE149:
- 1109              		.section	.text.nRF24_configure_tx_mode,"ax",%progbits
- 1110              		.align	1
- 1111              		.global	nRF24_configure_tx_mode
- 1112              		.syntax unified
- 1113              		.thumb
- 1114              		.thumb_func
- 1115              		.fpu fpv4-sp-d16
- 1117              	nRF24_configure_tx_mode:
- 1118              	.LFB150:
+ 1220              		.loc 1 395 0
+ 1221 00fe 0120     		movs	r0, #1
+ 1222 0100 EDE7     		b	.L85
+ 1223              	.L89:
+ 1224 0102 00BF     		.align	2
+ 1225              	.L88:
+ 1226 0104 00000000 		.word	.LC6
+ 1227 0108 00000000 		.word	huart2
+ 1228 010c 20000000 		.word	.LC7
+ 1229 0110 00000000 		.word	.LANCHOR0
+ 1230 0114 74000000 		.word	.LC9
+ 1231 0118 BC000000 		.word	.LC8
+ 1232              	.LBE71:
+ 1233              		.cfi_endproc
+ 1234              	.LFE149:
+ 1236              		.section	.text.nRF24_configure_tx_mode,"ax",%progbits
+ 1237              		.align	1
+ 1238              		.global	nRF24_configure_tx_mode
+ARM GAS  /tmp/ccJN1dG0.s 			page 30
+
+
+ 1239              		.syntax unified
+ 1240              		.thumb
+ 1241              		.thumb_func
+ 1242              		.fpu fpv4-sp-d16
+ 1244              	nRF24_configure_tx_mode:
+ 1245              	.LFB150:
  405:Src/nRF24.c   **** 
  406:Src/nRF24.c   **** /**
- 407:Src/nRF24.c   **** 	* @brief  Configure nRF24 to work in TX (transmit) mode.
- 408:Src/nRF24.c   **** 	* @param  None.
- 409:Src/nRF24.c   **** 	* @retval None.
- 410:Src/nRF24.c   **** 	* @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending data
- 411:Src/nRF24.c   **** 	*/
+ 407:Src/nRF24.c   ****   * @brief  Configure nRF24 to work in TX (transmit) mode.
+ 408:Src/nRF24.c   ****   * @param  None.
+ 409:Src/nRF24.c   ****   * @retval None.
+ 410:Src/nRF24.c   ****   * @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending dat
+ 411:Src/nRF24.c   ****   */
  412:Src/nRF24.c   **** void nRF24_configure_tx_mode() 
  413:Src/nRF24.c   **** {
- 1119              		.loc 1 413 0
- 1120              		.cfi_startproc
- 1121              		@ args = 0, pretend = 0, frame = 16
-ARM GAS  /tmp/ccehh4cg.s 			page 28
-
-
- 1122              		@ frame_needed = 0, uses_anonymous_args = 0
- 1123 0000 30B5     		push	{r4, r5, lr}
- 1124              	.LCFI32:
- 1125              		.cfi_def_cfa_offset 12
- 1126              		.cfi_offset 4, -12
- 1127              		.cfi_offset 5, -8
- 1128              		.cfi_offset 14, -4
- 1129 0002 85B0     		sub	sp, sp, #20
- 1130              	.LCFI33:
- 1131              		.cfi_def_cfa_offset 32
+ 1246              		.loc 1 413 0
+ 1247              		.cfi_startproc
+ 1248              		@ args = 0, pretend = 0, frame = 16
+ 1249              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1250 0000 30B5     		push	{r4, r5, lr}
+ 1251              	.LCFI32:
+ 1252              		.cfi_def_cfa_offset 12
+ 1253              		.cfi_offset 4, -12
+ 1254              		.cfi_offset 5, -8
+ 1255              		.cfi_offset 14, -4
+ 1256 0002 85B0     		sub	sp, sp, #20
+ 1257              	.LCFI33:
+ 1258              		.cfi_def_cfa_offset 32
  414:Src/nRF24.c   ****     nRF24_CE_0();
- 1132              		.loc 1 414 0
- 1133 0004 FFF7FEFF 		bl	nRF24_CE_0
- 1134              	.LVL102:
+ 1259              		.loc 1 414 0
+ 1260 0004 FFF7FEFF 		bl	nRF24_CE_0
+ 1261              	.LVL112:
  415:Src/nRF24.c   **** 
  416:Src/nRF24.c   ****     // Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value.
  417:Src/nRF24.c   ****     uint8_t TX_ADDRESS[5] = {0x10,0xDE,0x10,0x10,0x10};  // 5 byte transmit-address
- 1135              		.loc 1 417 0
- 1136 0008 1F4B     		ldr	r3, .L84
- 1137 000a 93E80300 		ldm	r3, {r0, r1}
- 1138 000e 0290     		str	r0, [sp, #8]
- 1139 0010 8DF80C10 		strb	r1, [sp, #12]
+ 1262              		.loc 1 417 0
+ 1263 0008 1F4B     		ldr	r3, .L92
+ 1264 000a 93E80300 		ldm	r3, {r0, r1}
+ 1265 000e 0290     		str	r0, [sp, #8]
+ 1266 0010 8DF80C10 		strb	r1, [sp, #12]
  418:Src/nRF24.c   ****     spi_write_register(W_REGISTER_MASK + TX_ADDR, 5, TX_ADDRESS);     // Write transmit-address to 
- 1140              		.loc 1 418 0
- 1141 0014 02AA     		add	r2, sp, #8
- 1142 0016 0521     		movs	r1, #5
- 1143 0018 3020     		movs	r0, #48
- 1144 001a FFF7FEFF 		bl	spi_write_register
- 1145              	.LVL103:
+ 1267              		.loc 1 418 0
+ 1268 0014 02AA     		add	r2, sp, #8
+ 1269 0016 0521     		movs	r1, #5
+ 1270 0018 3020     		movs	r0, #48
+ 1271 001a FFF7FEFF 		bl	spi_write_register
+ 1272              	.LVL113:
  419:Src/nRF24.c   **** 
  420:Src/nRF24.c   ****     uint8_t writing_byte;
  421:Src/nRF24.c   **** 
  422:Src/nRF24.c   ****     writing_byte = 0x00;
- 1146              		.loc 1 422 0
- 1147 001e 0025     		movs	r5, #0
- 1148 0020 04AC     		add	r4, sp, #16
- 1149 0022 04F8095D 		strb	r5, [r4, #-9]!
+ 1273              		.loc 1 422 0
+ 1274 001e 0025     		movs	r5, #0
+ 1275 0020 04AC     		add	r4, sp, #16
+ 1276 0022 04F8095D 		strb	r5, [r4, #-9]!
  423:Src/nRF24.c   ****     nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
- 1150              		.loc 1 423 0
- 1151 0026 2246     		mov	r2, r4
- 1152 0028 0121     		movs	r1, #1
- 1153 002a 2120     		movs	r0, #33
- 1154 002c FFF7FEFF 		bl	nRF24_verified_write_register
- 1155              	.LVL104:
+ 1277              		.loc 1 423 0
+ARM GAS  /tmp/ccJN1dG0.s 			page 31
+
+
+ 1278 0026 2246     		mov	r2, r4
+ 1279 0028 0121     		movs	r1, #1
+ 1280 002a 2120     		movs	r0, #33
+ 1281 002c FFF7FEFF 		bl	nRF24_verified_write_register
+ 1282              	.LVL114:
  424:Src/nRF24.c   **** 
  425:Src/nRF24.c   ****     writing_byte = 0x00;
- 1156              		.loc 1 425 0
- 1157 0030 8DF80750 		strb	r5, [sp, #7]
+ 1283              		.loc 1 425 0
+ 1284 0030 8DF80750 		strb	r5, [sp, #7]
  426:Src/nRF24.c   ****     nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
- 1158              		.loc 1 426 0
- 1159 0034 2246     		mov	r2, r4
- 1160 0036 0121     		movs	r1, #1
- 1161 0038 2220     		movs	r0, #34
- 1162 003a FFF7FEFF 		bl	nRF24_verified_write_register
- 1163              	.LVL105:
+ 1285              		.loc 1 426 0
+ 1286 0034 2246     		mov	r2, r4
+ 1287 0036 0121     		movs	r1, #1
+ 1288 0038 2220     		movs	r0, #34
+ 1289 003a FFF7FEFF 		bl	nRF24_verified_write_register
+ 1290              	.LVL115:
  427:Src/nRF24.c   **** 
  428:Src/nRF24.c   ****     writing_byte = 0x00;
-ARM GAS  /tmp/ccehh4cg.s 			page 29
-
-
- 1164              		.loc 1 428 0
- 1165 003e 8DF80750 		strb	r5, [sp, #7]
+ 1291              		.loc 1 428 0
+ 1292 003e 8DF80750 		strb	r5, [sp, #7]
  429:Src/nRF24.c   ****     nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
- 1166              		.loc 1 429 0
- 1167 0042 2246     		mov	r2, r4
- 1168 0044 0121     		movs	r1, #1
- 1169 0046 2420     		movs	r0, #36
- 1170 0048 FFF7FEFF 		bl	nRF24_verified_write_register
- 1171              	.LVL106:
+ 1293              		.loc 1 429 0
+ 1294 0042 2246     		mov	r2, r4
+ 1295 0044 0121     		movs	r1, #1
+ 1296 0046 2420     		movs	r0, #36
+ 1297 0048 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1298              	.LVL116:
  430:Src/nRF24.c   **** 
  431:Src/nRF24.c   ****     writing_byte = 40;
- 1172              		.loc 1 431 0
- 1173 004c 2823     		movs	r3, #40
- 1174 004e 8DF80730 		strb	r3, [sp, #7]
+ 1299              		.loc 1 431 0
+ 1300 004c 2823     		movs	r3, #40
+ 1301 004e 8DF80730 		strb	r3, [sp, #7]
  432:Src/nRF24.c   ****     nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
- 1175              		.loc 1 432 0
- 1176 0052 2246     		mov	r2, r4
- 1177 0054 0121     		movs	r1, #1
- 1178 0056 2520     		movs	r0, #37
- 1179 0058 FFF7FEFF 		bl	nRF24_verified_write_register
- 1180              	.LVL107:
+ 1302              		.loc 1 432 0
+ 1303 0052 2246     		mov	r2, r4
+ 1304 0054 0121     		movs	r1, #1
+ 1305 0056 2520     		movs	r0, #37
+ 1306 0058 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1307              	.LVL117:
  433:Src/nRF24.c   **** 
  434:Src/nRF24.c   ****     writing_byte = 0x07;
- 1181              		.loc 1 434 0
- 1182 005c 0723     		movs	r3, #7
- 1183 005e 8DF80730 		strb	r3, [sp, #7]
+ 1308              		.loc 1 434 0
+ 1309 005c 0723     		movs	r3, #7
+ 1310 005e 8DF80730 		strb	r3, [sp, #7]
  435:Src/nRF24.c   ****     nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
- 1184              		.loc 1 435 0
- 1185 0062 2246     		mov	r2, r4
- 1186 0064 0121     		movs	r1, #1
- 1187 0066 2620     		movs	r0, #38
- 1188 0068 FFF7FEFF 		bl	nRF24_verified_write_register
- 1189              	.LVL108:
+ 1311              		.loc 1 435 0
+ 1312 0062 2246     		mov	r2, r4
+ 1313 0064 0121     		movs	r1, #1
+ 1314 0066 2620     		movs	r0, #38
+ 1315 0068 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1316              	.LVL118:
  436:Src/nRF24.c   **** 
  437:Src/nRF24.c   ****     // PWR_UP, state transition to [Standby-I]
  438:Src/nRF24.c   ****     writing_byte = 0x0e;
- 1190              		.loc 1 438 0
- 1191 006c 0E23     		movs	r3, #14
- 1192 006e 8DF80730 		strb	r3, [sp, #7]
+ 1317              		.loc 1 438 0
+ 1318 006c 0E23     		movs	r3, #14
+ 1319 006e 8DF80730 		strb	r3, [sp, #7]
+ARM GAS  /tmp/ccJN1dG0.s 			page 32
+
+
  439:Src/nRF24.c   ****     nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
- 1193              		.loc 1 439 0
- 1194 0072 2246     		mov	r2, r4
- 1195 0074 0121     		movs	r1, #1
- 1196 0076 2020     		movs	r0, #32
- 1197 0078 FFF7FEFF 		bl	nRF24_verified_write_register
- 1198              	.LVL109:
+ 1320              		.loc 1 439 0
+ 1321 0072 2246     		mov	r2, r4
+ 1322 0074 0121     		movs	r1, #1
+ 1323 0076 2020     		movs	r0, #32
+ 1324 0078 FFF7FEFF 		bl	nRF24_verified_write_register
+ 1325              	.LVL119:
  440:Src/nRF24.c   ****     spi_delay(150);
- 1199              		.loc 1 440 0
- 1200 007c 9620     		movs	r0, #150
- 1201 007e FFF7FEFF 		bl	spi_delay
- 1202              	.LVL110:
+ 1326              		.loc 1 440 0
+ 1327 007c 9620     		movs	r0, #150
+ 1328 007e FFF7FEFF 		bl	spi_delay
+ 1329              	.LVL120:
  441:Src/nRF24.c   **** 
  442:Src/nRF24.c   ****     // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
  443:Src/nRF24.c   **** }
- 1203              		.loc 1 443 0
- 1204 0082 05B0     		add	sp, sp, #20
- 1205              	.LCFI34:
-ARM GAS  /tmp/ccehh4cg.s 			page 30
-
-
- 1206              		.cfi_def_cfa_offset 12
- 1207              		@ sp needed
- 1208 0084 30BD     		pop	{r4, r5, pc}
- 1209              	.L85:
- 1210 0086 00BF     		.align	2
- 1211              	.L84:
- 1212 0088 04000000 		.word	.LANCHOR0+4
- 1213              		.cfi_endproc
- 1214              	.LFE150:
- 1216              		.section	.text.nRF24_keep_sending,"ax",%progbits
- 1217              		.align	1
- 1218              		.global	nRF24_keep_sending
- 1219              		.syntax unified
- 1220              		.thumb
- 1221              		.thumb_func
- 1222              		.fpu fpv4-sp-d16
- 1224              	nRF24_keep_sending:
- 1225              	.LFB151:
+ 1330              		.loc 1 443 0
+ 1331 0082 05B0     		add	sp, sp, #20
+ 1332              	.LCFI34:
+ 1333              		.cfi_def_cfa_offset 12
+ 1334              		@ sp needed
+ 1335 0084 30BD     		pop	{r4, r5, pc}
+ 1336              	.L93:
+ 1337 0086 00BF     		.align	2
+ 1338              	.L92:
+ 1339 0088 04000000 		.word	.LANCHOR0+4
+ 1340              		.cfi_endproc
+ 1341              	.LFE150:
+ 1343              		.section	.text.nRF24_keep_sending,"ax",%progbits
+ 1344              		.align	1
+ 1345              		.global	nRF24_keep_sending
+ 1346              		.syntax unified
+ 1347              		.thumb
+ 1348              		.thumb_func
+ 1349              		.fpu fpv4-sp-d16
+ 1351              	nRF24_keep_sending:
+ 1352              	.LFB151:
  444:Src/nRF24.c   **** 
  445:Src/nRF24.c   **** 
  446:Src/nRF24.c   **** /**
- 447:Src/nRF24.c   **** 	* @brief  Make nRF24 keep sending data.
- 448:Src/nRF24.c   **** 	* @param  None.
- 449:Src/nRF24.c   **** 	* @retval None.
- 450:Src/nRF24.c   **** 	*/
+ 447:Src/nRF24.c   ****   * @brief  Make nRF24 keep sending data.
+ 448:Src/nRF24.c   ****   * @param  None.
+ 449:Src/nRF24.c   ****   * @retval None.
+ 450:Src/nRF24.c   ****   */
  451:Src/nRF24.c   **** void nRF24_keep_sending() 
  452:Src/nRF24.c   **** {
- 1226              		.loc 1 452 0
- 1227              		.cfi_startproc
- 1228              		@ args = 0, pretend = 0, frame = 72
- 1229              		@ frame_needed = 0, uses_anonymous_args = 0
- 1230 0000 30B5     		push	{r4, r5, lr}
- 1231              	.LCFI35:
- 1232              		.cfi_def_cfa_offset 12
- 1233              		.cfi_offset 4, -12
- 1234              		.cfi_offset 5, -8
- 1235              		.cfi_offset 14, -4
- 1236 0002 93B0     		sub	sp, sp, #76
- 1237              	.LCFI36:
- 1238              		.cfi_def_cfa_offset 88
+ 1353              		.loc 1 452 0
+ 1354              		.cfi_startproc
+ 1355              		@ args = 0, pretend = 0, frame = 72
+ 1356              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1357 0000 30B5     		push	{r4, r5, lr}
+ 1358              	.LCFI35:
+ 1359              		.cfi_def_cfa_offset 12
+ 1360              		.cfi_offset 4, -12
+ 1361              		.cfi_offset 5, -8
+ 1362              		.cfi_offset 14, -4
+ 1363 0002 93B0     		sub	sp, sp, #76
+ 1364              	.LCFI36:
+ARM GAS  /tmp/ccJN1dG0.s 			page 33
+
+
+ 1365              		.cfi_def_cfa_offset 88
  453:Src/nRF24.c   ****   uint8_t payload[] = {0xBE, 0xEF, 0xCA, 0xFE}; // clock in a payload, TX FIFO not empty 
- 1239              		.loc 1 453 0
- 1240 0004 254B     		ldr	r3, .L91
- 1241 0006 DB68     		ldr	r3, [r3, #12]
- 1242 0008 12AA     		add	r2, sp, #72
- 1243 000a 42F8043D 		str	r3, [r2, #-4]!
+ 1366              		.loc 1 453 0
+ 1367 0004 254B     		ldr	r3, .L99
+ 1368 0006 DB68     		ldr	r3, [r3, #12]
+ 1369 0008 12AA     		add	r2, sp, #72
+ 1370 000a 42F8043D 		str	r3, [r2, #-4]!
  454:Src/nRF24.c   **** 
  455:Src/nRF24.c   ****   char debug_msg[64];
  456:Src/nRF24.c   ****   
  457:Src/nRF24.c   ****   spi_write_register(W_TX_PAYLOAD, 4, (uint8_t*) payload);
- 1244              		.loc 1 457 0
- 1245 000e 0421     		movs	r1, #4
- 1246 0010 A020     		movs	r0, #160
- 1247 0012 FFF7FEFF 		bl	spi_write_register
- 1248              	.LVL111:
+ 1371              		.loc 1 457 0
+ 1372 000e 0421     		movs	r1, #4
+ 1373 0010 A020     		movs	r0, #160
+ 1374 0012 FFF7FEFF 		bl	spi_write_register
+ 1375              	.LVL121:
  458:Src/nRF24.c   **** 
- 459:Src/nRF24.c   **** 	/* fire out the transmit packet */
-ARM GAS  /tmp/ccehh4cg.s 			page 31
-
-
+ 459:Src/nRF24.c   ****   /* Fire out the transmit packet */
  460:Src/nRF24.c   ****   nRF24_CE_1(); 
- 1249              		.loc 1 460 0
- 1250 0016 FFF7FEFF 		bl	nRF24_CE_1
- 1251              	.LVL112:
+ 1376              		.loc 1 460 0
+ 1377 0016 FFF7FEFF 		bl	nRF24_CE_1
+ 1378              	.LVL122:
  461:Src/nRF24.c   **** 
  462:Src/nRF24.c   ****   uint8_t stat = nRF24_get_STATUS();
- 1252              		.loc 1 462 0
- 1253 001a FFF7FEFF 		bl	nRF24_get_STATUS
- 1254              	.LVL113:
- 1255 001e 0446     		mov	r4, r0
- 1256              	.LVL114:
+ 1379              		.loc 1 462 0
+ 1380 001a FFF7FEFF 		bl	nRF24_get_STATUS
+ 1381              	.LVL123:
+ 1382 001e 0446     		mov	r4, r0
+ 1383              	.LVL124:
  463:Src/nRF24.c   **** 
  464:Src/nRF24.c   ****   sprintf(debug_msg, "<STATUS> register : %x\n", stat);
- 1257              		.loc 1 464 0
- 1258 0020 0246     		mov	r2, r0
- 1259 0022 1F49     		ldr	r1, .L91+4
- 1260 0024 01A8     		add	r0, sp, #4
- 1261              	.LVL115:
- 1262 0026 FFF7FEFF 		bl	sprintf
- 1263              	.LVL116:
+ 1384              		.loc 1 464 0
+ 1385 0020 0246     		mov	r2, r0
+ 1386 0022 1F49     		ldr	r1, .L99+4
+ 1387 0024 01A8     		add	r0, sp, #4
+ 1388              	.LVL125:
+ 1389 0026 FFF7FEFF 		bl	sprintf
+ 1390              	.LVL126:
  465:Src/nRF24.c   ****   HAL_UART_Transmit(&huart2, (uint8_t*)debug_msg, strlen(debug_msg), 100);
- 1264              		.loc 1 465 0
- 1265 002a 01A8     		add	r0, sp, #4
- 1266 002c FFF7FEFF 		bl	strlen
- 1267              	.LVL117:
- 1268 0030 6423     		movs	r3, #100
- 1269 0032 82B2     		uxth	r2, r0
- 1270 0034 01A9     		add	r1, sp, #4
- 1271 0036 1B48     		ldr	r0, .L91+8
- 1272 0038 FFF7FEFF 		bl	HAL_UART_Transmit
- 1273              	.LVL118:
+ 1391              		.loc 1 465 0
+ 1392 002a 01A8     		add	r0, sp, #4
+ 1393 002c FFF7FEFF 		bl	strlen
+ 1394              	.LVL127:
+ 1395 0030 6423     		movs	r3, #100
+ 1396 0032 82B2     		uxth	r2, r0
+ 1397 0034 01A9     		add	r1, sp, #4
+ 1398 0036 1B48     		ldr	r0, .L99+8
+ 1399 0038 FFF7FEFF 		bl	HAL_UART_Transmit
+ 1400              	.LVL128:
  466:Src/nRF24.c   **** 
  467:Src/nRF24.c   ****   if (stat == 0x2e) // TX_DS bit is set.
- 1274              		.loc 1 467 0
- 1275 003c 2E2C     		cmp	r4, #46
- 1276 003e 1AD0     		beq	.L90
+ 1401              		.loc 1 467 0
+ 1402 003c 2E2C     		cmp	r4, #46
+ 1403 003e 1AD0     		beq	.L98
  468:Src/nRF24.c   ****   {
  469:Src/nRF24.c   ****     strcpy(debug_msg, "nRF24 send successful.\n");
  470:Src/nRF24.c   ****     HAL_UART_Transmit(&huart2, (uint8_t*)debug_msg, strlen(debug_msg), 100);
+ARM GAS  /tmp/ccJN1dG0.s 			page 34
+
+
  471:Src/nRF24.c   ****   } 
- 472:Src/nRF24.c   **** 	else 
+ 472:Src/nRF24.c   ****   else 
  473:Src/nRF24.c   ****   {
  474:Src/nRF24.c   ****     strcpy(debug_msg, "nRF24 send failed.\n");
- 1277              		.loc 1 474 0
- 1278 0040 01AC     		add	r4, sp, #4
- 1279 0042 194D     		ldr	r5, .L91+12
- 1280 0044 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 1281 0046 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 1282 0048 2B68     		ldr	r3, [r5]
- 1283 004a 2360     		str	r3, [r4]
+ 1404              		.loc 1 474 0
+ 1405 0040 01AC     		add	r4, sp, #4
+ 1406 0042 194D     		ldr	r5, .L99+12
+ 1407 0044 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 1408 0046 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 1409 0048 2B68     		ldr	r3, [r5]
+ 1410 004a 2360     		str	r3, [r4]
  475:Src/nRF24.c   ****     HAL_UART_Transmit(&huart2, (uint8_t*)debug_msg, strlen(debug_msg), 100);
- 1284              		.loc 1 475 0
- 1285 004c 01A8     		add	r0, sp, #4
- 1286 004e FFF7FEFF 		bl	strlen
- 1287              	.LVL119:
- 1288 0052 6423     		movs	r3, #100
- 1289 0054 82B2     		uxth	r2, r0
-ARM GAS  /tmp/ccehh4cg.s 			page 32
-
-
- 1290 0056 01A9     		add	r1, sp, #4
- 1291 0058 1248     		ldr	r0, .L91+8
- 1292 005a FFF7FEFF 		bl	HAL_UART_Transmit
- 1293              	.LVL120:
- 1294              	.L88:
+ 1411              		.loc 1 475 0
+ 1412 004c 01A8     		add	r0, sp, #4
+ 1413 004e FFF7FEFF 		bl	strlen
+ 1414              	.LVL129:
+ 1415 0052 6423     		movs	r3, #100
+ 1416 0054 82B2     		uxth	r2, r0
+ 1417 0056 01A9     		add	r1, sp, #4
+ 1418 0058 1248     		ldr	r0, .L99+8
+ 1419 005a FFF7FEFF 		bl	HAL_UART_Transmit
+ 1420              	.LVL130:
+ 1421              	.L96:
  476:Src/nRF24.c   ****   }
  477:Src/nRF24.c   ****   // write 1 to clear TX_DS, TX_DS bit is Write-to-Clear.
  478:Src/nRF24.c   ****   uint8_t writing_byte = 0x20;
- 1295              		.loc 1 478 0
- 1296 005e 12AA     		add	r2, sp, #72
- 1297 0060 2023     		movs	r3, #32
- 1298 0062 02F8453D 		strb	r3, [r2, #-69]!
+ 1422              		.loc 1 478 0
+ 1423 005e 12AA     		add	r2, sp, #72
+ 1424 0060 2023     		movs	r3, #32
+ 1425 0062 02F8453D 		strb	r3, [r2, #-69]!
  479:Src/nRF24.c   ****   spi_write_register(W_REGISTER_MASK + STATUS, 1, &writing_byte); 
- 1299              		.loc 1 479 0
- 1300 0066 0121     		movs	r1, #1
- 1301 0068 2720     		movs	r0, #39
- 1302 006a FFF7FEFF 		bl	spi_write_register
- 1303              	.LVL121:
+ 1426              		.loc 1 479 0
+ 1427 0066 0121     		movs	r1, #1
+ 1428 0068 2720     		movs	r0, #39
+ 1429 006a FFF7FEFF 		bl	spi_write_register
+ 1430              	.LVL131:
  480:Src/nRF24.c   **** 
  481:Src/nRF24.c   ****   nRF24_CE_0(); /* stop transmission. Returns to [Standby-I]. */
- 1304              		.loc 1 481 0
- 1305 006e FFF7FEFF 		bl	nRF24_CE_0
- 1306              	.LVL122:
+ 1431              		.loc 1 481 0
+ 1432 006e FFF7FEFF 		bl	nRF24_CE_0
+ 1433              	.LVL132:
  482:Src/nRF24.c   **** }
- 1307              		.loc 1 482 0
- 1308 0072 13B0     		add	sp, sp, #76
- 1309              	.LCFI37:
- 1310              		.cfi_remember_state
- 1311              		.cfi_def_cfa_offset 12
- 1312              		@ sp needed
- 1313 0074 30BD     		pop	{r4, r5, pc}
- 1314              	.L90:
- 1315              	.LCFI38:
- 1316              		.cfi_restore_state
+ 1434              		.loc 1 482 0
+ 1435 0072 13B0     		add	sp, sp, #76
+ 1436              	.LCFI37:
+ 1437              		.cfi_remember_state
+ 1438              		.cfi_def_cfa_offset 12
+ 1439              		@ sp needed
+ 1440 0074 30BD     		pop	{r4, r5, pc}
+ 1441              	.L98:
+ 1442              	.LCFI38:
+ 1443              		.cfi_restore_state
  469:Src/nRF24.c   ****     HAL_UART_Transmit(&huart2, (uint8_t*)debug_msg, strlen(debug_msg), 100);
- 1317              		.loc 1 469 0
- 1318 0076 01AC     		add	r4, sp, #4
- 1319 0078 0C4D     		ldr	r5, .L91+16
- 1320 007a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 1321 007c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 1322 007e 95E80300 		ldm	r5, {r0, r1}
- 1323 0082 84E80300 		stm	r4, {r0, r1}
+ 1444              		.loc 1 469 0
+ 1445 0076 01AC     		add	r4, sp, #4
+ 1446 0078 0C4D     		ldr	r5, .L99+16
+ 1447 007a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ARM GAS  /tmp/ccJN1dG0.s 			page 35
+
+
+ 1448 007c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 1449 007e 95E80300 		ldm	r5, {r0, r1}
+ 1450 0082 84E80300 		stm	r4, {r0, r1}
  470:Src/nRF24.c   ****   } 
- 1324              		.loc 1 470 0
- 1325 0086 01A8     		add	r0, sp, #4
- 1326 0088 FFF7FEFF 		bl	strlen
- 1327              	.LVL123:
- 1328 008c 6423     		movs	r3, #100
- 1329 008e 82B2     		uxth	r2, r0
- 1330 0090 01A9     		add	r1, sp, #4
- 1331 0092 0448     		ldr	r0, .L91+8
- 1332 0094 FFF7FEFF 		bl	HAL_UART_Transmit
- 1333              	.LVL124:
- 1334 0098 E1E7     		b	.L88
- 1335              	.L92:
- 1336 009a 00BF     		.align	2
- 1337              	.L91:
-ARM GAS  /tmp/ccehh4cg.s 			page 33
+ 1451              		.loc 1 470 0
+ 1452 0086 01A8     		add	r0, sp, #4
+ 1453 0088 FFF7FEFF 		bl	strlen
+ 1454              	.LVL133:
+ 1455 008c 6423     		movs	r3, #100
+ 1456 008e 82B2     		uxth	r2, r0
+ 1457 0090 01A9     		add	r1, sp, #4
+ 1458 0092 0448     		ldr	r0, .L99+8
+ 1459 0094 FFF7FEFF 		bl	HAL_UART_Transmit
+ 1460              	.LVL134:
+ 1461 0098 E1E7     		b	.L96
+ 1462              	.L100:
+ 1463 009a 00BF     		.align	2
+ 1464              	.L99:
+ 1465 009c 00000000 		.word	.LANCHOR0
+ 1466 00a0 00000000 		.word	.LC10
+ 1467 00a4 00000000 		.word	huart2
+ 1468 00a8 30000000 		.word	.LC12
+ 1469 00ac 18000000 		.word	.LC11
+ 1470              		.cfi_endproc
+ 1471              	.LFE151:
+ 1473              		.section	.rodata
+ 1474              		.align	2
+ 1475              		.set	.LANCHOR0,. + 0
+ 1476              	.LC0:
+ 1477 0000 C0       		.byte	-64
+ 1478 0001 FE       		.byte	-2
+ 1479 0002 BE       		.byte	-66
+ 1480 0003 EF       		.byte	-17
+ 1481              	.LC1:
+ 1482 0004 10       		.byte	16
+ 1483 0005 DE       		.byte	-34
+ 1484 0006 10       		.byte	16
+ 1485 0007 10       		.byte	16
+ 1486 0008 10       		.byte	16
+ 1487 0009 000000   		.space	3
+ 1488              	.LC2:
+ 1489 000c BE       		.byte	-66
+ 1490 000d EF       		.byte	-17
+ 1491 000e CA       		.byte	-54
+ 1492 000f FE       		.byte	-2
+ 1493              		.section	.rodata.nRF24_keep_sending.str1.4,"aMS",%progbits,1
+ 1494              		.align	2
+ 1495              	.LC10:
+ 1496 0000 3C535441 		.ascii	"<STATUS> register : %x\012\000"
+ 1496      5455533E 
+ 1496      20726567 
+ 1496      69737465 
+ 1496      72203A20 
+ 1497              	.LC11:
+ 1498 0018 6E524632 		.ascii	"nRF24 send successful.\012\000"
+ 1498      34207365 
+ 1498      6E642073 
+ARM GAS  /tmp/ccJN1dG0.s 			page 36
 
 
- 1338 009c 00000000 		.word	.LANCHOR0
- 1339 00a0 00000000 		.word	.LC10
- 1340 00a4 00000000 		.word	huart2
- 1341 00a8 30000000 		.word	.LC12
- 1342 00ac 18000000 		.word	.LC11
- 1343              		.cfi_endproc
- 1344              	.LFE151:
- 1346              		.section	.rodata
- 1347              		.align	2
- 1348              		.set	.LANCHOR0,. + 0
- 1349              	.LC0:
- 1350 0000 C0       		.byte	-64
- 1351 0001 FE       		.byte	-2
- 1352 0002 BE       		.byte	-66
- 1353 0003 EF       		.byte	-17
- 1354              	.LC1:
- 1355 0004 10       		.byte	16
- 1356 0005 DE       		.byte	-34
- 1357 0006 10       		.byte	16
- 1358 0007 10       		.byte	16
- 1359 0008 10       		.byte	16
- 1360 0009 000000   		.space	3
- 1361              	.LC2:
- 1362 000c BE       		.byte	-66
- 1363 000d EF       		.byte	-17
- 1364 000e CA       		.byte	-54
- 1365 000f FE       		.byte	-2
- 1366              		.section	.rodata.nRF24_keep_sending.str1.4,"aMS",%progbits,1
- 1367              		.align	2
- 1368              	.LC10:
- 1369 0000 3C535441 		.ascii	"<STATUS> register : %x\012\000"
- 1369      5455533E 
- 1369      20726567 
- 1369      69737465 
- 1369      72203A20 
- 1370              	.LC11:
- 1371 0018 6E524632 		.ascii	"nRF24 send successful.\012\000"
- 1371      34207365 
- 1371      6E642073 
- 1371      75636365 
- 1371      73736675 
- 1372              	.LC12:
- 1373 0030 6E524632 		.ascii	"nRF24 send failed.\012\000"
- 1373      34207365 
- 1373      6E642066 
- 1373      61696C65 
- 1373      642E0A00 
- 1374              		.section	.rodata.nRF24_tx_self_test.str1.4,"aMS",%progbits,1
- 1375              		.align	2
- 1376              	.LC6:
- 1377 0000 2D2D2D2D 		.ascii	"---- nrf24 tx self test. ----\012\000"
- 1377      206E7266 
- 1377      32342074 
- 1377      78207365 
- 1377      6C662074 
- 1378 001f 00       		.space	1
- 1379              	.LC7:
-ARM GAS  /tmp/ccehh4cg.s 			page 34
+ 1498      75636365 
+ 1498      73736675 
+ 1499              	.LC12:
+ 1500 0030 6E524632 		.ascii	"nRF24 send failed.\012\000"
+ 1500      34207365 
+ 1500      6E642066 
+ 1500      61696C65 
+ 1500      642E0A00 
+ 1501              		.section	.rodata.nRF24_tx_self_test.str1.4,"aMS",%progbits,1
+ 1502              		.align	2
+ 1503              	.LC6:
+ 1504 0000 2D2D2D2D 		.ascii	"---- nrf24 tx self test. ----\012\000"
+ 1504      206E7266 
+ 1504      32342074 
+ 1504      78207365 
+ 1504      6C662074 
+ 1505 001f 00       		.space	1
+ 1506              	.LC7:
+ 1507 0020 2D2D2D2D 		.ascii	"---- This test to verifies function of a tranmitter"
+ 1507      20546869 
+ 1507      73207465 
+ 1507      73742074 
+ 1507      6F207665 
+ 1508 0053 2073656E 		.ascii	" send without a receiver. ----\012\000"
+ 1508      64207769 
+ 1508      74686F75 
+ 1508      74206120 
+ 1508      72656365 
+ 1509 0073 00       		.space	1
+ 1510              	.LC9:
+ 1511 0074 0A203E20 		.ascii	"\012 > nRF24 transmission self-test has failed. STA"
+ 1511      6E524632 
+ 1511      34207472 
+ 1511      616E736D 
+ 1511      69737369 
+ 1512 00a4 54555320 		.ascii	"TUS is expected 0x2E.\000"
+ 1512      69732065 
+ 1512      78706563 
+ 1512      74656420 
+ 1512      30783245 
+ 1513 00ba 0000     		.space	2
+ 1514              	.LC8:
+ 1515 00bc 0A203E20 		.ascii	"\012 > nRF24 transmission self-test has passed. STA"
+ 1515      6E524632 
+ 1515      34207472 
+ 1515      616E736D 
+ 1515      69737369 
+ 1516 00ec 54555320 		.ascii	"TUS has value of 0x2E, TX_DS (transfer data sent) w"
+ 1516      68617320 
+ 1516      76616C75 
+ 1516      65206F66 
+ 1516      20307832 
+ 1517 011f 61732073 		.ascii	"as set, RX_P_NO = 111, means RX FIFO Empty.\012\000"
+ 1517      65742C20 
+ 1517      52585F50 
+ 1517      5F4E4F20 
+ 1517      3D203131 
+ARM GAS  /tmp/ccJN1dG0.s 			page 37
 
 
- 1380 0020 2D2D2D2D 		.ascii	"---- This test to verifies function of a tranmitter"
- 1380      20546869 
- 1380      73207465 
- 1380      73742074 
- 1380      6F207665 
- 1381 0053 2073656E 		.ascii	" send without a receiver. ----\012\000"
- 1381      64207769 
- 1381      74686F75 
- 1381      74206120 
- 1381      72656365 
- 1382 0073 00       		.space	1
- 1383              	.LC9:
- 1384 0074 0A203E20 		.ascii	"\012 > nRF24 transmission self-test has failed. STA"
- 1384      6E524632 
- 1384      34207472 
- 1384      616E736D 
- 1384      69737369 
- 1385 00a4 54555320 		.ascii	"TUS is expected 0x2E.\000"
- 1385      69732065 
- 1385      78706563 
- 1385      74656420 
- 1385      30783245 
- 1386 00ba 0000     		.space	2
- 1387              	.LC8:
- 1388 00bc 0A203E20 		.ascii	"\012 > nRF24 transmission self-test has passed. STA"
- 1388      6E524632 
- 1388      34207472 
- 1388      616E736D 
- 1388      69737369 
- 1389 00ec 54555320 		.ascii	"TUS has value of 0x2E, TX_DS (transfer data sent) w"
- 1389      68617320 
- 1389      76616C75 
- 1389      65206F66 
- 1389      20307832 
- 1390 011f 61732073 		.ascii	"as set, RX_P_NO = 111, means RX FIFO Empty.\012\000"
- 1390      65742C20 
- 1390      52585F50 
- 1390      5F4E4F20 
- 1390      3D203131 
- 1391              		.section	.rodata.nRF24_verified_write_register.str1.4,"aMS",%progbits,1
- 1392              		.align	2
- 1393              	.LC3:
- 1394 0000 50726F62 		.ascii	"Problem writing to SPI register -- \000"
- 1394      6C656D20 
- 1394      77726974 
- 1394      696E6720 
- 1394      746F2053 
- 1395              	.LC4:
- 1396 0024 77726974 		.ascii	"writing_data: <%02x> read_data: <%02x>\012\000"
- 1396      696E675F 
- 1396      64617461 
- 1396      3A203C25 
- 1396      3032783E 
- 1397              	.LC5:
- 1398 004c 53756363 		.ascii	"Success writing to SPI register -- \000"
- 1398      65737320 
- 1398      77726974 
-ARM GAS  /tmp/ccehh4cg.s 			page 35
-
-
- 1398      696E6720 
- 1398      746F2053 
- 1399              		.text
- 1400              	.Letext0:
- 1401              		.file 2 "/usr/include/newlib/machine/_default_types.h"
- 1402              		.file 3 "/usr/include/newlib/sys/_stdint.h"
- 1403              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
- 1404              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
- 1405              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h"
- 1406              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 1407              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
- 1408              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 1409              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
- 1410              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
- 1411              		.file 12 "/usr/include/newlib/sys/lock.h"
- 1412              		.file 13 "/usr/include/newlib/sys/_types.h"
- 1413              		.file 14 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
- 1414              		.file 15 "/usr/include/newlib/sys/reent.h"
- 1415              		.file 16 "Inc/nRF24.h"
- 1416              		.file 17 "/usr/include/newlib/stdio.h"
- 1417              		.file 18 "/usr/include/newlib/string.h"
-ARM GAS  /tmp/ccehh4cg.s 			page 36
+ 1518              		.section	.rodata.nRF24_verified_write_register.str1.4,"aMS",%progbits,1
+ 1519              		.align	2
+ 1520              	.LC3:
+ 1521 0000 50726F62 		.ascii	"Problem writing to SPI register -- \000"
+ 1521      6C656D20 
+ 1521      77726974 
+ 1521      696E6720 
+ 1521      746F2053 
+ 1522              	.LC4:
+ 1523 0024 705F7772 		.ascii	"p_writing_data: <%#02x> read_data: <%#02x>\012\000"
+ 1523      6974696E 
+ 1523      675F6461 
+ 1523      74613A20 
+ 1523      3C252330 
+ 1524              	.LC5:
+ 1525 0050 53756363 		.ascii	"Success writing to SPI register -- \000"
+ 1525      65737320 
+ 1525      77726974 
+ 1525      696E6720 
+ 1525      746F2053 
+ 1526              		.text
+ 1527              	.Letext0:
+ 1528              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 1529              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 1530              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 1531              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 1532              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h"
+ 1533              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1534              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 1535              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 1536              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 1537              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 1538              		.file 12 "/usr/include/newlib/sys/lock.h"
+ 1539              		.file 13 "/usr/include/newlib/sys/_types.h"
+ 1540              		.file 14 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 1541              		.file 15 "/usr/include/newlib/sys/reent.h"
+ 1542              		.file 16 "Inc/nRF24.h"
+ 1543              		.file 17 "/usr/include/newlib/stdio.h"
+ 1544              		.file 18 "/usr/include/newlib/string.h"
+ARM GAS  /tmp/ccJN1dG0.s 			page 38
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 nRF24.c
-     /tmp/ccehh4cg.s:18     .text.SPI_SCK_1:0000000000000000 $t
-     /tmp/ccehh4cg.s:25     .text.SPI_SCK_1:0000000000000000 SPI_SCK_1
-     /tmp/ccehh4cg.s:47     .text.SPI_SCK_1:0000000000000010 $d
-     /tmp/ccehh4cg.s:52     .text.SPI_SCK_0:0000000000000000 $t
-     /tmp/ccehh4cg.s:59     .text.SPI_SCK_0:0000000000000000 SPI_SCK_0
-     /tmp/ccehh4cg.s:80     .text.SPI_SCK_0:0000000000000010 $d
-     /tmp/ccehh4cg.s:85     .text.SPI_MOSI_1:0000000000000000 $t
-     /tmp/ccehh4cg.s:92     .text.SPI_MOSI_1:0000000000000000 SPI_MOSI_1
-     /tmp/ccehh4cg.s:113    .text.SPI_MOSI_1:0000000000000010 $d
-     /tmp/ccehh4cg.s:118    .text.SPI_MOSI_0:0000000000000000 $t
-     /tmp/ccehh4cg.s:125    .text.SPI_MOSI_0:0000000000000000 SPI_MOSI_0
-     /tmp/ccehh4cg.s:146    .text.SPI_MOSI_0:0000000000000010 $d
-     /tmp/ccehh4cg.s:151    .text.SPI_CS_1:0000000000000000 $t
-     /tmp/ccehh4cg.s:158    .text.SPI_CS_1:0000000000000000 SPI_CS_1
-     /tmp/ccehh4cg.s:179    .text.SPI_CS_1:0000000000000010 $d
-     /tmp/ccehh4cg.s:184    .text.SPI_CS_0:0000000000000000 $t
-     /tmp/ccehh4cg.s:191    .text.SPI_CS_0:0000000000000000 SPI_CS_0
-     /tmp/ccehh4cg.s:212    .text.SPI_CS_0:0000000000000010 $d
-     /tmp/ccehh4cg.s:217    .text.SPI_READ_MISO:0000000000000000 $t
-     /tmp/ccehh4cg.s:224    .text.SPI_READ_MISO:0000000000000000 SPI_READ_MISO
-     /tmp/ccehh4cg.s:245    .text.SPI_READ_MISO:0000000000000010 $d
-     /tmp/ccehh4cg.s:250    .text.spi_delay:0000000000000000 $t
-     /tmp/ccehh4cg.s:257    .text.spi_delay:0000000000000000 spi_delay
-     /tmp/ccehh4cg.s:277    .text.gpio_clockout_8_bits:0000000000000000 $t
-     /tmp/ccehh4cg.s:284    .text.gpio_clockout_8_bits:0000000000000000 gpio_clockout_8_bits
-     /tmp/ccehh4cg.s:353    .text.gpio_clockin_8_bits:0000000000000000 $t
-     /tmp/ccehh4cg.s:360    .text.gpio_clockin_8_bits:0000000000000000 gpio_clockin_8_bits
-     /tmp/ccehh4cg.s:436    .text.spi_read_register:0000000000000000 $t
-     /tmp/ccehh4cg.s:443    .text.spi_read_register:0000000000000000 spi_read_register
-     /tmp/ccehh4cg.s:493    .text.spi_write_register:0000000000000000 $t
-     /tmp/ccehh4cg.s:500    .text.spi_write_register:0000000000000000 spi_write_register
-     /tmp/ccehh4cg.s:552    .text.nRF24_CE_1:0000000000000000 $t
-     /tmp/ccehh4cg.s:559    .text.nRF24_CE_1:0000000000000000 nRF24_CE_1
-     /tmp/ccehh4cg.s:580    .text.nRF24_CE_1:0000000000000010 $d
-     /tmp/ccehh4cg.s:585    .text.nRF24_CE_0:0000000000000000 $t
-     /tmp/ccehh4cg.s:592    .text.nRF24_CE_0:0000000000000000 nRF24_CE_0
-     /tmp/ccehh4cg.s:613    .text.nRF24_CE_0:0000000000000010 $d
-     /tmp/ccehh4cg.s:618    .text.nRF24_verified_write_register:0000000000000000 $t
-     /tmp/ccehh4cg.s:625    .text.nRF24_verified_write_register:0000000000000000 nRF24_verified_write_register
-     /tmp/ccehh4cg.s:795    .text.nRF24_verified_write_register:00000000000000f8 $d
-     /tmp/ccehh4cg.s:803    .text.nRF24_get_STATUS:0000000000000000 $t
-     /tmp/ccehh4cg.s:810    .text.nRF24_get_STATUS:0000000000000000 nRF24_get_STATUS
-     /tmp/ccehh4cg.s:840    .text.nRF24_get_FIFO_STATUS:0000000000000000 $t
-     /tmp/ccehh4cg.s:847    .text.nRF24_get_FIFO_STATUS:0000000000000000 nRF24_get_FIFO_STATUS
-     /tmp/ccehh4cg.s:877    .text.nRF24_get_CONFIG:0000000000000000 $t
-     /tmp/ccehh4cg.s:884    .text.nRF24_get_CONFIG:0000000000000000 nRF24_get_CONFIG
-     /tmp/ccehh4cg.s:914    .text.nRF24_tx_self_test:0000000000000000 $t
-     /tmp/ccehh4cg.s:921    .text.nRF24_tx_self_test:0000000000000000 nRF24_tx_self_test
-     /tmp/ccehh4cg.s:1099   .text.nRF24_tx_self_test:0000000000000104 $d
-     /tmp/ccehh4cg.s:1110   .text.nRF24_configure_tx_mode:0000000000000000 $t
-     /tmp/ccehh4cg.s:1117   .text.nRF24_configure_tx_mode:0000000000000000 nRF24_configure_tx_mode
-     /tmp/ccehh4cg.s:1212   .text.nRF24_configure_tx_mode:0000000000000088 $d
-     /tmp/ccehh4cg.s:1217   .text.nRF24_keep_sending:0000000000000000 $t
-     /tmp/ccehh4cg.s:1224   .text.nRF24_keep_sending:0000000000000000 nRF24_keep_sending
-     /tmp/ccehh4cg.s:1338   .text.nRF24_keep_sending:000000000000009c $d
-ARM GAS  /tmp/ccehh4cg.s 			page 37
+     /tmp/ccJN1dG0.s:18     .text.SPI_SCK_1:0000000000000000 $t
+     /tmp/ccJN1dG0.s:25     .text.SPI_SCK_1:0000000000000000 SPI_SCK_1
+     /tmp/ccJN1dG0.s:47     .text.SPI_SCK_1:0000000000000010 $d
+     /tmp/ccJN1dG0.s:52     .text.SPI_SCK_0:0000000000000000 $t
+     /tmp/ccJN1dG0.s:59     .text.SPI_SCK_0:0000000000000000 SPI_SCK_0
+     /tmp/ccJN1dG0.s:80     .text.SPI_SCK_0:0000000000000010 $d
+     /tmp/ccJN1dG0.s:85     .text.SPI_MOSI_1:0000000000000000 $t
+     /tmp/ccJN1dG0.s:92     .text.SPI_MOSI_1:0000000000000000 SPI_MOSI_1
+     /tmp/ccJN1dG0.s:113    .text.SPI_MOSI_1:0000000000000010 $d
+     /tmp/ccJN1dG0.s:118    .text.SPI_MOSI_0:0000000000000000 $t
+     /tmp/ccJN1dG0.s:125    .text.SPI_MOSI_0:0000000000000000 SPI_MOSI_0
+     /tmp/ccJN1dG0.s:146    .text.SPI_MOSI_0:0000000000000010 $d
+     /tmp/ccJN1dG0.s:151    .text.SPI_CS_1:0000000000000000 $t
+     /tmp/ccJN1dG0.s:158    .text.SPI_CS_1:0000000000000000 SPI_CS_1
+     /tmp/ccJN1dG0.s:179    .text.SPI_CS_1:0000000000000010 $d
+     /tmp/ccJN1dG0.s:184    .text.SPI_CS_0:0000000000000000 $t
+     /tmp/ccJN1dG0.s:191    .text.SPI_CS_0:0000000000000000 SPI_CS_0
+     /tmp/ccJN1dG0.s:212    .text.SPI_CS_0:0000000000000010 $d
+     /tmp/ccJN1dG0.s:217    .text.SPI_READ_MISO:0000000000000000 $t
+     /tmp/ccJN1dG0.s:224    .text.SPI_READ_MISO:0000000000000000 SPI_READ_MISO
+     /tmp/ccJN1dG0.s:245    .text.SPI_READ_MISO:0000000000000010 $d
+     /tmp/ccJN1dG0.s:250    .text.spi_delay:0000000000000000 $t
+     /tmp/ccJN1dG0.s:257    .text.spi_delay:0000000000000000 spi_delay
+     /tmp/ccJN1dG0.s:277    .text.gpio_clockout_8_bits:0000000000000000 $t
+     /tmp/ccJN1dG0.s:284    .text.gpio_clockout_8_bits:0000000000000000 gpio_clockout_8_bits
+     /tmp/ccJN1dG0.s:386    .text.gpio_clockout_8_bits:0000000000000064 $d
+     /tmp/ccJN1dG0.s:394    .text.gpio_clockin_8_bits:0000000000000000 $t
+     /tmp/ccJN1dG0.s:401    .text.gpio_clockin_8_bits:0000000000000000 gpio_clockin_8_bits
+     /tmp/ccJN1dG0.s:513    .text.gpio_clockin_8_bits:0000000000000068 $d
+     /tmp/ccJN1dG0.s:519    .text.spi_read_register:0000000000000000 $t
+     /tmp/ccJN1dG0.s:526    .text.spi_read_register:0000000000000000 spi_read_register
+     /tmp/ccJN1dG0.s:591    .text.spi_read_register:0000000000000034 $d
+     /tmp/ccJN1dG0.s:598    .text.spi_write_register:0000000000000000 $t
+     /tmp/ccJN1dG0.s:605    .text.spi_write_register:0000000000000000 spi_write_register
+     /tmp/ccJN1dG0.s:672    .text.spi_write_register:0000000000000034 $d
+     /tmp/ccJN1dG0.s:679    .text.nRF24_CE_1:0000000000000000 $t
+     /tmp/ccJN1dG0.s:686    .text.nRF24_CE_1:0000000000000000 nRF24_CE_1
+     /tmp/ccJN1dG0.s:707    .text.nRF24_CE_1:0000000000000010 $d
+     /tmp/ccJN1dG0.s:712    .text.nRF24_CE_0:0000000000000000 $t
+     /tmp/ccJN1dG0.s:719    .text.nRF24_CE_0:0000000000000000 nRF24_CE_0
+     /tmp/ccJN1dG0.s:740    .text.nRF24_CE_0:0000000000000010 $d
+     /tmp/ccJN1dG0.s:745    .text.nRF24_verified_write_register:0000000000000000 $t
+     /tmp/ccJN1dG0.s:752    .text.nRF24_verified_write_register:0000000000000000 nRF24_verified_write_register
+     /tmp/ccJN1dG0.s:922    .text.nRF24_verified_write_register:00000000000000f8 $d
+     /tmp/ccJN1dG0.s:930    .text.nRF24_get_STATUS:0000000000000000 $t
+     /tmp/ccJN1dG0.s:937    .text.nRF24_get_STATUS:0000000000000000 nRF24_get_STATUS
+     /tmp/ccJN1dG0.s:967    .text.nRF24_get_FIFO_STATUS:0000000000000000 $t
+     /tmp/ccJN1dG0.s:974    .text.nRF24_get_FIFO_STATUS:0000000000000000 nRF24_get_FIFO_STATUS
+     /tmp/ccJN1dG0.s:1004   .text.nRF24_get_CONFIG:0000000000000000 $t
+     /tmp/ccJN1dG0.s:1011   .text.nRF24_get_CONFIG:0000000000000000 nRF24_get_CONFIG
+     /tmp/ccJN1dG0.s:1041   .text.nRF24_tx_self_test:0000000000000000 $t
+     /tmp/ccJN1dG0.s:1048   .text.nRF24_tx_self_test:0000000000000000 nRF24_tx_self_test
+     /tmp/ccJN1dG0.s:1226   .text.nRF24_tx_self_test:0000000000000104 $d
+     /tmp/ccJN1dG0.s:1237   .text.nRF24_configure_tx_mode:0000000000000000 $t
+     /tmp/ccJN1dG0.s:1244   .text.nRF24_configure_tx_mode:0000000000000000 nRF24_configure_tx_mode
+ARM GAS  /tmp/ccJN1dG0.s 			page 39
 
 
-     /tmp/ccehh4cg.s:1347   .rodata:0000000000000000 $d
-     /tmp/ccehh4cg.s:1367   .rodata.nRF24_keep_sending.str1.4:0000000000000000 $d
-     /tmp/ccehh4cg.s:1375   .rodata.nRF24_tx_self_test.str1.4:0000000000000000 $d
-     /tmp/ccehh4cg.s:1392   .rodata.nRF24_verified_write_register.str1.4:0000000000000000 $d
+     /tmp/ccJN1dG0.s:1339   .text.nRF24_configure_tx_mode:0000000000000088 $d
+     /tmp/ccJN1dG0.s:1344   .text.nRF24_keep_sending:0000000000000000 $t
+     /tmp/ccJN1dG0.s:1351   .text.nRF24_keep_sending:0000000000000000 nRF24_keep_sending
+     /tmp/ccJN1dG0.s:1465   .text.nRF24_keep_sending:000000000000009c $d
+     /tmp/ccJN1dG0.s:1474   .rodata:0000000000000000 $d
+     /tmp/ccJN1dG0.s:1494   .rodata.nRF24_keep_sending.str1.4:0000000000000000 $d
+     /tmp/ccJN1dG0.s:1502   .rodata.nRF24_tx_self_test.str1.4:0000000000000000 $d
+     /tmp/ccJN1dG0.s:1519   .rodata.nRF24_verified_write_register.str1.4:0000000000000000 $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS
