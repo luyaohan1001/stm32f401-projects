@@ -91,13 +91,6 @@ GPIO_PinState SPI_READ_MISO()
   return HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 }
 
-/* SPI Operations -------------------------------------------------------------------------------*/
-void spi_delay() 
-{
-  HAL_Delay(1);
-}
-
-
 /**
   * @brief      Clock out (write) 8 bits on MOSI of SPI bus on SCK high.
   * @param[in]  txData One byte of data to transmit.
@@ -169,6 +162,19 @@ uint8_t gpio_clockin_8_bits(void)
 }
   
 
+/* SPI Operations -------------------------------------------------------------------------------*/
+void spi_delay() 
+{
+  HAL_Delay(1);
+}
+
+/**
+	* @brief      Read a bytes from the SPI target device register.
+	* @param[in]  reg SPI target device register to write to.
+	* @param[in]  num_bytes Number of bytes needed to write to that address.
+	* @param[in]  pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
+	* @retval     none.
+	*/
 void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
 {
   // Select chip
@@ -186,7 +192,13 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
   SPI_CS_0();
 }
 
-
+/**
+	* @brief      Write a number of bytes to the spi target device register.
+	* @param[in]  reg spi target device register to write to.
+	* @param[in]  num_bytes number of bytes needed to write to that address.
+	* @param[in]  writing_data A pointer pointing to a memory location storing the data to write.
+	* @retval     none.
+	*/
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
 {
   // Select chip (CSN LOW)
@@ -238,7 +250,7 @@ void nRF24_CE_0()
   * @param[in]  writing_data Data to write.
   * @retval     Boolean. 1 for mistakes happen. 0 for success.
   */
-bool spi_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
+bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* writing_data)
 {
 
     char message[64] = {'\0'};
@@ -354,11 +366,11 @@ bool nRF24_tx_self_test()
   nRF24_CE_0();
   // [Current State: (RF transmission is) Power Down (But SPI is alive.)]
   uint8_t writing_byte = 0x00;
-  spi_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);        // disable auto acknowledgement  
-  spi_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);    // disable RX data pipes
-  spi_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);   // disable automatic re-transmit, ARC = 0000
+  nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);        // disable auto acknowledgement  
+  nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);    // disable RX data pipes
+  nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);   // disable automatic re-transmit, ARC = 0000
   writing_byte = 0x0E;
-  spi_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       // PWR_UP = 1 PRIMRX=0 (TX mode)
+  nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       // PWR_UP = 1 PRIMRX=0 (TX mode)
 
   // PWR_UP=1, state transition to [Standby-I]
   uint8_t test_payload[4] = {0xC0, 0xFE, 0xBE, 0xEF}; // clock in a payload, now TX FIFO not empty 
@@ -373,7 +385,7 @@ bool nRF24_tx_self_test()
   nRF24_CE_0();
   // PWR_UP = 0, state transition -> now return to [Power Down]
   writing_byte = 0x08; // write default value for CONFIG register (writing_byte = 0)
-  spi_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       
+  nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       
 
   // Now the chip is back to power down mode, check test result. 
   if (nRF24_status & 0x2E) 
@@ -391,7 +403,12 @@ bool nRF24_tx_self_test()
   
 }
 
-
+/**
+	* @brief  Configure nRF24 to work in TX (transmit) mode.
+	* @param  None.
+	* @retval None.
+	* @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending data.
+	*/
 void nRF24_configure_tx_mode() 
 {
     nRF24_CE_0();
@@ -403,29 +420,34 @@ void nRF24_configure_tx_mode()
     uint8_t writing_byte;
 
     writing_byte = 0x00;
-    spi_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
+    nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
 
     writing_byte = 0x00;
-    spi_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
+    nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
 
     writing_byte = 0x00;
-    spi_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
+    nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
 
     writing_byte = 40;
-    spi_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
+    nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
 
     writing_byte = 0x07;
-    spi_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
+    nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
 
     // PWR_UP, state transition to [Standby-I]
     writing_byte = 0x0e;
-    spi_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
+    nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
     spi_delay(150);
 
     // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
 }
 
 
+/**
+	* @brief  Make nRF24 keep sending data.
+	* @param  None.
+	* @retval None.
+	*/
 void nRF24_keep_sending() 
 {
   uint8_t payload[] = {0xBE, 0xEF, 0xCA, 0xFE}; // clock in a payload, TX FIFO not empty 

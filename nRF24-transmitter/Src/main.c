@@ -101,8 +101,8 @@ int main(void)
 		HAL_Delay (200);
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 		HAL_Delay (200);
+		nRF24_keep_sending();
 
-		SPI_SCK_1();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

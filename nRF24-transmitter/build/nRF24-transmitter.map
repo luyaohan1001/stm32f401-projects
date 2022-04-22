@@ -690,10 +690,6 @@ Discarded input sections
                 0x0000000000000000       0x1a build/nRF24.o
  .text.nRF24_get_CONFIG
                 0x0000000000000000       0x1a build/nRF24.o
- .text.nRF24_keep_sending
-                0x0000000000000000       0xb0 build/nRF24.o
- .rodata.nRF24_keep_sending.str1.4
-                0x0000000000000000       0x44 build/nRF24.o
  .text          0x0000000000000000       0x14 build/startup_stm32f401xe.o
  .data          0x0000000000000000        0x0 build/startup_stm32f401xe.o
  .bss           0x0000000000000000        0x0 build/startup_stm32f401xe.o
@@ -889,7 +885,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
                 0x0000000008000000                g_pfnVectors
                 0x0000000008000194                . = ALIGN (0x4)
 
-.text           0x00000000080001c0     0x26bc
+.text           0x00000000080001c0     0x276c
                 0x00000000080001c0                . = ALIGN (0x4)
  *(.text)
  .text          0x00000000080001c0       0xa4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
@@ -1093,9 +1089,9 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
  .text.nRF24_CE_0
                 0x0000000008002530       0x14 build/nRF24.o
                 0x0000000008002530                nRF24_CE_0
- .text.spi_verified_write_register
+ .text.nRF24_verified_write_register
                 0x0000000008002544      0x108 build/nRF24.o
-                0x0000000008002544                spi_verified_write_register
+                0x0000000008002544                nRF24_verified_write_register
  .text.nRF24_get_STATUS
                 0x000000000800264c       0x1a build/nRF24.o
                 0x000000000800264c                nRF24_get_STATUS
@@ -1106,154 +1102,159 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
  .text.nRF24_configure_tx_mode
                 0x0000000008002784       0x8c build/nRF24.o
                 0x0000000008002784                nRF24_configure_tx_mode
+ .text.nRF24_keep_sending
+                0x0000000008002810       0xb0 build/nRF24.o
+                0x0000000008002810                nRF24_keep_sending
  .text.Reset_Handler
-                0x0000000008002810       0x50 build/startup_stm32f401xe.o
-                0x0000000008002810                Reset_Handler
+                0x00000000080028c0       0x50 build/startup_stm32f401xe.o
+                0x00000000080028c0                Reset_Handler
  .text.Default_Handler
-                0x0000000008002860        0x2 build/startup_stm32f401xe.o
-                0x0000000008002860                RTC_Alarm_IRQHandler
-                0x0000000008002860                EXTI2_IRQHandler
-                0x0000000008002860                SPI4_IRQHandler
-                0x0000000008002860                TIM1_CC_IRQHandler
-                0x0000000008002860                DMA2_Stream5_IRQHandler
-                0x0000000008002860                DMA1_Stream5_IRQHandler
-                0x0000000008002860                PVD_IRQHandler
-                0x0000000008002860                SDIO_IRQHandler
-                0x0000000008002860                TAMP_STAMP_IRQHandler
-                0x0000000008002860                EXTI3_IRQHandler
-                0x0000000008002860                TIM1_UP_TIM10_IRQHandler
-                0x0000000008002860                I2C3_ER_IRQHandler
-                0x0000000008002860                EXTI0_IRQHandler
-                0x0000000008002860                I2C2_EV_IRQHandler
-                0x0000000008002860                DMA1_Stream2_IRQHandler
-                0x0000000008002860                FPU_IRQHandler
-                0x0000000008002860                DMA2_Stream2_IRQHandler
-                0x0000000008002860                SPI1_IRQHandler
-                0x0000000008002860                TIM1_BRK_TIM9_IRQHandler
-                0x0000000008002860                DMA2_Stream3_IRQHandler
-                0x0000000008002860                USART6_IRQHandler
-                0x0000000008002860                DMA2_Stream0_IRQHandler
-                0x0000000008002860                TIM4_IRQHandler
-                0x0000000008002860                I2C1_EV_IRQHandler
-                0x0000000008002860                DMA1_Stream6_IRQHandler
-                0x0000000008002860                DMA1_Stream1_IRQHandler
-                0x0000000008002860                TIM3_IRQHandler
-                0x0000000008002860                RCC_IRQHandler
-                0x0000000008002860                Default_Handler
-                0x0000000008002860                EXTI15_10_IRQHandler
-                0x0000000008002860                ADC_IRQHandler
-                0x0000000008002860                DMA1_Stream7_IRQHandler
-                0x0000000008002860                TIM5_IRQHandler
-                0x0000000008002860                DMA2_Stream7_IRQHandler
-                0x0000000008002860                I2C3_EV_IRQHandler
-                0x0000000008002860                EXTI9_5_IRQHandler
-                0x0000000008002860                RTC_WKUP_IRQHandler
-                0x0000000008002860                SPI2_IRQHandler
-                0x0000000008002860                DMA1_Stream0_IRQHandler
-                0x0000000008002860                EXTI4_IRQHandler
-                0x0000000008002860                WWDG_IRQHandler
-                0x0000000008002860                TIM2_IRQHandler
-                0x0000000008002860                OTG_FS_WKUP_IRQHandler
-                0x0000000008002860                TIM1_TRG_COM_TIM11_IRQHandler
-                0x0000000008002860                EXTI1_IRQHandler
-                0x0000000008002860                USART2_IRQHandler
-                0x0000000008002860                I2C2_ER_IRQHandler
-                0x0000000008002860                DMA2_Stream1_IRQHandler
-                0x0000000008002860                FLASH_IRQHandler
-                0x0000000008002860                DMA2_Stream4_IRQHandler
-                0x0000000008002860                USART1_IRQHandler
-                0x0000000008002860                OTG_FS_IRQHandler
-                0x0000000008002860                SPI3_IRQHandler
-                0x0000000008002860                DMA1_Stream4_IRQHandler
-                0x0000000008002860                I2C1_ER_IRQHandler
-                0x0000000008002860                DMA2_Stream6_IRQHandler
-                0x0000000008002860                DMA1_Stream3_IRQHandler
+                0x0000000008002910        0x2 build/startup_stm32f401xe.o
+                0x0000000008002910                RTC_Alarm_IRQHandler
+                0x0000000008002910                EXTI2_IRQHandler
+                0x0000000008002910                SPI4_IRQHandler
+                0x0000000008002910                TIM1_CC_IRQHandler
+                0x0000000008002910                DMA2_Stream5_IRQHandler
+                0x0000000008002910                DMA1_Stream5_IRQHandler
+                0x0000000008002910                PVD_IRQHandler
+                0x0000000008002910                SDIO_IRQHandler
+                0x0000000008002910                TAMP_STAMP_IRQHandler
+                0x0000000008002910                EXTI3_IRQHandler
+                0x0000000008002910                TIM1_UP_TIM10_IRQHandler
+                0x0000000008002910                I2C3_ER_IRQHandler
+                0x0000000008002910                EXTI0_IRQHandler
+                0x0000000008002910                I2C2_EV_IRQHandler
+                0x0000000008002910                DMA1_Stream2_IRQHandler
+                0x0000000008002910                FPU_IRQHandler
+                0x0000000008002910                DMA2_Stream2_IRQHandler
+                0x0000000008002910                SPI1_IRQHandler
+                0x0000000008002910                TIM1_BRK_TIM9_IRQHandler
+                0x0000000008002910                DMA2_Stream3_IRQHandler
+                0x0000000008002910                USART6_IRQHandler
+                0x0000000008002910                DMA2_Stream0_IRQHandler
+                0x0000000008002910                TIM4_IRQHandler
+                0x0000000008002910                I2C1_EV_IRQHandler
+                0x0000000008002910                DMA1_Stream6_IRQHandler
+                0x0000000008002910                DMA1_Stream1_IRQHandler
+                0x0000000008002910                TIM3_IRQHandler
+                0x0000000008002910                RCC_IRQHandler
+                0x0000000008002910                Default_Handler
+                0x0000000008002910                EXTI15_10_IRQHandler
+                0x0000000008002910                ADC_IRQHandler
+                0x0000000008002910                DMA1_Stream7_IRQHandler
+                0x0000000008002910                TIM5_IRQHandler
+                0x0000000008002910                DMA2_Stream7_IRQHandler
+                0x0000000008002910                I2C3_EV_IRQHandler
+                0x0000000008002910                EXTI9_5_IRQHandler
+                0x0000000008002910                RTC_WKUP_IRQHandler
+                0x0000000008002910                SPI2_IRQHandler
+                0x0000000008002910                DMA1_Stream0_IRQHandler
+                0x0000000008002910                EXTI4_IRQHandler
+                0x0000000008002910                WWDG_IRQHandler
+                0x0000000008002910                TIM2_IRQHandler
+                0x0000000008002910                OTG_FS_WKUP_IRQHandler
+                0x0000000008002910                TIM1_TRG_COM_TIM11_IRQHandler
+                0x0000000008002910                EXTI1_IRQHandler
+                0x0000000008002910                USART2_IRQHandler
+                0x0000000008002910                I2C2_ER_IRQHandler
+                0x0000000008002910                DMA2_Stream1_IRQHandler
+                0x0000000008002910                FLASH_IRQHandler
+                0x0000000008002910                DMA2_Stream4_IRQHandler
+                0x0000000008002910                USART1_IRQHandler
+                0x0000000008002910                OTG_FS_IRQHandler
+                0x0000000008002910                SPI3_IRQHandler
+                0x0000000008002910                DMA1_Stream4_IRQHandler
+                0x0000000008002910                I2C1_ER_IRQHandler
+                0x0000000008002910                DMA2_Stream6_IRQHandler
+                0x0000000008002910                DMA1_Stream3_IRQHandler
  *(.glue_7)
- .glue_7        0x0000000008002862        0x0 linker stubs
+ .glue_7        0x0000000008002912        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0000000008002862        0x0 linker stubs
+ .glue_7t       0x0000000008002912        0x0 linker stubs
  *(.eh_frame)
- *fill*         0x0000000008002862        0x2 
- .eh_frame      0x0000000008002864        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+ *fill*         0x0000000008002912        0x2 
+ .eh_frame      0x0000000008002914        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
  *(.init)
- .init          0x0000000008002864        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
-                0x0000000008002864                _init
- .init          0x0000000008002868        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
+ .init          0x0000000008002914        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
+                0x0000000008002914                _init
+ .init          0x0000000008002918        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
  *(.fini)
- .fini          0x0000000008002870        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
-                0x0000000008002870                _fini
- .fini          0x0000000008002874        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
-                0x000000000800287c                . = ALIGN (0x4)
-                0x000000000800287c                _etext = .
+ .fini          0x0000000008002920        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
+                0x0000000008002920                _fini
+ .fini          0x0000000008002924        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
+                0x000000000800292c                . = ALIGN (0x4)
+                0x000000000800292c                _etext = .
 
-.vfp11_veneer   0x000000000800287c        0x0
- .vfp11_veneer  0x000000000800287c        0x0 linker stubs
+.vfp11_veneer   0x000000000800292c        0x0
+ .vfp11_veneer  0x000000000800292c        0x0 linker stubs
 
-.v4_bx          0x000000000800287c        0x0
- .v4_bx         0x000000000800287c        0x0 linker stubs
+.v4_bx          0x000000000800292c        0x0
+ .v4_bx         0x000000000800292c        0x0 linker stubs
 
-.iplt           0x000000000800287c        0x0
- .iplt          0x000000000800287c        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+.iplt           0x000000000800292c        0x0
+ .iplt          0x000000000800292c        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.rodata         0x000000000800287c      0x224
-                0x000000000800287c                . = ALIGN (0x4)
+.rodata         0x000000000800292c      0x268
+                0x000000000800292c                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x000000000800287c       0x10 build/nRF24.o
+ .rodata        0x000000000800292c       0x10 build/nRF24.o
  *(.rodata*)
  .rodata.AHBPrescTable
-                0x000000000800288c       0x10 build/system_stm32f4xx.o
-                0x000000000800288c                AHBPrescTable
+                0x000000000800293c       0x10 build/system_stm32f4xx.o
+                0x000000000800293c                AHBPrescTable
  .rodata.APBPrescTable
-                0x000000000800289c        0x8 build/system_stm32f4xx.o
-                0x000000000800289c                APBPrescTable
+                0x000000000800294c        0x8 build/system_stm32f4xx.o
+                0x000000000800294c                APBPrescTable
+ .rodata.nRF24_keep_sending.str1.4
+                0x0000000008002954       0x44 build/nRF24.o
  .rodata.nRF24_tx_self_test.str1.4
-                0x00000000080028a4      0x14c build/nRF24.o
- .rodata.spi_verified_write_register.str1.4
-                0x00000000080029f0       0x70 build/nRF24.o
+                0x0000000008002998      0x14c build/nRF24.o
+ .rodata.nRF24_verified_write_register.str1.4
+                0x0000000008002ae4       0x70 build/nRF24.o
  .rodata.str1.4
-                0x0000000008002a60        0x2 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
- *fill*         0x0000000008002a62        0x2 
+                0x0000000008002b54        0x2 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
+ *fill*         0x0000000008002b56        0x2 
  .rodata.str1.4
-                0x0000000008002a64       0x13 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
- *fill*         0x0000000008002a77        0x1 
+                0x0000000008002b58       0x13 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
+ *fill*         0x0000000008002b6b        0x1 
  .rodata.str1.4
-                0x0000000008002a78       0x28 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0000000008002b6c       0x28 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
                                          0x25 (size before relaxing)
-                0x0000000008002aa0                . = ALIGN (0x4)
+                0x0000000008002b94                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0000000008002aa0        0x8
-                0x0000000008002aa0                __exidx_start = .
+.ARM            0x0000000008002b94        0x8
+                0x0000000008002b94                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0000000008002aa0        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
-                0x0000000008002aa8                __exidx_end = .
+ .ARM.exidx     0x0000000008002b94        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
+                0x0000000008002b9c                __exidx_end = .
 
-.rel.dyn        0x0000000008002aa8        0x0
- .rel.iplt      0x0000000008002aa8        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+.rel.dyn        0x0000000008002b9c        0x0
+ .rel.iplt      0x0000000008002b9c        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.preinit_array  0x0000000008002aa8        0x0
-                0x0000000008002aa8                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x0000000008002b9c        0x0
+                0x0000000008002b9c                PROVIDE (__preinit_array_start, .)
  *(.preinit_array*)
-                0x0000000008002aa8                PROVIDE (__preinit_array_end, .)
+                0x0000000008002b9c                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0000000008002aa8        0x4
-                0x0000000008002aa8                PROVIDE (__init_array_start, .)
+.init_array     0x0000000008002b9c        0x4
+                0x0000000008002b9c                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array*)
- .init_array    0x0000000008002aa8        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
-                0x0000000008002aac                PROVIDE (__init_array_end, .)
+ .init_array    0x0000000008002b9c        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+                0x0000000008002ba0                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0000000008002aac        0x4
-                0x0000000008002aac                PROVIDE (__fini_array_start, .)
+.fini_array     0x0000000008002ba0        0x4
+                0x0000000008002ba0                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0000000008002aac        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
-                0x0000000008002ab0                PROVIDE (__fini_array_end, .)
-                0x0000000008002ab0                _sidata = LOADADDR (.data)
+ .fini_array    0x0000000008002ba0        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+                0x0000000008002ba4                PROVIDE (__fini_array_end, .)
+                0x0000000008002ba4                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x70 load address 0x0000000008002ab0
+.data           0x0000000020000000       0x70 load address 0x0000000008002ba4
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                _sdata = .
  *(.data)
@@ -1273,21 +1274,21 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
                 0x0000000020000070                . = ALIGN (0x4)
                 0x0000000020000070                _edata = .
 
-.jcr            0x0000000020000070        0x0 load address 0x0000000008002b20
+.jcr            0x0000000020000070        0x0 load address 0x0000000008002c14
  .jcr           0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
 .tm_clone_table
-                0x0000000020000070        0x0 load address 0x0000000008002b20
+                0x0000000020000070        0x0 load address 0x0000000008002c14
  .tm_clone_table
                 0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
  .tm_clone_table
                 0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtend.o
 
-.igot.plt       0x0000000020000070        0x0 load address 0x0000000008002b20
+.igot.plt       0x0000000020000070        0x0 load address 0x0000000008002c14
  .igot.plt      0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
                 0x0000000020000070                . = ALIGN (0x4)
 
-.bss            0x0000000020000070       0x74 load address 0x0000000008002b20
+.bss            0x0000000020000070       0x74 load address 0x0000000008002c14
                 0x0000000020000070                _sbss = .
                 0x0000000020000070                __bss_start__ = _sbss
  *(.bss)
@@ -1309,7 +1310,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
                 0x00000000200000e4                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x00000000200000e4      0x604 load address 0x0000000008002b20
+                0x00000000200000e4      0x604 load address 0x0000000008002c14
                 0x00000000200000e8                . = ALIGN (0x8)
  *fill*         0x00000000200000e4        0x4 
                 0x00000000200000e8                PROVIDE (end, .)
@@ -1430,7 +1431,7 @@ OUTPUT(build/nRF24-transmitter.elf elf32-littlearm)
  .comment       0x0000000000000031       0x32 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
  .comment       0x0000000000000031       0x32 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtend.o
 
-.debug_info     0x0000000000000000    0x14b08
+.debug_info     0x0000000000000000    0x14b0b
  .debug_info    0x0000000000000000     0x1818 build/main.o
  .debug_info    0x0000000000001818      0x25e build/stm32f4xx_it.o
  .debug_info    0x0000000000001a76      0xaf6 build/stm32f4xx_hal_msp.o
@@ -1440,28 +1441,28 @@ OUTPUT(build/nRF24-transmitter.elf elf32-littlearm)
  .debug_info    0x000000000000747a      0xfe0 build/stm32f4xx_hal_cortex.o
  .debug_info    0x000000000000845a      0xa63 build/stm32f4xx_hal.o
  .debug_info    0x0000000000008ebd      0x60e build/system_stm32f4xx.o
- .debug_info    0x00000000000094cb     0x1dd4 build/nRF24.o
- .debug_info    0x000000000000b29f       0x79 build/startup_stm32f401xe.o
- .debug_info    0x000000000000b318      0x8a0 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
- .debug_info    0x000000000000bbb8      0x110 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-init.o)
- .debug_info    0x000000000000bcc8       0xe1 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memcpy.o)
- .debug_info    0x000000000000bda9      0x916 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memset.o)
- .debug_info    0x000000000000c6bf      0xbcb /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
- .debug_info    0x000000000000d28a       0xe0 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-strlen.o)
- .debug_info    0x000000000000d36a     0x11b2 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
- .debug_info    0x000000000000e51c      0xfb4 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_info    0x000000000000f4d0       0xda /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memchr.o)
- .debug_info    0x000000000000f5aa      0x925 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memmove.o)
- .debug_info    0x000000000000fecf      0xa51 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-freer.o)
- .debug_info    0x0000000000010920      0xb1f /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-mallocr.o)
- .debug_info    0x000000000001143f      0xac0 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-reallocr.o)
- .debug_info    0x0000000000011eff      0x955 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sbrkr.o)
- .debug_info    0x0000000000012854      0x9f7 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-msizer.o)
- .debug_info    0x000000000001324b      0xa67 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
- .debug_info    0x0000000000013cb2       0x90 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libnosys.a(sbrk.o)
- .debug_info    0x0000000000013d42       0xcf /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_aeabi_uldivmod.o)
- .debug_info    0x0000000000013e11      0xc24 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
- .debug_info    0x0000000000014a35       0xd3 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_dvmd_tls.o)
+ .debug_info    0x00000000000094cb     0x1dd7 build/nRF24.o
+ .debug_info    0x000000000000b2a2       0x79 build/startup_stm32f401xe.o
+ .debug_info    0x000000000000b31b      0x8a0 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
+ .debug_info    0x000000000000bbbb      0x110 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-init.o)
+ .debug_info    0x000000000000bccb       0xe1 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memcpy.o)
+ .debug_info    0x000000000000bdac      0x916 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memset.o)
+ .debug_info    0x000000000000c6c2      0xbcb /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
+ .debug_info    0x000000000000d28d       0xe0 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-strlen.o)
+ .debug_info    0x000000000000d36d     0x11b2 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
+ .debug_info    0x000000000000e51f      0xfb4 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_info    0x000000000000f4d3       0xda /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memchr.o)
+ .debug_info    0x000000000000f5ad      0x925 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memmove.o)
+ .debug_info    0x000000000000fed2      0xa51 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-freer.o)
+ .debug_info    0x0000000000010923      0xb1f /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-mallocr.o)
+ .debug_info    0x0000000000011442      0xac0 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-reallocr.o)
+ .debug_info    0x0000000000011f02      0x955 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sbrkr.o)
+ .debug_info    0x0000000000012857      0x9f7 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-msizer.o)
+ .debug_info    0x000000000001324e      0xa67 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
+ .debug_info    0x0000000000013cb5       0x90 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libnosys.a(sbrk.o)
+ .debug_info    0x0000000000013d45       0xcf /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_aeabi_uldivmod.o)
+ .debug_info    0x0000000000013e14      0xc24 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_info    0x0000000000014a38       0xd3 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_dvmd_tls.o)
 
 .debug_abbrev   0x0000000000000000     0x322c
  .debug_abbrev  0x0000000000000000      0x2a6 build/main.o
@@ -1636,56 +1637,56 @@ OUTPUT(build/nRF24-transmitter.elf elf32-littlearm)
  .debug_line    0x0000000000004b60      0x258 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
  .debug_line    0x0000000000004db8       0x67 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_dvmd_tls.o)
 
-.debug_str      0x0000000000000000     0x3d6f
- .debug_str     0x0000000000000000      0xd48 build/main.o
-                                        0xe45 (size before relaxing)
- .debug_str     0x0000000000000d48       0xaf build/stm32f4xx_it.o
+.debug_str      0x0000000000000000     0x3d71
+ .debug_str     0x0000000000000000      0xd51 build/main.o
+                                        0xe4e (size before relaxing)
+ .debug_str     0x0000000000000d51       0xaf build/stm32f4xx_it.o
                                         0x302 (size before relaxing)
- .debug_str     0x0000000000000df7       0x7b build/stm32f4xx_hal_msp.o
+ .debug_str     0x0000000000000e00       0x7b build/stm32f4xx_hal_msp.o
                                         0x88e (size before relaxing)
- .debug_str     0x0000000000000e72      0x6a8 build/stm32f4xx_hal_uart.o
+ .debug_str     0x0000000000000e7b      0x6a8 build/stm32f4xx_hal_uart.o
                                         0xdfa (size before relaxing)
- .debug_str     0x000000000000151a      0x1a0 build/stm32f4xx_hal_rcc.o
+ .debug_str     0x0000000000001523      0x1a0 build/stm32f4xx_hal_rcc.o
                                         0x782 (size before relaxing)
- .debug_str     0x00000000000016ba      0x125 build/stm32f4xx_hal_gpio.o
+ .debug_str     0x00000000000016c3      0x125 build/stm32f4xx_hal_gpio.o
                                         0x5a4 (size before relaxing)
- .debug_str     0x00000000000017df      0x876 build/stm32f4xx_hal_cortex.o
+ .debug_str     0x00000000000017e8      0x876 build/stm32f4xx_hal_cortex.o
                                         0xb6a (size before relaxing)
- .debug_str     0x0000000000002055      0x21f build/stm32f4xx_hal.o
+ .debug_str     0x000000000000205e      0x21f build/stm32f4xx_hal.o
                                         0xa3d (size before relaxing)
- .debug_str     0x0000000000002274       0x42 build/system_stm32f4xx.o
+ .debug_str     0x000000000000227d       0x42 build/system_stm32f4xx.o
                                         0x408 (size before relaxing)
- .debug_str     0x00000000000022b6      0x1f5 build/nRF24.o
-                                        0xd3d (size before relaxing)
- .debug_str     0x00000000000024ab      0x1cb /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
+ .debug_str     0x00000000000022bf      0x1ee build/nRF24.o
+                                        0xd3f (size before relaxing)
+ .debug_str     0x00000000000024ad      0x1cb /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
                                         0x602 (size before relaxing)
- .debug_str     0x0000000000002676      0x107 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-init.o)
+ .debug_str     0x0000000000002678      0x107 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-init.o)
                                         0x253 (size before relaxing)
- .debug_str     0x000000000000277d       0xbb /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memset.o)
+ .debug_str     0x000000000000277f       0xbb /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memset.o)
                                         0x61a (size before relaxing)
- .debug_str     0x0000000000002838      0x206 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
+ .debug_str     0x000000000000283a      0x206 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
                                         0x77d (size before relaxing)
- .debug_str     0x0000000000002a3e      0x29a /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
+ .debug_str     0x0000000000002a40      0x29a /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
                                         0x971 (size before relaxing)
- .debug_str     0x0000000000002cd8       0x97 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_str     0x0000000000002cda       0x97 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
                                         0x910 (size before relaxing)
- .debug_str     0x0000000000002d6f       0x69 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memmove.o)
+ .debug_str     0x0000000000002d71       0x69 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-memmove.o)
                                         0x639 (size before relaxing)
- .debug_str     0x0000000000002dd8      0x175 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-freer.o)
+ .debug_str     0x0000000000002dda      0x175 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-freer.o)
                                         0x714 (size before relaxing)
- .debug_str     0x0000000000002f4d       0x32 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-mallocr.o)
+ .debug_str     0x0000000000002f4f       0x32 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-mallocr.o)
                                         0x72b (size before relaxing)
- .debug_str     0x0000000000002f7f       0x23 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-reallocr.o)
+ .debug_str     0x0000000000002f81       0x23 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-reallocr.o)
                                         0x72f (size before relaxing)
- .debug_str     0x0000000000002fa2       0x4a /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sbrkr.o)
+ .debug_str     0x0000000000002fa4       0x4a /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sbrkr.o)
                                         0x645 (size before relaxing)
- .debug_str     0x0000000000002fec        0xf /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-msizer.o)
+ .debug_str     0x0000000000002fee        0xf /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-msizer.o)
                                         0x70d (size before relaxing)
- .debug_str     0x0000000000002ffb       0x61 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
+ .debug_str     0x0000000000002ffd       0x61 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
                                         0x63e (size before relaxing)
- .debug_str     0x000000000000305c      0x10d /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libnosys.a(sbrk.o)
+ .debug_str     0x000000000000305e      0x10d /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libnosys.a(sbrk.o)
                                         0x126 (size before relaxing)
- .debug_str     0x0000000000003169      0xc06 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
+ .debug_str     0x000000000000316b      0xc06 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
                                         0xcf4 (size before relaxing)
 
 .debug_frame    0x0000000000000000     0x14e8
@@ -2005,7 +2006,6 @@ SPI_MOSI_1                                        build/nRF24.o
 SPI_READ_MISO                                     build/nRF24.o
 SPI_SCK_0                                         build/nRF24.o
 SPI_SCK_1                                         build/nRF24.o
-                                                  build/main.o
 SVC_Handler                                       build/stm32f4xx_it.o
 SysTick_Handler                                   build/stm32f4xx_it.o
 SystemClock_Config                                build/main.o
@@ -2164,15 +2164,16 @@ nRF24_get_CONFIG                                  build/nRF24.o
 nRF24_get_FIFO_STATUS                             build/nRF24.o
 nRF24_get_STATUS                                  build/nRF24.o
 nRF24_keep_sending                                build/nRF24.o
+                                                  build/main.o
 nRF24_tx_self_test                                build/nRF24.o
                                                   build/main.o
+nRF24_verified_write_register                     build/nRF24.o
 pFlash                                            build/stm32f4xx_hal_flash.o
                                                   build/stm32f4xx_hal_flash_ex.o
 siprintf                                          /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
 software_init_hook                                /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
 spi_delay                                         build/nRF24.o
 spi_read_register                                 build/nRF24.o
-spi_verified_write_register                       build/nRF24.o
 spi_write_register                                build/nRF24.o
 sprintf                                           /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
                                                   build/nRF24.o
