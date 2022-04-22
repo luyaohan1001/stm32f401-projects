@@ -96,12 +96,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-			
-		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-		HAL_Delay (200);
-		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-		HAL_Delay (200);
-		nRF24_keep_sending();
+      
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+    HAL_Delay (200);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+    HAL_Delay (200);
+    nRF24_keep_sending();
 
     /* USER CODE END WHILE */
 

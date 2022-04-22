@@ -92,9 +92,13 @@ __inline__ GPIO_PinState SPI_READ_MISO()
 }
 
 /**
-	* @brief Print debug string through USART.
-	* @param p_msg Pointer to anynomous message string.
-	* @retval None.
+	* @brief   Print debug string through USART.
+	* @param   p_msg Pointer to anynomous message string.
+	* @retval  None.
+	* @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port through USB.
+	*            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will not receive data.
+	*	           In the datasheet it has been confirmed that the USART2 pins have been to multiplexed for the virtual COM feature.
+	*            On the PC, look for port /dev/ttyACM0 as the virtual serial port.  
 	*/
 __inline__ void serial_print(char* message)
 {
