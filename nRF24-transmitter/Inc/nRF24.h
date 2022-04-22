@@ -8,19 +8,18 @@
   * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
   ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
 
+/* Macro to prevent recursive inclusion ----------------------------------------------------------------------------------------*/
 #ifndef __NRF24_H
 #define __NRF24_H
 
+/* Includes --------------------------------------------------------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 
-#define TX_ADR_WIDTH  5        
-#define RX_ADR_WIDTH  5       
-#define TX_PLOAD_WIDTH  32  
-#define RX_PLOAD_WIDTH  32  
 
+/* nRF24 SPI Commands ----------------------------------------------------------------------------------------------------------*/
 #define R_REGISTER_MASK   0x00                   
 #define W_REGISTER_MASK   0x20
 #define R_RX_PAYLOAD  0x61                      
@@ -30,36 +29,34 @@
 #define REUSE_TX_PL  0xE3                       
 #define NOP          0xFF                      
 
-// Mnemonic   Address  Description
-#define CONFIG        0x00  // 配置收发状态，CRC校验模式以及收发状态响应方式
-#define EN_AA         0x01  // 自动应答功能设置
-#define EN_RXADDR     0x02  // 可用信道设置
-#define SETUP_AW      0x03  // 收发地址宽度设置
-#define SETUP_RETR    0x04  // 自动重发功能设置
-#define RF_CH         0x05  // 工作频率设置
-#define RF_SETUP      0x06  // 发射速率、功耗功能设置
-#define STATUS        0x07  // 状态寄存器
-#define OBSERVE_TX    0x08  // 发送监测功能
-#define CD            0x09  // 地址检测           
-#define RX_ADDR_P0    0x0A  // 频道0接收数据地址
-#define RX_ADDR_P1    0x0B  // 频道1接收数据地址
-#define RX_ADDR_P2    0x0C  // 频道2接收数据地址
-#define RX_ADDR_P3    0x0D  // 频道3接收数据地址
-#define RX_ADDR_P4    0x0E  // 频道4接收数据地址
-#define RX_ADDR_P5    0x0F  // 频道5接收数据地址
-#define TX_ADDR       0x10  // 发送地址寄存器
-#define RX_PW_P0      0x11  // 接收频道0接收数据长度
-#define RX_PW_P1      0x12  // 接收频道0接收数据长度
-#define RX_PW_P2      0x13  // 接收频道0接收数据长度
-#define RX_PW_P3      0x14  // 接收频道0接收数据长度
-#define RX_PW_P4      0x15  // 接收频道0接收数据长度
-#define RX_PW_P5      0x16  // 接收频道0接收数据长度
-#define FIFO_STATUS   0x17  // FIFO栈入栈出状态寄存器设置
-#define TX_OK         0x20  //TX发送完成中断
-#define MAX_TX        0x10  //达到最大发送次数中断
-
+/* nRF24 On-device Registers ----------------------------------------------------------------------------------------------------*/
+#define CONFIG        0x00  // Configuration registers.
+#define EN_AA         0x01  // Enable Auto Acknowledge.
+#define EN_RXADDR     0x02  // Enable RX Addresses.
+#define SETUP_AW      0x03  // Setup of Address Widths.
+#define SETUP_RETR    0x04  // Setup of Automatic Retransmission.
+#define RF_CH         0x05  // RF Channel.
+#define RF_SETUP      0x06  // RF Setup Register.
+#define STATUS        0x07  // Status Register.
+#define OBSERVE_TX    0x08  // Transmit Lost Register.
+#define RPD            0x09 // Received Power Detector.
+#define RX_ADDR_P0    0x0A  // Receive address data pipe 0.
+#define RX_ADDR_P1    0x0B  // Receive address data pipe 1.
+#define RX_ADDR_P2    0x0C  // Receive address data pipe 2.
+#define RX_ADDR_P3    0x0D  // Receive address data pipe 3.
+#define RX_ADDR_P4    0x0E  // Receive address data pipe 4.
+#define RX_ADDR_P5    0x0F  // Receive address data pipe 5.
+#define TX_ADDR       0x10  // Transmit address.
+#define RX_PW_P0      0x11  // Number of bytes in RX payload in data pipe 0.
+#define RX_PW_P1      0x12  // Number of bytes in RX payload in data pipe 1.
+#define RX_PW_P2      0x13  // Number of bytes in RX payload in data pipe 2.
+#define RX_PW_P3      0x14  // Number of bytes in RX payload in data pipe 3.
+#define RX_PW_P4      0x15  // Number of bytes in RX payload in data pipe 4.
+#define RX_PW_P5      0x16  // Number of bytes in RX payload in data pipe 5.
+#define FIFO_STATUS   0x17  // FIFO Status Register.
 
 extern UART_HandleTypeDef huart2;
+
 
 void SPI_SCK_1();
 void SPI_SCK_0();
@@ -67,9 +64,12 @@ void SPI_MOSI_1();
 void SPI_MOSI_0();
 void SPI_CS_1();
 void SPI_CS_0();
-void SPI_CE_1();
-void SPI_CE_0();
+
 GPIO_PinState SPI_READ_MISO();
+
+
+void nRF24_CE_1();
+void nRF24_CE_0();
 
 
 void spi_delay();
