@@ -92,17 +92,17 @@ __inline__ GPIO_PinState SPI_READ_MISO()
 }
 
 /**
-	* @brief   Print debug string through USART.
-	* @param   p_msg Pointer to anynomous message string.
-	* @retval  None.
-	* @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port through USB.
-	*            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will not receive data.
-	*	           In the datasheet it has been confirmed that the USART2 pins have been to multiplexed for the virtual COM feature.
-	*            On the PC, look for port /dev/ttyACM0 as the virtual serial port.  
-	*/
+  * @brief   Print debug string through USART.
+  * @param   p_msg Pointer to anynomous message string.
+  * @retval  None.
+  * @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port through USB.
+  *            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will not receive data.
+  *             In the datasheet it has been confirmed that the USART2 pins have been to multiplexed for the virtual COM feature.
+  *            On the PC, look for port /dev/ttyACM0 as the virtual serial port.  
+  */
 __inline__ void serial_print(char* message)
 {
-	HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
+  HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
 }
 
 /**
@@ -282,15 +282,15 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
       if (read_data[i] != p_writing_data[i]) 
       {
         strcpy(message, "Problem writing to SPI register -- ");
-				serial_print(message);
+        serial_print(message);
         sprintf(message, "writing data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_data[i]);
-				serial_print(message);
+        serial_print(message);
         return true;
       } else {
         strcpy(message, "Success writing to SPI register -- ");
-				serial_print(message);
+        serial_print(message);
         sprintf(message, "writing data: <%#02x> read_data: <%#02x>\n", p_writing_data[i], read_data[i]);
-				serial_print(message);
+        serial_print(message);
       }
   }
   return false;
@@ -369,10 +369,10 @@ bool nRF24_tx_self_test()
 {
 
   char message1[] = "---- nrf24 tx self test. ----\n";
-	serial_print(message1);
+  serial_print(message1);
 
   char message2[] = "---- This test to verifies function of a tranmitter send without a receiver. ----\n";
-	serial_print(message2);
+  serial_print(message2);
 
   uint8_t nRF24_status = 0x00;
 
@@ -406,16 +406,16 @@ bool nRF24_tx_self_test()
   if (nRF24_status & 0x2E) 
   {
     char message3[] = "\n > nRF24 transmission self-test has passed. \
-											 STATUS has value of 0x2E. \
-											 TX_DS (transfer data sent) was set. \
-											 RX_P_NO = 111, means RX FIFO Empty. \n";
-		serial_print(message3);
+                       STATUS has value of 0x2E. \
+                       TX_DS (transfer data sent) was set. \
+                       RX_P_NO = 111, means RX FIFO Empty. \n";
+    serial_print(message3);
     return true;
   } 
   else 
   {
     char message4[] = "\n > nRF24 transmission self-test has failed. STATUS is expected 0x2E.";
-		serial_print(message4);
+    serial_print(message4);
     return false;
   }
   
@@ -457,7 +457,7 @@ void nRF24_configure_tx_mode()
     nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
     spi_delay(150);
 
-		// CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
+    // CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
     // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
 }
 
@@ -481,17 +481,17 @@ void nRF24_keep_sending()
   uint8_t stat = nRF24_get_STATUS();
 
   sprintf(debug_msg, "<STATUS> register : %x\n", stat);
-	serial_print(debug_msg);
+  serial_print(debug_msg);
 
   if (stat == 0x2e) // TX_DS bit is set.
   {
     strcpy(debug_msg, "nRF24 send successful.\n");
-		serial_print(debug_msg);
+    serial_print(debug_msg);
   } 
   else 
   {
     strcpy(debug_msg, "nRF24 send failed.\n");
-		serial_print(debug_msg);
+    serial_print(debug_msg);
   }
   // write 1 to clear TX_DS, TX_DS bit is Write-to-Clear.
   uint8_t writing_byte = 0x20;

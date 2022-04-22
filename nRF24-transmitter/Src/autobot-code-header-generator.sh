@@ -14,7 +14,7 @@ if [[ ! $1 ]]; then
 fi
 
 # Check if header already exist in that file.
-if [[ `grep 'Author' $1` ]]; then
+if [[ `grep 'author' $1` ]]; then
 	echo 'Code header already exists.'
 	echo '- autobot exiting... -'
 	exit 1
