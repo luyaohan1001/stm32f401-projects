@@ -1,0 +1,1262 @@
+ARM GAS  /tmp/ccbiPTrS.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BTLE.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.swapbuf,"ax",%progbits
+  18              		.align	1
+  19              		.global	swapbuf
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	swapbuf:
+  26              	.LFB130:
+  27              		.file 1 "Src/BTLE.c"
+   1:Src/BTLE.c    **** /*
+   2:Src/BTLE.c    ****  * Copyright (C) 2013 Florian Echtler <floe@butterbrot.org>
+   3:Src/BTLE.c    ****  *
+   4:Src/BTLE.c    ****  * This program is free software; you can redistribute it and/or
+   5:Src/BTLE.c    ****  * modify it under the terms of the GNU General Public License
+   6:Src/BTLE.c    ****  * version 3 as published by the Free Software Foundation.
+   7:Src/BTLE.c    **** */
+   8:Src/BTLE.c    **** 
+   9:Src/BTLE.c    **** #include <BTLE.h>
+  10:Src/BTLE.c    **** 
+  11:Src/BTLE.c    **** #define min(x,y) ( ((x) < (y)) ? (x) : (y) ) 
+  12:Src/BTLE.c    **** #define max(x,y) ( ((x) > (y)) ? (x) : (y) ) 
+  13:Src/BTLE.c    **** 
+  14:Src/BTLE.c    **** const uint8_t channel[3]   = {37,38,39};  // logical BTLE channel number (37-39)
+  15:Src/BTLE.c    **** const uint8_t frequency[3] = { 2,26,80};  // physical frequency (2400+x MHz)
+  16:Src/BTLE.c    **** 
+  17:Src/BTLE.c    **** 
+  18:Src/BTLE.c    **** // This is a rather convoluted hack to extract the month number from the build date in
+  19:Src/BTLE.c    **** // the __DATE__ macro using a small hash function + lookup table. Since all inputs are
+  20:Src/BTLE.c    **** // const, this can be fully resolved by the compiler and saves over 200 bytes of code.
+  21:Src/BTLE.c    **** #define month(m) month_lookup[ (( ((( (m[0] % 24) * 13) + m[1]) % 24) * 13) + m[2]) % 24 ]
+  22:Src/BTLE.c    **** const uint8_t month_lookup[24] = { 0,6,0,4,0,1,0,17,0,8,0,0,3,0,0,0,18,2,16,5,9,0,1,7 };
+  23:Src/BTLE.c    **** 
+  24:Src/BTLE.c    **** 
+  25:Src/BTLE.c    **** // change buffer contents to "wire bit order"
+  26:Src/BTLE.c    **** void swapbuf( uint8_t len ) {
+  28              		.loc 1 26 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ARM GAS  /tmp/ccbiPTrS.s 			page 2
+
+
+  33              	.LVL0:
+  34 0000 10B4     		push	{r4}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 4, -4
+  38              	.LVL1:
+  27:Src/BTLE.c    **** 
+  28:Src/BTLE.c    **** 	uint8_t* buf = (uint8_t*)&buffer;
+  39              		.loc 1 28 0
+  40 0002 1B4C     		ldr	r4, .L15
+  29:Src/BTLE.c    **** 
+  30:Src/BTLE.c    **** 	while (len--) {
+  41              		.loc 1 30 0
+  42 0004 04E0     		b	.L2
+  43              	.LVL2:
+  44              	.L12:
+  45              	.LBB2:
+  31:Src/BTLE.c    **** 
+  32:Src/BTLE.c    **** 		uint8_t a = *buf;
+  33:Src/BTLE.c    **** 		uint8_t v = 0;
+  34:Src/BTLE.c    **** 
+  35:Src/BTLE.c    **** 		if (a & 0x80) v |= 0x01;
+  46              		.loc 1 35 0
+  47 0006 0122     		movs	r2, #1
+  48 0008 0AE0     		b	.L3
+  49              	.LVL3:
+  50              	.L10:
+  36:Src/BTLE.c    **** 		if (a & 0x40) v |= 0x02;
+  37:Src/BTLE.c    **** 		if (a & 0x20) v |= 0x04;
+  38:Src/BTLE.c    **** 		if (a & 0x10) v |= 0x08;
+  39:Src/BTLE.c    **** 		if (a & 0x08) v |= 0x10;
+  40:Src/BTLE.c    **** 		if (a & 0x04) v |= 0x20;
+  41:Src/BTLE.c    **** 		if (a & 0x02) v |= 0x40;
+  42:Src/BTLE.c    **** 		if (a & 0x01) v |= 0x80;
+  43:Src/BTLE.c    **** 
+  44:Src/BTLE.c    **** 		*(buf++) = v;
+  51              		.loc 1 44 0
+  52 000a 2270     		strb	r2, [r4]
+  53 000c 0134     		adds	r4, r4, #1
+  54              	.LVL4:
+  55              	.LBE2:
+  30:Src/BTLE.c    **** 
+  56              		.loc 1 30 0
+  57 000e 0846     		mov	r0, r1
+  58              	.LVL5:
+  59              	.L2:
+  60 0010 431E     		subs	r3, r0, #1
+  61 0012 D9B2     		uxtb	r1, r3
+  62              	.LVL6:
+  63 0014 40B3     		cbz	r0, .L14
+  64              	.LBB3:
+  32:Src/BTLE.c    **** 		uint8_t v = 0;
+  65              		.loc 1 32 0
+  66 0016 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+  67              	.LVL7:
+  35:Src/BTLE.c    **** 		if (a & 0x40) v |= 0x02;
+  68              		.loc 1 35 0
+ARM GAS  /tmp/ccbiPTrS.s 			page 3
+
+
+  69 0018 13F0800F 		tst	r3, #128
+  70 001c F3D1     		bne	.L12
+  33:Src/BTLE.c    **** 
+  71              		.loc 1 33 0
+  72 001e 0022     		movs	r2, #0
+  73              	.L3:
+  74              	.LVL8:
+  36:Src/BTLE.c    **** 		if (a & 0x20) v |= 0x04;
+  75              		.loc 1 36 0
+  76 0020 13F0400F 		tst	r3, #64
+  77 0024 01D0     		beq	.L4
+  36:Src/BTLE.c    **** 		if (a & 0x20) v |= 0x04;
+  78              		.loc 1 36 0 is_stmt 0 discriminator 1
+  79 0026 42F00202 		orr	r2, r2, #2
+  80              	.LVL9:
+  81              	.L4:
+  37:Src/BTLE.c    **** 		if (a & 0x10) v |= 0x08;
+  82              		.loc 1 37 0 is_stmt 1
+  83 002a 13F0200F 		tst	r3, #32
+  84 002e 01D0     		beq	.L5
+  37:Src/BTLE.c    **** 		if (a & 0x10) v |= 0x08;
+  85              		.loc 1 37 0 is_stmt 0 discriminator 1
+  86 0030 42F00402 		orr	r2, r2, #4
+  87              	.LVL10:
+  88              	.L5:
+  38:Src/BTLE.c    **** 		if (a & 0x08) v |= 0x10;
+  89              		.loc 1 38 0 is_stmt 1
+  90 0034 13F0100F 		tst	r3, #16
+  91 0038 01D0     		beq	.L6
+  38:Src/BTLE.c    **** 		if (a & 0x08) v |= 0x10;
+  92              		.loc 1 38 0 is_stmt 0 discriminator 1
+  93 003a 42F00802 		orr	r2, r2, #8
+  94              	.LVL11:
+  95              	.L6:
+  39:Src/BTLE.c    **** 		if (a & 0x04) v |= 0x20;
+  96              		.loc 1 39 0 is_stmt 1
+  97 003e 13F0080F 		tst	r3, #8
+  98 0042 01D0     		beq	.L7
+  39:Src/BTLE.c    **** 		if (a & 0x04) v |= 0x20;
+  99              		.loc 1 39 0 is_stmt 0 discriminator 1
+ 100 0044 42F01002 		orr	r2, r2, #16
+ 101              	.LVL12:
+ 102              	.L7:
+  40:Src/BTLE.c    **** 		if (a & 0x02) v |= 0x40;
+ 103              		.loc 1 40 0 is_stmt 1
+ 104 0048 13F0040F 		tst	r3, #4
+ 105 004c 01D0     		beq	.L8
+  40:Src/BTLE.c    **** 		if (a & 0x02) v |= 0x40;
+ 106              		.loc 1 40 0 is_stmt 0 discriminator 1
+ 107 004e 42F02002 		orr	r2, r2, #32
+ 108              	.LVL13:
+ 109              	.L8:
+  41:Src/BTLE.c    **** 		if (a & 0x01) v |= 0x80;
+ 110              		.loc 1 41 0 is_stmt 1
+ 111 0052 13F0020F 		tst	r3, #2
+ 112 0056 01D0     		beq	.L9
+  41:Src/BTLE.c    **** 		if (a & 0x01) v |= 0x80;
+ARM GAS  /tmp/ccbiPTrS.s 			page 4
+
+
+ 113              		.loc 1 41 0 is_stmt 0 discriminator 1
+ 114 0058 42F04002 		orr	r2, r2, #64
+ 115              	.LVL14:
+ 116              	.L9:
+  42:Src/BTLE.c    **** 
+ 117              		.loc 1 42 0 is_stmt 1
+ 118 005c 13F0010F 		tst	r3, #1
+ 119 0060 D3D0     		beq	.L10
+  42:Src/BTLE.c    **** 
+ 120              		.loc 1 42 0 is_stmt 0 discriminator 1
+ 121 0062 42F08002 		orr	r2, r2, #128
+ 122              	.LVL15:
+ 123 0066 D0E7     		b	.L10
+ 124              	.LVL16:
+ 125              	.L14:
+ 126              	.LBE3:
+  45:Src/BTLE.c    **** 	}
+  46:Src/BTLE.c    **** }
+ 127              		.loc 1 46 0 is_stmt 1
+ 128 0068 5DF8044B 		ldr	r4, [sp], #4
+ 129              	.LCFI1:
+ 130              		.cfi_restore 4
+ 131              		.cfi_def_cfa_offset 0
+ 132              	.LVL17:
+ 133 006c 7047     		bx	lr
+ 134              	.L16:
+ 135 006e 00BF     		.align	2
+ 136              	.L15:
+ 137 0070 00000000 		.word	buffer
+ 138              		.cfi_endproc
+ 139              	.LFE130:
+ 141              		.section	.text.setChannel,"ax",%progbits
+ 142              		.align	1
+ 143              		.global	setChannel
+ 144              		.syntax unified
+ 145              		.thumb
+ 146              		.thumb_func
+ 147              		.fpu fpv4-sp-d16
+ 149              	setChannel:
+ 150              	.LFB132:
+  47:Src/BTLE.c    **** 
+  48:Src/BTLE.c    **** /*
+  49:Src/BTLE.c    **** // constructor
+  50:Src/BTLE.c    **** BTLE( RF24* _radio ):
+  51:Src/BTLE.c    **** 	radio(_radio),
+  52:Src/BTLE.c    **** 	current(0)
+  53:Src/BTLE.c    **** { }
+  54:Src/BTLE.c    **** */
+  55:Src/BTLE.c    **** 
+  56:Src/BTLE.c    **** 
+  57:Src/BTLE.c    **** // Simple converter from arduino float to a nRF_Float.
+  58:Src/BTLE.c    **** // Supports values from -167772 to +167772, with two decimal places.
+  59:Src/BTLE.c    **** nRF_Float 
+  60:Src/BTLE.c    **** to_nRF_Float(float t) {
+  61:Src/BTLE.c    ****   int32_t ret;
+  62:Src/BTLE.c    ****   int32_t exponent = -2;
+  63:Src/BTLE.c    ****   ret = ((exponent & 0xff) << 24) | (((int32_t)(t * 100)) & 0xffffff);
+ARM GAS  /tmp/ccbiPTrS.s 			page 5
+
+
+  64:Src/BTLE.c    ****   return ret;
+  65:Src/BTLE.c    **** }
+  66:Src/BTLE.c    **** 
+  67:Src/BTLE.c    **** // set BTLE-compatible radio parameters
+  68:Src/BTLE.c    **** /*
+  69:Src/BTLE.c    **** void begin( const char* _name ) {
+  70:Src/BTLE.c    **** 
+  71:Src/BTLE.c    **** 	name = _name;
+  72:Src/BTLE.c    **** 	radio->begin();
+  73:Src/BTLE.c    **** 
+  74:Src/BTLE.c    **** 	// set standard parameters
+  75:Src/BTLE.c    **** 	radio->setAutoAck(false);
+  76:Src/BTLE.c    **** 	radio->setDataRate(RF24_1MBPS);
+  77:Src/BTLE.c    **** 	radio->disableCRC();
+  78:Src/BTLE.c    **** 	radio->setChannel( frequency[current] );
+  79:Src/BTLE.c    **** 	radio->setRetries(0,0);
+  80:Src/BTLE.c    **** 	radio->setPALevel(RF24_PA_MAX);
+  81:Src/BTLE.c    **** 
+  82:Src/BTLE.c    **** 	// set advertisement address: 0x8E89BED6 (bit-reversed -> 0x6B7D9171)
+  83:Src/BTLE.c    **** 	radio->setAddressWidth(4);
+  84:Src/BTLE.c    **** 	radio->openReadingPipe(0,0x6B7D9171);
+  85:Src/BTLE.c    **** 	radio->openWritingPipe(  0x6B7D9171);
+  86:Src/BTLE.c    **** 
+  87:Src/BTLE.c    **** 	radio->powerUp();
+  88:Src/BTLE.c    **** }
+  89:Src/BTLE.c    **** */
+  90:Src/BTLE.c    **** 
+  91:Src/BTLE.c    **** // set the current channel (from 37 to 39)
+  92:Src/BTLE.c    **** void setChannel( uint8_t num ) {
+ 151              		.loc 1 92 0
+ 152              		.cfi_startproc
+ 153              		@ args = 0, pretend = 0, frame = 0
+ 154              		@ frame_needed = 0, uses_anonymous_args = 0
+ 155              		@ link register save eliminated.
+ 156              	.LVL18:
+  93:Src/BTLE.c    **** 	current = min(2,max(0,num-37));
+ 157              		.loc 1 93 0
+ 158 0000 2538     		subs	r0, r0, #37
+ 159              	.LVL19:
+ 160 0002 0228     		cmp	r0, #2
+ 161 0004 05DC     		bgt	.L19
+ 162              		.loc 1 93 0 is_stmt 0 discriminator 1
+ 163 0006 20EAE070 		bic	r0, r0, r0, asr #31
+ 164 000a C0B2     		uxtb	r0, r0
+ 165              	.L18:
+ 166              		.loc 1 93 0 discriminator 4
+ 167 000c 024B     		ldr	r3, .L20
+ 168 000e 1870     		strb	r0, [r3]
+ 169 0010 7047     		bx	lr
+ 170              	.L19:
+ 171              		.loc 1 93 0
+ 172 0012 0220     		movs	r0, #2
+ 173 0014 FAE7     		b	.L18
+ 174              	.L21:
+ 175 0016 00BF     		.align	2
+ 176              	.L20:
+ 177 0018 00000000 		.word	current
+ARM GAS  /tmp/ccbiPTrS.s 			page 6
+
+
+ 178              		.cfi_endproc
+ 179              	.LFE132:
+ 181              		.section	.text.hopChannel,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	hopChannel
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 187              		.fpu fpv4-sp-d16
+ 189              	hopChannel:
+ 190              	.LFB133:
+  94:Src/BTLE.c    **** 	// radio->setChannel( frequency[current] ); TODO
+  95:Src/BTLE.c    **** }
+  96:Src/BTLE.c    **** 
+  97:Src/BTLE.c    **** // hop to the next channel
+  98:Src/BTLE.c    **** void hopChannel() {
+ 191              		.loc 1 98 0 is_stmt 1
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195              		@ link register save eliminated.
+  99:Src/BTLE.c    **** 	current++;
+ 196              		.loc 1 99 0
+ 197 0000 054A     		ldr	r2, .L24
+ 198 0002 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 199 0004 0133     		adds	r3, r3, #1
+ 200 0006 DBB2     		uxtb	r3, r3
+ 201 0008 1370     		strb	r3, [r2]
+ 100:Src/BTLE.c    **** 	if (current >= sizeof(channel)) current = 0;
+ 202              		.loc 1 100 0
+ 203 000a 022B     		cmp	r3, #2
+ 204 000c 02D9     		bls	.L22
+ 205              		.loc 1 100 0 is_stmt 0 discriminator 1
+ 206 000e 0022     		movs	r2, #0
+ 207 0010 014B     		ldr	r3, .L24
+ 208 0012 1A70     		strb	r2, [r3]
+ 209              	.L22:
+ 210 0014 7047     		bx	lr
+ 211              	.L25:
+ 212 0016 00BF     		.align	2
+ 213              	.L24:
+ 214 0018 00000000 		.word	current
+ 215              		.cfi_endproc
+ 216              	.LFE133:
+ 218              		.section	.text.preparePacket,"ax",%progbits
+ 219              		.align	1
+ 220              		.global	preparePacket
+ 221              		.syntax unified
+ 222              		.thumb
+ 223              		.thumb_func
+ 224              		.fpu fpv4-sp-d16
+ 226              	preparePacket:
+ 227              	.LFB135:
+ 101:Src/BTLE.c    **** 	// radio->setChannel( frequency[current] ); TODO
+ 102:Src/BTLE.c    **** }
+ 103:Src/BTLE.c    **** 
+ 104:Src/BTLE.c    **** 
+ARM GAS  /tmp/ccbiPTrS.s 			page 7
+
+
+ 105:Src/BTLE.c    **** // Broadcast an advertisement packet with optional payload
+ 106:Src/BTLE.c    **** // Data type will be 0xFF (Manufacturer Specific Data)
+ 107:Src/BTLE.c    **** /*
+ 108:Src/BTLE.c    **** bool advertise( void* buf, uint8_t buflen ) {
+ 109:Src/BTLE.c    **** 	return advertise(0xFF, buf, buflen);
+ 110:Src/BTLE.c    **** }
+ 111:Src/BTLE.c    **** 
+ 112:Src/BTLE.c    **** bool addChunk(uint8_t chunk_type, uint8_t buflen, const void* buf) {
+ 113:Src/BTLE.c    **** 	if (buffer.pl_size + buflen + 2 > 21 + 6) // (buflen+2) is how much this chunk will take, 21 is pa
+ 114:Src/BTLE.c    **** 		return false;
+ 115:Src/BTLE.c    **** 	btle_pdu_chunk* chunk = (btle_pdu_chunk*) (buffer.payload+buffer.pl_size-6);
+ 116:Src/BTLE.c    **** 	chunk->type = chunk_type;
+ 117:Src/BTLE.c    **** 	for (uint8_t i = 0; i < buflen; i++)
+ 118:Src/BTLE.c    **** 		chunk->data[i] = ((uint8_t*)buf)[i];
+ 119:Src/BTLE.c    **** 	chunk->size = buflen + 1;
+ 120:Src/BTLE.c    **** 	buffer.pl_size += buflen + 2;
+ 121:Src/BTLE.c    **** 	return true;
+ 122:Src/BTLE.c    **** }
+ 123:Src/BTLE.c    **** */
+ 124:Src/BTLE.c    **** 
+ 125:Src/BTLE.c    **** // Broadcast an advertisement packet with a specific data type
+ 126:Src/BTLE.c    **** // Standardized data types can be seen here: 
+ 127:Src/BTLE.c    **** // https://www.bluetooth.org/en-us/specification/assigned-numbers/generic-access-profile
+ 128:Src/BTLE.c    **** bool advertise( uint8_t data_type, void* buf, uint8_t buflen ) {
+ 129:Src/BTLE.c    **** 	preparePacket();
+ 130:Src/BTLE.c    **** 	
+ 131:Src/BTLE.c    **** 	// add custom data, if applicable
+ 132:Src/BTLE.c    **** 	if (buflen > 0) {
+ 133:Src/BTLE.c    **** 		bool success = addChunk(data_type, buflen, buf);
+ 134:Src/BTLE.c    **** 		if (!success) {
+ 135:Src/BTLE.c    **** 			return false;
+ 136:Src/BTLE.c    **** 		}
+ 137:Src/BTLE.c    **** 	}
+ 138:Src/BTLE.c    **** 	
+ 139:Src/BTLE.c    **** 	transmitPacket();
+ 140:Src/BTLE.c    **** 	return true;
+ 141:Src/BTLE.c    **** }
+ 142:Src/BTLE.c    **** 
+ 143:Src/BTLE.c    **** void preparePacket() {
+ 228              		.loc 1 143 0 is_stmt 1
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 8
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232 0000 10B5     		push	{r4, lr}
+ 233              	.LCFI2:
+ 234              		.cfi_def_cfa_offset 8
+ 235              		.cfi_offset 4, -8
+ 236              		.cfi_offset 14, -4
+ 237 0002 82B0     		sub	sp, sp, #8
+ 238              	.LCFI3:
+ 239              		.cfi_def_cfa_offset 16
+ 144:Src/BTLE.c    **** 	// insert pseudo-random MAC address
+ 145:Src/BTLE.c    **** 	buffer.mac[0] = ((__TIME__[6]-0x30) << 4) | (__TIME__[7]-0x30);
+ 240              		.loc 1 145 0
+ 241 0004 134B     		ldr	r3, .L30
+ 242 0006 4922     		movs	r2, #73
+ 243 0008 9A70     		strb	r2, [r3, #2]
+ARM GAS  /tmp/ccbiPTrS.s 			page 8
+
+
+ 146:Src/BTLE.c    **** 	buffer.mac[1] = ((__TIME__[3]-0x30) << 4) | (__TIME__[4]-0x30);
+ 244              		.loc 1 146 0
+ 245 000a 2322     		movs	r2, #35
+ 246 000c DA70     		strb	r2, [r3, #3]
+ 147:Src/BTLE.c    **** 	buffer.mac[2] = ((__TIME__[0]-0x30) << 4) | (__TIME__[1]-0x30);
+ 247              		.loc 1 147 0
+ 248 000e 2222     		movs	r2, #34
+ 249 0010 1A71     		strb	r2, [r3, #4]
+ 148:Src/BTLE.c    **** 	buffer.mac[3] = ((__DATE__[4]-0x30) << 4) | (__DATE__[5]-0x30);
+ 250              		.loc 1 148 0
+ 251 0012 5A71     		strb	r2, [r3, #5]
+ 149:Src/BTLE.c    **** 	buffer.mac[4] = month(__DATE__);
+ 252              		.loc 1 149 0
+ 253 0014 0422     		movs	r2, #4
+ 254 0016 9A71     		strb	r2, [r3, #6]
+ 150:Src/BTLE.c    **** 	buffer.mac[5] = ((__DATE__[9]-0x30) << 4) | (__DATE__[10]-0x30) | 0xC0; // static random address s
+ 255              		.loc 1 150 0
+ 256 0018 E222     		movs	r2, #226
+ 257 001a DA71     		strb	r2, [r3, #7]
+ 151:Src/BTLE.c    **** 	
+ 152:Src/BTLE.c    **** 	buffer.pdu_type = 0x42;    // PDU type: ADV_NONCONN_IND, TX address is random
+ 258              		.loc 1 152 0
+ 259 001c 4222     		movs	r2, #66
+ 260 001e 1A70     		strb	r2, [r3]
+ 153:Src/BTLE.c    **** 	buffer.pl_size = 6; //including MAC
+ 261              		.loc 1 153 0
+ 262 0020 0622     		movs	r2, #6
+ 263 0022 5A70     		strb	r2, [r3, #1]
+ 154:Src/BTLE.c    **** 	
+ 155:Src/BTLE.c    **** 	// add device descriptor chunk
+ 156:Src/BTLE.c    **** 	uint8_t flags = 0x05;
+ 264              		.loc 1 156 0
+ 265 0024 02AA     		add	r2, sp, #8
+ 266 0026 0523     		movs	r3, #5
+ 267 0028 02F8013D 		strb	r3, [r2, #-1]!
+ 157:Src/BTLE.c    **** 	addChunk(0x01, 1, &flags);
+ 268              		.loc 1 157 0
+ 269 002c 0121     		movs	r1, #1
+ 270 002e 0846     		mov	r0, r1
+ 271 0030 FFF7FEFF 		bl	addChunk
+ 272              	.LVL20:
+ 158:Src/BTLE.c    **** 	
+ 159:Src/BTLE.c    **** 	// add "complete name" chunk
+ 160:Src/BTLE.c    **** 	if (strlen(name) > 0) {
+ 273              		.loc 1 160 0
+ 274 0034 084B     		ldr	r3, .L30+4
+ 275 0036 1C68     		ldr	r4, [r3]
+ 276 0038 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 277 003a 0BB9     		cbnz	r3, .L29
+ 278              	.L26:
+ 161:Src/BTLE.c    **** 		addChunk(0x09, strlen(name), name);
+ 162:Src/BTLE.c    **** 	}
+ 163:Src/BTLE.c    **** }
+ 279              		.loc 1 163 0
+ 280 003c 02B0     		add	sp, sp, #8
+ 281              	.LCFI4:
+ 282              		.cfi_remember_state
+ARM GAS  /tmp/ccbiPTrS.s 			page 9
+
+
+ 283              		.cfi_def_cfa_offset 8
+ 284              		@ sp needed
+ 285 003e 10BD     		pop	{r4, pc}
+ 286              	.L29:
+ 287              	.LCFI5:
+ 288              		.cfi_restore_state
+ 161:Src/BTLE.c    **** 		addChunk(0x09, strlen(name), name);
+ 289              		.loc 1 161 0
+ 290 0040 2046     		mov	r0, r4
+ 291 0042 FFF7FEFF 		bl	strlen
+ 292              	.LVL21:
+ 293 0046 2246     		mov	r2, r4
+ 294 0048 C1B2     		uxtb	r1, r0
+ 295 004a 0920     		movs	r0, #9
+ 296 004c FFF7FEFF 		bl	addChunk
+ 297              	.LVL22:
+ 298              		.loc 1 163 0
+ 299 0050 F4E7     		b	.L26
+ 300              	.L31:
+ 301 0052 00BF     		.align	2
+ 302              	.L30:
+ 303 0054 00000000 		.word	buffer
+ 304 0058 00000000 		.word	name
+ 305              		.cfi_endproc
+ 306              	.LFE135:
+ 308              		.section	.text.whiten,"ax",%progbits
+ 309              		.align	1
+ 310              		.global	whiten
+ 311              		.syntax unified
+ 312              		.thumb
+ 313              		.thumb_func
+ 314              		.fpu fpv4-sp-d16
+ 316              	whiten:
+ 317              	.LFB138:
+ 164:Src/BTLE.c    **** 
+ 165:Src/BTLE.c    **** void transmitPacket() {
+ 166:Src/BTLE.c    **** 	uint8_t pls = buffer.pl_size - 6;
+ 167:Src/BTLE.c    **** 	// calculate CRC over header+MAC+payload, append after payload
+ 168:Src/BTLE.c    **** 	uint8_t* outbuf = (uint8_t*)&buffer;
+ 169:Src/BTLE.c    **** 	crc( pls+8, outbuf+pls+8);
+ 170:Src/BTLE.c    **** 	
+ 171:Src/BTLE.c    **** 	// whiten header+MAC+payload+CRC, swap bit order
+ 172:Src/BTLE.c    **** 	whiten( pls+11 );
+ 173:Src/BTLE.c    **** 	swapbuf( pls+11 );
+ 174:Src/BTLE.c    **** 	
+ 175:Src/BTLE.c    **** 	// flush buffers and send
+ 176:Src/BTLE.c    **** 	// radio->stopListening(); TODO
+ 177:Src/BTLE.c    **** 	// radio->write( outbuf, pls+11 ); TODO
+ 178:Src/BTLE.c    **** }
+ 179:Src/BTLE.c    **** 
+ 180:Src/BTLE.c    **** 
+ 181:Src/BTLE.c    **** // listen for advertisement packets
+ 182:Src/BTLE.c    **** bool listen(int timeout) {
+ 183:Src/BTLE.c    **** 	if (timeout == 0) 
+ 184:Src/BTLE.c    **** 	{
+ 185:Src/BTLE.c    **** 		timeout = 100;
+ 186:Src/BTLE.c    **** 	}
+ARM GAS  /tmp/ccbiPTrS.s 			page 10
+
+
+ 187:Src/BTLE.c    **** 
+ 188:Src/BTLE.c    **** 	// radio->startListening(); TODO
+ 189:Src/BTLE.c    **** 	
+ 190:Src/BTLE.c    **** 	HAL_Delay(timeout); //delay(timeout);
+ 191:Src/BTLE.c    **** 
+ 192:Src/BTLE.c    **** 	// if (!radio->available())
+ 193:Src/BTLE.c    ****   // 		return false; TODO
+ 194:Src/BTLE.c    **** 
+ 195:Src/BTLE.c    **** 	uint8_t total_size = 0;
+ 196:Src/BTLE.c    **** 	uint8_t* inbuf = (uint8_t*)&buffer;
+ 197:Src/BTLE.c    **** 
+ 198:Src/BTLE.c    **** 	// while (radio->available()) { // TODO
+ 199:Src/BTLE.c    **** 
+ 200:Src/BTLE.c    **** 		// fetch the payload, and check if there are more left
+ 201:Src/BTLE.c    **** 		// radio->read( inbuf, sizeof(buffer) ); // TODO
+ 202:Src/BTLE.c    **** 
+ 203:Src/BTLE.c    **** 		// decode: swap bit order, un-whiten
+ 204:Src/BTLE.c    **** 		swapbuf( sizeof(buffer) );
+ 205:Src/BTLE.c    **** 		whiten( sizeof(buffer) );
+ 206:Src/BTLE.c    **** 		
+ 207:Src/BTLE.c    **** 		// size is w/o header+CRC -> add 2 bytes header
+ 208:Src/BTLE.c    **** 		total_size = inbuf[1]+2;
+ 209:Src/BTLE.c    **** 		uint8_t in_crc[3];
+ 210:Src/BTLE.c    **** 
+ 211:Src/BTLE.c    **** 		// calculate & compare CRC
+ 212:Src/BTLE.c    **** 		crc( total_size, in_crc );
+ 213:Src/BTLE.c    **** 		for (uint8_t i = 0; i < 3; i++)
+ 214:Src/BTLE.c    **** 			if (inbuf[total_size+i] != in_crc[i])
+ 215:Src/BTLE.c    **** 				return false;
+ 216:Src/BTLE.c    **** 	// }
+ 217:Src/BTLE.c    **** 
+ 218:Src/BTLE.c    **** 	return true;
+ 219:Src/BTLE.c    **** }
+ 220:Src/BTLE.c    **** 
+ 221:Src/BTLE.c    **** 
+ 222:Src/BTLE.c    **** // see BT Core Spec 4.0, Section 6.B.3.2
+ 223:Src/BTLE.c    **** void whiten( uint8_t len ) {
+ 318              		.loc 1 223 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 0
+ 321              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322              		@ link register save eliminated.
+ 323              	.LVL23:
+ 324 0000 30B4     		push	{r4, r5}
+ 325              	.LCFI6:
+ 326              		.cfi_def_cfa_offset 8
+ 327              		.cfi_offset 4, -8
+ 328              		.cfi_offset 5, -4
+ 329              	.LVL24:
+ 224:Src/BTLE.c    **** 
+ 225:Src/BTLE.c    **** 	uint8_t* buf = (uint8_t*)&buffer;
+ 226:Src/BTLE.c    **** 
+ 227:Src/BTLE.c    **** 	// initialize LFSR with current channel, set bit 6
+ 228:Src/BTLE.c    **** 	uint8_t lfsr = channel[current] | 0x40;
+ 330              		.loc 1 228 0
+ 331 0002 104B     		ldr	r3, .L41
+ 332 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ARM GAS  /tmp/ccbiPTrS.s 			page 11
+
+
+ 333 0006 104A     		ldr	r2, .L41+4
+ 334 0008 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 335 000a 42F04002 		orr	r2, r2, #64
+ 336              	.LVL25:
+ 225:Src/BTLE.c    **** 
+ 337              		.loc 1 225 0
+ 338 000e 0F4D     		ldr	r5, .L41+8
+ 229:Src/BTLE.c    **** 
+ 230:Src/BTLE.c    **** 	while (len--) {
+ 339              		.loc 1 230 0
+ 340 0010 0FE0     		b	.L33
+ 341              	.LVL26:
+ 342              	.L34:
+ 343              	.LBB4:
+ 344              	.LBB5:
+ 231:Src/BTLE.c    **** 		uint8_t res = 0;
+ 232:Src/BTLE.c    **** 		// LFSR in "wire bit order"
+ 233:Src/BTLE.c    **** 		for (uint8_t i = 1; i; i <<= 1) {
+ 234:Src/BTLE.c    **** 			if (lfsr & 0x01) {
+ 235:Src/BTLE.c    **** 				lfsr ^= 0x88;
+ 236:Src/BTLE.c    **** 				res |= i;
+ 237:Src/BTLE.c    **** 			}
+ 238:Src/BTLE.c    **** 			lfsr >>= 1;
+ 345              		.loc 1 238 0 discriminator 2
+ 346 0012 5208     		lsrs	r2, r2, #1
+ 347              	.LVL27:
+ 233:Src/BTLE.c    **** 			if (lfsr & 0x01) {
+ 348              		.loc 1 233 0 discriminator 2
+ 349 0014 5B00     		lsls	r3, r3, #1
+ 350              	.LVL28:
+ 351 0016 DBB2     		uxtb	r3, r3
+ 352              	.LVL29:
+ 353              	.L36:
+ 233:Src/BTLE.c    **** 			if (lfsr & 0x01) {
+ 354              		.loc 1 233 0 is_stmt 0 discriminator 1
+ 355 0018 33B1     		cbz	r3, .L39
+ 234:Src/BTLE.c    **** 				lfsr ^= 0x88;
+ 356              		.loc 1 234 0 is_stmt 1
+ 357 001a 12F0010F 		tst	r2, #1
+ 358 001e F8D0     		beq	.L34
+ 235:Src/BTLE.c    **** 				res |= i;
+ 359              		.loc 1 235 0
+ 360 0020 82F08802 		eor	r2, r2, #136
+ 361              	.LVL30:
+ 236:Src/BTLE.c    **** 			}
+ 362              		.loc 1 236 0
+ 363 0024 1943     		orrs	r1, r1, r3
+ 364              	.LVL31:
+ 365 0026 F4E7     		b	.L34
+ 366              	.L39:
+ 367              	.LVL32:
+ 368              	.LBE5:
+ 239:Src/BTLE.c    **** 		}
+ 240:Src/BTLE.c    **** 		*(buf++) ^= res;
+ 369              		.loc 1 240 0
+ 370 0028 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 371              	.LVL33:
+ARM GAS  /tmp/ccbiPTrS.s 			page 12
+
+
+ 372 002a 5940     		eors	r1, r1, r3
+ 373              	.LVL34:
+ 374 002c 2970     		strb	r1, [r5]
+ 375 002e 0135     		adds	r5, r5, #1
+ 376              	.LVL35:
+ 377              	.LBE4:
+ 230:Src/BTLE.c    **** 		uint8_t res = 0;
+ 378              		.loc 1 230 0
+ 379 0030 2046     		mov	r0, r4
+ 380              	.LVL36:
+ 381              	.L33:
+ 382 0032 431E     		subs	r3, r0, #1
+ 383 0034 DCB2     		uxtb	r4, r3
+ 384              	.LVL37:
+ 385 0036 10B1     		cbz	r0, .L40
+ 386 0038 0123     		movs	r3, #1
+ 387 003a 0021     		movs	r1, #0
+ 388 003c ECE7     		b	.L36
+ 389              	.L40:
+ 241:Src/BTLE.c    **** 	}
+ 242:Src/BTLE.c    **** }
+ 390              		.loc 1 242 0
+ 391 003e 30BC     		pop	{r4, r5}
+ 392              	.LCFI7:
+ 393              		.cfi_restore 5
+ 394              		.cfi_restore 4
+ 395              		.cfi_def_cfa_offset 0
+ 396              	.LVL38:
+ 397 0040 7047     		bx	lr
+ 398              	.L42:
+ 399 0042 00BF     		.align	2
+ 400              	.L41:
+ 401 0044 00000000 		.word	current
+ 402 0048 00000000 		.word	.LANCHOR0
+ 403 004c 00000000 		.word	buffer
+ 404              		.cfi_endproc
+ 405              	.LFE138:
+ 407              		.section	.text.crc,"ax",%progbits
+ 408              		.align	1
+ 409              		.global	crc
+ 410              		.syntax unified
+ 411              		.thumb
+ 412              		.thumb_func
+ 413              		.fpu fpv4-sp-d16
+ 415              	crc:
+ 416              	.LFB139:
+ 243:Src/BTLE.c    **** 
+ 244:Src/BTLE.c    **** // see BT Core Spec 4.0, Section 6.B.3.1.1
+ 245:Src/BTLE.c    **** void crc( uint8_t len, uint8_t* dst ) {
+ 417              		.loc 1 245 0
+ 418              		.cfi_startproc
+ 419              		@ args = 0, pretend = 0, frame = 0
+ 420              		@ frame_needed = 0, uses_anonymous_args = 0
+ 421              		@ link register save eliminated.
+ 422              	.LVL39:
+ 423 0000 F0B4     		push	{r4, r5, r6, r7}
+ 424              	.LCFI8:
+ARM GAS  /tmp/ccbiPTrS.s 			page 13
+
+
+ 425              		.cfi_def_cfa_offset 16
+ 426              		.cfi_offset 4, -16
+ 427              		.cfi_offset 5, -12
+ 428              		.cfi_offset 6, -8
+ 429              		.cfi_offset 7, -4
+ 430              	.LVL40:
+ 246:Src/BTLE.c    **** 
+ 247:Src/BTLE.c    **** 	uint8_t* buf = (uint8_t*)&buffer;
+ 248:Src/BTLE.c    **** 
+ 249:Src/BTLE.c    **** 	// initialize 24-bit shift register in "wire bit order"
+ 250:Src/BTLE.c    **** 	// dst[0] = bits 23-16, dst[1] = bits 15-8, dst[2] = bits 7-0
+ 251:Src/BTLE.c    **** 	dst[0] = 0xAA;
+ 431              		.loc 1 251 0
+ 432 0002 AA23     		movs	r3, #170
+ 433 0004 0B70     		strb	r3, [r1]
+ 252:Src/BTLE.c    **** 	dst[1] = 0xAA;
+ 434              		.loc 1 252 0
+ 435 0006 4B70     		strb	r3, [r1, #1]
+ 253:Src/BTLE.c    **** 	dst[2] = 0xAA;
+ 436              		.loc 1 253 0
+ 437 0008 8B70     		strb	r3, [r1, #2]
+ 247:Src/BTLE.c    **** 
+ 438              		.loc 1 247 0
+ 439 000a 1A4B     		ldr	r3, .L54
+ 254:Src/BTLE.c    **** 
+ 255:Src/BTLE.c    **** 	while (len--) {
+ 440              		.loc 1 255 0
+ 441 000c 28E0     		b	.L44
+ 442              	.LVL41:
+ 443              	.L47:
+ 444              	.LBB6:
+ 445              	.LBB7:
+ 446              	.LBB8:
+ 256:Src/BTLE.c    **** 
+ 257:Src/BTLE.c    **** 		uint8_t d = *(buf++);
+ 258:Src/BTLE.c    **** 
+ 259:Src/BTLE.c    **** 		for (uint8_t i = 1; i; i <<= 1, d >>= 1) {
+ 260:Src/BTLE.c    **** 
+ 261:Src/BTLE.c    **** 			// save bit 23 (highest-value), left-shift the entire register by one
+ 262:Src/BTLE.c    **** 			uint8_t t = dst[0] & 0x01;         
+ 263:Src/BTLE.c    **** 			dst[0] >>= 1;
+ 264:Src/BTLE.c    **** 			if (dst[1] & 0x01)
+ 265:Src/BTLE.c    **** 			{
+ 266:Src/BTLE.c    **** 				dst[0] |= 0x80; 
+ 267:Src/BTLE.c    **** 			}
+ 268:Src/BTLE.c    **** 
+ 269:Src/BTLE.c    **** 			dst[1] >>= 1;
+ 270:Src/BTLE.c    **** 
+ 271:Src/BTLE.c    **** 			if (dst[2] & 0x01) 
+ 272:Src/BTLE.c    **** 			{
+ 273:Src/BTLE.c    **** 				dst[1] |= 0x80; 
+ 274:Src/BTLE.c    **** 			}
+ 275:Src/BTLE.c    **** 			dst[2] >>= 1;
+ 447              		.loc 1 275 0
+ 448 000e 5B08     		lsrs	r3, r3, #1
+ 449 0010 8B70     		strb	r3, [r1, #2]
+ 276:Src/BTLE.c    **** 
+ARM GAS  /tmp/ccbiPTrS.s 			page 14
+
+
+ 277:Src/BTLE.c    **** 			// if the bit just shifted out (former bit 23) and the incoming data
+ 278:Src/BTLE.c    **** 			// bit are not equal (i.e. bit_out ^ bit_in == 1) => toggle tap bits
+ 279:Src/BTLE.c    **** 			if (t != (d & 1)) {
+ 450              		.loc 1 279 0
+ 451 0012 04F00102 		and	r2, r4, #1
+ 452 0016 BA42     		cmp	r2, r7
+ 453 0018 06D0     		beq	.L48
+ 280:Src/BTLE.c    **** 				// toggle register tap bits (=XOR with 1) according to CRC polynom
+ 281:Src/BTLE.c    **** 				dst[2] ^= 0xDA; // 0b11011010 inv. = 0b01011011 ^= x^6+x^4+x^3+x+1
+ 454              		.loc 1 281 0
+ 455 001a 83F0DA03 		eor	r3, r3, #218
+ 456 001e 8B70     		strb	r3, [r1, #2]
+ 282:Src/BTLE.c    **** 				dst[1] ^= 0x60; // 0b01100000 inv. = 0b00000110 ^= x^10+x^9
+ 457              		.loc 1 282 0
+ 458 0020 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 459 0022 83F06003 		eor	r3, r3, #96
+ 460 0026 4B70     		strb	r3, [r1, #1]
+ 461              	.L48:
+ 462              	.LBE8:
+ 259:Src/BTLE.c    **** 
+ 463              		.loc 1 259 0 discriminator 2
+ 464 0028 4000     		lsls	r0, r0, #1
+ 465              	.LVL42:
+ 466 002a C0B2     		uxtb	r0, r0
+ 467              	.LVL43:
+ 468 002c 6408     		lsrs	r4, r4, #1
+ 469              	.LVL44:
+ 470              	.L45:
+ 259:Src/BTLE.c    **** 
+ 471              		.loc 1 259 0 is_stmt 0 discriminator 1
+ 472 002e A8B1     		cbz	r0, .L52
+ 473              	.LBB9:
+ 262:Src/BTLE.c    **** 			dst[0] >>= 1;
+ 474              		.loc 1 262 0 is_stmt 1
+ 475 0030 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 476 0032 03F00107 		and	r7, r3, #1
+ 477              	.LVL45:
+ 263:Src/BTLE.c    **** 			if (dst[1] & 0x01)
+ 478              		.loc 1 263 0
+ 479 0036 5A08     		lsrs	r2, r3, #1
+ 480 0038 0A70     		strb	r2, [r1]
+ 264:Src/BTLE.c    **** 			{
+ 481              		.loc 1 264 0
+ 482 003a 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 483 003c 13F0010F 		tst	r3, #1
+ 484 0040 02D0     		beq	.L46
+ 266:Src/BTLE.c    **** 			}
+ 485              		.loc 1 266 0
+ 486 0042 62F07F02 		orn	r2, r2, #127
+ 487 0046 0A70     		strb	r2, [r1]
+ 488              	.L46:
+ 269:Src/BTLE.c    **** 
+ 489              		.loc 1 269 0
+ 490 0048 5A08     		lsrs	r2, r3, #1
+ 491 004a 4A70     		strb	r2, [r1, #1]
+ 271:Src/BTLE.c    **** 			{
+ 492              		.loc 1 271 0
+ARM GAS  /tmp/ccbiPTrS.s 			page 15
+
+
+ 493 004c 8B78     		ldrb	r3, [r1, #2]	@ zero_extendqisi2
+ 494 004e 13F0010F 		tst	r3, #1
+ 495 0052 DCD0     		beq	.L47
+ 273:Src/BTLE.c    **** 			}
+ 496              		.loc 1 273 0
+ 497 0054 62F07F02 		orn	r2, r2, #127
+ 498 0058 4A70     		strb	r2, [r1, #1]
+ 499 005a D8E7     		b	.L47
+ 500              	.LVL46:
+ 501              	.L52:
+ 502              	.LBE9:
+ 503              	.LBE7:
+ 257:Src/BTLE.c    **** 
+ 504              		.loc 1 257 0
+ 505 005c 3346     		mov	r3, r6
+ 506              	.LBE6:
+ 255:Src/BTLE.c    **** 
+ 507              		.loc 1 255 0
+ 508 005e 2846     		mov	r0, r5
+ 509              	.LVL47:
+ 510              	.L44:
+ 511 0060 451E     		subs	r5, r0, #1
+ 512 0062 EDB2     		uxtb	r5, r5
+ 513              	.LVL48:
+ 514 0064 18B1     		cbz	r0, .L53
+ 515              	.LBB11:
+ 257:Src/BTLE.c    **** 
+ 516              		.loc 1 257 0
+ 517 0066 5E1C     		adds	r6, r3, #1
+ 518              	.LVL49:
+ 519 0068 1C78     		ldrb	r4, [r3]	@ zero_extendqisi2
+ 520              	.LVL50:
+ 521              	.LBB10:
+ 259:Src/BTLE.c    **** 
+ 522              		.loc 1 259 0
+ 523 006a 0120     		movs	r0, #1
+ 524 006c DFE7     		b	.L45
+ 525              	.LVL51:
+ 526              	.L53:
+ 527              	.LBE10:
+ 528              	.LBE11:
+ 283:Src/BTLE.c    **** 			}
+ 284:Src/BTLE.c    **** 		}
+ 285:Src/BTLE.c    **** 	}
+ 286:Src/BTLE.c    **** }
+ 529              		.loc 1 286 0
+ 530 006e F0BC     		pop	{r4, r5, r6, r7}
+ 531              	.LCFI9:
+ 532              		.cfi_restore 7
+ 533              		.cfi_restore 6
+ 534              		.cfi_restore 5
+ 535              		.cfi_restore 4
+ 536              		.cfi_def_cfa_offset 0
+ 537              	.LVL52:
+ 538 0070 7047     		bx	lr
+ 539              	.L55:
+ 540 0072 00BF     		.align	2
+ARM GAS  /tmp/ccbiPTrS.s 			page 16
+
+
+ 541              	.L54:
+ 542 0074 00000000 		.word	buffer
+ 543              		.cfi_endproc
+ 544              	.LFE139:
+ 546              		.section	.text.transmitPacket,"ax",%progbits
+ 547              		.align	1
+ 548              		.global	transmitPacket
+ 549              		.syntax unified
+ 550              		.thumb
+ 551              		.thumb_func
+ 552              		.fpu fpv4-sp-d16
+ 554              	transmitPacket:
+ 555              	.LFB136:
+ 165:Src/BTLE.c    **** 	uint8_t pls = buffer.pl_size - 6;
+ 556              		.loc 1 165 0
+ 557              		.cfi_startproc
+ 558              		@ args = 0, pretend = 0, frame = 0
+ 559              		@ frame_needed = 0, uses_anonymous_args = 0
+ 560 0000 10B5     		push	{r4, lr}
+ 561              	.LCFI10:
+ 562              		.cfi_def_cfa_offset 8
+ 563              		.cfi_offset 4, -8
+ 564              		.cfi_offset 14, -4
+ 166:Src/BTLE.c    **** 	// calculate CRC over header+MAC+payload, append after payload
+ 565              		.loc 1 166 0
+ 566 0002 0949     		ldr	r1, .L58
+ 567 0004 4C78     		ldrb	r4, [r1, #1]	@ zero_extendqisi2
+ 568 0006 A31F     		subs	r3, r4, #6
+ 569 0008 DBB2     		uxtb	r3, r3
+ 570              	.LVL53:
+ 169:Src/BTLE.c    **** 	
+ 571              		.loc 1 169 0
+ 572 000a 0833     		adds	r3, r3, #8
+ 573              	.LVL54:
+ 574 000c A01C     		adds	r0, r4, #2
+ 575 000e 1944     		add	r1, r1, r3
+ 576 0010 C0B2     		uxtb	r0, r0
+ 577 0012 FFF7FEFF 		bl	crc
+ 578              	.LVL55:
+ 172:Src/BTLE.c    **** 	swapbuf( pls+11 );
+ 579              		.loc 1 172 0
+ 580 0016 0534     		adds	r4, r4, #5
+ 581              	.LVL56:
+ 582 0018 E4B2     		uxtb	r4, r4
+ 583              	.LVL57:
+ 584 001a 2046     		mov	r0, r4
+ 585 001c FFF7FEFF 		bl	whiten
+ 586              	.LVL58:
+ 173:Src/BTLE.c    **** 	
+ 587              		.loc 1 173 0
+ 588 0020 2046     		mov	r0, r4
+ 589 0022 FFF7FEFF 		bl	swapbuf
+ 590              	.LVL59:
+ 591 0026 10BD     		pop	{r4, pc}
+ 592              	.L59:
+ 593              		.align	2
+ 594              	.L58:
+ARM GAS  /tmp/ccbiPTrS.s 			page 17
+
+
+ 595 0028 00000000 		.word	buffer
+ 596              		.cfi_endproc
+ 597              	.LFE136:
+ 599              		.section	.text.advertise,"ax",%progbits
+ 600              		.align	1
+ 601              		.global	advertise
+ 602              		.syntax unified
+ 603              		.thumb
+ 604              		.thumb_func
+ 605              		.fpu fpv4-sp-d16
+ 607              	advertise:
+ 608              	.LFB134:
+ 128:Src/BTLE.c    **** 	preparePacket();
+ 609              		.loc 1 128 0
+ 610              		.cfi_startproc
+ 611              		@ args = 0, pretend = 0, frame = 0
+ 612              		@ frame_needed = 0, uses_anonymous_args = 0
+ 613              	.LVL60:
+ 614 0000 70B5     		push	{r4, r5, r6, lr}
+ 615              	.LCFI11:
+ 616              		.cfi_def_cfa_offset 16
+ 617              		.cfi_offset 4, -16
+ 618              		.cfi_offset 5, -12
+ 619              		.cfi_offset 6, -8
+ 620              		.cfi_offset 14, -4
+ 621 0002 0546     		mov	r5, r0
+ 622 0004 0E46     		mov	r6, r1
+ 623 0006 1446     		mov	r4, r2
+ 129:Src/BTLE.c    **** 	
+ 624              		.loc 1 129 0
+ 625 0008 FFF7FEFF 		bl	preparePacket
+ 626              	.LVL61:
+ 132:Src/BTLE.c    **** 		bool success = addChunk(data_type, buflen, buf);
+ 627              		.loc 1 132 0
+ 628 000c 34B1     		cbz	r4, .L61
+ 629              	.LBB12:
+ 133:Src/BTLE.c    **** 		if (!success) {
+ 630              		.loc 1 133 0
+ 631 000e 3246     		mov	r2, r6
+ 632 0010 2146     		mov	r1, r4
+ 633 0012 2846     		mov	r0, r5
+ 634 0014 FFF7FEFF 		bl	addChunk
+ 635              	.LVL62:
+ 134:Src/BTLE.c    **** 			return false;
+ 636              		.loc 1 134 0
+ 637 0018 0346     		mov	r3, r0
+ 638 001a 10B1     		cbz	r0, .L62
+ 639              	.LVL63:
+ 640              	.L61:
+ 641              	.LBE12:
+ 139:Src/BTLE.c    **** 	return true;
+ 642              		.loc 1 139 0
+ 643 001c FFF7FEFF 		bl	transmitPacket
+ 644              	.LVL64:
+ 140:Src/BTLE.c    **** }
+ 645              		.loc 1 140 0
+ 646 0020 0123     		movs	r3, #1
+ARM GAS  /tmp/ccbiPTrS.s 			page 18
+
+
+ 647              	.L62:
+ 141:Src/BTLE.c    **** 
+ 648              		.loc 1 141 0
+ 649 0022 1846     		mov	r0, r3
+ 650 0024 70BD     		pop	{r4, r5, r6, pc}
+ 651              		.cfi_endproc
+ 652              	.LFE134:
+ 654              		.section	.text.listen,"ax",%progbits
+ 655              		.align	1
+ 656              		.global	listen
+ 657              		.syntax unified
+ 658              		.thumb
+ 659              		.thumb_func
+ 660              		.fpu fpv4-sp-d16
+ 662              	listen:
+ 663              	.LFB137:
+ 182:Src/BTLE.c    **** 	if (timeout == 0) 
+ 664              		.loc 1 182 0
+ 665              		.cfi_startproc
+ 666              		@ args = 0, pretend = 0, frame = 8
+ 667              		@ frame_needed = 0, uses_anonymous_args = 0
+ 668              	.LVL65:
+ 669 0000 10B5     		push	{r4, lr}
+ 670              	.LCFI12:
+ 671              		.cfi_def_cfa_offset 8
+ 672              		.cfi_offset 4, -8
+ 673              		.cfi_offset 14, -4
+ 674 0002 82B0     		sub	sp, sp, #8
+ 675              	.LCFI13:
+ 676              		.cfi_def_cfa_offset 16
+ 183:Src/BTLE.c    **** 	{
+ 677              		.loc 1 183 0
+ 678 0004 0346     		mov	r3, r0
+ 679 0006 00B9     		cbnz	r0, .L65
+ 185:Src/BTLE.c    **** 	}
+ 680              		.loc 1 185 0
+ 681 0008 6423     		movs	r3, #100
+ 682              	.L65:
+ 683              	.LVL66:
+ 190:Src/BTLE.c    **** 
+ 684              		.loc 1 190 0
+ 685 000a 1846     		mov	r0, r3
+ 686 000c FFF7FEFF 		bl	HAL_Delay
+ 687              	.LVL67:
+ 204:Src/BTLE.c    **** 		whiten( sizeof(buffer) );
+ 688              		.loc 1 204 0
+ 689 0010 2020     		movs	r0, #32
+ 690 0012 FFF7FEFF 		bl	swapbuf
+ 691              	.LVL68:
+ 205:Src/BTLE.c    **** 		
+ 692              		.loc 1 205 0
+ 693 0016 2020     		movs	r0, #32
+ 694 0018 FFF7FEFF 		bl	whiten
+ 695              	.LVL69:
+ 208:Src/BTLE.c    **** 		uint8_t in_crc[3];
+ 696              		.loc 1 208 0
+ 697 001c 0D4B     		ldr	r3, .L73
+ARM GAS  /tmp/ccbiPTrS.s 			page 19
+
+
+ 698 001e 5C78     		ldrb	r4, [r3, #1]	@ zero_extendqisi2
+ 699 0020 0234     		adds	r4, r4, #2
+ 700 0022 E4B2     		uxtb	r4, r4
+ 701              	.LVL70:
+ 212:Src/BTLE.c    **** 		for (uint8_t i = 0; i < 3; i++)
+ 702              		.loc 1 212 0
+ 703 0024 01A9     		add	r1, sp, #4
+ 704 0026 2046     		mov	r0, r4
+ 705 0028 FFF7FEFF 		bl	crc
+ 706              	.LVL71:
+ 707              	.LBB13:
+ 213:Src/BTLE.c    **** 			if (inbuf[total_size+i] != in_crc[i])
+ 708              		.loc 1 213 0
+ 709 002c 0023     		movs	r3, #0
+ 710              	.LVL72:
+ 711              	.L66:
+ 213:Src/BTLE.c    **** 			if (inbuf[total_size+i] != in_crc[i])
+ 712              		.loc 1 213 0 is_stmt 0 discriminator 1
+ 713 002e 022B     		cmp	r3, #2
+ 714 0030 0BD8     		bhi	.L72
+ 214:Src/BTLE.c    **** 				return false;
+ 715              		.loc 1 214 0 is_stmt 1
+ 716 0032 E218     		adds	r2, r4, r3
+ 717 0034 0749     		ldr	r1, .L73
+ 718 0036 515C     		ldrb	r1, [r2, r1]	@ zero_extendqisi2
+ 719 0038 02AA     		add	r2, sp, #8
+ 720 003a 1A44     		add	r2, r2, r3
+ 721 003c 12F8042C 		ldrb	r2, [r2, #-4]	@ zero_extendqisi2
+ 722 0040 9142     		cmp	r1, r2
+ 723 0042 05D1     		bne	.L70
+ 213:Src/BTLE.c    **** 			if (inbuf[total_size+i] != in_crc[i])
+ 724              		.loc 1 213 0 discriminator 2
+ 725 0044 0133     		adds	r3, r3, #1
+ 726              	.LVL73:
+ 727 0046 DBB2     		uxtb	r3, r3
+ 728              	.LVL74:
+ 729 0048 F1E7     		b	.L66
+ 730              	.L72:
+ 731              	.LBE13:
+ 218:Src/BTLE.c    **** }
+ 732              		.loc 1 218 0
+ 733 004a 0120     		movs	r0, #1
+ 734              	.L67:
+ 219:Src/BTLE.c    **** 
+ 735              		.loc 1 219 0
+ 736 004c 02B0     		add	sp, sp, #8
+ 737              	.LCFI14:
+ 738              		.cfi_remember_state
+ 739              		.cfi_def_cfa_offset 8
+ 740              		@ sp needed
+ 741 004e 10BD     		pop	{r4, pc}
+ 742              	.LVL75:
+ 743              	.L70:
+ 744              	.LCFI15:
+ 745              		.cfi_restore_state
+ 746              	.LBB14:
+ 215:Src/BTLE.c    **** 	// }
+ARM GAS  /tmp/ccbiPTrS.s 			page 20
+
+
+ 747              		.loc 1 215 0
+ 748 0050 0020     		movs	r0, #0
+ 749 0052 FBE7     		b	.L67
+ 750              	.L74:
+ 751              		.align	2
+ 752              	.L73:
+ 753 0054 00000000 		.word	buffer
+ 754              	.LBE14:
+ 755              		.cfi_endproc
+ 756              	.LFE137:
+ 758              		.global	month_lookup
+ 759              		.global	frequency
+ 760              		.global	channel
+ 761              		.comm	name,4,4
+ 762              		.comm	current,1,1
+ 763              		.comm	buffer,32,4
+ 764              		.section	.rodata.channel,"a",%progbits
+ 765              		.align	2
+ 766              		.set	.LANCHOR0,. + 0
+ 769              	channel:
+ 770 0000 25       		.byte	37
+ 771 0001 26       		.byte	38
+ 772 0002 27       		.byte	39
+ 773              		.section	.rodata.frequency,"a",%progbits
+ 774              		.align	2
+ 777              	frequency:
+ 778 0000 02       		.byte	2
+ 779 0001 1A       		.byte	26
+ 780 0002 50       		.byte	80
+ 781              		.section	.rodata.month_lookup,"a",%progbits
+ 782              		.align	2
+ 785              	month_lookup:
+ 786 0000 00       		.byte	0
+ 787 0001 06       		.byte	6
+ 788 0002 00       		.byte	0
+ 789 0003 04       		.byte	4
+ 790 0004 00       		.byte	0
+ 791 0005 01       		.byte	1
+ 792 0006 00       		.byte	0
+ 793 0007 11       		.byte	17
+ 794 0008 00       		.byte	0
+ 795 0009 08       		.byte	8
+ 796 000a 00       		.byte	0
+ 797 000b 00       		.byte	0
+ 798 000c 03       		.byte	3
+ 799 000d 00       		.byte	0
+ 800 000e 00       		.byte	0
+ 801 000f 00       		.byte	0
+ 802 0010 12       		.byte	18
+ 803 0011 02       		.byte	2
+ 804 0012 10       		.byte	16
+ 805 0013 05       		.byte	5
+ 806 0014 09       		.byte	9
+ 807 0015 00       		.byte	0
+ 808 0016 01       		.byte	1
+ 809 0017 07       		.byte	7
+ 810              		.text
+ARM GAS  /tmp/ccbiPTrS.s 			page 21
+
+
+ 811              	.Letext0:
+ 812              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 813              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 814              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 815              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 816              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 817              		.file 7 "/usr/include/newlib/sys/lock.h"
+ 818              		.file 8 "/usr/include/newlib/sys/_types.h"
+ 819              		.file 9 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 820              		.file 10 "/usr/include/newlib/sys/reent.h"
+ 821              		.file 11 "/usr/include/newlib/stdlib.h"
+ 822              		.file 12 "Inc/BTLE.h"
+ 823              		.file 13 "/usr/include/newlib/string.h"
+ARM GAS  /tmp/ccbiPTrS.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 BTLE.c
+     /tmp/ccbiPTrS.s:18     .text.swapbuf:0000000000000000 $t
+     /tmp/ccbiPTrS.s:25     .text.swapbuf:0000000000000000 swapbuf
+     /tmp/ccbiPTrS.s:137    .text.swapbuf:0000000000000070 $d
+                            *COM*:0000000000000020 buffer
+     /tmp/ccbiPTrS.s:142    .text.setChannel:0000000000000000 $t
+     /tmp/ccbiPTrS.s:149    .text.setChannel:0000000000000000 setChannel
+     /tmp/ccbiPTrS.s:177    .text.setChannel:0000000000000018 $d
+                            *COM*:0000000000000001 current
+     /tmp/ccbiPTrS.s:182    .text.hopChannel:0000000000000000 $t
+     /tmp/ccbiPTrS.s:189    .text.hopChannel:0000000000000000 hopChannel
+     /tmp/ccbiPTrS.s:214    .text.hopChannel:0000000000000018 $d
+     /tmp/ccbiPTrS.s:219    .text.preparePacket:0000000000000000 $t
+     /tmp/ccbiPTrS.s:226    .text.preparePacket:0000000000000000 preparePacket
+     /tmp/ccbiPTrS.s:303    .text.preparePacket:0000000000000054 $d
+                            *COM*:0000000000000004 name
+     /tmp/ccbiPTrS.s:309    .text.whiten:0000000000000000 $t
+     /tmp/ccbiPTrS.s:316    .text.whiten:0000000000000000 whiten
+     /tmp/ccbiPTrS.s:401    .text.whiten:0000000000000044 $d
+     /tmp/ccbiPTrS.s:408    .text.crc:0000000000000000 $t
+     /tmp/ccbiPTrS.s:415    .text.crc:0000000000000000 crc
+     /tmp/ccbiPTrS.s:542    .text.crc:0000000000000074 $d
+     /tmp/ccbiPTrS.s:547    .text.transmitPacket:0000000000000000 $t
+     /tmp/ccbiPTrS.s:554    .text.transmitPacket:0000000000000000 transmitPacket
+     /tmp/ccbiPTrS.s:595    .text.transmitPacket:0000000000000028 $d
+     /tmp/ccbiPTrS.s:600    .text.advertise:0000000000000000 $t
+     /tmp/ccbiPTrS.s:607    .text.advertise:0000000000000000 advertise
+     /tmp/ccbiPTrS.s:655    .text.listen:0000000000000000 $t
+     /tmp/ccbiPTrS.s:662    .text.listen:0000000000000000 listen
+     /tmp/ccbiPTrS.s:753    .text.listen:0000000000000054 $d
+     /tmp/ccbiPTrS.s:785    .rodata.month_lookup:0000000000000000 month_lookup
+     /tmp/ccbiPTrS.s:777    .rodata.frequency:0000000000000000 frequency
+     /tmp/ccbiPTrS.s:769    .rodata.channel:0000000000000000 channel
+     /tmp/ccbiPTrS.s:765    .rodata.channel:0000000000000000 $d
+     /tmp/ccbiPTrS.s:774    .rodata.frequency:0000000000000000 $d
+     /tmp/ccbiPTrS.s:782    .rodata.month_lookup:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+addChunk
+strlen
+HAL_Delay

@@ -59,7 +59,10 @@ Common symbol       size              file
 errno               0x4               /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
 uwTick              0x4               build/stm32f4xx_hal.o
 pFlash              0x20              build/stm32f4xx_hal_flash.o
+buffer              0x20              build/BTLE.o
+current             0x1               build/BTLE.o
 huart2              0x44              build/main.o
+name                0x4               build/BTLE.o
 
 Discarded input sections
 
@@ -704,6 +707,42 @@ Discarded input sections
                 0x0000000000000000       0x1a build/nRF24.o
  .text.nRF24_get_CONFIG
                 0x0000000000000000       0x1a build/nRF24.o
+ .text          0x0000000000000000        0x0 build/BTLE.o
+ .data          0x0000000000000000        0x0 build/BTLE.o
+ .bss           0x0000000000000000        0x0 build/BTLE.o
+ .text.swapbuf  0x0000000000000000       0x74 build/BTLE.o
+ .text.setChannel
+                0x0000000000000000       0x1c build/BTLE.o
+ .text.hopChannel
+                0x0000000000000000       0x1c build/BTLE.o
+ .text.preparePacket
+                0x0000000000000000       0x5c build/BTLE.o
+ .text.whiten   0x0000000000000000       0x50 build/BTLE.o
+ .text.crc      0x0000000000000000       0x78 build/BTLE.o
+ .text.transmitPacket
+                0x0000000000000000       0x2c build/BTLE.o
+ .text.advertise
+                0x0000000000000000       0x26 build/BTLE.o
+ .text.listen   0x0000000000000000       0x58 build/BTLE.o
+ .rodata.channel
+                0x0000000000000000        0x3 build/BTLE.o
+ .rodata.frequency
+                0x0000000000000000        0x3 build/BTLE.o
+ .rodata.month_lookup
+                0x0000000000000000       0x18 build/BTLE.o
+ .debug_info    0x0000000000000000      0xf8c build/BTLE.o
+ .debug_abbrev  0x0000000000000000      0x300 build/BTLE.o
+ .debug_loc     0x0000000000000000      0x4da build/BTLE.o
+ .debug_aranges
+                0x0000000000000000       0x60 build/BTLE.o
+ .debug_ranges  0x0000000000000000       0xc8 build/BTLE.o
+ .debug_line    0x0000000000000000      0x30d build/BTLE.o
+ .debug_str     0x0000000000000000      0x759 build/BTLE.o
+ .comment       0x0000000000000000       0x32 build/BTLE.o
+ .debug_frame   0x0000000000000000      0x11c build/BTLE.o
+ .ARM.attributes
+                0x0000000000000000       0x39 build/BTLE.o
+ COMMON         0x0000000000000000       0x28 build/BTLE.o
  .text          0x0000000000000000       0x14 build/startup_stm32f401xe.o
  .data          0x0000000000000000        0x0 build/startup_stm32f401xe.o
  .bss           0x0000000000000000        0x0 build/startup_stm32f401xe.o
@@ -874,6 +913,7 @@ LOAD build/stm32f4xx_hal.o
 LOAD build/stm32f4xx_hal_exti.o
 LOAD build/system_stm32f4xx.o
 LOAD build/nRF24.o
+LOAD build/BTLE.o
 LOAD build/startup_stm32f401xe.o
 LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a
 LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libm.a
@@ -1188,7 +1228,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
 .iplt           0x0000000008002924        0x0
  .iplt          0x0000000008002924        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.rodata         0x0000000008002924      0x294
+.rodata         0x0000000008002924      0x2b4
                 0x0000000008002924                . = ALIGN (0x4)
  *(.rodata)
  .rodata        0x0000000008002924       0x10 build/nRF24.o
@@ -1202,54 +1242,54 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
  .rodata.nRF24_keep_sending.str1.4
                 0x000000000800294c       0x44 build/nRF24.o
  .rodata.nRF24_tx_self_test.str1.4
-                0x0000000008002990      0x171 build/nRF24.o
- *fill*         0x0000000008002b01        0x3 
+                0x0000000008002990      0x192 build/nRF24.o
+ *fill*         0x0000000008002b22        0x2 
  .rodata.nRF24_verified_write_register.str1.4
-                0x0000000008002b04       0x74 build/nRF24.o
+                0x0000000008002b24       0x74 build/nRF24.o
  .rodata.str1.4
-                0x0000000008002b78        0x2 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
- *fill*         0x0000000008002b7a        0x2 
+                0x0000000008002b98        0x2 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-impure.o)
+ *fill*         0x0000000008002b9a        0x2 
  .rodata.str1.4
-                0x0000000008002b7c       0x13 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
- *fill*         0x0000000008002b8f        0x1 
+                0x0000000008002b9c       0x13 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
+ *fill*         0x0000000008002baf        0x1 
  .rodata.str1.4
-                0x0000000008002b90       0x28 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0000000008002bb0       0x28 /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-vfprintf_i.o)
                                          0x25 (size before relaxing)
-                0x0000000008002bb8                . = ALIGN (0x4)
+                0x0000000008002bd8                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0000000008002bb8        0x8
-                0x0000000008002bb8                __exidx_start = .
+.ARM            0x0000000008002bd8        0x8
+                0x0000000008002bd8                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0000000008002bb8        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
-                0x0000000008002bc0                __exidx_end = .
+ .ARM.exidx     0x0000000008002bd8        0x8 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/libgcc.a(_udivmoddi4.o)
+                0x0000000008002be0                __exidx_end = .
 
-.rel.dyn        0x0000000008002bc0        0x0
- .rel.iplt      0x0000000008002bc0        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+.rel.dyn        0x0000000008002be0        0x0
+ .rel.iplt      0x0000000008002be0        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.preinit_array  0x0000000008002bc0        0x0
-                0x0000000008002bc0                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x0000000008002be0        0x0
+                0x0000000008002be0                PROVIDE (__preinit_array_start, .)
  *(.preinit_array*)
-                0x0000000008002bc0                PROVIDE (__preinit_array_end, .)
+                0x0000000008002be0                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0000000008002bc0        0x4
-                0x0000000008002bc0                PROVIDE (__init_array_start, .)
+.init_array     0x0000000008002be0        0x4
+                0x0000000008002be0                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array*)
- .init_array    0x0000000008002bc0        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
-                0x0000000008002bc4                PROVIDE (__init_array_end, .)
+ .init_array    0x0000000008002be0        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+                0x0000000008002be4                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0000000008002bc4        0x4
-                0x0000000008002bc4                PROVIDE (__fini_array_start, .)
+.fini_array     0x0000000008002be4        0x4
+                0x0000000008002be4                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0000000008002bc4        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
-                0x0000000008002bc8                PROVIDE (__fini_array_end, .)
-                0x0000000008002bc8                _sidata = LOADADDR (.data)
+ .fini_array    0x0000000008002be4        0x4 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+                0x0000000008002be8                PROVIDE (__fini_array_end, .)
+                0x0000000008002be8                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000       0x70 load address 0x0000000008002bc8
+.data           0x0000000020000000       0x70 load address 0x0000000008002be8
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                _sdata = .
  *(.data)
@@ -1269,21 +1309,21 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
                 0x0000000020000070                . = ALIGN (0x4)
                 0x0000000020000070                _edata = .
 
-.jcr            0x0000000020000070        0x0 load address 0x0000000008002c38
+.jcr            0x0000000020000070        0x0 load address 0x0000000008002c58
  .jcr           0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
 .tm_clone_table
-                0x0000000020000070        0x0 load address 0x0000000008002c38
+                0x0000000020000070        0x0 load address 0x0000000008002c58
  .tm_clone_table
                 0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
  .tm_clone_table
                 0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtend.o
 
-.igot.plt       0x0000000020000070        0x0 load address 0x0000000008002c38
+.igot.plt       0x0000000020000070        0x0 load address 0x0000000008002c58
  .igot.plt      0x0000000020000070        0x0 /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
                 0x0000000020000070                . = ALIGN (0x4)
 
-.bss            0x0000000020000070       0x74 load address 0x0000000008002c38
+.bss            0x0000000020000070       0x74 load address 0x0000000008002c58
                 0x0000000020000070                _sbss = .
                 0x0000000020000070                __bss_start__ = _sbss
  *(.bss)
@@ -1305,7 +1345,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
                 0x00000000200000e4                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x00000000200000e4      0x604 load address 0x0000000008002c38
+                0x00000000200000e4      0x604 load address 0x0000000008002c58
                 0x00000000200000e8                . = ALIGN (0x8)
  *fill*         0x00000000200000e4        0x4 
                 0x00000000200000e8                PROVIDE (end, .)
@@ -1781,6 +1821,7 @@ HAL_DMA_Start_IT                                  build/stm32f4xx_hal_dma.o
 HAL_DMA_UnRegisterCallback                        build/stm32f4xx_hal_dma.o
 HAL_DeInit                                        build/stm32f4xx_hal.o
 HAL_Delay                                         build/stm32f4xx_hal.o
+                                                  build/BTLE.o
                                                   build/nRF24.o
                                                   build/main.o
 HAL_DisableCompensationCell                       build/stm32f4xx_hal.o
@@ -2119,21 +2160,30 @@ _start                                            /usr/lib/gcc/arm-none-eabi/6.3
 _svfiprintf_r                                     /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
 _svfprintf_r                                      /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-nano-svfprintf.o)
                                                   /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
+addChunk                                          build/BTLE.o
+advertise                                         build/BTLE.o
 atexit                                            /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-atexit.o)
                                                   /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
+buffer                                            build/BTLE.o
+channel                                           build/BTLE.o
 cleanup_glue                                      /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
+crc                                               build/BTLE.o
+current                                           build/BTLE.o
 end                                               /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libnosys.a(sbrk.o)
 errno                                             /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-reent.o)
                                                   /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sbrkr.o)
 exit                                              /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-exit.o)
                                                   /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
 free                                              /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-__call_atexit.o)
+frequency                                         build/BTLE.o
 g_pfnVectors                                      build/startup_stm32f401xe.o
 gpio_clockin_8_bits                               build/nRF24.o
 gpio_clockout_8_bits                              build/nRF24.o
 hardware_init_hook                                /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
+hopChannel                                        build/BTLE.o
 huart2                                            build/main.o
                                                   build/nRF24.o
+listen                                            build/BTLE.o
 main                                              build/main.o
                                                   build/startup_stm32f401xe.o
                                                   /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
@@ -2151,6 +2201,7 @@ memset                                            /usr/lib/gcc/arm-none-eabi/6.3
                                                   build/nRF24.o
                                                   build/main.o
                                                   /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
+month_lookup                                      build/BTLE.o
 nRF24_CE_0                                        build/nRF24.o
 nRF24_CE_1                                        build/nRF24.o
 nRF24_configure_tx_mode                           build/nRF24.o
@@ -2163,8 +2214,11 @@ nRF24_keep_sending                                build/nRF24.o
 nRF24_tx_self_test                                build/nRF24.o
                                                   build/main.o
 nRF24_verified_write_register                     build/nRF24.o
+name                                              build/BTLE.o
 pFlash                                            build/stm32f4xx_hal_flash.o
                                                   build/stm32f4xx_hal_flash_ex.o
+preparePacket                                     build/BTLE.o
+setChannel                                        build/BTLE.o
 siprintf                                          /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
 software_init_hook                                /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/crt0.o
 spi_delay                                         build/nRF24.o
@@ -2173,9 +2227,13 @@ spi_write_register                                build/nRF24.o
 sprintf                                           /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-sprintf.o)
                                                   build/nRF24.o
 strlen                                            /usr/lib/gcc/arm-none-eabi/6.3.1/../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard/libc_nano.a(lib_a-strlen.o)
+                                                  build/BTLE.o
                                                   build/nRF24.o
+swapbuf                                           build/BTLE.o
+transmitPacket                                    build/BTLE.o
 uwTick                                            build/stm32f4xx_hal.o
 uwTickFreq                                        build/stm32f4xx_hal.o
 uwTickPrio                                        build/stm32f4xx_hal.o
                                                   build/stm32f4xx_hal_rcc_ex.o
                                                   build/stm32f4xx_hal_rcc.o
+whiten                                            build/BTLE.o
