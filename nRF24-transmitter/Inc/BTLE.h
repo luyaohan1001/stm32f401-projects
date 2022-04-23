@@ -11,6 +11,7 @@
 
 
 #include "stm32f4xx_hal.h"
+#include "nRF24.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -70,12 +71,16 @@ struct btle_adv_pdu {
 };
 
 
+
 // payload chunk in advertisement PDU payload
 struct btle_pdu_chunk {
   uint8_t size;
   uint8_t type;
   uint8_t data[];
 };
+
+// helper macro to access chunk at specific offset
+#define chunk(x,y) ((struct btle_pdu_chunk*)(x.payload+y))
 
 
 
@@ -95,7 +100,7 @@ bool advertise( uint8_t data_type, void* buf, uint8_t len );
 
 // Broadcast an advertisement packet with optional payload
 // Data type will be 0xFF (Manufacturer Specific Data)
-// bool advertise( void* buf, uint8_t len ); 
+bool advertise_short( void* buf, uint8_t len ); 
 
 bool listen( int timeout);         // listen for advertisement packets (if true: result = buffer)
 

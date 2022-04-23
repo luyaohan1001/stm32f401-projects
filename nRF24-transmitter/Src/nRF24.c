@@ -183,7 +183,7 @@ void spi_delay()
 }
 
 /**
-  * @brief      Read a bytes from the SPI target device register.
+  * @brief      Read data from the SPI target device register. Endianess: LSByte first.
   * @param[in]  reg SPI target device register to write to.
   * @param[in]  num_bytes Number of bytes needed to write to that address.
   * @param[out] pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
@@ -499,6 +499,84 @@ void nRF24_keep_sending()
 
   nRF24_CE_0(); /* stop transmission. Returns to [Standby-I]. */
 }
+
+
+
+
+
+/**
+  * @brief  Print all registers on nRF24. 
+  * @param  None.
+  * @retval None.
+  */
+void nRF24_print_all_registers()
+{
+	  uint8_t read_data;
+		uint8_t read_buf[4];
+		char message[32];
+  
+    spi_read_register(R_REGISTER_MASK + CONFIG, 1, &read_data);
+		sprintf(message, "CONFIG: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + EN_AA, 1, &read_data);
+		sprintf(message, "EN_AA: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + EN_RXADDR, 1, &read_data);
+		sprintf(message, "EN_RXADDR: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + SETUP_AW, 1, &read_data);
+		sprintf(message, "SETUP_AW: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + SETUP_RETR, 1, &read_data);
+		sprintf(message, "SETUP_RETR: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RF_CH, 1, &read_data);
+		sprintf(message, "RF_CH: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RF_SETUP, 1, &read_data);
+		sprintf(message, "RF_SETUP: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + STATUS, 1, &read_data);
+		sprintf(message, "STATUS: <0x%02x>\n", read_data);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RX_ADDR_P0, 4, read_buf);
+		sprintf(message, "RX_ADDR_P0: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RX_ADDR_P1, 4, read_buf);
+		sprintf(message, "RX_ADDR_P1: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RX_ADDR_P2, 4, read_buf);
+		sprintf(message, "RX_ADDR_P2: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RX_ADDR_P3, 4, read_buf);
+		sprintf(message, "RX_ADDR_P3: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RX_ADDR_P4, 4, read_buf);
+		sprintf(message, "RX_ADDR_P4: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + RX_PW_P5, 4, read_buf);
+		sprintf(message, "RX_ADDR_P5: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+  	spi_read_register(R_REGISTER_MASK + TX_ADDR, 4, read_buf);
+		sprintf(message, "TX_ADDR: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    serial_print(message);
+
+}
+
 
 
 

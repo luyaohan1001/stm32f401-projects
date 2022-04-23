@@ -1,0 +1,1416 @@
+ARM GAS  /tmp/ccd56jVt.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ble.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ble_addChunk,"ax",%progbits
+  18              		.align	1
+  19              		.global	ble_addChunk
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	ble_addChunk:
+  26              	.LFB131:
+  27              		.file 1 "Src/ble.c"
+   1:Src/ble.c     **** #include "ble.h"
+   2:Src/ble.c     **** 
+   3:Src/ble.c     **** // This is a rather convoluted hack to extract the month number from the build date in
+   4:Src/ble.c     **** // the __DATE__ macro using a small hash function + lookup table. Since all inputs are
+   5:Src/ble.c     **** // const, this can be fully resolved by the compiler and saves over 200 bytes of code.
+   6:Src/ble.c     **** #define month(m) month_lookup[ (( ((( (m[0] % 24) * 13) + m[1]) % 24) * 13) + m[2]) % 24 ]
+   7:Src/ble.c     **** const uint8_t month_lookup[24] = { 0,6,0,4,0,1,0,17,0,8,0,0,3,0,0,0,18,2,16,5,9,0,1,7 };
+   8:Src/ble.c     **** 
+   9:Src/ble.c     **** 
+  10:Src/ble.c     **** const uint8_t channel[3]   = {37,38,39};  // logical BTLE channel number (37-39)
+  11:Src/ble.c     **** const uint8_t frequency[3] = { 2,26,80};  // physical frequency (2400+x MHz)
+  12:Src/ble.c     **** 
+  13:Src/ble.c     **** 
+  14:Src/ble.c     **** 
+  15:Src/ble.c     **** 
+  16:Src/ble.c     **** void ble_preparePacket(ble_struct *ble) ;
+  17:Src/ble.c     **** void ble_transmitPacket(ble_struct *ble) ;
+  18:Src/ble.c     **** void ble_whiten( ble_struct *ble,uint8_t len ) ;
+  19:Src/ble.c     **** void ble_swapbuf( ble_struct *ble,uint8_t len ) ;
+  20:Src/ble.c     **** void ble_crc( ble_struct *ble,uint8_t len, uint8_t* dst ) ;
+  21:Src/ble.c     **** 
+  22:Src/ble.c     **** 
+  23:Src/ble.c     **** 
+  24:Src/ble.c     **** 
+  25:Src/ble.c     **** 
+  26:Src/ble.c     **** //添加数据段，返回0,成功
+  27:Src/ble.c     **** int ble_addChunk(ble_struct *ble,uint8_t chunk_type, uint8_t buflen, const void* buf)
+  28:Src/ble.c     **** {
+  28              		.loc 1 28 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccd56jVt.s 			page 2
+
+
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 20
+  36              		.cfi_offset 4, -20
+  37              		.cfi_offset 5, -16
+  38              		.cfi_offset 6, -12
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  29:Src/ble.c     **** 	if (ble->buffer.pl_size + buflen + 2 > 21 + 6) // (buflen+2) is how much this chunk will take, 21 
+  41              		.loc 1 29 0
+  42 0002 4478     		ldrb	r4, [r0, #1]	@ zero_extendqisi2
+  43 0004 1519     		adds	r5, r2, r4
+  44 0006 0235     		adds	r5, r5, #2
+  45 0008 1B2D     		cmp	r5, #27
+  46 000a 17DC     		bgt	.L5
+  30:Src/ble.c     **** 		return -1;
+  31:Src/ble.c     **** 	
+  32:Src/ble.c     **** 	struct btle_pdu_chunk* chunk = (struct btle_pdu_chunk*) (ble->buffer.payload+ble->buffer.pl_size-6
+  47              		.loc 1 32 0
+  48 000c 00F1080E 		add	lr, r0, #8
+  49 0010 A71F     		subs	r7, r4, #6
+  50 0012 0EEB0706 		add	r6, lr, r7
+  51              	.LVL1:
+  33:Src/ble.c     **** 	chunk->type = chunk_type;
+  52              		.loc 1 33 0
+  53 0016 7170     		strb	r1, [r6, #1]
+  54              	.LVL2:
+  55              	.LBB2:
+  34:Src/ble.c     **** 	for (uint8_t i = 0; i < buflen; i++)
+  56              		.loc 1 34 0
+  57 0018 0021     		movs	r1, #0
+  58              	.LVL3:
+  59 001a 04E0     		b	.L3
+  60              	.LVL4:
+  61              	.L4:
+  35:Src/ble.c     **** 		chunk->data[i] = ((uint8_t*)buf)[i];
+  62              		.loc 1 35 0 discriminator 3
+  63 001c 5D5C     		ldrb	r5, [r3, r1]	@ zero_extendqisi2
+  64 001e 7418     		adds	r4, r6, r1
+  65 0020 A570     		strb	r5, [r4, #2]
+  34:Src/ble.c     **** 	for (uint8_t i = 0; i < buflen; i++)
+  66              		.loc 1 34 0 discriminator 3
+  67 0022 0131     		adds	r1, r1, #1
+  68              	.LVL5:
+  69 0024 C9B2     		uxtb	r1, r1
+  70              	.LVL6:
+  71              	.L3:
+  34:Src/ble.c     **** 	for (uint8_t i = 0; i < buflen; i++)
+  72              		.loc 1 34 0 is_stmt 0 discriminator 1
+  73 0026 9142     		cmp	r1, r2
+  74 0028 F8D3     		bcc	.L4
+  75              	.LBE2:
+  36:Src/ble.c     **** 	chunk->size = buflen + 1;
+  76              		.loc 1 36 0 is_stmt 1
+  77 002a 531C     		adds	r3, r2, #1
+ARM GAS  /tmp/ccd56jVt.s 			page 3
+
+
+  78              	.LVL7:
+  79 002c 0EF80730 		strb	r3, [lr, r7]
+  37:Src/ble.c     **** 	ble->buffer.pl_size += buflen + 2;
+  80              		.loc 1 37 0
+  81 0030 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+  82 0032 1A44     		add	r2, r2, r3
+  83              	.LVL8:
+  84 0034 0232     		adds	r2, r2, #2
+  85 0036 4270     		strb	r2, [r0, #1]
+  38:Src/ble.c     **** 	return 0;
+  86              		.loc 1 38 0
+  87 0038 0020     		movs	r0, #0
+  88              	.LVL9:
+  89 003a F0BD     		pop	{r4, r5, r6, r7, pc}
+  90              	.LVL10:
+  91              	.L5:
+  30:Src/ble.c     **** 	
+  92              		.loc 1 30 0
+  93 003c 4FF0FF30 		mov	r0, #-1
+  94              	.LVL11:
+  39:Src/ble.c     **** }
+  95              		.loc 1 39 0
+  96 0040 F0BD     		pop	{r4, r5, r6, r7, pc}
+  97              		.cfi_endproc
+  98              	.LFE131:
+ 100              		.section	.text.ble_hopChannel,"ax",%progbits
+ 101              		.align	1
+ 102              		.global	ble_hopChannel
+ 103              		.syntax unified
+ 104              		.thumb
+ 105              		.thumb_func
+ 106              		.fpu fpv4-sp-d16
+ 108              	ble_hopChannel:
+ 109              	.LFB132:
+  40:Src/ble.c     **** 
+  41:Src/ble.c     **** 
+  42:Src/ble.c     **** 
+  43:Src/ble.c     **** void ble_hopChannel(ble_struct *ble) {
+ 110              		.loc 1 43 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 8
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114              	.LVL12:
+ 115 0000 00B5     		push	{lr}
+ 116              	.LCFI1:
+ 117              		.cfi_def_cfa_offset 4
+ 118              		.cfi_offset 14, -4
+ 119 0002 83B0     		sub	sp, sp, #12
+ 120              	.LCFI2:
+ 121              		.cfi_def_cfa_offset 16
+  44:Src/ble.c     **** 	ble->current++;
+ 122              		.loc 1 44 0
+ 123 0004 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 124 0008 0133     		adds	r3, r3, #1
+ 125 000a DBB2     		uxtb	r3, r3
+ 126 000c 80F82430 		strb	r3, [r0, #36]
+  45:Src/ble.c     **** 	if (ble->current >= sizeof(channel)) ble->current = 0;
+ARM GAS  /tmp/ccd56jVt.s 			page 4
+
+
+ 127              		.loc 1 45 0
+ 128 0010 022B     		cmp	r3, #2
+ 129 0012 02D9     		bls	.L8
+ 130              		.loc 1 45 0 is_stmt 0 discriminator 1
+ 131 0014 0023     		movs	r3, #0
+ 132 0016 80F82430 		strb	r3, [r0, #36]
+ 133              	.L8:
+  46:Src/ble.c     **** 
+  47:Src/ble.c     **** 	uint8_t writing_byte;
+  48:Src/ble.c     ****   writing_byte = frequency[ble->current];
+ 134              		.loc 1 48 0 is_stmt 1
+ 135 001a 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 136 001e 064A     		ldr	r2, .L10
+ 137 0020 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 138 0022 02AA     		add	r2, sp, #8
+ 139 0024 02F8013D 		strb	r3, [r2, #-1]!
+  49:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
+ 140              		.loc 1 49 0
+ 141 0028 0121     		movs	r1, #1
+ 142 002a 2520     		movs	r0, #37
+ 143              	.LVL13:
+ 144 002c FFF7FEFF 		bl	nRF24_verified_write_register
+ 145              	.LVL14:
+  50:Src/ble.c     **** }
+ 146              		.loc 1 50 0
+ 147 0030 03B0     		add	sp, sp, #12
+ 148              	.LCFI3:
+ 149              		.cfi_def_cfa_offset 4
+ 150              		@ sp needed
+ 151 0032 5DF804FB 		ldr	pc, [sp], #4
+ 152              	.L11:
+ 153 0036 00BF     		.align	2
+ 154              	.L10:
+ 155 0038 00000000 		.word	.LANCHOR0
+ 156              		.cfi_endproc
+ 157              	.LFE132:
+ 159              		.section	.text.ble_preparePacket,"ax",%progbits
+ 160              		.align	1
+ 161              		.global	ble_preparePacket
+ 162              		.syntax unified
+ 163              		.thumb
+ 164              		.thumb_func
+ 165              		.fpu fpv4-sp-d16
+ 167              	ble_preparePacket:
+ 168              	.LFB134:
+  51:Src/ble.c     **** 
+  52:Src/ble.c     **** 
+  53:Src/ble.c     **** 
+  54:Src/ble.c     **** 
+  55:Src/ble.c     **** 
+  56:Src/ble.c     **** 
+  57:Src/ble.c     **** //发送一个广播包
+  58:Src/ble.c     **** int ble_advertise( ble_struct *ble,uint8_t data_type, void* buf, uint8_t buflen ) {
+  59:Src/ble.c     **** 	ble_preparePacket(ble);
+  60:Src/ble.c     **** 	
+  61:Src/ble.c     **** 	// add custom data, if applicable
+  62:Src/ble.c     **** 	if (buflen > 0) {
+ARM GAS  /tmp/ccd56jVt.s 			page 5
+
+
+  63:Src/ble.c     **** 		int success = ble_addChunk(ble,data_type, buflen, buf);
+  64:Src/ble.c     **** 		if (0!=success) {
+  65:Src/ble.c     **** 			return -1;
+  66:Src/ble.c     **** 		}
+  67:Src/ble.c     **** 	}
+  68:Src/ble.c     **** 	
+  69:Src/ble.c     **** 	ble_transmitPacket(ble );
+  70:Src/ble.c     **** 	return 0;
+  71:Src/ble.c     **** }
+  72:Src/ble.c     **** 
+  73:Src/ble.c     **** 
+  74:Src/ble.c     **** 
+  75:Src/ble.c     **** void ble_preparePacket(ble_struct *ble) 
+  76:Src/ble.c     **** {
+ 169              		.loc 1 76 0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 8
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173              	.LVL15:
+ 174 0000 30B5     		push	{r4, r5, lr}
+ 175              	.LCFI4:
+ 176              		.cfi_def_cfa_offset 12
+ 177              		.cfi_offset 4, -12
+ 178              		.cfi_offset 5, -8
+ 179              		.cfi_offset 14, -4
+ 180 0002 83B0     		sub	sp, sp, #12
+ 181              	.LCFI5:
+ 182              		.cfi_def_cfa_offset 24
+ 183 0004 0446     		mov	r4, r0
+  77:Src/ble.c     **** 	// insert pseudo-random MAC address
+  78:Src/ble.c     **** 	ble->buffer.mac[0] = ((__TIME__[6]-0x30) << 4) | (__TIME__[7]-0x30);
+ 184              		.loc 1 78 0
+ 185 0006 0623     		movs	r3, #6
+ 186 0008 8370     		strb	r3, [r0, #2]
+  79:Src/ble.c     **** 	ble->buffer.mac[1] = ((__TIME__[3]-0x30) << 4) | (__TIME__[4]-0x30);
+ 187              		.loc 1 79 0
+ 188 000a 0822     		movs	r2, #8
+ 189 000c C270     		strb	r2, [r0, #3]
+  80:Src/ble.c     **** 	ble->buffer.mac[2] = ((__TIME__[0]-0x30) << 4) | (__TIME__[1]-0x30);
+ 190              		.loc 1 80 0
+ 191 000e 1922     		movs	r2, #25
+ 192 0010 0271     		strb	r2, [r0, #4]
+  81:Src/ble.c     **** 	ble->buffer.mac[3] = ((__DATE__[4]-0x30) << 4) | (__DATE__[5]-0x30);
+ 193              		.loc 1 81 0
+ 194 0012 2322     		movs	r2, #35
+ 195 0014 4271     		strb	r2, [r0, #5]
+  82:Src/ble.c     **** 	ble->buffer.mac[4] = month(__DATE__);
+ 196              		.loc 1 82 0
+ 197 0016 0422     		movs	r2, #4
+ 198 0018 8271     		strb	r2, [r0, #6]
+  83:Src/ble.c     **** 	ble->buffer.mac[5] = ((__DATE__[9]-0x30) << 4) | (__DATE__[10]-0x30) | 0xC0; // static random addr
+ 199              		.loc 1 83 0
+ 200 001a E222     		movs	r2, #226
+ 201 001c C271     		strb	r2, [r0, #7]
+  84:Src/ble.c     **** 	
+  85:Src/ble.c     **** 	//ble->buffer.pdu_type = 0x42;    // PDU type: ADV_NONCONN_IND, TX address is random
+  86:Src/ble.c     **** 	ble->buffer.pdu_type = 0x02;
+ARM GAS  /tmp/ccd56jVt.s 			page 6
+
+
+ 202              		.loc 1 86 0
+ 203 001e 0222     		movs	r2, #2
+ 204 0020 0270     		strb	r2, [r0]
+  87:Src/ble.c     **** 	ble->buffer.pl_size = 6; //including MAC
+ 205              		.loc 1 87 0
+ 206 0022 4370     		strb	r3, [r0, #1]
+  88:Src/ble.c     **** 	
+  89:Src/ble.c     **** 	// add device descriptor chunk
+  90:Src/ble.c     **** 	uint8_t flags = 0x05;
+ 207              		.loc 1 90 0
+ 208 0024 02AB     		add	r3, sp, #8
+ 209 0026 0522     		movs	r2, #5
+ 210 0028 03F8012D 		strb	r2, [r3, #-1]!
+  91:Src/ble.c     **** 	ble_addChunk(ble,0x01, 1, &flags);
+ 211              		.loc 1 91 0
+ 212 002c 0122     		movs	r2, #1
+ 213 002e 1146     		mov	r1, r2
+ 214 0030 FFF7FEFF 		bl	ble_addChunk
+ 215              	.LVL16:
+  92:Src/ble.c     **** 	
+  93:Src/ble.c     **** 	// add "complete name" chunk
+  94:Src/ble.c     **** 	if (strlen(ble->name) > 0) {
+ 216              		.loc 1 94 0
+ 217 0034 256A     		ldr	r5, [r4, #32]
+ 218 0036 2B78     		ldrb	r3, [r5]	@ zero_extendqisi2
+ 219 0038 0BB9     		cbnz	r3, .L15
+ 220              	.L12:
+  95:Src/ble.c     **** 		ble_addChunk(ble,0x09, strlen(ble->name), ble->name);
+  96:Src/ble.c     **** 	}
+  97:Src/ble.c     **** }
+ 221              		.loc 1 97 0
+ 222 003a 03B0     		add	sp, sp, #12
+ 223              	.LCFI6:
+ 224              		.cfi_remember_state
+ 225              		.cfi_def_cfa_offset 12
+ 226              		@ sp needed
+ 227 003c 30BD     		pop	{r4, r5, pc}
+ 228              	.LVL17:
+ 229              	.L15:
+ 230              	.LCFI7:
+ 231              		.cfi_restore_state
+  95:Src/ble.c     **** 		ble_addChunk(ble,0x09, strlen(ble->name), ble->name);
+ 232              		.loc 1 95 0
+ 233 003e 2846     		mov	r0, r5
+ 234 0040 FFF7FEFF 		bl	strlen
+ 235              	.LVL18:
+ 236 0044 2B46     		mov	r3, r5
+ 237 0046 C2B2     		uxtb	r2, r0
+ 238 0048 0921     		movs	r1, #9
+ 239 004a 2046     		mov	r0, r4
+ 240 004c FFF7FEFF 		bl	ble_addChunk
+ 241              	.LVL19:
+ 242              		.loc 1 97 0
+ 243 0050 F3E7     		b	.L12
+ 244              		.cfi_endproc
+ 245              	.LFE134:
+ 247              		.section	.text.ble_swapbuf,"ax",%progbits
+ARM GAS  /tmp/ccd56jVt.s 			page 7
+
+
+ 248              		.align	1
+ 249              		.global	ble_swapbuf
+ 250              		.syntax unified
+ 251              		.thumb
+ 252              		.thumb_func
+ 253              		.fpu fpv4-sp-d16
+ 255              	ble_swapbuf:
+ 256              	.LFB136:
+  98:Src/ble.c     **** 
+  99:Src/ble.c     **** 
+ 100:Src/ble.c     **** 
+ 101:Src/ble.c     **** 
+ 102:Src/ble.c     **** void ble_transmitPacket(ble_struct *ble) 
+ 103:Src/ble.c     **** {
+ 104:Src/ble.c     **** 	uint8_t pls = ble->buffer.pl_size - 6;
+ 105:Src/ble.c     **** 	// calculate CRC over header+MAC+payload, append after payload
+ 106:Src/ble.c     **** 	uint8_t* outbuf = (uint8_t*)&ble->buffer;
+ 107:Src/ble.c     **** 	ble_crc( ble,pls+8, outbuf+pls+8);
+ 108:Src/ble.c     **** 	
+ 109:Src/ble.c     **** 	// whiten header+MAC+payload+CRC, swap bit order
+ 110:Src/ble.c     **** 	ble_whiten(ble, pls+11 );
+ 111:Src/ble.c     **** 	ble_swapbuf( ble,pls+11 );
+ 112:Src/ble.c     **** 	
+ 113:Src/ble.c     **** 	// flush buffers and send
+ 114:Src/ble.c     **** 	//radio->stopListening();
+ 115:Src/ble.c     **** 	//radio->write( outbuf, pls+11 );
+ 116:Src/ble.c     **** 	// NRF24L01_TxPacket(outbuf,32);
+ 117:Src/ble.c     **** 
+ 118:Src/ble.c     **** 	// uint8_t writing_byte;
+ 119:Src/ble.c     ****   // writing_byte = frequency[ble->current];
+ 120:Src/ble.c     ****   // nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
+ 121:Src/ble.c     **** 
+ 122:Src/ble.c     **** 	
+ 123:Src/ble.c     **** 	char msg[64];
+ 124:Src/ble.c     **** 	serial_print("printing outbuf: ");
+ 125:Src/ble.c     **** 	for (int i = 0; i < pls+11; ++i) {
+ 126:Src/ble.c     **** 		sprintf(msg, "%#02x", outbuf[i]);
+ 127:Src/ble.c     **** 		serial_print(msg);
+ 128:Src/ble.c     **** 	}
+ 129:Src/ble.c     **** 	serial_print("\n");
+ 130:Src/ble.c     **** 
+ 131:Src/ble.c     ****   spi_write_register(W_TX_PAYLOAD, 32, outbuf);
+ 132:Src/ble.c     ****   // nRF24_CE_1(); // fire out the packet
+ 133:Src/ble.c     **** 
+ 134:Src/ble.c     **** }
+ 135:Src/ble.c     **** 
+ 136:Src/ble.c     **** 
+ 137:Src/ble.c     **** 
+ 138:Src/ble.c     **** 
+ 139:Src/ble.c     **** 
+ 140:Src/ble.c     **** 
+ 141:Src/ble.c     **** // change buffer contents to "wire bit order"
+ 142:Src/ble.c     **** void ble_swapbuf( ble_struct *ble,uint8_t len ) {
+ 257              		.loc 1 142 0
+ 258              		.cfi_startproc
+ 259              		@ args = 0, pretend = 0, frame = 0
+ 260              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccd56jVt.s 			page 8
+
+
+ 261              		@ link register save eliminated.
+ 262              	.LVL20:
+ 263 0000 10B4     		push	{r4}
+ 264              	.LCFI8:
+ 265              		.cfi_def_cfa_offset 4
+ 266              		.cfi_offset 4, -4
+ 267              	.LVL21:
+ 143:Src/ble.c     **** 
+ 144:Src/ble.c     **** 	uint8_t* buf = (uint8_t*)&ble->buffer;
+ 145:Src/ble.c     **** 
+ 146:Src/ble.c     **** 	while (len--) {
+ 268              		.loc 1 146 0
+ 269 0002 04E0     		b	.L17
+ 270              	.LVL22:
+ 271              	.L27:
+ 272              	.LBB3:
+ 147:Src/ble.c     **** 
+ 148:Src/ble.c     **** 		uint8_t a = *buf;
+ 149:Src/ble.c     **** 		uint8_t v = 0;
+ 150:Src/ble.c     **** 
+ 151:Src/ble.c     **** 		if (a & 0x80) v |= 0x01;
+ 273              		.loc 1 151 0
+ 274 0004 0122     		movs	r2, #1
+ 275 0006 0AE0     		b	.L18
+ 276              	.LVL23:
+ 277              	.L25:
+ 152:Src/ble.c     **** 		if (a & 0x40) v |= 0x02;
+ 153:Src/ble.c     **** 		if (a & 0x20) v |= 0x04;
+ 154:Src/ble.c     **** 		if (a & 0x10) v |= 0x08;
+ 155:Src/ble.c     **** 		if (a & 0x08) v |= 0x10;
+ 156:Src/ble.c     **** 		if (a & 0x04) v |= 0x20;
+ 157:Src/ble.c     **** 		if (a & 0x02) v |= 0x40;
+ 158:Src/ble.c     **** 		if (a & 0x01) v |= 0x80;
+ 159:Src/ble.c     **** 
+ 160:Src/ble.c     **** 		*(buf++) = v;
+ 278              		.loc 1 160 0
+ 279 0008 0270     		strb	r2, [r0]
+ 280 000a 0130     		adds	r0, r0, #1
+ 281              	.LVL24:
+ 282              	.LBE3:
+ 146:Src/ble.c     **** 
+ 283              		.loc 1 146 0
+ 284 000c 2146     		mov	r1, r4
+ 285              	.LVL25:
+ 286              	.L17:
+ 287 000e 4B1E     		subs	r3, r1, #1
+ 288 0010 DCB2     		uxtb	r4, r3
+ 289              	.LVL26:
+ 290 0012 41B3     		cbz	r1, .L29
+ 291              	.LBB4:
+ 148:Src/ble.c     **** 		uint8_t v = 0;
+ 292              		.loc 1 148 0
+ 293 0014 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 294              	.LVL27:
+ 151:Src/ble.c     **** 		if (a & 0x40) v |= 0x02;
+ 295              		.loc 1 151 0
+ 296 0016 13F0800F 		tst	r3, #128
+ARM GAS  /tmp/ccd56jVt.s 			page 9
+
+
+ 297 001a F3D1     		bne	.L27
+ 149:Src/ble.c     **** 
+ 298              		.loc 1 149 0
+ 299 001c 0022     		movs	r2, #0
+ 300              	.L18:
+ 301              	.LVL28:
+ 152:Src/ble.c     **** 		if (a & 0x20) v |= 0x04;
+ 302              		.loc 1 152 0
+ 303 001e 13F0400F 		tst	r3, #64
+ 304 0022 01D0     		beq	.L19
+ 152:Src/ble.c     **** 		if (a & 0x20) v |= 0x04;
+ 305              		.loc 1 152 0 is_stmt 0 discriminator 1
+ 306 0024 42F00202 		orr	r2, r2, #2
+ 307              	.LVL29:
+ 308              	.L19:
+ 153:Src/ble.c     **** 		if (a & 0x10) v |= 0x08;
+ 309              		.loc 1 153 0 is_stmt 1
+ 310 0028 13F0200F 		tst	r3, #32
+ 311 002c 01D0     		beq	.L20
+ 153:Src/ble.c     **** 		if (a & 0x10) v |= 0x08;
+ 312              		.loc 1 153 0 is_stmt 0 discriminator 1
+ 313 002e 42F00402 		orr	r2, r2, #4
+ 314              	.LVL30:
+ 315              	.L20:
+ 154:Src/ble.c     **** 		if (a & 0x08) v |= 0x10;
+ 316              		.loc 1 154 0 is_stmt 1
+ 317 0032 13F0100F 		tst	r3, #16
+ 318 0036 01D0     		beq	.L21
+ 154:Src/ble.c     **** 		if (a & 0x08) v |= 0x10;
+ 319              		.loc 1 154 0 is_stmt 0 discriminator 1
+ 320 0038 42F00802 		orr	r2, r2, #8
+ 321              	.LVL31:
+ 322              	.L21:
+ 155:Src/ble.c     **** 		if (a & 0x04) v |= 0x20;
+ 323              		.loc 1 155 0 is_stmt 1
+ 324 003c 13F0080F 		tst	r3, #8
+ 325 0040 01D0     		beq	.L22
+ 155:Src/ble.c     **** 		if (a & 0x04) v |= 0x20;
+ 326              		.loc 1 155 0 is_stmt 0 discriminator 1
+ 327 0042 42F01002 		orr	r2, r2, #16
+ 328              	.LVL32:
+ 329              	.L22:
+ 156:Src/ble.c     **** 		if (a & 0x02) v |= 0x40;
+ 330              		.loc 1 156 0 is_stmt 1
+ 331 0046 13F0040F 		tst	r3, #4
+ 332 004a 01D0     		beq	.L23
+ 156:Src/ble.c     **** 		if (a & 0x02) v |= 0x40;
+ 333              		.loc 1 156 0 is_stmt 0 discriminator 1
+ 334 004c 42F02002 		orr	r2, r2, #32
+ 335              	.LVL33:
+ 336              	.L23:
+ 157:Src/ble.c     **** 		if (a & 0x01) v |= 0x80;
+ 337              		.loc 1 157 0 is_stmt 1
+ 338 0050 13F0020F 		tst	r3, #2
+ 339 0054 01D0     		beq	.L24
+ 157:Src/ble.c     **** 		if (a & 0x01) v |= 0x80;
+ 340              		.loc 1 157 0 is_stmt 0 discriminator 1
+ARM GAS  /tmp/ccd56jVt.s 			page 10
+
+
+ 341 0056 42F04002 		orr	r2, r2, #64
+ 342              	.LVL34:
+ 343              	.L24:
+ 158:Src/ble.c     **** 
+ 344              		.loc 1 158 0 is_stmt 1
+ 345 005a 13F0010F 		tst	r3, #1
+ 346 005e D3D0     		beq	.L25
+ 158:Src/ble.c     **** 
+ 347              		.loc 1 158 0 is_stmt 0 discriminator 1
+ 348 0060 42F08002 		orr	r2, r2, #128
+ 349              	.LVL35:
+ 350 0064 D0E7     		b	.L25
+ 351              	.LVL36:
+ 352              	.L29:
+ 353              	.LBE4:
+ 161:Src/ble.c     **** 	}
+ 162:Src/ble.c     **** }
+ 354              		.loc 1 162 0 is_stmt 1
+ 355 0066 5DF8044B 		ldr	r4, [sp], #4
+ 356              	.LCFI9:
+ 357              		.cfi_restore 4
+ 358              		.cfi_def_cfa_offset 0
+ 359              	.LVL37:
+ 360 006a 7047     		bx	lr
+ 361              		.cfi_endproc
+ 362              	.LFE136:
+ 364              		.section	.text.ble_whiten,"ax",%progbits
+ 365              		.align	1
+ 366              		.global	ble_whiten
+ 367              		.syntax unified
+ 368              		.thumb
+ 369              		.thumb_func
+ 370              		.fpu fpv4-sp-d16
+ 372              	ble_whiten:
+ 373              	.LFB137:
+ 163:Src/ble.c     **** 
+ 164:Src/ble.c     **** 
+ 165:Src/ble.c     **** 
+ 166:Src/ble.c     **** 
+ 167:Src/ble.c     **** 
+ 168:Src/ble.c     **** 
+ 169:Src/ble.c     **** // see BT Core Spec 4.0, Section 6.B.3.2
+ 170:Src/ble.c     **** void ble_whiten( ble_struct *ble,uint8_t len ) {
+ 374              		.loc 1 170 0
+ 375              		.cfi_startproc
+ 376              		@ args = 0, pretend = 0, frame = 0
+ 377              		@ frame_needed = 0, uses_anonymous_args = 0
+ 378              		@ link register save eliminated.
+ 379              	.LVL38:
+ 380 0000 10B4     		push	{r4}
+ 381              	.LCFI10:
+ 382              		.cfi_def_cfa_offset 4
+ 383              		.cfi_offset 4, -4
+ 171:Src/ble.c     **** 
+ 172:Src/ble.c     **** 	uint8_t* buf = (uint8_t*)&ble->buffer;
+ 384              		.loc 1 172 0
+ 385 0002 0446     		mov	r4, r0
+ARM GAS  /tmp/ccd56jVt.s 			page 11
+
+
+ 386              	.LVL39:
+ 173:Src/ble.c     **** 
+ 174:Src/ble.c     **** 	// initialize LFSR with current channel, set bit 6
+ 175:Src/ble.c     **** 	uint8_t lfsr = channel[ble->current] | 0x40;
+ 387              		.loc 1 175 0
+ 388 0004 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 389 0008 0E4A     		ldr	r2, .L39
+ 390 000a D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 391 000c 42F04002 		orr	r2, r2, #64
+ 392              	.LVL40:
+ 176:Src/ble.c     **** 
+ 177:Src/ble.c     **** 	while (len--) {
+ 393              		.loc 1 177 0
+ 394 0010 0FE0     		b	.L31
+ 395              	.LVL41:
+ 396              	.L32:
+ 397              	.LBB5:
+ 398              	.LBB6:
+ 178:Src/ble.c     **** 		uint8_t res = 0;
+ 179:Src/ble.c     **** 		// LFSR in "wire bit order"
+ 180:Src/ble.c     **** 		for (uint8_t i = 1; i; i <<= 1) {
+ 181:Src/ble.c     **** 			if (lfsr & 0x01) {
+ 182:Src/ble.c     **** 				lfsr ^= 0x88;
+ 183:Src/ble.c     **** 				res |= i;
+ 184:Src/ble.c     **** 			}
+ 185:Src/ble.c     **** 			lfsr >>= 1;
+ 399              		.loc 1 185 0 discriminator 2
+ 400 0012 5208     		lsrs	r2, r2, #1
+ 401              	.LVL42:
+ 180:Src/ble.c     **** 			if (lfsr & 0x01) {
+ 402              		.loc 1 180 0 discriminator 2
+ 403 0014 5B00     		lsls	r3, r3, #1
+ 404              	.LVL43:
+ 405 0016 DBB2     		uxtb	r3, r3
+ 406              	.LVL44:
+ 407              	.L34:
+ 180:Src/ble.c     **** 			if (lfsr & 0x01) {
+ 408              		.loc 1 180 0 is_stmt 0 discriminator 1
+ 409 0018 33B1     		cbz	r3, .L37
+ 181:Src/ble.c     **** 				lfsr ^= 0x88;
+ 410              		.loc 1 181 0 is_stmt 1
+ 411 001a 12F0010F 		tst	r2, #1
+ 412 001e F8D0     		beq	.L32
+ 182:Src/ble.c     **** 				res |= i;
+ 413              		.loc 1 182 0
+ 414 0020 82F08802 		eor	r2, r2, #136
+ 415              	.LVL45:
+ 183:Src/ble.c     **** 			}
+ 416              		.loc 1 183 0
+ 417 0024 1943     		orrs	r1, r1, r3
+ 418              	.LVL46:
+ 419 0026 F4E7     		b	.L32
+ 420              	.L37:
+ 421              	.LVL47:
+ 422              	.LBE6:
+ 186:Src/ble.c     **** 		}
+ 187:Src/ble.c     **** 		*(buf++) ^= res;
+ARM GAS  /tmp/ccd56jVt.s 			page 12
+
+
+ 423              		.loc 1 187 0
+ 424 0028 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 425              	.LVL48:
+ 426 002a 5940     		eors	r1, r1, r3
+ 427              	.LVL49:
+ 428 002c 2170     		strb	r1, [r4]
+ 429 002e 0134     		adds	r4, r4, #1
+ 430              	.LVL50:
+ 431              	.LBE5:
+ 177:Src/ble.c     **** 		uint8_t res = 0;
+ 432              		.loc 1 177 0
+ 433 0030 0146     		mov	r1, r0
+ 434              	.LVL51:
+ 435              	.L31:
+ 436 0032 4B1E     		subs	r3, r1, #1
+ 437 0034 D8B2     		uxtb	r0, r3
+ 438              	.LVL52:
+ 439 0036 11B1     		cbz	r1, .L38
+ 440 0038 0123     		movs	r3, #1
+ 441 003a 0021     		movs	r1, #0
+ 442 003c ECE7     		b	.L34
+ 443              	.L38:
+ 188:Src/ble.c     **** 	}
+ 189:Src/ble.c     **** }
+ 444              		.loc 1 189 0
+ 445 003e 5DF8044B 		ldr	r4, [sp], #4
+ 446              	.LCFI11:
+ 447              		.cfi_restore 4
+ 448              		.cfi_def_cfa_offset 0
+ 449              	.LVL53:
+ 450 0042 7047     		bx	lr
+ 451              	.L40:
+ 452              		.align	2
+ 453              	.L39:
+ 454 0044 00000000 		.word	.LANCHOR1
+ 455              		.cfi_endproc
+ 456              	.LFE137:
+ 458              		.section	.text.ble_crc,"ax",%progbits
+ 459              		.align	1
+ 460              		.global	ble_crc
+ 461              		.syntax unified
+ 462              		.thumb
+ 463              		.thumb_func
+ 464              		.fpu fpv4-sp-d16
+ 466              	ble_crc:
+ 467              	.LFB138:
+ 190:Src/ble.c     **** 
+ 191:Src/ble.c     **** 
+ 192:Src/ble.c     **** 
+ 193:Src/ble.c     **** void ble_crc( ble_struct *ble,uint8_t len, uint8_t* dst ) {
+ 468              		.loc 1 193 0
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 0
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472              		@ link register save eliminated.
+ 473              	.LVL54:
+ 474 0000 F0B4     		push	{r4, r5, r6, r7}
+ARM GAS  /tmp/ccd56jVt.s 			page 13
+
+
+ 475              	.LCFI12:
+ 476              		.cfi_def_cfa_offset 16
+ 477              		.cfi_offset 4, -16
+ 478              		.cfi_offset 5, -12
+ 479              		.cfi_offset 6, -8
+ 480              		.cfi_offset 7, -4
+ 481              	.LVL55:
+ 194:Src/ble.c     **** 
+ 195:Src/ble.c     **** 	uint8_t* buf = (uint8_t*)&ble->buffer;
+ 196:Src/ble.c     **** 
+ 197:Src/ble.c     **** 	// initialize 24-bit shift register in "wire bit order"
+ 198:Src/ble.c     **** 	// dst[0] = bits 23-16, dst[1] = bits 15-8, dst[2] = bits 7-0
+ 199:Src/ble.c     **** 	dst[0] = 0xAA;
+ 482              		.loc 1 199 0
+ 483 0002 AA23     		movs	r3, #170
+ 484 0004 1370     		strb	r3, [r2]
+ 200:Src/ble.c     **** 	dst[1] = 0xAA;
+ 485              		.loc 1 200 0
+ 486 0006 5370     		strb	r3, [r2, #1]
+ 201:Src/ble.c     **** 	dst[2] = 0xAA;
+ 487              		.loc 1 201 0
+ 488 0008 9370     		strb	r3, [r2, #2]
+ 202:Src/ble.c     **** 
+ 203:Src/ble.c     **** 	while (len--) {
+ 489              		.loc 1 203 0
+ 490 000a 28E0     		b	.L42
+ 491              	.LVL56:
+ 492              	.L45:
+ 493              	.LBB7:
+ 494              	.LBB8:
+ 495              	.LBB9:
+ 204:Src/ble.c     **** 
+ 205:Src/ble.c     **** 		uint8_t d = *(buf++);
+ 206:Src/ble.c     **** 
+ 207:Src/ble.c     **** 		for (uint8_t i = 1; i; i <<= 1, d >>= 1) {
+ 208:Src/ble.c     **** 
+ 209:Src/ble.c     **** 			// save bit 23 (highest-value), left-shift the entire register by one
+ 210:Src/ble.c     **** 			uint8_t t = dst[0] & 0x01;         dst[0] >>= 1;
+ 211:Src/ble.c     **** 			if (dst[1] & 0x01) dst[0] |= 0x80; dst[1] >>= 1;
+ 212:Src/ble.c     **** 			if (dst[2] & 0x01) dst[1] |= 0x80; dst[2] >>= 1;
+ 496              		.loc 1 212 0 discriminator 3
+ 497 000c 5B08     		lsrs	r3, r3, #1
+ 498 000e 9370     		strb	r3, [r2, #2]
+ 213:Src/ble.c     **** 
+ 214:Src/ble.c     **** 			// if the bit just shifted out (former bit 23) and the incoming data
+ 215:Src/ble.c     **** 			// bit are not equal (i.e. bit_out ^ bit_in == 1) => toggle tap bits
+ 216:Src/ble.c     **** 			if (t != (d & 1)) {
+ 499              		.loc 1 216 0 discriminator 3
+ 500 0010 04F00101 		and	r1, r4, #1
+ 501 0014 B942     		cmp	r1, r7
+ 502 0016 06D0     		beq	.L46
+ 217:Src/ble.c     **** 				// toggle register tap bits (=XOR with 1) according to CRC polynom
+ 218:Src/ble.c     **** 				dst[2] ^= 0xDA; // 0b11011010 inv. = 0b01011011 ^= x^6+x^4+x^3+x+1
+ 503              		.loc 1 218 0
+ 504 0018 83F0DA03 		eor	r3, r3, #218
+ 505 001c 9370     		strb	r3, [r2, #2]
+ 219:Src/ble.c     **** 				dst[1] ^= 0x60; // 0b01100000 inv. = 0b00000110 ^= x^10+x^9
+ARM GAS  /tmp/ccd56jVt.s 			page 14
+
+
+ 506              		.loc 1 219 0
+ 507 001e 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 508 0020 83F06003 		eor	r3, r3, #96
+ 509 0024 5370     		strb	r3, [r2, #1]
+ 510              	.L46:
+ 511              	.LBE9:
+ 207:Src/ble.c     **** 
+ 512              		.loc 1 207 0 discriminator 2
+ 513 0026 4000     		lsls	r0, r0, #1
+ 514              	.LVL57:
+ 515 0028 C0B2     		uxtb	r0, r0
+ 516              	.LVL58:
+ 517 002a 6408     		lsrs	r4, r4, #1
+ 518              	.LVL59:
+ 519              	.L43:
+ 207:Src/ble.c     **** 
+ 520              		.loc 1 207 0 is_stmt 0 discriminator 1
+ 521 002c A8B1     		cbz	r0, .L50
+ 522              	.LBB10:
+ 210:Src/ble.c     **** 			if (dst[1] & 0x01) dst[0] |= 0x80; dst[1] >>= 1;
+ 523              		.loc 1 210 0 is_stmt 1
+ 524 002e 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 525 0030 03F00107 		and	r7, r3, #1
+ 526              	.LVL60:
+ 527 0034 5908     		lsrs	r1, r3, #1
+ 528 0036 1170     		strb	r1, [r2]
+ 211:Src/ble.c     **** 			if (dst[2] & 0x01) dst[1] |= 0x80; dst[2] >>= 1;
+ 529              		.loc 1 211 0
+ 530 0038 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 531 003a 13F0010F 		tst	r3, #1
+ 532 003e 02D0     		beq	.L44
+ 211:Src/ble.c     **** 			if (dst[2] & 0x01) dst[1] |= 0x80; dst[2] >>= 1;
+ 533              		.loc 1 211 0 is_stmt 0 discriminator 1
+ 534 0040 61F07F01 		orn	r1, r1, #127
+ 535 0044 1170     		strb	r1, [r2]
+ 536              	.L44:
+ 211:Src/ble.c     **** 			if (dst[2] & 0x01) dst[1] |= 0x80; dst[2] >>= 1;
+ 537              		.loc 1 211 0 discriminator 3
+ 538 0046 5908     		lsrs	r1, r3, #1
+ 539 0048 5170     		strb	r1, [r2, #1]
+ 212:Src/ble.c     **** 
+ 540              		.loc 1 212 0 is_stmt 1 discriminator 3
+ 541 004a 9378     		ldrb	r3, [r2, #2]	@ zero_extendqisi2
+ 542 004c 13F0010F 		tst	r3, #1
+ 543 0050 DCD0     		beq	.L45
+ 212:Src/ble.c     **** 
+ 544              		.loc 1 212 0 is_stmt 0 discriminator 1
+ 545 0052 61F07F01 		orn	r1, r1, #127
+ 546 0056 5170     		strb	r1, [r2, #1]
+ 547 0058 D8E7     		b	.L45
+ 548              	.LVL61:
+ 549              	.L50:
+ 550              	.LBE10:
+ 551              	.LBE8:
+ 205:Src/ble.c     **** 
+ 552              		.loc 1 205 0 is_stmt 1
+ 553 005a 3046     		mov	r0, r6
+ARM GAS  /tmp/ccd56jVt.s 			page 15
+
+
+ 554              	.LVL62:
+ 555              	.LBE7:
+ 203:Src/ble.c     **** 
+ 556              		.loc 1 203 0
+ 557 005c 2946     		mov	r1, r5
+ 558              	.LVL63:
+ 559              	.L42:
+ 560 005e 4D1E     		subs	r5, r1, #1
+ 561 0060 EDB2     		uxtb	r5, r5
+ 562              	.LVL64:
+ 563 0062 19B1     		cbz	r1, .L51
+ 564              	.LBB12:
+ 205:Src/ble.c     **** 
+ 565              		.loc 1 205 0
+ 566 0064 461C     		adds	r6, r0, #1
+ 567              	.LVL65:
+ 568 0066 0478     		ldrb	r4, [r0]	@ zero_extendqisi2
+ 569              	.LVL66:
+ 570              	.LBB11:
+ 207:Src/ble.c     **** 
+ 571              		.loc 1 207 0
+ 572 0068 0120     		movs	r0, #1
+ 573 006a DFE7     		b	.L43
+ 574              	.LVL67:
+ 575              	.L51:
+ 576              	.LBE11:
+ 577              	.LBE12:
+ 220:Src/ble.c     **** 			}
+ 221:Src/ble.c     **** 		}
+ 222:Src/ble.c     **** 	}
+ 223:Src/ble.c     **** }
+ 578              		.loc 1 223 0
+ 579 006c F0BC     		pop	{r4, r5, r6, r7}
+ 580              	.LCFI13:
+ 581              		.cfi_restore 7
+ 582              		.cfi_restore 6
+ 583              		.cfi_restore 5
+ 584              		.cfi_restore 4
+ 585              		.cfi_def_cfa_offset 0
+ 586              	.LVL68:
+ 587 006e 7047     		bx	lr
+ 588              		.cfi_endproc
+ 589              	.LFE138:
+ 591              		.section	.text.ble_transmitPacket,"ax",%progbits
+ 592              		.align	1
+ 593              		.global	ble_transmitPacket
+ 594              		.syntax unified
+ 595              		.thumb
+ 596              		.thumb_func
+ 597              		.fpu fpv4-sp-d16
+ 599              	ble_transmitPacket:
+ 600              	.LFB135:
+ 103:Src/ble.c     **** 	uint8_t pls = ble->buffer.pl_size - 6;
+ 601              		.loc 1 103 0
+ 602              		.cfi_startproc
+ 603              		@ args = 0, pretend = 0, frame = 64
+ 604              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccd56jVt.s 			page 16
+
+
+ 605              	.LVL69:
+ 606 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 607              	.LCFI14:
+ 608              		.cfi_def_cfa_offset 20
+ 609              		.cfi_offset 4, -20
+ 610              		.cfi_offset 5, -16
+ 611              		.cfi_offset 6, -12
+ 612              		.cfi_offset 7, -8
+ 613              		.cfi_offset 14, -4
+ 614 0002 91B0     		sub	sp, sp, #68
+ 615              	.LCFI15:
+ 616              		.cfi_def_cfa_offset 88
+ 617 0004 0746     		mov	r7, r0
+ 104:Src/ble.c     **** 	// calculate CRC over header+MAC+payload, append after payload
+ 618              		.loc 1 104 0
+ 619 0006 4478     		ldrb	r4, [r0, #1]	@ zero_extendqisi2
+ 620 0008 A51F     		subs	r5, r4, #6
+ 621 000a EDB2     		uxtb	r5, r5
+ 622              	.LVL70:
+ 106:Src/ble.c     **** 	ble_crc( ble,pls+8, outbuf+pls+8);
+ 623              		.loc 1 106 0
+ 624 000c 0646     		mov	r6, r0
+ 625              	.LVL71:
+ 107:Src/ble.c     **** 	
+ 626              		.loc 1 107 0
+ 627 000e 05F10802 		add	r2, r5, #8
+ 628 0012 A11C     		adds	r1, r4, #2
+ 629 0014 0244     		add	r2, r2, r0
+ 630 0016 C9B2     		uxtb	r1, r1
+ 631 0018 FFF7FEFF 		bl	ble_crc
+ 632              	.LVL72:
+ 110:Src/ble.c     **** 	ble_swapbuf( ble,pls+11 );
+ 633              		.loc 1 110 0
+ 634 001c 0534     		adds	r4, r4, #5
+ 635 001e E4B2     		uxtb	r4, r4
+ 636 0020 2146     		mov	r1, r4
+ 637 0022 3846     		mov	r0, r7
+ 638 0024 FFF7FEFF 		bl	ble_whiten
+ 639              	.LVL73:
+ 111:Src/ble.c     **** 	
+ 640              		.loc 1 111 0
+ 641 0028 2146     		mov	r1, r4
+ 642 002a 3846     		mov	r0, r7
+ 643 002c FFF7FEFF 		bl	ble_swapbuf
+ 644              	.LVL74:
+ 124:Src/ble.c     **** 	for (int i = 0; i < pls+11; ++i) {
+ 645              		.loc 1 124 0
+ 646 0030 0D48     		ldr	r0, .L56
+ 647 0032 FFF7FEFF 		bl	serial_print
+ 648              	.LVL75:
+ 649              	.LBB13:
+ 125:Src/ble.c     **** 		sprintf(msg, "%#02x", outbuf[i]);
+ 650              		.loc 1 125 0
+ 651 0036 0024     		movs	r4, #0
+ 652 0038 08E0     		b	.L53
+ 653              	.LVL76:
+ 654              	.L54:
+ARM GAS  /tmp/ccd56jVt.s 			page 17
+
+
+ 126:Src/ble.c     **** 		serial_print(msg);
+ 655              		.loc 1 126 0 discriminator 3
+ 656 003a 325D     		ldrb	r2, [r6, r4]	@ zero_extendqisi2
+ 657 003c 0B49     		ldr	r1, .L56+4
+ 658 003e 6846     		mov	r0, sp
+ 659 0040 FFF7FEFF 		bl	sprintf
+ 660              	.LVL77:
+ 127:Src/ble.c     **** 	}
+ 661              		.loc 1 127 0 discriminator 3
+ 662 0044 6846     		mov	r0, sp
+ 663 0046 FFF7FEFF 		bl	serial_print
+ 664              	.LVL78:
+ 125:Src/ble.c     **** 		sprintf(msg, "%#02x", outbuf[i]);
+ 665              		.loc 1 125 0 discriminator 3
+ 666 004a 0134     		adds	r4, r4, #1
+ 667              	.LVL79:
+ 668              	.L53:
+ 125:Src/ble.c     **** 		sprintf(msg, "%#02x", outbuf[i]);
+ 669              		.loc 1 125 0 is_stmt 0 discriminator 1
+ 670 004c 05F10B03 		add	r3, r5, #11
+ 671 0050 9C42     		cmp	r4, r3
+ 672 0052 F2DB     		blt	.L54
+ 673              	.LBE13:
+ 129:Src/ble.c     **** 
+ 674              		.loc 1 129 0 is_stmt 1
+ 675 0054 0648     		ldr	r0, .L56+8
+ 676 0056 FFF7FEFF 		bl	serial_print
+ 677              	.LVL80:
+ 131:Src/ble.c     ****   // nRF24_CE_1(); // fire out the packet
+ 678              		.loc 1 131 0
+ 679 005a 3A46     		mov	r2, r7
+ 680 005c 2021     		movs	r1, #32
+ 681 005e A020     		movs	r0, #160
+ 682 0060 FFF7FEFF 		bl	spi_write_register
+ 683              	.LVL81:
+ 134:Src/ble.c     **** 
+ 684              		.loc 1 134 0
+ 685 0064 11B0     		add	sp, sp, #68
+ 686              	.LCFI16:
+ 687              		.cfi_def_cfa_offset 20
+ 688              		@ sp needed
+ 689 0066 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 690              	.LVL82:
+ 691              	.L57:
+ 692              		.align	2
+ 693              	.L56:
+ 694 0068 00000000 		.word	.LC1
+ 695 006c 14000000 		.word	.LC2
+ 696 0070 1C000000 		.word	.LC3
+ 697              		.cfi_endproc
+ 698              	.LFE135:
+ 700              		.section	.text.ble_advertise,"ax",%progbits
+ 701              		.align	1
+ 702              		.global	ble_advertise
+ 703              		.syntax unified
+ 704              		.thumb
+ 705              		.thumb_func
+ARM GAS  /tmp/ccd56jVt.s 			page 18
+
+
+ 706              		.fpu fpv4-sp-d16
+ 708              	ble_advertise:
+ 709              	.LFB133:
+  58:Src/ble.c     **** 	ble_preparePacket(ble);
+ 710              		.loc 1 58 0
+ 711              		.cfi_startproc
+ 712              		@ args = 0, pretend = 0, frame = 0
+ 713              		@ frame_needed = 0, uses_anonymous_args = 0
+ 714              	.LVL83:
+ 715 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 716              	.LCFI17:
+ 717              		.cfi_def_cfa_offset 24
+ 718              		.cfi_offset 3, -24
+ 719              		.cfi_offset 4, -20
+ 720              		.cfi_offset 5, -16
+ 721              		.cfi_offset 6, -12
+ 722              		.cfi_offset 7, -8
+ 723              		.cfi_offset 14, -4
+ 724 0002 0546     		mov	r5, r0
+ 725 0004 0E46     		mov	r6, r1
+ 726 0006 1746     		mov	r7, r2
+ 727 0008 1C46     		mov	r4, r3
+  59:Src/ble.c     **** 	
+ 728              		.loc 1 59 0
+ 729 000a FFF7FEFF 		bl	ble_preparePacket
+ 730              	.LVL84:
+  62:Src/ble.c     **** 		int success = ble_addChunk(ble,data_type, buflen, buf);
+ 731              		.loc 1 62 0
+ 732 000e 34B1     		cbz	r4, .L59
+ 733              	.LBB14:
+  63:Src/ble.c     **** 		if (0!=success) {
+ 734              		.loc 1 63 0
+ 735 0010 3B46     		mov	r3, r7
+ 736 0012 2246     		mov	r2, r4
+ 737 0014 3146     		mov	r1, r6
+ 738 0016 2846     		mov	r0, r5
+ 739 0018 FFF7FEFF 		bl	ble_addChunk
+ 740              	.LVL85:
+  64:Src/ble.c     **** 			return -1;
+ 741              		.loc 1 64 0
+ 742 001c 20B9     		cbnz	r0, .L61
+ 743              	.LVL86:
+ 744              	.L59:
+ 745              	.LBE14:
+  69:Src/ble.c     **** 	return 0;
+ 746              		.loc 1 69 0
+ 747 001e 2846     		mov	r0, r5
+ 748 0020 FFF7FEFF 		bl	ble_transmitPacket
+ 749              	.LVL87:
+  70:Src/ble.c     **** }
+ 750              		.loc 1 70 0
+ 751 0024 0020     		movs	r0, #0
+ 752 0026 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 753              	.LVL88:
+ 754              	.L61:
+ 755              	.LBB15:
+  65:Src/ble.c     **** 		}
+ARM GAS  /tmp/ccd56jVt.s 			page 19
+
+
+ 756              		.loc 1 65 0
+ 757 0028 4FF0FF30 		mov	r0, #-1
+ 758              	.LVL89:
+ 759              	.LBE15:
+  71:Src/ble.c     **** 
+ 760              		.loc 1 71 0
+ 761 002c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 762              		.cfi_endproc
+ 763              	.LFE133:
+ 765              		.section	.text.ble_begin,"ax",%progbits
+ 766              		.align	1
+ 767              		.global	ble_begin
+ 768              		.syntax unified
+ 769              		.thumb
+ 770              		.thumb_func
+ 771              		.fpu fpv4-sp-d16
+ 773              	ble_begin:
+ 774              	.LFB139:
+ 224:Src/ble.c     **** 
+ 225:Src/ble.c     **** 
+ 226:Src/ble.c     **** 
+ 227:Src/ble.c     **** void ble_begin( ble_struct *ble,char* _name ) 
+ 228:Src/ble.c     **** {
+ 775              		.loc 1 228 0
+ 776              		.cfi_startproc
+ 777              		@ args = 0, pretend = 0, frame = 8
+ 778              		@ frame_needed = 0, uses_anonymous_args = 0
+ 779              	.LVL90:
+ 780 0000 70B5     		push	{r4, r5, r6, lr}
+ 781              	.LCFI18:
+ 782              		.cfi_def_cfa_offset 16
+ 783              		.cfi_offset 4, -16
+ 784              		.cfi_offset 5, -12
+ 785              		.cfi_offset 6, -8
+ 786              		.cfi_offset 14, -4
+ 787 0002 82B0     		sub	sp, sp, #8
+ 788              	.LCFI19:
+ 789              		.cfi_def_cfa_offset 24
+ 790 0004 0646     		mov	r6, r0
+ 229:Src/ble.c     **** 
+ 230:Src/ble.c     **** 	ble->name = _name;
+ 791              		.loc 1 230 0
+ 792 0006 0162     		str	r1, [r0, #32]
+ 231:Src/ble.c     **** 
+ 232:Src/ble.c     **** 
+ 233:Src/ble.c     **** 	nRF24_CE_0();
+ 793              		.loc 1 233 0
+ 794 0008 FFF7FEFF 		bl	nRF24_CE_0
+ 795              	.LVL91:
+ 234:Src/ble.c     **** 		
+ 235:Src/ble.c     **** 	//发送节点地址4
+ 236:Src/ble.c     **** 	uint8_t addr[4]={0x71,0x91,0x7D,0x6B};
+ 237:Src/ble.c     **** 
+ 238:Src/ble.c     **** 	uint8_t writing_byte;
+ 239:Src/ble.c     **** 	
+ 240:Src/ble.c     ****   writing_byte = 0x00;
+ 796              		.loc 1 240 0
+ARM GAS  /tmp/ccd56jVt.s 			page 20
+
+
+ 797 000c 0025     		movs	r5, #0
+ 798 000e 02AC     		add	r4, sp, #8
+ 799 0010 04F8015D 		strb	r5, [r4, #-1]!
+ 241:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
+ 800              		.loc 1 241 0
+ 801 0014 2246     		mov	r2, r4
+ 802 0016 0121     		movs	r1, #1
+ 803 0018 2120     		movs	r0, #33
+ 804 001a FFF7FEFF 		bl	nRF24_verified_write_register
+ 805              	.LVL92:
+ 242:Src/ble.c     **** 
+ 243:Src/ble.c     ****   writing_byte = 0b00000111; // '00' - 1Mbps '11' - 0dBm
+ 806              		.loc 1 243 0
+ 807 001e 0723     		movs	r3, #7
+ 808 0020 8DF80730 		strb	r3, [sp, #7]
+ 244:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
+ 809              		.loc 1 244 0
+ 810 0024 2246     		mov	r2, r4
+ 811 0026 0121     		movs	r1, #1
+ 812 0028 2620     		movs	r0, #38
+ 813 002a FFF7FEFF 		bl	nRF24_verified_write_register
+ 814              	.LVL93:
+ 245:Src/ble.c     **** 
+ 246:Src/ble.c     ****   writing_byte = frequency[ble->current];
+ 815              		.loc 1 246 0
+ 816 002e 96F82430 		ldrb	r3, [r6, #36]	@ zero_extendqisi2
+ 817 0032 1F4A     		ldr	r2, .L65
+ 818 0034 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 819 0036 8DF80730 		strb	r3, [sp, #7]
+ 247:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
+ 820              		.loc 1 247 0
+ 821 003a 2246     		mov	r2, r4
+ 822 003c 0121     		movs	r1, #1
+ 823 003e 2520     		movs	r0, #37
+ 824 0040 FFF7FEFF 		bl	nRF24_verified_write_register
+ 825              	.LVL94:
+ 248:Src/ble.c     **** 
+ 249:Src/ble.c     ****   writing_byte = 0b00000000; // Wait 250us, disable auto retransmit
+ 826              		.loc 1 249 0
+ 827 0044 8DF80750 		strb	r5, [sp, #7]
+ 250:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
+ 828              		.loc 1 250 0
+ 829 0048 2246     		mov	r2, r4
+ 830 004a 0121     		movs	r1, #1
+ 831 004c 2420     		movs	r0, #36
+ 832 004e FFF7FEFF 		bl	nRF24_verified_write_register
+ 833              	.LVL95:
+ 251:Src/ble.c     **** 
+ 252:Src/ble.c     ****   writing_byte = 0b00000010; // 4 bytes '10' on AW bits
+ 834              		.loc 1 252 0
+ 835 0052 0223     		movs	r3, #2
+ 836 0054 8DF80730 		strb	r3, [sp, #7]
+ 253:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + SETUP_AW, 1, &writing_byte);
+ 837              		.loc 1 253 0
+ 838 0058 2246     		mov	r2, r4
+ 839 005a 0121     		movs	r1, #1
+ 840 005c 2320     		movs	r0, #35
+ARM GAS  /tmp/ccd56jVt.s 			page 21
+
+
+ 841 005e FFF7FEFF 		bl	nRF24_verified_write_register
+ 842              	.LVL96:
+ 254:Src/ble.c     **** 
+ 255:Src/ble.c     ****   writing_byte = 0x01; // 4 bytes '10' on AW bits
+ 843              		.loc 1 255 0
+ 844 0062 0126     		movs	r6, #1
+ 845              	.LVL97:
+ 846 0064 8DF80760 		strb	r6, [sp, #7]
+ 256:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
+ 847              		.loc 1 256 0
+ 848 0068 2246     		mov	r2, r4
+ 849 006a 3146     		mov	r1, r6
+ 850 006c 2220     		movs	r0, #34
+ 851 006e FFF7FEFF 		bl	nRF24_verified_write_register
+ 852              	.LVL98:
+ 257:Src/ble.c     **** 
+ 258:Src/ble.c     ****   // Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value.
+ 259:Src/ble.c     ****   uint8_t TX_ADDRESS[4] = {0x71,0x91,0x7D,0x6B};  // 4 byte transmit-address
+ 853              		.loc 1 259 0
+ 854 0072 104B     		ldr	r3, .L65+4
+ 855 0074 1B68     		ldr	r3, [r3]
+ 856 0076 02AD     		add	r5, sp, #8
+ 857 0078 45F8083D 		str	r3, [r5, #-8]!
+ 260:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + TX_ADDR, 4, TX_ADDRESS);     // Write transmit-ad
+ 858              		.loc 1 260 0
+ 859 007c 2A46     		mov	r2, r5
+ 860 007e 0421     		movs	r1, #4
+ 861 0080 3020     		movs	r0, #48
+ 862 0082 FFF7FEFF 		bl	nRF24_verified_write_register
+ 863              	.LVL99:
+ 261:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + RX_ADDR_P0, 4, TX_ADDRESS);     // Write transmit
+ 864              		.loc 1 261 0
+ 865 0086 2A46     		mov	r2, r5
+ 866 0088 0421     		movs	r1, #4
+ 867 008a 2A20     		movs	r0, #42
+ 868 008c FFF7FEFF 		bl	nRF24_verified_write_register
+ 869              	.LVL100:
+ 262:Src/ble.c     **** 
+ 263:Src/ble.c     ****   // PWR_UP, state transition to [Standby-I]
+ 264:Src/ble.c     ****   writing_byte = 0x06;
+ 870              		.loc 1 264 0
+ 871 0090 0623     		movs	r3, #6
+ 872 0092 8DF80730 		strb	r3, [sp, #7]
+ 265:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
+ 873              		.loc 1 265 0
+ 874 0096 2246     		mov	r2, r4
+ 875 0098 3146     		mov	r1, r6
+ 876 009a 2020     		movs	r0, #32
+ 877 009c FFF7FEFF 		bl	nRF24_verified_write_register
+ 878              	.LVL101:
+ 266:Src/ble.c     ****   spi_delay(150);
+ 879              		.loc 1 266 0
+ 880 00a0 9620     		movs	r0, #150
+ 881 00a2 FFF7FEFF 		bl	spi_delay
+ 882              	.LVL102:
+ 267:Src/ble.c     ****   
+ 268:Src/ble.c     **** 	nRF24_CE_1();
+ARM GAS  /tmp/ccd56jVt.s 			page 22
+
+
+ 883              		.loc 1 268 0
+ 884 00a6 FFF7FEFF 		bl	nRF24_CE_1
+ 885              	.LVL103:
+ 269:Src/ble.c     **** }
+ 886              		.loc 1 269 0
+ 887 00aa 02B0     		add	sp, sp, #8
+ 888              	.LCFI20:
+ 889              		.cfi_def_cfa_offset 16
+ 890              		@ sp needed
+ 891 00ac 70BD     		pop	{r4, r5, r6, pc}
+ 892              	.L66:
+ 893 00ae 00BF     		.align	2
+ 894              	.L65:
+ 895 00b0 00000000 		.word	.LANCHOR0
+ 896 00b4 00000000 		.word	.LANCHOR2
+ 897              		.cfi_endproc
+ 898              	.LFE139:
+ 900              		.global	frequency
+ 901              		.global	channel
+ 902              		.global	month_lookup
+ 903              		.section	.rodata
+ 904              		.align	2
+ 905              		.set	.LANCHOR2,. + 0
+ 906              	.LC0:
+ 907 0000 71       		.byte	113
+ 908 0001 91       		.byte	-111
+ 909 0002 7D       		.byte	125
+ 910 0003 6B       		.byte	107
+ 911              		.section	.rodata.ble_transmitPacket.str1.4,"aMS",%progbits,1
+ 912              		.align	2
+ 913              	.LC1:
+ 914 0000 7072696E 		.ascii	"printing outbuf: \000"
+ 914      74696E67 
+ 914      206F7574 
+ 914      6275663A 
+ 914      2000
+ 915 0012 0000     		.space	2
+ 916              	.LC2:
+ 917 0014 25233032 		.ascii	"%#02x\000"
+ 917      7800
+ 918 001a 0000     		.space	2
+ 919              	.LC3:
+ 920 001c 0A00     		.ascii	"\012\000"
+ 921              		.section	.rodata.channel,"a",%progbits
+ 922              		.align	2
+ 923              		.set	.LANCHOR1,. + 0
+ 926              	channel:
+ 927 0000 25       		.byte	37
+ 928 0001 26       		.byte	38
+ 929 0002 27       		.byte	39
+ 930              		.section	.rodata.frequency,"a",%progbits
+ 931              		.align	2
+ 932              		.set	.LANCHOR0,. + 0
+ 935              	frequency:
+ 936 0000 02       		.byte	2
+ 937 0001 1A       		.byte	26
+ 938 0002 50       		.byte	80
+ARM GAS  /tmp/ccd56jVt.s 			page 23
+
+
+ 939              		.section	.rodata.month_lookup,"a",%progbits
+ 940              		.align	2
+ 943              	month_lookup:
+ 944 0000 00       		.byte	0
+ 945 0001 06       		.byte	6
+ 946 0002 00       		.byte	0
+ 947 0003 04       		.byte	4
+ 948 0004 00       		.byte	0
+ 949 0005 01       		.byte	1
+ 950 0006 00       		.byte	0
+ 951 0007 11       		.byte	17
+ 952 0008 00       		.byte	0
+ 953 0009 08       		.byte	8
+ 954 000a 00       		.byte	0
+ 955 000b 00       		.byte	0
+ 956 000c 03       		.byte	3
+ 957 000d 00       		.byte	0
+ 958 000e 00       		.byte	0
+ 959 000f 00       		.byte	0
+ 960 0010 12       		.byte	18
+ 961 0011 02       		.byte	2
+ 962 0012 10       		.byte	16
+ 963 0013 05       		.byte	5
+ 964 0014 09       		.byte	9
+ 965 0015 00       		.byte	0
+ 966 0016 01       		.byte	1
+ 967 0017 07       		.byte	7
+ 968              		.text
+ 969              	.Letext0:
+ 970              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 971              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 972              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 973              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 974              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h"
+ 975              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 976              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 977              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 978              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 979              		.file 11 "/usr/include/newlib/sys/lock.h"
+ 980              		.file 12 "/usr/include/newlib/sys/_types.h"
+ 981              		.file 13 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 982              		.file 14 "/usr/include/newlib/sys/reent.h"
+ 983              		.file 15 "Inc/nRF24.h"
+ 984              		.file 16 "/usr/include/newlib/stdlib.h"
+ 985              		.file 17 "Inc/ble.h"
+ 986              		.file 18 "/usr/include/newlib/stdio.h"
+ 987              		.file 19 "/usr/include/newlib/string.h"
+ARM GAS  /tmp/ccd56jVt.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ble.c
+     /tmp/ccd56jVt.s:18     .text.ble_addChunk:0000000000000000 $t
+     /tmp/ccd56jVt.s:25     .text.ble_addChunk:0000000000000000 ble_addChunk
+     /tmp/ccd56jVt.s:101    .text.ble_hopChannel:0000000000000000 $t
+     /tmp/ccd56jVt.s:108    .text.ble_hopChannel:0000000000000000 ble_hopChannel
+     /tmp/ccd56jVt.s:155    .text.ble_hopChannel:0000000000000038 $d
+     /tmp/ccd56jVt.s:160    .text.ble_preparePacket:0000000000000000 $t
+     /tmp/ccd56jVt.s:167    .text.ble_preparePacket:0000000000000000 ble_preparePacket
+     /tmp/ccd56jVt.s:248    .text.ble_swapbuf:0000000000000000 $t
+     /tmp/ccd56jVt.s:255    .text.ble_swapbuf:0000000000000000 ble_swapbuf
+     /tmp/ccd56jVt.s:365    .text.ble_whiten:0000000000000000 $t
+     /tmp/ccd56jVt.s:372    .text.ble_whiten:0000000000000000 ble_whiten
+     /tmp/ccd56jVt.s:454    .text.ble_whiten:0000000000000044 $d
+     /tmp/ccd56jVt.s:459    .text.ble_crc:0000000000000000 $t
+     /tmp/ccd56jVt.s:466    .text.ble_crc:0000000000000000 ble_crc
+     /tmp/ccd56jVt.s:592    .text.ble_transmitPacket:0000000000000000 $t
+     /tmp/ccd56jVt.s:599    .text.ble_transmitPacket:0000000000000000 ble_transmitPacket
+     /tmp/ccd56jVt.s:694    .text.ble_transmitPacket:0000000000000068 $d
+     /tmp/ccd56jVt.s:701    .text.ble_advertise:0000000000000000 $t
+     /tmp/ccd56jVt.s:708    .text.ble_advertise:0000000000000000 ble_advertise
+     /tmp/ccd56jVt.s:766    .text.ble_begin:0000000000000000 $t
+     /tmp/ccd56jVt.s:773    .text.ble_begin:0000000000000000 ble_begin
+     /tmp/ccd56jVt.s:895    .text.ble_begin:00000000000000b0 $d
+     /tmp/ccd56jVt.s:935    .rodata.frequency:0000000000000000 frequency
+     /tmp/ccd56jVt.s:926    .rodata.channel:0000000000000000 channel
+     /tmp/ccd56jVt.s:943    .rodata.month_lookup:0000000000000000 month_lookup
+     /tmp/ccd56jVt.s:904    .rodata:0000000000000000 $d
+     /tmp/ccd56jVt.s:912    .rodata.ble_transmitPacket.str1.4:0000000000000000 $d
+     /tmp/ccd56jVt.s:922    .rodata.channel:0000000000000000 $d
+     /tmp/ccd56jVt.s:931    .rodata.frequency:0000000000000000 $d
+     /tmp/ccd56jVt.s:940    .rodata.month_lookup:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+nRF24_verified_write_register
+strlen
+serial_print
+sprintf
+spi_write_register
+nRF24_CE_0
+spi_delay
+nRF24_CE_1

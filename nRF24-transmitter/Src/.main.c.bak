@@ -21,10 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ble.h"
 #include <stdio.h>
 #include <nRF24.h>
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,13 +88,8 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  // nRF24_tx_self_test();
-  // nRF24_configure_tx_mode();
-
-	ble_struct ble;
-	ble_begin(&ble,"ble_chuan");
-  nRF24_print_all_registers();
-
+  nRF24_tx_self_test();
+  nRF24_configure_tx_mode();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,14 +101,7 @@ int main(void)
     HAL_Delay (200);
     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
     HAL_Delay (200);
-    // nRF24_keep_sending();
-		ble_advertise(&ble,0xff,0,0);
-		//蓝牙广播信道有3个，这里切换广播信道
-		ble_hopChannel(&ble); 
-
-    nRF24_print_all_registers();
-    HAL_Delay (1000);
-    // hopChannel();
+    nRF24_keep_sending();
 
     /* USER CODE END WHILE */
 

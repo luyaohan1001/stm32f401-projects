@@ -57,7 +57,8 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
 Src/system_stm32f4xx.c \
 Src/nRF24.c \
-Src/BTLE.c
+Src/ble.c
+# Src/BTLE.c
 
 # ASM sources
 ASM_SOURCES =  \

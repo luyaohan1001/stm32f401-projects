@@ -53,6 +53,9 @@
 #define RX_PW_P4      0x15  // Number of bytes in RX payload in data pipe 4.
 #define RX_PW_P5      0x16  // Number of bytes in RX payload in data pipe 5.
 #define FIFO_STATUS   0x17  // FIFO Status Register.
+// Register 0x18 - 0x1B are not accesible, specified in datasheet.
+#define DYNPD         0x1C  // Enable dynamic payload length.
+#define FEATURE       0x1D  // Feature Register.
 
 /* @brief husart2 Handler to UART2 peripherals on STM32F401RE */
 extern UART_HandleTypeDef huart2;
@@ -77,6 +80,8 @@ uint8_t gpio_clockin_8_bits();
 void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf);
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data);
 
+void serial_print(char* message);
+
 /**
   * @brief Following functions are nRF24-specific operations.
   */
@@ -89,6 +94,7 @@ uint8_t nRF24_get_CONFIG();
 bool nRF24_tx_self_test();
 void nRF24_configure_tx_mode();
 void nRF24_keep_sending();
+void nRF24_print_all_registers();
 
 #endif /* __NRF24_H */
 
