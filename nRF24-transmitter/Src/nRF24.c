@@ -8,7 +8,7 @@
   * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
   ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
 
-/* Includes -------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------- */
 #include "nRF24.h"
 
 /* GPIO Operations --------------------------------------------------------*/
@@ -120,7 +120,6 @@ __inline__ void serial_print(char* message)
   *   MISO______|S7|__|S6|__|S5|__|S4|__|S3|__|S2|__|S1|__|S0|______XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX________
   *
   *   Pulse#     1     2     3     4     5     6     7     8         9     10    11    12    13    14   15     16
-  *
   */
 void gpio_clockout_8_bits(uint8_t tx_data) 
 {
@@ -129,12 +128,19 @@ void gpio_clockout_8_bits(uint8_t tx_data)
   {
       SPI_SCK_0();
       spi_delay();
+
       if(tx_data & 0x80) // MSBit first
           SPI_MOSI_1();
       else
           SPI_MOSI_0();
+
+			/* setup time */	
+      spi_delay();
+
       SPI_SCK_1(); // clock data
       tx_data = tx_data << 1; // load next MSB
+
+			/* hold time */
       spi_delay();
   }
   SPI_SCK_0();
@@ -165,12 +171,17 @@ uint8_t gpio_clockin_8_bits(void)
       SPI_SCK_0();
       spi_delay();
       SPI_MOSI_0();
+
+			/* setup time */
       SPI_SCK_1();
       spi_delay();
       rx_data = rx_data << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 times.
       rx_data |= SPI_READ_MISO();
+
+			/* hold time */
       spi_delay();
   }
+
   SPI_SCK_0();
   return rx_data;
 }
@@ -182,29 +193,32 @@ void spi_delay()
   HAL_Delay(1);
 }
 
+
 /**
   * @brief      Read data from the SPI target device register. Endianess: LSByte first.
   * @param[in]  reg SPI target device register to write to.
   * @param[in]  num_bytes Number of bytes needed to write to that address.
-  * @param[out] pbuf A pointer pointing to a memory location that can store the data read from the SPI device.
+  * @param[out] p_read_data A pointer pointing to a memory location that can store the data read from the SPI device.
   * @retval     none.
   */
-void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
+void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_read_data)
 {
-  // Select chip
+  /* SPI CHIP SELECT */
   SPI_CS_1();
   
-  // Write register address to read.
+  /* Clock out target register. */
   gpio_clockout_8_bits(reg);
-  // Read value
+
+  /* Clock in target register value. */
   for (int i = 0; i < num_bytes; ++i) 
   {
-    pbuf[i] = gpio_clockin_8_bits();
+    p_read_data[i] = gpio_clockin_8_bits();
   }
   
-  // Deselect chip
+  /* SPI CHIP DESELECT */
   SPI_CS_0();
 }
+
 
 /**
   * @brief      Write a number of bytes to the spi target device register.
@@ -215,20 +229,20 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* pbuf)
   */
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 {
-  // Select chip.
+  /* SPI CHIP SELECT */
   SPI_CS_1();
 
-  // First clock out the on-device target register address.
+  /* Clock out target register. */
   gpio_clockout_8_bits(reg); 
 
-  // Write / Clock out bits in each bytes.
+  /* Clock out value bytes to the target. */
   for (int i = 0; i < num_bytes; ++i)
   {
     uint8_t writing_byte = p_writing_data[i];
     gpio_clockout_8_bits(writing_byte);
   }
 
-  // Deselect chip.
+  /* SPI CHIP DESELECT */
   SPI_CS_0();
 }
 
@@ -257,29 +271,31 @@ void nRF24_CE_0()
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 
-
 /**
   * @brief      Write to a register on target device through SPI. Read the same registers after write to confirm that the write has been successful.
   * @param[in]  reg The device register to write value to.
   * @param[in]  num_bytes Number of bytes to write.
   * @param[in]  p_writing_data Data to write.
   * @retval     Boolean. 1 for mistakes happen. 0 for success.
+  * @note       reg & ~ W_REGISTER_MASK is reverse operation of reg | W_REGISTER_MASK,
+	*               essentially get rid of Write Regiter Mask and add a Read Register Mask. 
   */
 bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 {
 
     char message[64] = {'\0'};
-
-    spi_write_register(reg, num_bytes, p_writing_data); 
-
     uint8_t read_data[num_bytes];
 
-    // reg & ~ W_REGISTER_MASK is a reverse operation of reg | W_REGISTER_MASK, essentially get rid of Write Regiter Mask and add a Read Register Mask.
+		/* Write the data to target register. */
+    spi_write_register(reg, num_bytes, p_writing_data); 
+
+		/* Read from same target register to verify if data has been successfully written. */
+
     spi_read_register(R_REGISTER_MASK | (reg & ~W_REGISTER_MASK), num_bytes, read_data);
+
     for (int i = 0; i < num_bytes; ++i) 
     {
-      // if there's any mismatch between written data and read data from the register.
-      if (read_data[i] != p_writing_data[i]) 
+      if (read_data[i] != p_writing_data[i])  // check mismatch between written data and read data from target register.
       {
         strcpy(message, "Problem writing to SPI register -- ");
         serial_print(message);
@@ -296,44 +312,6 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
   return false;
 }
 
-/**
-  * @brief      Read 'STATUS' register from nRF24.
-  * @param      None.
-  * @retval     STATUS register value.
-  */
-uint8_t nRF24_get_STATUS(void) 
-{
-  uint8_t stat;
-  spi_read_register(R_REGISTER_MASK + STATUS, 1, &stat);
-  // Serial.print("- STATUS: "); Serial.println(stat,HEX);
-  return stat;
-}
-
-/**
-  * @brief      Read 'FIFO_STATUS' register from nRF24.
-  * @param      None.
-  * @retval     FIFO_STATUS register value.
-  */
-uint8_t nRF24_get_FIFO_STATUS() 
-{
-  uint8_t fifo_status;
-  spi_read_register(R_REGISTER_MASK + FIFO_STATUS, 1, &fifo_status);
-  // Serial.print("- FIFO STATUS: "); Serial.println(fifo_status,HEX);
-  return fifo_status;
-}
-
-/**
-  * @brief      Read 'CONFIG' register from nRF24.
-  * @param      None.
-  * @retval     CONFIG register value.
-  */
-uint8_t nRF24_get_CONFIG() 
-{
-  uint8_t config_reg;
-  spi_read_register(R_REGISTER_MASK + CONFIG, 1, &config_reg);
-  // Serial.print("- CONFIG: "); Serial.println(config_reg,HEX);
-  return config_reg;
-}
 
 /**  
  *  @brief:  Test nRF24 transmitter function without a receiver.
@@ -363,59 +341,63 @@ uint8_t nRF24_get_CONFIG()
  *                                                             Not Used.
  *                                                             111:
  *                                                             RX FIFO Empty.
- * 
  */
 bool nRF24_tx_self_test() 
 {
+	char message[128];
+	uint8_t writing_byte;
 
-  char message1[] = "---- nrf24 tx self test. ----\n";
-  serial_print(message1);
+  strcpy(message, "---- nrf24 tx self test. ----\n");
+  serial_print(message);
 
-  char message2[] = "---- This test to verifies function of a tranmitter send without a receiver. ----\n";
-  serial_print(message2);
+  strcpy(message, "---- This test to verifies function of a tranmitter send without a receiver. ----\n");
+  serial_print(message);
 
   uint8_t nRF24_status = 0x00;
 
   // Note that if we reset the nRF connected without re-poweron the chip, initial value of registers such as STATUS or CONFIG may be different from one listed in datasheet.
-  // [Current State: Power-on reset 100 ms] 
+  /* Current State: [Power-on reset 100 ms] */
   nRF24_CE_0();
-  // [Current State: (RF transmission is) Power Down (But SPI is alive.)]
-  uint8_t writing_byte = 0x00;
+
+  /* Current State: [Power-Down] (RF transmission is Power-Down, but SPI is alive.) */
+  writing_byte = 0x00;
   nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);        // disable auto acknowledgement  
   nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);    // disable RX data pipes
   nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);   // disable automatic re-transmit, ARC = 0000
+
   writing_byte = 0x0E;
   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       // PWR_UP = 1 PRIMRX=0 (TX mode)
 
-  // PWR_UP=1, state transition to [Standby-I]
+  /* PWR_UP=1, state transition to [Standby-I] */
   uint8_t test_payload[4] = {0xC0, 0xFE, 0xBE, 0xEF}; // clock in a payload, now TX FIFO not empty 
   spi_write_register(W_TX_PAYLOAD, 4, test_payload);
   nRF24_CE_1(); // Chip Enable. Fire the packet out on the antenna!
   
-  // TX FIFO not empty AND CE = 1, state transition to [TX MODE]
+  /* TX FIFO not empty AND CE = 1, state transition to [TX MODE] */
   nRF24_status = nRF24_get_STATUS();
   spi_delay(1);
 
-  // CE=0, state transition -> now return to [Standby-I]. 
+  /* CE=0, state transition -> now return to [Standby-I]. */
   nRF24_CE_0();
-  // PWR_UP = 0, state transition -> now return to [Power Down]
+
+  /* PWR_UP = 0, state transition to [Power Down] */
   writing_byte = 0x08; // write default value for CONFIG register (writing_byte = 0)
   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       
 
-  // Now the chip is back to power down mode, check test result. 
+  /* Now the chip is back to power down mode, check test result. */
   if (nRF24_status & 0x2E) 
   {
-    char message3[] = "\n > nRF24 transmission self-test has passed. \
+    strcpy(message, "\n > nRF24 transmission self-test has passed. \
                        STATUS has value of 0x2E. \
                        TX_DS (transfer data sent) was set. \
-                       RX_P_NO = 111, means RX FIFO Empty. \n";
-    serial_print(message3);
+                       RX_P_NO = 111, means RX FIFO Empty. \n");
+    serial_print(message);
     return true;
   } 
   else 
   {
-    char message4[] = "\n > nRF24 transmission self-test has failed. STATUS is expected 0x2E.";
-    serial_print(message4);
+    strcpy(message, "\n > nRF24 transmission self-test has failed. STATUS is expected 0x2E.");
+    serial_print(message);
     return false;
   }
   
@@ -431,7 +413,8 @@ void nRF24_configure_tx_mode()
 {
     nRF24_CE_0();
 
-    // Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value.
+    /* Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value. */
+
     uint8_t TX_ADDRESS[5] = {0x10,0xDE,0x10,0x10,0x10};  // 5 byte transmit-address
     spi_write_register(W_REGISTER_MASK + TX_ADDR, 5, TX_ADDRESS);     // Write transmit-address to nRF24
 
@@ -480,7 +463,7 @@ void nRF24_keep_sending()
 
   uint8_t stat = nRF24_get_STATUS();
 
-  sprintf(debug_msg, "<STATUS> register : %x\n", stat);
+  sprintf(debug_msg, "<STATUS> REGISTER : %x\n", stat);
   serial_print(debug_msg);
 
   if (stat == 0x2e) // TX_DS bit is set.
@@ -499,8 +482,6 @@ void nRF24_keep_sending()
 
   nRF24_CE_0(); /* stop transmission. Returns to [Standby-I]. */
 }
-
-
 
 
 
@@ -576,6 +557,61 @@ void nRF24_print_all_registers()
     serial_print(message);
 
 }
+
+
+
+
+/**
+  * @brief      Read 'STATUS' register from nRF24.
+  * @param      None.
+  * @retval     STATUS register value.
+  */
+uint8_t nRF24_get_STATUS(void) 
+{
+  uint8_t status;
+  spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
+  return status;
+}
+
+/**
+  * @brief      Read 'FIFO_STATUS' register from nRF24.
+  * @param      None.
+  * @retval     FIFO_STATUS register value.
+  */
+uint8_t nRF24_get_FIFO_STATUS() 
+{
+  uint8_t fifo_status;
+  spi_read_register(R_REGISTER_MASK + FIFO_STATUS, 1, &fifo_status);
+  return fifo_status;
+}
+
+/**
+  * @brief      Read 'CONFIG' register from nRF24.
+  * @param      None.
+  * @retval     CONFIG register value.
+  */
+uint8_t nRF24_get_CONFIG() 
+{
+  uint8_t config_reg;
+  spi_read_register(R_REGISTER_MASK + CONFIG, 1, &config_reg);
+  return config_reg;
+}
+
+
+
+/**
+	* @brief  nRF24 set <CONFIG> register
+	*
+	*
+void nRF24_set_CONFIG(uint8_t MASK_RX_DR, uint8_t MASK_TX_DS, uint8_t MASK_MAX_RT, uint8_t EN_CRC, uint8_t CRCO, uint8_t PWR_UP, uint8_t PRIM_RX) 
+{
+	
+}
+*/
+
+
+
+
 
 
 

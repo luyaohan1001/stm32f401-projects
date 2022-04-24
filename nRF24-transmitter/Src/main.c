@@ -91,11 +91,11 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   // nRF24_tx_self_test();
-  // nRF24_configure_tx_mode();
+  nRF24_configure_tx_mode();
 
-	ble_struct ble;
-	ble_begin(&ble,"nRF24_BLE");
-  nRF24_print_all_registers();
+	// ble - 1. ble_struct ble;
+	// ble - 2. ble_begin(&ble,"nRF24_BLE");
+  // ble - 3. nRF24_print_all_registers();
 
   /* USER CODE END 2 */
 
@@ -109,13 +109,12 @@ int main(void)
     // HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
     // HAL_Delay (200);
 
-    // nRF24_keep_sending();
+    nRF24_keep_sending();
 
 		// send advertise packet
-		ble_advertise(&ble,0xff,0,0);
-
+		// ble - 4. ble_advertise(&ble,0xff,0,0);
 		// hop on frequency
-		ble_hopChannel(&ble); 
+		// ble - 5. ble_hopChannel(&ble); 
 
     // nRF24_print_all_registers();
     // HAL_Delay (1000);
