@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccJiNaFM.s 			page 1
+ARM GAS  /tmp/ccKJnr4C.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
   30:Src/main.c    **** /* Private typedef -----------------------------------------------------------*/
   31:Src/main.c    **** /* USER CODE BEGIN PTD */
   32:Src/main.c    **** 
-ARM GAS  /tmp/ccJiNaFM.s 			page 2
+ARM GAS  /tmp/ccKJnr4C.s 			page 2
 
 
   33:Src/main.c    **** /* USER CODE END PTD */
@@ -69,7 +69,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
   38:Src/main.c    **** 
   39:Src/main.c    **** /* Private macro -------------------------------------------------------------*/
   40:Src/main.c    **** /* USER CODE BEGIN PM */
-  41:Src/main.c    **** 
+  41:Src/main.c    **** #define NRF24_DEBUG
   42:Src/main.c    **** /* USER CODE END PM */
   43:Src/main.c    **** 
   44:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
@@ -118,14 +118,14 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
   87:Src/main.c    ****   /* USER CODE END SysInit */
   88:Src/main.c    **** 
   89:Src/main.c    ****   /* Initialize all configured peripherals */
-ARM GAS  /tmp/ccJiNaFM.s 			page 3
+ARM GAS  /tmp/ccKJnr4C.s 			page 3
 
 
   90:Src/main.c    ****   MX_GPIO_Init();
   91:Src/main.c    ****   MX_USART2_UART_Init();
   92:Src/main.c    ****   /* USER CODE BEGIN 2 */
   93:Src/main.c    ****   // nRF24_tx_self_test();
-  94:Src/main.c    ****   nRF24_configure_tx_mode();
+  94:Src/main.c    ****   nRF24_mvt_configure_tx_mode();
   95:Src/main.c    **** 
   96:Src/main.c    **** 	// ble - 1. ble_struct ble;
   97:Src/main.c    **** 	// ble - 2. ble_begin(&ble,"nRF24_BLE");
@@ -143,7 +143,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  109:Src/main.c    ****     // HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
  110:Src/main.c    ****     // HAL_Delay (200);
  111:Src/main.c    **** 
- 112:Src/main.c    ****     nRF24_keep_sending();
+ 112:Src/main.c    ****     nRF24_mvt_keep_sending();
  113:Src/main.c    **** 
  114:Src/main.c    **** 		// send advertise packet
  115:Src/main.c    **** 		// ble - 4. ble_advertise(&ble,0xff,0,0);
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  144:Src/main.c    ****   /** Initializes the RCC Oscillators according to the specified parameters
  145:Src/main.c    ****   * in the RCC_OscInitTypeDef structure.
  146:Src/main.c    ****   */
-ARM GAS  /tmp/ccJiNaFM.s 			page 4
+ARM GAS  /tmp/ccKJnr4C.s 			page 4
 
 
  147:Src/main.c    ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  201:Src/main.c    ****     Error_Handler();
  202:Src/main.c    ****   }
  203:Src/main.c    ****   /* USER CODE BEGIN USART2_Init 2 */
-ARM GAS  /tmp/ccJiNaFM.s 			page 5
+ARM GAS  /tmp/ccKJnr4C.s 			page 5
 
 
  204:Src/main.c    **** 
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
   64 0028 1A6B     		ldr	r2, [r3, #48]
   65 002a 42F08002 		orr	r2, r2, #128
   66 002e 1A63     		str	r2, [r3, #48]
-ARM GAS  /tmp/ccJiNaFM.s 			page 6
+ARM GAS  /tmp/ccKJnr4C.s 			page 6
 
 
   67 0030 1A6B     		ldr	r2, [r3, #48]
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  110 0082 0593     		str	r3, [sp, #20]
  232:Src/main.c    ****   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
  111              		.loc 1 232 0
-ARM GAS  /tmp/ccJiNaFM.s 			page 7
+ARM GAS  /tmp/ccKJnr4C.s 			page 7
 
 
  112 0084 4FF40413 		mov	r3, #2162688
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  249:Src/main.c    **** 
  250:Src/main.c    ****   /*Configure GPIO pin : PA10 */
  251:Src/main.c    ****   GPIO_InitStruct.Pin = GPIO_PIN_10;
-ARM GAS  /tmp/ccJiNaFM.s 			page 8
+ARM GAS  /tmp/ccKJnr4C.s 			page 8
 
 
  150              		.loc 1 251 0
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  190              		@ Volatile: function does not return.
  191              		@ args = 0, pretend = 0, frame = 0
  192              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccJiNaFM.s 			page 9
+ARM GAS  /tmp/ccKJnr4C.s 			page 9
 
 
  193              		@ link register save eliminated.
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
   51:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif                                           
   52:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __NO_RETURN
   53:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
-ARM GAS  /tmp/ccJiNaFM.s 			page 10
+ARM GAS  /tmp/ccKJnr4C.s 			page 10
 
 
   54:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  108:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
  109:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
  110:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ALIGNED
-ARM GAS  /tmp/ccJiNaFM.s 			page 11
+ARM GAS  /tmp/ccKJnr4C.s 			page 11
 
 
  111:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  220              		.loc 1 182 0
  221              		.cfi_startproc
  222              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /tmp/ccJiNaFM.s 			page 12
+ARM GAS  /tmp/ccKJnr4C.s 			page 12
 
 
  223              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  268              		.align	1
  269              		.global	SystemClock_Config
  270              		.syntax unified
-ARM GAS  /tmp/ccJiNaFM.s 			page 13
+ARM GAS  /tmp/ccKJnr4C.s 			page 13
 
 
  271              		.thumb
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  321 0040 0A68     		ldr	r2, [r1]
  322 0042 02F44042 		and	r2, r2, #49152
  323 0046 0292     		str	r2, [sp, #8]
-ARM GAS  /tmp/ccJiNaFM.s 			page 14
+ARM GAS  /tmp/ccKJnr4C.s 			page 14
 
 
  324 0048 029A     		ldr	r2, [sp, #8]
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  364              		.loc 1 167 0
  365 007e 4FF48052 		mov	r2, #4096
  366 0082 0692     		str	r2, [sp, #24]
-ARM GAS  /tmp/ccJiNaFM.s 			page 15
+ARM GAS  /tmp/ccKJnr4C.s 			page 15
 
 
  168:Src/main.c    **** 
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  417              		.cfi_offset 3, -8
  418              		.cfi_offset 14, -4
   76:Src/main.c    **** 
-ARM GAS  /tmp/ccJiNaFM.s 			page 16
+ARM GAS  /tmp/ccKJnr4C.s 			page 16
 
 
  419              		.loc 1 76 0
@@ -918,12 +918,12 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  430              	.LVL16:
   94:Src/main.c    **** 
  431              		.loc 1 94 0
- 432 0012 FFF7FEFF 		bl	nRF24_configure_tx_mode
+ 432 0012 FFF7FEFF 		bl	nRF24_mvt_configure_tx_mode
  433              	.LVL17:
  434              	.L22:
  112:Src/main.c    **** 
  435              		.loc 1 112 0 discriminator 1
- 436 0016 FFF7FEFF 		bl	nRF24_keep_sending
+ 436 0016 FFF7FEFF 		bl	nRF24_mvt_keep_sending
  437              	.LVL18:
  438 001a FCE7     		b	.L22
  439              		.cfi_endproc
@@ -949,25 +949,25 @@ ARM GAS  /tmp/ccJiNaFM.s 			page 1
  460              		.file 18 "/usr/include/newlib/sys/reent.h"
  461              		.file 19 "Inc/nRF24.h"
  462              		.file 20 "/usr/include/newlib/stdlib.h"
-ARM GAS  /tmp/ccJiNaFM.s 			page 17
+ARM GAS  /tmp/ccKJnr4C.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccJiNaFM.s:18     .text.MX_GPIO_Init:0000000000000000 $t
-     /tmp/ccJiNaFM.s:24     .text.MX_GPIO_Init:0000000000000000 MX_GPIO_Init
-     /tmp/ccJiNaFM.s:171    .text.MX_GPIO_Init:00000000000000d4 $d
-     /tmp/ccJiNaFM.s:179    .text.Error_Handler:0000000000000000 $t
-     /tmp/ccJiNaFM.s:186    .text.Error_Handler:0000000000000000 Error_Handler
-     /tmp/ccJiNaFM.s:212    .text.MX_USART2_UART_Init:0000000000000000 $t
-     /tmp/ccJiNaFM.s:218    .text.MX_USART2_UART_Init:0000000000000000 MX_USART2_UART_Init
-     /tmp/ccJiNaFM.s:262    .text.MX_USART2_UART_Init:000000000000002c $d
+     /tmp/ccKJnr4C.s:18     .text.MX_GPIO_Init:0000000000000000 $t
+     /tmp/ccKJnr4C.s:24     .text.MX_GPIO_Init:0000000000000000 MX_GPIO_Init
+     /tmp/ccKJnr4C.s:171    .text.MX_GPIO_Init:00000000000000d4 $d
+     /tmp/ccKJnr4C.s:179    .text.Error_Handler:0000000000000000 $t
+     /tmp/ccKJnr4C.s:186    .text.Error_Handler:0000000000000000 Error_Handler
+     /tmp/ccKJnr4C.s:212    .text.MX_USART2_UART_Init:0000000000000000 $t
+     /tmp/ccKJnr4C.s:218    .text.MX_USART2_UART_Init:0000000000000000 MX_USART2_UART_Init
+     /tmp/ccKJnr4C.s:262    .text.MX_USART2_UART_Init:000000000000002c $d
                             *COM*:0000000000000044 huart2
-     /tmp/ccJiNaFM.s:268    .text.SystemClock_Config:0000000000000000 $t
-     /tmp/ccJiNaFM.s:275    .text.SystemClock_Config:0000000000000000 SystemClock_Config
-     /tmp/ccJiNaFM.s:394    .text.SystemClock_Config:000000000000009c $d
-     /tmp/ccJiNaFM.s:400    .text.main:0000000000000000 $t
-     /tmp/ccJiNaFM.s:407    .text.main:0000000000000000 main
+     /tmp/ccKJnr4C.s:268    .text.SystemClock_Config:0000000000000000 $t
+     /tmp/ccKJnr4C.s:275    .text.SystemClock_Config:0000000000000000 SystemClock_Config
+     /tmp/ccKJnr4C.s:394    .text.SystemClock_Config:000000000000009c $d
+     /tmp/ccKJnr4C.s:400    .text.main:0000000000000000 $t
+     /tmp/ccKJnr4C.s:407    .text.main:0000000000000000 main
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS
@@ -978,5 +978,5 @@ memset
 HAL_RCC_OscConfig
 HAL_RCC_ClockConfig
 HAL_Init
-nRF24_configure_tx_mode
-nRF24_keep_sending
+nRF24_mvt_configure_tx_mode
+nRF24_mvt_keep_sending

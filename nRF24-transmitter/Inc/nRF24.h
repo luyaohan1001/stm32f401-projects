@@ -293,8 +293,8 @@ uint8_t nRF24_get_STATUS();
 uint8_t nRF24_get_FIFO_STATUS();
 uint8_t nRF24_get_CONFIG();
 bool nRF24_tx_self_test();
-void nRF24_configure_tx_mode();
-void nRF24_keep_sending();
-void nRF24_print_all_registers();
+void nRF24_mvt_configure_tx_mode();
+void nRF24_mvt_keep_sending();
+void nRF24_mvt_print_all_registers();
 #endif /* __NRF24_H */
 

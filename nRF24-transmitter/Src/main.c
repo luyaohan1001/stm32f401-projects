@@ -38,7 +38,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define NRF24_DEBUG
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -91,7 +91,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   // nRF24_tx_self_test();
-  nRF24_configure_tx_mode();
+  nRF24_mvt_configure_tx_mode();
 
 	// ble - 1. ble_struct ble;
 	// ble - 2. ble_begin(&ble,"nRF24_BLE");
@@ -109,7 +109,7 @@ int main(void)
     // HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
     // HAL_Delay (200);
 
-    nRF24_keep_sending();
+    nRF24_mvt_keep_sending();
 
 		// send advertise packet
 		// ble - 4. ble_advertise(&ble,0xff,0,0);
