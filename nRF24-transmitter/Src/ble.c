@@ -7,7 +7,7 @@ const uint8_t channel[3]   = {37,38,39};  // logical BTLE channel number (37-39)
 const uint8_t frequency[3] = { 2,26,80};  // physical frequency (2400+x MHz)
 
 
-//添加数据段，返回0,成功
+// add data segment
 int ble_addChunk(ble_struct *ble,uint8_t chunk_type, uint8_t buflen, const void* buf)
 {
 	if (ble->buffer.payload_size + buflen + 2 > 21 + 6) // (buflen+2) is how much this chunk will take, 21 is payload size without crc and 6 is MAC size
