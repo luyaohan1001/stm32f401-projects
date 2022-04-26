@@ -89,9 +89,9 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  // nRF24_mvt_tx_self_test();
-  // nRF24_config_tx_mode_primitive();
-	nRF24_config_enhanced_shockburst_tx_mode();
+  // nRF24_tx_self_test();
+  nRF24_config_normal_tx_mode();
+	// nRF24_config_enhanced_shockburst_tx_mode();
 	// nRF24_print_all_registers();
 
 	// ble - 1. ble_struct ble;

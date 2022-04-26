@@ -5,10 +5,7 @@
   * @email     :     luyaohan1001@gmail.com
   * @brief     :     C library for Nordic nRF24L01+ (or nRF24L01p) 2.4GHz wireless transceiver.
   * @date      :     04-21-2022
-  * @note      :     The library nRF24.c and nRF24.h strictly follows the "nRF24L01+ Single Chip 2.4GHz Transceiver Product Specification v1.0" released by NORDIC SEMICONDUCTOR in 2008.
-                     Name Conventions:
-                         <REGISTER>
-                         high-level actions uses more snake cases, while lower-level GPIO / Delays uses more capitalized letter since they are closer to hardware.
+  * @note      :     The library strictly follows "nRF24L01+ Single Chip 2.4GHz Transceiver Product Specification v1.0" released by NORDIC SEMICONDUCTOR in 2008.
   * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
   ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
 
@@ -17,8 +14,10 @@
 
 /* Macro Define -----------------------------------------------------------------------------------------------------------------------------------*/
 #define NRF24_DEBUG /* When defined, debug messages are logged through UART. */
+
 /* GPIO Physical Layer ----------------------------------------------------------------------------------------------------------------------------*/
 
+/* GPIO Defined on STM32F401 */
 /* SCK    PA8  */
 /* MOSI   PB10 */
 /* CSN    PB4  */
@@ -26,18 +25,23 @@
 /* MISO   PA10 */
 
 /**
-  * @brief Set high on SCK pin of SPI bus.
-  * @param None
-  * @retval None */
+  * @brief  Set high on SCK pin of SPI bus.
+  * @param  None.
+  * @retval None.
+  * @note   This GPIO pin must be initialized. 
+  *           Initialization code is not included in this library.
+  */
 __inline__ void SPI_SCK_1()
 {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);  
 }
 
 /**
-  * @brief Set low on SCK pin of SPI bus.
-  * @param None
-  * @retval None
+  * @brief  Set low on SCK pin of SPI bus.
+  * @param  None.
+  * @retval None.
+  * @note   This GPIO pin must be initialized. 
+  *           Initialization code is not part of this library.
   */
 __inline__ void SPI_SCK_0()
 {
@@ -45,9 +49,11 @@ __inline__ void SPI_SCK_0()
 } 
 
 /**
-  * @brief Set high on MOSI pin of SPI bus.
-  * @param None
-  * @retval None
+  * @brief  Set high on MOSI pin of SPI bus.
+  * @param  None.
+  * @retval None.
+  * @note   This GPIO pin must be initialized. 
+  *           Initialization code is not part of this library.
   */
 __inline__ void SPI_MOSI_1()
 {
@@ -55,9 +61,11 @@ __inline__ void SPI_MOSI_1()
 }
 
 /**
-  * @brief Set low on MOSI pin of SPI bus.
-  * @param None
-  * @retval None
+  * @brief  Set low on MOSI pin of SPI bus.
+  * @param  None.
+  * @retval None.
+  * @note   This GPIO pin must be initialized. 
+  *           Initialization code is not part of this library.
   */
 __inline__ void SPI_MOSI_0()
 {
@@ -65,9 +73,11 @@ __inline__ void SPI_MOSI_0()
 }
 
 /**
-  * @brief Set high on CS pin of SPI bus.
-  * @param None
-  * @retval None
+  * @brief  Set high on CS pin of SPI bus.
+  * @param  None.
+  * @retval None.
+  * @note   This GPIO pin must be initialized. 
+  *           Initialization code is not part of this library.
   */
 __inline__ void SPI_CS_1() 
 {
@@ -76,9 +86,11 @@ __inline__ void SPI_CS_1()
 }
 
 /**
-  * @brief Set low on CS pin of SPI bus.
-  * @param None
-  * @retval None
+  * @brief  Set low on CS pin of SPI bus.
+  * @param  None.
+  * @retval None.
+  * @note   This GPIO pin must be initialized. 
+  *           Initialization code is not part of this library.
   */
 __inline__ void SPI_CS_0()
 {
@@ -99,23 +111,26 @@ __inline__ GPIO_PinState SPI_READ_MISO()
 
 /**
   * @brief   Print debug string through USART.
-  * @param   p_msg Pointer to anynomous message string.
+  * @param   p_message Pointer to a message string.
   * @retval  None.
   * @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port through USB.
   *            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will not receive data.
   *             In the datasheet it has been confirmed that the USART2 pins have been to multiplexed for the virtual COM feature.
-  *            On the PC, look for port /dev/ttyACM0 as the virtual serial port.  
+  *             On the PC, look for port /dev/ttyACM0 as the virtual serial port in CuteCom / MiniCom / Screen / Putty.
   */
-__inline__ void serial_print(char* message)
+__inline__ void serial_print(char* p_message)
 {
-  HAL_UART_Transmit(&huart2, (uint8_t*)message, strlen(message), 100);
+  /* Call STM32 HAL library function to UART, pass uart hander, string, length to UART. */
+  HAL_UART_Transmit(&huart2, (uint8_t*)p_message, strlen(p_message), 100);
 }
 
 /**
-  * @brief      Clock out (write) 8 bits on MOSI of SPI bus on SCK high.
+  * @brief      Clock out (write) 8 bits on MOSI of SPI bus on SCK high. 
+  *               SPI Mode = [CPOL = 0, CPHA = 0]. (Non-inverted clock and sample data on rising edge.)
   * @param[in]  tx_data One byte of data to transmit.
   * @retval     None.
   * @note  
+  *   SPI Timing Requirement specified in section 8.3.2 SPI Timing of nRF24L01+ Product Specification.
   *   Endianess: Most Significant Bit First. Cn: Command Bits. Sn: Status Register bits. Dn: data bits.
   *
   *   Following is a diagram for time sequence:
@@ -126,61 +141,93 @@ __inline__ void serial_print(char* message)
   *   MISO______|S7|__|S6|__|S5|__|S4|__|S3|__|S2|__|S1|__|S0|______XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX________
   *
   *   Pulse#     1     2     3     4     5     6     7     8         9     10    11    12    13    14   15     16
+  * 
+  *   '^' indicates the clock rising pulse sampling MOSI data line. 
+  *   MOSI data establish '|' arrives slightly before SCK clock rising edge '/' to satisfy setup-time.
+  *     It is required Data to SCK setup-time > 2 ns.
+  *   SCK falling edge '\' settles slightly after MOSI change back to 0 to satisfy hold-time.
+  *     It is required SCK to Data hold > 2 ns.
   */
 void gpio_clockout_8_bits(uint8_t tx_data) 
 {
   SPI_DELAY();
+  /* Repeat for each bit in the tx_data. */
   for (int i = 0; i < 8; ++i) 
   {
+      /* Clock Falling Edge */
       SPI_SCK_0();
       SPI_DELAY();
 
-      if(tx_data & 0x80) // MSBit first
+      /* Fetch the Most Significant Bit. */
+      if(tx_data & 0x80) 
           SPI_MOSI_1();
       else
           SPI_MOSI_0();
 
-      /* setup time */  
+      /* Setup Time */  
       SPI_DELAY();
 
-      SPI_SCK_1(); // clock data
-      tx_data = tx_data << 1; // load next MSB
+      /* Clock Rising Edge - '^' Sampling in the diagram.*/
+      SPI_SCK_1(); 
+
+      /* Loads next bit. e.g. 10110011 << 1 = 01100110 */
+      tx_data = tx_data << 1; 
 
       /* hold time */
       SPI_DELAY();
   }
+
+  /* Make sure SPI clock set to 0 after the last bit has been clocked out. */
   SPI_SCK_0();
 }
 
 /**
   * @brief  Clock in (read) 8 bits from MISO of SPI bus on SCK high.
+  *               SPI Mode = [CPOL = 0, CPHA = 0]. (Non-inverted clock and sample data on rising edge.)
   * @param  None
   * @retval A byte of read data.
   * @note
+  *   SPI Timing Requirement specified in section 8.3.2 SPI Timing of nRF24L01+ Product Specification.
+  *
   *   Endianess: Most Significant Bit first. Cn: Command bits. Sn: Status register bits. Dn: Data bits.
   *    
   *   Following is a diagram for time sequence:
   *   CSN ````\___________________________________________________________________________________________________/```````
-  *   MOSI______|C7|__|C6|__|C5|__|C4|__|C3|__|C2|__|C1|__|C0|______|00|__|00|__|00|__|00|__|00|__|00|__|00|__|00|
+  *   MOSI______|C7|__|C6|__|C5|__|C4|__|C3|__|C2|__|C1|__|C0|______|XX|__|XX|__|XX|__|XX|__|XX|__|XX|__|XX|__|XX|
   *             ^     ^     ^     ^     ^     ^     ^     ^         ^     ^     ^     ^     ^     ^     ^     ^
   *   SCK ______/``\__/``\__/``\__/``\__/``\__/``\__/``\__/``\______/``\__/``\__/``\__/``\__/``\__/``\__/``\__/``\________
   *   MISO______|S7|__|S6|__|S5|__|S4|__|S3|__|S2|__|S1|__|S0|______|D0|__|D1|__|D2|__|D3|__|D4|__|D5|__|D6|__|D7|________
   *   Pulse#     1     2     3     4     5     6     7     8         9     10    11    12    13    14   15     16
+  *
+  *   '^' indicates the clock rising pulse sampling MISO data line. 
+  *   MISO data establish '|' arrives slightly before SCK clock rising edge '/' to satisfy setup-time.
+  *     It is required Data to SCK setup-time > 2 ns.
+  *   SCK falling edge '\' settles slightly after MISO change back to 0 to satisfy hold-time.
+  *     It is required SCK to Data hold > 2 ns.
   */
 uint8_t gpio_clockin_8_bits(void)
 {
   uint8_t rx_data = 0;
 
   SPI_DELAY();
+
+  /* Repeat for each bit read from MISO. */
   for (int i=0; i < 8; ++i) 
   {
-      SPI_SCK_0();
-      SPI_DELAY();
-      SPI_MOSI_0();
 
-      /* setup time */
-      SPI_SCK_1();
+      /* Clock Falling Edge */
+      SPI_SCK_0();
+
+      /* Setup Time for MISO. MISO finished changnig before SCK rising edge. */  
       SPI_DELAY();
+
+      /* Clock Rising Edge - '^' Sampling in the diagram.*/
+      SPI_SCK_1();
+
+      /* Setup Time for MISO. MISO starts change level on SCK rising edge. */  
+      SPI_DELAY();
+      
+      /* Store the bit read from MISO. */
       rx_data = rx_data << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 times.
       rx_data |= SPI_READ_MISO();
 
@@ -188,6 +235,7 @@ uint8_t gpio_clockin_8_bits(void)
       SPI_DELAY();
   }
 
+  /* Make sure SPI clock set to 0 after the last bit has been clocked in. */
   SPI_SCK_0();
   return rx_data;
 }
@@ -195,6 +243,12 @@ uint8_t gpio_clockin_8_bits(void)
 
 
 /* SPI Datalink Layer------------------------------------------------------------------------------------------------------------------------------*/
+
+/**
+  * @brief  Provide on milisecond delay for SPI bus to satisfy timing requirement.
+  * @param  None.
+  * @retval None.
+  */
 void SPI_DELAY() 
 {
   HAL_Delay(1);
@@ -213,12 +267,13 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_read_data)
   /* SPI CHIP SELECT */
   SPI_CS_1();
   
-  /* Clock out target register. */
+  /* Clock out first byte: target register to read. */
   gpio_clockout_8_bits(reg);
 
-  /* Clock in target register value. */
+  /* Repeat for number of bytes. */
   for (int i = 0; i < num_bytes; ++i) 
   {
+    /* Clock in byte data from target register. */
     p_read_data[i] = gpio_clockin_8_bits();
   }
   
@@ -229,23 +284,24 @@ void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_read_data)
 
 /**
   * @brief      Write a number of bytes to the spi target device register.
-  * @param[in]  reg spi target device register to write to.
-  * @param[in]  num_bytes number of bytes needed to write to that address.
+  * @param[in]  reg            SPI target device register to write to.
+  * @param[in]  num_bytes      Number of bytes needed to write to that address.
   * @param[in]  p_writing_data A pointer pointing to a memory location storing the data to write.
-  * @retval     none.
+  * @retval     None.
   */
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 {
   /* SPI CHIP SELECT */
   SPI_CS_1();
 
-  /* Clock out target register. */
+  /* Clock out first byte: target register to write. */
   gpio_clockout_8_bits(reg); 
 
-  /* Clock out value bytes to the target. */
+  /* Repeat for total number of bytes to write. */
   for (int i = 0; i < num_bytes; ++i)
   {
     uint8_t writing_byte = p_writing_data[i];
+    /* Clock out data to the target register. */
     gpio_clockout_8_bits(writing_byte);
   }
 
@@ -254,14 +310,12 @@ void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 }
 
 
-/* nRF24 Operations -------------------------------------------------------------------------------------------------------------------------------*/
-
-
+/* nRF24 Data-Link Layer Operations ---------------------------------------------------------------------------------------------------------------*/
 
 /**
-  * @brief Set high on Chip-Enable pin of nRF24L01.
-  * @param None
-  * @retval None
+  * @brief  Set high on Chip-Enable pin of nRF24L01.
+  * @param  None.
+  * @retval None.
   */
 void nRF24_CE_1()
 {
@@ -270,28 +324,45 @@ void nRF24_CE_1()
 
 
 /**
-  * @brief Set low on Chip-Enable pin of nRF24L01.
-  * @param None
-  * @retval None
+  * @brief  Set low on Chip-Enable pin of nRF24L01.
+  * @param  None.
+  * @retval None.
   */
 void nRF24_CE_0()
 {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 
+
+/**
+  * @TODO Convert an array of hex bytes to string.
+  */
+char* bytearray_to_string(uint8_t num_bytes, uint8_t* byte_array, char* result_string)
+{
+  char buf;
+  for (int i = 0; i < num_bytes; ++i)
+  {
+    sprintf(&buf, "%#02x", byte_array[i]);
+    strcat(result_string, &buf);
+  }
+  return result_string;
+}
+
 /**
   * @brief      Write to a register on nRF24L01+ through SPI. Read the same registers after write to confirm that the write has been successful.
-  * @param[in]  reg The target register to write value to.
-  * @param[in]  num_bytes Number of bytes to write.
-  * @param[in]  p_writing_data Data to write.
+  *               This function seems to waste cycles but SPI communication issues expose immediately.
+  * @param[in]  reg            The target register to write value to.
+  * @param[in]  num_bytes      Number of bytes to write.
+  * @param[in]  p_writing_data Pointer to the data to write.
   * @retval     Boolean. 1 for mistakes happen. 0 for success.
-  * @note       reg & ~ W_REGISTER_MASK is reverse operation of reg | W_REGISTER_MASK,
+  * @note       reg & ~ W_REGISTER_MASK is the reverse operation of reg | W_REGISTER_MASK,
   *               essentially get rid of Write Regiter Mask and add a Read Register Mask. 
+  *             See section 8.3.1 SPI commands in nRF24L01+ Product Specification for details.
   */
 bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 {
 
-    char message[64] = {'\0'};
+    char message[256];
     uint8_t read_data[num_bytes];
 
     /* Write the data to target register. */
@@ -299,10 +370,11 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
 
     /* Read from same target register to verify if data has been successfully written. */
     spi_read_register(R_REGISTER_MASK | (reg & ~W_REGISTER_MASK), num_bytes, read_data);
-
+    
+    /* For each byte, check mismatch between written data and read data from target register. */
     for (int i = 0; i < num_bytes; ++i) 
     {
-      if (read_data[i] != p_writing_data[i])  /* check mismatch between written data and read data from target register. */
+      if (read_data[i] != p_writing_data[i])  
       {
         #ifdef NRF24_DEBUG
         strcpy(message, "Problem writing to nRF24 register -- ");
@@ -325,13 +397,15 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
 
 
 /**  
- *  @brief  Test nRF24 transmitter function without a receiver. Use this function on a fresh setup of the nRF24 module.
+ *  @brief  Test nRF24 transmitter function without a receiver. 
+ *          In the project, we always make sure that TX is working before RX.
+ *          Thus use this function on a fresh setup of the nRF24 modules.
  *  @param  None.
- *  @retval exit status. 0 success, 1 failure.
+ *  @retval None.
  *  @note  
  *      Steps: 1. Disable Auto Acknowledgement, disable Auto Retransmit. 
  *                The reason to disable them is that if they are enabled, ShockBurst mode is on.
- *								Without a usable receiver, it cannot be determined if the transceiver is working properly.
+ *                Without a usable receiver, it cannot be determined if the transceiver is working properly.
  *             2. TX_DS (in STATUS register) is expected to be set when data has been clock into TX FIFO is set.
  *             3. Check if STATUS = 0x2E, if so we have a working TX module.
  *            
@@ -356,9 +430,9 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
  *                                                             111:
  *                                                             RX FIFO Empty.
  */
-bool nRF24_tx_self_test() 
+void nRF24_tx_self_test() 
 {
-  char message[128];
+  char message[256];
   uint8_t writing_byte;
 
   #ifdef NRF24_DEBUG
@@ -385,7 +459,7 @@ bool nRF24_tx_self_test()
   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       // PWR_UP = 1 PRIMRX=0 (TX mode)
 
   /* PWR_UP=1, state transition to [Standby-I] */
-  uint8_t test_payload[4] = {0xC0, 0xC0, 0xCA, 0xFE}; // clock in a payload, now TX FIFO not empty 
+  uint8_t test_payload[4] = {0xC0, 0xC0, 0xCA, 0xFE}; // clock out a payload, now TX FIFO not empty 
   spi_write_register(W_TX_PAYLOAD, 4, test_payload);
   nRF24_CE_1(); // Chip Enable. Fire the packet out on the antenna!
   
@@ -398,11 +472,7 @@ bool nRF24_tx_self_test()
   /* CE=0, state transition -> now return to [Standby-I]. */
   nRF24_CE_0();
 
-  /* PWR_UP = 0, state transition to [Power Down] */
-  writing_byte = 0x08; // write default value for CONFIG register (writing_byte = 0)
-  nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       
-
-  /* Now the chip is back to power down mode, check test result. */
+  /* Now check test result. */
   if (nRF24_status & 0x2E) 
   {
     #ifdef NRF24_DEBUG
@@ -412,7 +482,6 @@ bool nRF24_tx_self_test()
                        RX_P_NO = 111, this means RX FIFO Empty. \n");
     serial_print(message);
     #endif
-    return 0;
   } 
   else 
   {
@@ -420,123 +489,69 @@ bool nRF24_tx_self_test()
     sprintf(message, "\n > nRF24 transmission self-test has failed. <STATUS> is expected 0x2E. Current value: %#02x\n", nRF24_status);
     serial_print(message);
     #endif
-    return 1;
   }
 
-
-  uint8_t payload[] = {0xC0, 0xC0, 0xCA, 0xFE}; /* clock out a four-byte payload "C0C0 CAFE" */
-
-  spi_write_register(W_TX_PAYLOAD, 4, (uint8_t*) payload);
-
-  /* Fire out the transmit packet */
-  nRF24_CE_1(); 
-
-  /* read <STATUS> register*/
-  uint8_t status;
-  spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
-
-  #ifdef NRF24_DEBUG
-  sprintf(message, "<STATUS> REGISTER : %#02x\n", status);
-  serial_print(message);
-  #endif
-
-  if (status == 0x2e) /* TX_DS bit is set. */
+  /* (!) The above code already determined if the chip works in TX mode.*/
+  /* The following code keeps sending the payload in a while loop. Comment below out if we don't need the TX on. */
+  /* The following code will be useful when we are testing a receiver board. */
+  /* clock out a four-byte payload "C0C0 CAFE" */
+  while(1) 
   {
+    uint8_t payload[] = {0xC0, 0xC0, 0xCA, 0xFE}; 
+
+    spi_write_register(W_TX_PAYLOAD, 4, (uint8_t*) payload);
+
+    /* Fire out the transmit packet */
+    nRF24_CE_1(); 
+
+    /* read <STATUS> register*/
+    uint8_t status;
+    spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
+
     #ifdef NRF24_DEBUG
-    strcpy(message, "nRF24 send status - success -\n");
+    sprintf(message, "<STATUS> REGISTER : %#02x\n", status);
     serial_print(message);
     #endif
-  } 
-  else 
-  {
-    #ifdef NRF24_DEBUG
-    strcpy(message, "nRF24 send status - failure -\n");
-    serial_print(message);
-    #endif
+
+    if (status == 0x2e) /* TX_DS bit is set. */
+    {
+      #ifdef NRF24_DEBUG
+      strcpy(message, "nRF24 send status - success -\n");
+      serial_print(message);
+      #endif
+    } 
+    else 
+    {
+      #ifdef NRF24_DEBUG
+      strcpy(message, "nRF24 send status - failure -\n");
+      serial_print(message);
+      #endif
+    }
+
+    /* write 1 to <STATUS> register to clear TX_DS, TX_DS bit is Write-to-Clear. */
+    nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
+
+    nRF24_CE_0(); /* stop transmission. Returns to [Standby-I]. */
   }
-
-  /* write 1 to <STATUS> register to clear TX_DS, TX_DS bit is Write-to-Clear. */
-	nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
-
-  nRF24_CE_0(); /* stop transmission. Returns to [Standby-I]. */
   
-}
-
-/**
-  * @brief  Configure nRF24 to work in TX (transmit) mode, primitive implementation.
-  * @param  None.
-  * @retval None.
-  * @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending data.
-  */
-void nRF24_config_tx_mode_primitive() 
-{
-    nRF24_CE_0();
-
-    /* Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value. */
-
-    uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  // 5 byte transmit-address
-    spi_write_register(W_REGISTER_MASK + TX_ADDR, 5, TX_ADDRESS);     // Write transmit-address to nRF24
-
-    uint8_t writing_byte;
-
-		/* Turn off auto-acknowledge in all channels, this would also disable Enhanced ShockBurst. */
-    writing_byte = 0x00;
-    nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
-
-		/* Turn off RX pipe in all channels */
-    writing_byte = 0x00;
-    nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
-
-		/* Turn off auto-retransmission in all channels */
-    writing_byte = 0x00;
-    nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
-
-		/* Set RF channel = 40. F = 2.4 GHz + 40 MHz = 2440 MHz.*/
-    writing_byte = 40;
-    nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
-
-    writing_byte = 0x07;
-    nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
-
-    // PWR_UP, state transition to [Standby-I]
-    writing_byte = 0x0e;
-    nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
-    SPI_DELAY(150);
-
-    // CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
-    // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
 }
 
 
 /**
   * @brief  Make nRF24 send data with primitive methods.
   * @param  tx_payload_width. Length of data packet to send to the receiver. 
-	            (!) tx_payload_width Must be the same value as the receiver's <RX_PW_Px>. x being the channel number.
+              (!) tx_payload_width Must be the same value as the receiver's <RX_PW_Px>. x being the channel number.
   * @param  payload Pointer to the actual data packet being sent to the receiver.
   * @retval None.
   * @note   Call nRF24_configure_tx_mode() before this test to initailize TX mode in nRF24L01+.
   */
 void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* p_payload) 
 {
-  // uint8_t pl[] = {0xC0, 0xC0, 0xCA, 0xFE}; /* clock out a four-byte payload "C0C0 CAFE" */
 
   char message[64];
-  		
-
+      
+  /* clock out the packet to TX FIFO*/
   nRF24_release_payload(tx_payload_width, p_payload);
-
-	// uint8_t payload[4] = {0xC0, 0xC0, 0xCA, 0xFE};
-  // spi_write_register(W_TX_PAYLOAD, 4, payload);
-
-
-  // uint8_t pl[] = {0xC0, 0xC0, 0xCA, 0xFE}; /* clock out a four-byte payload "C0C0 CAFE" */
-
-  // char message[64];
-  
-  // nRF24_release_payload(tx_payload_width, (uint8_t*) payload);
-
-  // nRF24_verified_write_register(W_TX_PAYLOAD, 4, pl);
-
 
   /* Fire out the transmit packet */
   nRF24_CE_1(); 
@@ -545,13 +560,13 @@ void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* p_payload)
   uint8_t status;
   spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
 
-	/* print <STATUS> register*/
+  /* print <STATUS> register*/
   #ifdef NRF24_DEBUG
   sprintf(message, "<STATUS> REGISTER : %#02x\n", status);
   serial_print(message);
   #endif
 
-	/* Verify if TX_DS bit is set in <STATUS> */
+  /* Verify if TX_DS bit is set in <STATUS> */
   if (status == 0x2e) /* TX_DS_MASK1 = 1 << 5 = 0x20 */
   {
     #ifdef NRF24_DEBUG
@@ -568,59 +583,89 @@ void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* p_payload)
   }
 
   /* write 1 to <STATUS> register to clear TX_DS, TX_DS bit is Write-to-Clear. */
-	nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
+  nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
 
-	/* stop transmission. Returns to [Standby-I]. */
+  /* Stop transmission. Returns to [Standby-I]. */
   nRF24_CE_0(); 
 }
 
-
-void nRF24_config_tx_mode() 
+/**
+  * @brief  Configure nRF24L01+ in TX mode without Enhanced ShockBurst.
+  *           Without Enhanced ShockBurst, Auto Acknowledgement and Auto-Retransmission is masked off.
+  *           The TX nRF transmit is successful by detecting 1 on TX_DS field in <STATUS> register.
+  *           TX is successful even if there's no presense or acknowledge from an RX nRF.
+  *         (!) Auto Acknowledgement must also be masked off on the RX nRF24 in order for it to receive data.
+  *           If RX nRF has different setting in parameters (expect for TX/RX), 
+  *           The TX nRF24 may be successfully sending data, but RX nRF24 receives none.
+  * @param  None.
+  * @retval None.
+  */
+void nRF24_config_normal_tx_mode() 
 {
     nRF24_CE_0();
 
-    /* Set TX_ADDR for transmit. On the Receiver side, set RX_ADDR_P0 with same value. */
-		nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
+    /* Set Address Width as 5 bytes. On the Receiver side, set RX_ADDR_P0 with same value. */
+    nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
+ 
+    /* Set TX address to nRF24. */
+    uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  /* 5 byte TX address */
+    nRF24_set_TX_ADDR(5, TX_ADDRESS); 
 
-    uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  // 5 byte transmit-address
-		nRF24_set_TX_ADDR(5, TX_ADDRESS);
-		nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK0);
-		nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK0);
-		nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK0);
-		nRF24_set_RF_CH(40);
-		nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
-		nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK0);
-    SPI_DELAY(10);
-    // CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
-    // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
+    /* Disable Auto-Acknowledgement on Pipe 5 - Pipe 0, this also disables Enhanced ShockBurst. */
+    nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK0);
+
+    /* Disable RX on Pipe 5 - Pipe 0. */
+    nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK0);
+
+    /* Disable Auto-Retransmission, this also disables Enhanced ShockBurst. */
+    nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK0);
+
+    /* Set Frquency Channel. Carrier Frequency = 2.4GHz + RF_CH = (2400 + RF_CH) = 2440 MHz. */
+    nRF24_set_RF_CH(40);
+
+    /* Set 'Continuous Carrier Transmit', RF Data Rate, and RF TX Power */
+    nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
+  
+    /* Set IRQ Masks, CRC, Power-Up and select RX/TX mode. */
+    nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK0);
+
+    /* CE is not set to 1, nRF24 still stays in [Standby-I] Mode. */
+    /* CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode. */
 }
 
 /**
-	* @brief TX (transmit) Mode with Enhanced ShockBurst.
-	* @note  ShockBurst provides hardware auto-acknowledge and auto-retransmit.
-	*/
+  * @brief  TX (transmit) Mode with Enhanced ShockBurst.
+  * @param  None.
+  * @retval None.
+  * @note   In Enhanced ShockBurst, Auto Acknowledgement and Auto-Retransmission are used to guarantee better data handling.
+  *         Thus used pipe's EN_AA and SETUP_RETR is masked 1.
+  *         The TX nRF transmit is successful by detecting 1 on TX_DS field in <STATUS> register.
+  *         However, trasmit is successful only when an RX nRF, also with Enhanced ShockBurst turned on, 
+  *           send Acknowledgement to the TX nRF.
+  *         The TX nRF, in order to receive that Acknowledgement signal, needs to turn on receive on Pipe 0.
+  */
 void nRF24_config_enhanced_shockburst_tx_mode() 
 {
     nRF24_CE_0();
-		// nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
+    // nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
 
     /* Set TX_ADDR for transmit. On the Receiver side, set RX_ADDR_P0 with same value. */
-		nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
+    nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
 
     uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  
-		nRF24_set_TX_ADDR(5, TX_ADDRESS);
+    nRF24_set_TX_ADDR(5, TX_ADDRESS);
 
-		/* ShockBurst Auto-Acknowledgement: In order to receive hardware-generated ACK from the receiver, open RX pipe 0 on the transmitter side. */
-		nRF24_set_RX_ADDR_P0(5, TX_ADDRESS);
+    /* ShockBurst Auto-Acknowledgement: In order to receive hardware-generated ACK from the receiver, open RX pipe 0 on the transmitter side. */
+    nRF24_set_RX_ADDR_P0(5, TX_ADDRESS);
 
-		nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK1);
-		nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK1);
-		nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK10);
-		nRF24_set_RF_CH(40);
-		uint8_t writing_byte = 0x07;
+    nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK1);
+    nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK1);
+    nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK10);
+    nRF24_set_RF_CH(40);
+    uint8_t writing_byte = 0x07;
     nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
-		// nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
-		nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK0);
+    // nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
+    nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK0);
     SPI_DELAY(10);
 
 }
@@ -943,7 +988,7 @@ void nRF24_clear_STATUS(uint8_t rx_dr, uint8_t tx_ds, uint8_t max_rt)
   uint8_t writing_byte = 0x00;
   writing_byte |= rx_dr | tx_ds | max_rt;
 
-	/* Do not use nRF24_verified_write_register() to write to <STATUS> register. Not all bits are writable. */
+  /* Do not use nRF24_verified_write_register() to write to <STATUS> register. Not all bits are writable. */
   spi_write_register(W_REGISTER_MASK + STATUS, 1, &writing_byte);
 }
 
@@ -1386,12 +1431,12 @@ uint8_t nRF24_get_FIFO_STATUS()
 }
 
 /**
-	* @brief Write the payload (data to transfer) to the TX FIFO.
-	* @param tx_payload_width Length of the payload in number of bytes.
-	            (!) tx_payload_width MUST be the same value as the receiver's <RX_PW_Px> to receive. x being the channel number.
-	* @param payload  Actual data to transfer.
-	* @retval None.
-	*/
+  * @brief Write the payload (data to transfer) to the TX FIFO.
+  * @param tx_payload_width Length of the payload in number of bytes.
+              (!) tx_payload_width MUST be the same value as the receiver's <RX_PW_Px> to receive. x being the channel number.
+  * @param payload  Actual data to transfer.
+  * @retval None.
+  */
 void nRF24_release_payload(uint8_t tx_payload_width, uint8_t* payload)
 {
   spi_write_register(W_TX_PAYLOAD, tx_payload_width, payload);

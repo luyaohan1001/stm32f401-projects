@@ -287,11 +287,11 @@ void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 void nRF24_CE_1();
 void nRF24_CE_0();
 bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data);
-bool nRF24_tx_self_test();
-void nRF24_config_tx_mode_primitive();
-void nRF24_config_tx_mode();
+void nRF24_tx_self_test();
+
 void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* payload);
 
+void nRF24_config_normal_tx_mode();
 void nRF24_config_enhanced_shockburst_tx_mode();
 
 /* Following functions are Getter / Setter Functions for register on nRF24-------------------------------------------------------*/
