@@ -15,9 +15,9 @@
 /* Includes ---------------------------------------------------------------------------------------------------------------------------------------*/
 #include "nRF24.h"
 
-/* Macro Define ---------------------------------------------------------------------------------------------------------------------------------------*/
+/* Macro Define -----------------------------------------------------------------------------------------------------------------------------------*/
 #define NRF24_DEBUG /* When defined, debug messages are logged through UART. */
-/* GPIO Physical Layer --------------------------------------------------------------------------------------------------------------------------------*/
+/* GPIO Physical Layer ----------------------------------------------------------------------------------------------------------------------------*/
 
 /* SCK    PA8  */
 /* MOSI   PB10 */
@@ -129,11 +129,11 @@ __inline__ void serial_print(char* message)
   */
 void gpio_clockout_8_bits(uint8_t tx_data) 
 {
-  spi_delay();
+  SPI_DELAY();
   for (int i = 0; i < 8; ++i) 
   {
       SPI_SCK_0();
-      spi_delay();
+      SPI_DELAY();
 
       if(tx_data & 0x80) // MSBit first
           SPI_MOSI_1();
@@ -141,13 +141,13 @@ void gpio_clockout_8_bits(uint8_t tx_data)
           SPI_MOSI_0();
 
       /* setup time */  
-      spi_delay();
+      SPI_DELAY();
 
       SPI_SCK_1(); // clock data
       tx_data = tx_data << 1; // load next MSB
 
       /* hold time */
-      spi_delay();
+      SPI_DELAY();
   }
   SPI_SCK_0();
 }
@@ -171,21 +171,21 @@ uint8_t gpio_clockin_8_bits(void)
 {
   uint8_t rx_data = 0;
 
-  spi_delay();
+  SPI_DELAY();
   for (int i=0; i < 8; ++i) 
   {
       SPI_SCK_0();
-      spi_delay();
+      SPI_DELAY();
       SPI_MOSI_0();
 
       /* setup time */
       SPI_SCK_1();
-      spi_delay();
+      SPI_DELAY();
       rx_data = rx_data << 1; // Why shift first then OR'? range (0, 8) will need to shift only 7 times.
       rx_data |= SPI_READ_MISO();
 
       /* hold time */
-      spi_delay();
+      SPI_DELAY();
   }
 
   SPI_SCK_0();
@@ -193,8 +193,9 @@ uint8_t gpio_clockin_8_bits(void)
 }
   
 
-/* SPI Datalink Layer------------------------------------------------------------------------------------------------------------------------------------*/
-void spi_delay() 
+
+/* SPI Datalink Layer------------------------------------------------------------------------------------------------------------------------------*/
+void SPI_DELAY() 
 {
   HAL_Delay(1);
 }
@@ -253,7 +254,8 @@ void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data)
 }
 
 
-/* nRF24 Operations -----------------------------------------------------------------------------------------------------------------------------------*/
+/* nRF24 Operations -------------------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /**
@@ -323,11 +325,13 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
 
 
 /**  
- *  @brief  MVP: Minial Viable Test. Test nRF24 transmitter function without a receiver. Use this function on a fresh setup as sanity check.
+ *  @brief  Test nRF24 transmitter function without a receiver. Use this function on a fresh setup of the nRF24 module.
  *  @param  None.
  *  @retval exit status. 0 success, 1 failure.
  *  @note  
- *      Steps: 1. Disable Auto Acknowledgement, disable Auto Retransmit.
+ *      Steps: 1. Disable Auto Acknowledgement, disable Auto Retransmit. 
+ *                The reason to disable them is that if they are enabled, ShockBurst mode is on.
+ *								Without a usable receiver, it cannot be determined if the transceiver is working properly.
  *             2. TX_DS (in STATUS register) is expected to be set when data has been clock into TX FIFO is set.
  *             3. Check if STATUS = 0x2E, if so we have a working TX module.
  *            
@@ -352,7 +356,7 @@ bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_wr
  *                                                             111:
  *                                                             RX FIFO Empty.
  */
-bool nRF24_mvt_tx_self_test() 
+bool nRF24_tx_self_test() 
 {
   char message[128];
   uint8_t writing_byte;
@@ -381,7 +385,7 @@ bool nRF24_mvt_tx_self_test()
   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);       // PWR_UP = 1 PRIMRX=0 (TX mode)
 
   /* PWR_UP=1, state transition to [Standby-I] */
-  uint8_t test_payload[4] = {0xC0, 0xFE, 0xBE, 0xEF}; // clock in a payload, now TX FIFO not empty 
+  uint8_t test_payload[4] = {0xC0, 0xC0, 0xCA, 0xFE}; // clock in a payload, now TX FIFO not empty 
   spi_write_register(W_TX_PAYLOAD, 4, test_payload);
   nRF24_CE_1(); // Chip Enable. Fire the packet out on the antenna!
   
@@ -389,7 +393,7 @@ bool nRF24_mvt_tx_self_test()
   /* Get nRF24 <STATUS> register value. */
   spi_read_register(R_REGISTER_MASK + STATUS, 1, &nRF24_status);
 
-  spi_delay(1);
+  SPI_DELAY(1);
 
   /* CE=0, state transition -> now return to [Standby-I]. */
   nRF24_CE_0();
@@ -418,63 +422,10 @@ bool nRF24_mvt_tx_self_test()
     #endif
     return 1;
   }
-  
-}
-
-/**
-  * @brief  MVT: Minial Viable Test. Configure nRF24 to work in TX (transmit) mode.
-  * @param  None.
-  * @retval None.
-  * @note   After nRF24_mvt_configure_tx_mode() is called, use nRF24_mvt_keep_sending() to keep sending data.
-  */
-void nRF24_mvt_configure_tx_mode() 
-{
-    nRF24_CE_0();
-
-    /* Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value. */
-
-    uint8_t TX_ADDRESS[5] = {0x10,0xDE,0x10,0x10,0x10};  // 5 byte transmit-address
-    spi_write_register(W_REGISTER_MASK + TX_ADDR, 5, TX_ADDRESS);     // Write transmit-address to nRF24
-
-    uint8_t writing_byte;
-
-    writing_byte = 0x00;
-    nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
-
-    writing_byte = 0x00;
-    nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
-
-    writing_byte = 0x00;
-    nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
-
-    writing_byte = 40;
-    nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
-
-    writing_byte = 0x07;
-    nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
-
-    // PWR_UP, state transition to [Standby-I]
-    writing_byte = 0x0e;
-    nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
-    spi_delay(150);
-
-    // CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
-    // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
-}
 
 
-/**
-  * @brief  Make nRF24 keep sending data.
-  * @param  None.
-  * @retval None.
-  * @note   Call nRF24_mvt_configure_tx_mode() before this test to initailize TX mode in nRF24L01+.
-  */
-void nRF24_mvt_keep_sending() 
-{
-  uint8_t payload[] = {0xBE, 0xEF, 0xCA, 0xFE}; /* clock out a four-byte payload "BEEF CAFE" */
+  uint8_t payload[] = {0xC0, 0xC0, 0xCA, 0xFE}; /* clock out a four-byte payload "C0C0 CAFE" */
 
-  char debug_msg[64];
-  
   spi_write_register(W_TX_PAYLOAD, 4, (uint8_t*) payload);
 
   /* Fire out the transmit packet */
@@ -485,30 +436,198 @@ void nRF24_mvt_keep_sending()
   spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
 
   #ifdef NRF24_DEBUG
-  sprintf(debug_msg, "<STATUS> REGISTER : %#02x\n", status);
-  serial_print(debug_msg);
+  sprintf(message, "<STATUS> REGISTER : %#02x\n", status);
+  serial_print(message);
   #endif
 
   if (status == 0x2e) /* TX_DS bit is set. */
   {
     #ifdef NRF24_DEBUG
-    strcpy(debug_msg, "nRF24 mvt send status - success -\n");
-    serial_print(debug_msg);
+    strcpy(message, "nRF24 send status - success -\n");
+    serial_print(message);
     #endif
   } 
   else 
   {
     #ifdef NRF24_DEBUG
-    strcpy(debug_msg, "nRF24 mvt send status - failure -\n");
-    serial_print(debug_msg);
+    strcpy(message, "nRF24 send status - failure -\n");
+    serial_print(message);
     #endif
   }
-  /* write 1 to clear TX_DS, TX_DS bit is Write-to-Clear. */
-  uint8_t writing_byte = 0x20;
-  spi_write_register(W_REGISTER_MASK + STATUS, 1, &writing_byte); 
+
+  /* write 1 to <STATUS> register to clear TX_DS, TX_DS bit is Write-to-Clear. */
+	nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
 
   nRF24_CE_0(); /* stop transmission. Returns to [Standby-I]. */
+  
 }
+
+/**
+  * @brief  Configure nRF24 to work in TX (transmit) mode, primitive implementation.
+  * @param  None.
+  * @retval None.
+  * @note   After nRF24_configure_tx_mode() is called, use nRF24_keep_sending() to keep sending data.
+  */
+void nRF24_config_tx_mode_primitive() 
+{
+    nRF24_CE_0();
+
+    /* Set TX_ADDR for sender. On the Receiver side, set RX_ADDR_P0 with same value. */
+
+    uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  // 5 byte transmit-address
+    spi_write_register(W_REGISTER_MASK + TX_ADDR, 5, TX_ADDRESS);     // Write transmit-address to nRF24
+
+    uint8_t writing_byte;
+
+		/* Turn off auto-acknowledge in all channels, this would also disable Enhanced ShockBurst. */
+    writing_byte = 0x00;
+    nRF24_verified_write_register(W_REGISTER_MASK + EN_AA, 1, &writing_byte);
+
+		/* Turn off RX pipe in all channels */
+    writing_byte = 0x00;
+    nRF24_verified_write_register(W_REGISTER_MASK + EN_RXADDR, 1, &writing_byte);
+
+		/* Turn off auto-retransmission in all channels */
+    writing_byte = 0x00;
+    nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
+
+		/* Set RF channel = 40. F = 2.4 GHz + 40 MHz = 2440 MHz.*/
+    writing_byte = 40;
+    nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
+
+    writing_byte = 0x07;
+    nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
+
+    // PWR_UP, state transition to [Standby-I]
+    writing_byte = 0x0e;
+    nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
+    SPI_DELAY(150);
+
+    // CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
+    // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
+}
+
+
+/**
+  * @brief  Make nRF24 send data with primitive methods.
+  * @param  tx_payload_width. Length of data packet to send to the receiver. 
+	            (!) tx_payload_width Must be the same value as the receiver's <RX_PW_Px>. x being the channel number.
+  * @param  payload Pointer to the actual data packet being sent to the receiver.
+  * @retval None.
+  * @note   Call nRF24_configure_tx_mode() before this test to initailize TX mode in nRF24L01+.
+  */
+void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* p_payload) 
+{
+  // uint8_t pl[] = {0xC0, 0xC0, 0xCA, 0xFE}; /* clock out a four-byte payload "C0C0 CAFE" */
+
+  char message[64];
+  		
+
+  nRF24_release_payload(tx_payload_width, p_payload);
+
+	// uint8_t payload[4] = {0xC0, 0xC0, 0xCA, 0xFE};
+  // spi_write_register(W_TX_PAYLOAD, 4, payload);
+
+
+  // uint8_t pl[] = {0xC0, 0xC0, 0xCA, 0xFE}; /* clock out a four-byte payload "C0C0 CAFE" */
+
+  // char message[64];
+  
+  // nRF24_release_payload(tx_payload_width, (uint8_t*) payload);
+
+  // nRF24_verified_write_register(W_TX_PAYLOAD, 4, pl);
+
+
+  /* Fire out the transmit packet */
+  nRF24_CE_1(); 
+
+  /* read <STATUS> register*/
+  uint8_t status;
+  spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
+
+	/* print <STATUS> register*/
+  #ifdef NRF24_DEBUG
+  sprintf(message, "<STATUS> REGISTER : %#02x\n", status);
+  serial_print(message);
+  #endif
+
+	/* Verify if TX_DS bit is set in <STATUS> */
+  if (status == 0x2e) /* TX_DS_MASK1 = 1 << 5 = 0x20 */
+  {
+    #ifdef NRF24_DEBUG
+    strcpy(message, "nRF24 send status - success -\n");
+    serial_print(message);
+    #endif
+  } 
+  else 
+  {
+    #ifdef NRF24_DEBUG
+    strcpy(message, "nRF24 send status - failure -\n");
+    serial_print(message);
+    #endif
+  }
+
+  /* write 1 to <STATUS> register to clear TX_DS, TX_DS bit is Write-to-Clear. */
+	nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
+
+	/* stop transmission. Returns to [Standby-I]. */
+  nRF24_CE_0(); 
+}
+
+
+void nRF24_config_tx_mode() 
+{
+    nRF24_CE_0();
+
+    /* Set TX_ADDR for transmit. On the Receiver side, set RX_ADDR_P0 with same value. */
+		nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
+
+    uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  // 5 byte transmit-address
+		nRF24_set_TX_ADDR(5, TX_ADDRESS);
+		nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK0);
+		nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK0);
+		nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK0);
+		nRF24_set_RF_CH(40);
+		nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
+		nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK0);
+    SPI_DELAY(10);
+    // CE is not set to 1, nRF24 still stays in [Standby-I] Mode.
+    // CE = 1 is not activated until we write to TX FIFO so stays in Standby-I mode.
+}
+
+/**
+	* @brief TX (transmit) Mode with Enhanced ShockBurst.
+	* @note  ShockBurst provides hardware auto-acknowledge and auto-retransmit.
+	*/
+void nRF24_config_enhanced_shockburst_tx_mode() 
+{
+    nRF24_CE_0();
+		// nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
+
+    /* Set TX_ADDR for transmit. On the Receiver side, set RX_ADDR_P0 with same value. */
+		nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
+
+    uint8_t TX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  
+		nRF24_set_TX_ADDR(5, TX_ADDRESS);
+
+		/* ShockBurst Auto-Acknowledgement: In order to receive hardware-generated ACK from the receiver, open RX pipe 0 on the transmitter side. */
+		nRF24_set_RX_ADDR_P0(5, TX_ADDRESS);
+
+		nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK1);
+		nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK1);
+		nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK10);
+		nRF24_set_RF_CH(40);
+		uint8_t writing_byte = 0x07;
+    nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
+		// nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
+		nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK0);
+    SPI_DELAY(10);
+
+}
+
+
+
+
 
 
 
@@ -555,38 +674,38 @@ void nRF24_print_all_registers()
     sprintf(message, "STATUS: <0x%02x>\n", read_data);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + RX_ADDR_P0, 4, read_buf);
-    sprintf(message, "RX_ADDR_P0: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + RX_ADDR_P0, 5, read_buf);
+    sprintf(message, "RX_ADDR_P0: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + RX_ADDR_P1, 4, read_buf);
-    sprintf(message, "RX_ADDR_P1: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + RX_ADDR_P1, 5, read_buf);
+    sprintf(message, "RX_ADDR_P1: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + RX_ADDR_P2, 4, read_buf);
-    sprintf(message, "RX_ADDR_P2: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + RX_ADDR_P2, 5, read_buf);
+    sprintf(message, "RX_ADDR_P2: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + RX_ADDR_P3, 4, read_buf);
-    sprintf(message, "RX_ADDR_P3: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + RX_ADDR_P3, 5, read_buf);
+    sprintf(message, "RX_ADDR_P3: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + RX_ADDR_P4, 4, read_buf);
-    sprintf(message, "RX_ADDR_P4: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + RX_ADDR_P4, 5, read_buf);
+    sprintf(message, "RX_ADDR_P4: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + RX_PW_P5, 4, read_buf);
-    sprintf(message, "RX_ADDR_P5: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + RX_PW_P5, 5, read_buf);
+    sprintf(message, "RX_ADDR_P5: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
-    spi_read_register(R_REGISTER_MASK + TX_ADDR, 4, read_buf);
-    sprintf(message, "TX_ADDR: %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
+    spi_read_register(R_REGISTER_MASK + TX_ADDR, 5, read_buf);
+    sprintf(message, "TX_ADDR: <%#02x %#02x %#02x %#02x %#02x>\n", read_buf[0], read_buf[1], read_buf[2], read_buf[3], read_buf[4]);
     serial_print(message);
 
 }
 
-/* Following Function Provides High Level Access to nRF24L01+ registers. -----------------------------------------------------------------------------------*/
-/* Instead of using spi_write_register() or nRF24_verified_write_register(). Following in configure function renders better code readability -----------*/
+
+/* Following Function Provides High Level Access to nRF24L01+ registers. --------------------------------------------------------------------------*/
 
 /**
   * @brief  nRF24 set <CONFIG> register
@@ -725,6 +844,12 @@ void nRF24_set_SETUP_RETR(uint8_t ard, uint8_t arc)
 }
 
 
+
+/**
+  * @brief      Read <SETUP_RETR> register from nRF24L01+.
+  * @param      None.
+  * @retval     <SETUP_RETR> register value.
+  */
 uint8_t nRF24_get_SETUP_RETR(uint8_t ARD, uint8_t ARC)
 {
   uint8_t read_byte;
@@ -747,6 +872,13 @@ void nRF24_set_RF_CH(uint8_t ch)
   nRF24_verified_write_register(W_REGISTER_MASK + RF_CH, 1, &writing_byte);
 }
 
+
+
+/**
+  * @brief   Read <RF_CH> register from nRF24L01+.
+  * @param   None.
+  * @retval  <RF_CH> register value.
+  */
 uint8_t nRF24_get_RF_CH()
 {
   uint8_t read_byte;
@@ -796,9 +928,6 @@ uint8_t nRF24_get_RF_SETUP()
   return read_byte;
 }
 
-
-
-
 /**
   * @brief      Clear flag bits in 'STATUS' register.
   * @param      rx_dr Data Ready RX FIFO interrupt. Asserted when new data arrives RX FIFO.
@@ -813,7 +942,9 @@ void nRF24_clear_STATUS(uint8_t rx_dr, uint8_t tx_ds, uint8_t max_rt)
 {
   uint8_t writing_byte = 0x00;
   writing_byte |= rx_dr | tx_ds | max_rt;
-  nRF24_verified_write_register(W_REGISTER_MASK + STATUS, 1, &writing_byte);
+
+	/* Do not use nRF24_verified_write_register() to write to <STATUS> register. Not all bits are writable. */
+  spi_write_register(W_REGISTER_MASK + STATUS, 1, &writing_byte);
 }
 
 /**
@@ -833,8 +964,6 @@ uint8_t nRF24_get_STATUS(void)
   spi_read_register(R_REGISTER_MASK + STATUS, 1, &status);
   return status;
 }
-
-
 
 /**
   * @brief      Read <OBSERVE_TX> register from nRF24.
@@ -1253,7 +1382,18 @@ uint8_t nRF24_get_FIFO_STATUS()
 {
   uint8_t fifo_status;
   spi_read_register(R_REGISTER_MASK + FIFO_STATUS, 1, &fifo_status);
-
   return fifo_status;
+}
+
+/**
+	* @brief Write the payload (data to transfer) to the TX FIFO.
+	* @param tx_payload_width Length of the payload in number of bytes.
+	            (!) tx_payload_width MUST be the same value as the receiver's <RX_PW_Px> to receive. x being the channel number.
+	* @param payload  Actual data to transfer.
+	* @retval None.
+	*/
+void nRF24_release_payload(uint8_t tx_payload_width, uint8_t* payload)
+{
+  spi_write_register(W_TX_PAYLOAD, tx_payload_width, payload);
 }
 

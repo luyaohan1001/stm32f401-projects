@@ -57,7 +57,7 @@
 #define DYNPD         0x1C  // Enable dynamic payload length.
 #define FEATURE       0x1D  // Feature Register.
 
-/* nRF24 Register Fields -----------------------------------------------------------------------------------------------------------------*/
+/* nRF24 Register Fields Macros -----------------------------------------------------------------------------------------------*/
 
 
 /* The following masks are constructed for better readability in codes involving configurating nRF24 registers.
@@ -158,10 +158,10 @@
 #define ERX_P0_MASKDEFAULT     0
 
 /* Masks for SETUP_AW - Setup of Address Widths */
-#define AW_MASK3bytes         0b01 << 0
-#define AW_MASK4bytes         0b10 << 0
-#define AW_MASK5bytes         0b11 << 0
-#define AW_MASKDEFAULT        0b11 << 0
+#define SETUP_AW_MASK3bytes         0b01 << 0
+#define SETUP_AW_MASK4bytes         0b10 << 0
+#define SETUP_AW_MASK5bytes         0b11 << 0
+#define SETUP_AW_MASKDEFAULT        0b11 << 0
 
 /* Masks for SETUP_RETR - Setup of Automatic Retransmission */
 #define ARD_MASK250us         0b0000 << 4
@@ -212,6 +212,8 @@
 #define RF_DR_LOW_MASK0        0
 #define RF_DR_LOW_MASKDEFAULT  0
 
+#define PLL_LOCK_MASKDEFAULT  0
+
 #define RF_DR_HIGH_MASK1       1 << 3
 #define RF_DR_HIGH_MASK0       0
 #define RF_DR_HIGH_MASKDEFAULT 1
@@ -220,6 +222,7 @@
 #define RF_DR_MASK1Mbps   (RF_DR_LOW_MASK0 | RF_DR_HIGH_MASK0)
 #define RF_DR_MASK2Mbps   (RF_DR_LOW_MASK0 | RF_DR_HIGH_MASK1)
 #define RF_DR_MASK250kbps (RF_DR_LOW_MASK1 | RF_DR_HIGH_MASK0)
+
 
 
 #define RF_PWR_MASKNEG18dBm     0b00 << 1
@@ -254,12 +257,10 @@
 
 /* Function Prototypes -------------------------------------------------------------------------------------------------------*/
 
-/* @brief husart2 Handler to UART2 peripherals on STM32F401RE */
+/* husart2 Handler to UART2 peripherals on STM32F401RE */
 extern UART_HandleTypeDef huart2;
 
-/**
-  * @brief Following functions operates GPIO pins on the SPI bus.
-  */
+/* Following functions Read / Write GPIO pins on the SPI bus. --------*/
 void SPI_SCK_1();
 void SPI_SCK_0();
 void SPI_MOSI_1();
@@ -267,7 +268,7 @@ void SPI_MOSI_0();
 void SPI_CS_1();
 void SPI_CS_0();
 GPIO_PinState SPI_READ_MISO();
-void spi_delay();
+void SPI_DELAY();
 void gpio_clockout_8_bits(uint8_t tx_data);
 uint8_t gpio_clockin_8_bits();
 
@@ -276,25 +277,97 @@ uint8_t gpio_clockin_8_bits();
 	*/
 void serial_print(char* message);
 
-/**
-  * @brief Following functions does spi operations.
-  */
+/* Following functions perform spi operations. ----------------------------------------------------------------------------------*/
 void spi_read_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_read_data);
 void spi_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data);
 
 
-/**
-  * @brief Following functions are nRF24-specific operations.
-  */
+/* Following functions are nRF24-specific operations. ---------------------------------------------------------------------------*/
+
 void nRF24_CE_1();
 void nRF24_CE_0();
 bool nRF24_verified_write_register(uint8_t reg, uint8_t num_bytes, uint8_t* p_writing_data);
-uint8_t nRF24_get_STATUS();
-uint8_t nRF24_get_FIFO_STATUS();
-uint8_t nRF24_get_CONFIG();
 bool nRF24_tx_self_test();
-void nRF24_mvt_configure_tx_mode();
-void nRF24_mvt_keep_sending();
-void nRF24_mvt_print_all_registers();
+void nRF24_config_tx_mode_primitive();
+void nRF24_config_tx_mode();
+void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* payload);
+
+void nRF24_config_enhanced_shockburst_tx_mode();
+
+/* Following functions are Getter / Setter Functions for register on nRF24-------------------------------------------------------*/
+void nRF24_print_all_registers();
+
+void nRF24_set_CONFIG(uint8_t mask_rx_dr, uint8_t mask_tx_ds, uint8_t mask_max_rt, uint8_t en_crc, uint8_t crco, uint8_t pwr_up, uint8_t prim_rx);
+uint8_t nRF24_get_CONFIG();
+
+void nRF24_set_EN_AA(uint8_t enaa_p5, uint8_t enaa_p4, uint8_t enaa_p3, uint8_t enaa_p2, uint8_t enaa_p1, uint8_t enaa_p0);
+uint8_t nRF24_get_EN_AA();
+
+void nRF24_set_EN_RXADDR(uint8_t erx_p5, uint8_t erx_p4, uint8_t erx_p3, uint8_t erx_p2, uint8_t erx_p1, uint8_t erx_p0);
+uint8_t nRF24_get_EN_RXADDR();
+
+void nRF24_set_SETUP_AW(uint8_t aw);
+uint8_t nRF24_get_SETUP_AW();
+
+void nRF24_set_SETUP_RETR(uint8_t ard, uint8_t arc);
+uint8_t nRF24_get_SETUP_RETR(uint8_t ARD, uint8_t ARC);
+
+void nRF24_set_RF_CH(uint8_t ch);
+uint8_t nRF24_get_RF_CH();
+
+void nRF24_set_RF_SETUP(uint8_t cont_wave, uint8_t rf_dr_low, uint8_t pll_lock, uint8_t rf_dr_high, uint8_t rf_pwr);
+uint8_t nRF24_get_RF_SETUP();
+
+void nRF24_clear_STATUS(uint8_t rx_dr, uint8_t tx_ds, uint8_t max_rt);
+uint8_t nRF24_get_STATUS(void);
+
+uint8_t nRF24_get_OBSERVE_TX();
+
+uint8_t nRF24_get_RPD();
+
+void nRF24_set_RX_ADDR_P0(uint8_t rx_addr_width, uint8_t* p_rx_addr_p0);
+void nRF24_get_RX_ADDR_P0(uint8_t rx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_RX_ADDR_P1(uint8_t rx_addr_width, uint8_t* p_rx_addr_p1);
+void nRF24_get_RX_ADDR_P1(uint8_t rx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_RX_ADDR_P2(uint8_t rx_addr_p2);
+void nRF24_get_RX_ADDR_P2(uint8_t rx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_RX_ADDR_P3(uint8_t rx_addr_p3);
+void nRF24_get_RX_ADDR_P3(uint8_t rx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_RX_ADDR_P4(uint8_t rx_addr_p4);
+void nRF24_get_RX_ADDR_P4(uint8_t rx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_RX_ADDR_P5(uint8_t rx_addr_p5);
+void nRF24_get_RX_ADDR_P5(uint8_t rx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_TX_ADDR(uint8_t tx_addr_width, uint8_t* p_tx_addr);
+void nRF24_get_TX_ADDR(uint8_t tx_addr_width, uint8_t* p_read_buffer);
+
+void nRF24_set_RX_PW_P0(uint8_t rx_pw_p0);
+uint8_t nRF24_get_RX_PW_P0();
+
+void nRF24_set_RX_PW_P1(uint8_t rx_pw_p1);
+uint8_t nRF24_get_RX_PW_P1();
+
+void nRF24_set_RX_PW_P2(uint8_t rx_pw_p2);
+uint8_t nRF24_get_RX_PW_P2();
+
+void nRF24_set_RX_PW_P3(uint8_t rx_pw_p3);
+uint8_t nRF24_get_RX_PW_P3();
+
+void nRF24_set_RX_PW_P4(uint8_t rx_pw_p4);
+uint8_t nRF24_get_RX_PW_P4();
+
+void nRF24_set_RX_PW_P5(uint8_t rx_pw_p5);
+uint8_t nRF24_get_RX_PW_P5();
+
+uint8_t nRF24_get_FIFO_STATUS();
+
+
+void nRF24_release_payload(uint8_t tx_payload_width, uint8_t* payload);
+
 #endif /* __NRF24_H */
 

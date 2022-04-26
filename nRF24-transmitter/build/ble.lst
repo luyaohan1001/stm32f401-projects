@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccGJP4sM.s 			page 1
+ARM GAS  /tmp/cc3wozPN.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
   43 0004 1519     		adds	r5, r2, r4
   44 0006 0235     		adds	r5, r5, #2
   45 0008 1B2D     		cmp	r5, #27
-ARM GAS  /tmp/ccGJP4sM.s 			page 2
+ARM GAS  /tmp/cc3wozPN.s 			page 2
 
 
   46 000a 17DC     		bgt	.L5
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
   89 003a F0BD     		pop	{r4, r5, r6, r7, pc}
   90              	.LVL10:
   91              	.L5:
-ARM GAS  /tmp/ccGJP4sM.s 			page 3
+ARM GAS  /tmp/cc3wozPN.s 			page 3
 
 
   14:Src/ble.c     **** 	
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  136 001e 064A     		ldr	r2, .L10
  137 0020 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
  138 0022 02AA     		add	r2, sp, #8
-ARM GAS  /tmp/ccGJP4sM.s 			page 4
+ARM GAS  /tmp/cc3wozPN.s 			page 4
 
 
  139 0024 02F8013D 		strb	r3, [r2, #-1]!
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
   60:Src/ble.c     **** {
  169              		.loc 1 60 0
  170              		.cfi_startproc
-ARM GAS  /tmp/ccGJP4sM.s 			page 5
+ARM GAS  /tmp/cc3wozPN.s 			page 5
 
 
  171              		@ args = 0, pretend = 0, frame = 8
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
   84:Src/ble.c     **** 	// ble->buffer.pdu_type = 0x42;    // PDU type: ADV_NONCONN_IND, TX address is random
   85:Src/ble.c     **** 	ble->buffer.pdu_type = 0x02;
  202              		.loc 1 85 0
-ARM GAS  /tmp/ccGJP4sM.s 			page 6
+ARM GAS  /tmp/cc3wozPN.s 			page 6
 
 
  203 001e 0223     		movs	r3, #2
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  244 0052 F3E7     		b	.L12
  245              		.cfi_endproc
  246              	.LFE134:
-ARM GAS  /tmp/ccGJP4sM.s 			page 7
+ARM GAS  /tmp/cc3wozPN.s 			page 7
 
 
  248              		.section	.text.ble_swapbuf,"ax",%progbits
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  261              		@ frame_needed = 0, uses_anonymous_args = 0
  262              		@ link register save eliminated.
  263              	.LVL20:
-ARM GAS  /tmp/ccGJP4sM.s 			page 8
+ARM GAS  /tmp/cc3wozPN.s 			page 8
 
 
  264 0000 10B4     		push	{r4}
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  297 0016 13F0800F 		tst	r3, #128
  298 001a F3D1     		bne	.L27
  146:Src/ble.c     **** 
-ARM GAS  /tmp/ccGJP4sM.s 			page 9
+ARM GAS  /tmp/cc3wozPN.s 			page 9
 
 
  299              		.loc 1 146 0
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  341              		.loc 1 154 0 is_stmt 0 discriminator 1
  342 0056 42F04002 		orr	r2, r2, #64
  343              	.LVL34:
-ARM GAS  /tmp/ccGJP4sM.s 			page 10
+ARM GAS  /tmp/cc3wozPN.s 			page 10
 
 
  344              	.L24:
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  385              		.loc 1 170 0
  386 0002 0446     		mov	r4, r0
  387              	.LVL39:
-ARM GAS  /tmp/ccGJP4sM.s 			page 11
+ARM GAS  /tmp/cc3wozPN.s 			page 11
 
 
  171:Src/ble.c     **** 
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  184:Src/ble.c     **** 		}
  185:Src/ble.c     **** 		*(buf++) ^= res;
  424              		.loc 1 185 0
-ARM GAS  /tmp/ccGJP4sM.s 			page 12
+ARM GAS  /tmp/cc3wozPN.s 			page 12
 
 
  425 0028 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  473              		@ link register save eliminated.
  474              	.LVL54:
  475 0000 F0B4     		push	{r4, r5, r6, r7}
-ARM GAS  /tmp/ccGJP4sM.s 			page 13
+ARM GAS  /tmp/cc3wozPN.s 			page 13
 
 
  476              	.LCFI12:
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  226:Src/ble.c     **** 			dst[2] >>= 1;
  497              		.loc 1 226 0
  498 000c 5B08     		lsrs	r3, r3, #1
-ARM GAS  /tmp/ccGJP4sM.s 			page 14
+ARM GAS  /tmp/cc3wozPN.s 			page 14
 
 
  499 000e 9370     		strb	r3, [r2, #2]
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  539              		.loc 1 219 0
  540 0046 5908     		lsrs	r1, r3, #1
  541 0048 5170     		strb	r1, [r2, #1]
-ARM GAS  /tmp/ccGJP4sM.s 			page 15
+ARM GAS  /tmp/cc3wozPN.s 			page 15
 
 
  221:Src/ble.c     **** 			{
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  586              		.cfi_restore 4
  587              		.cfi_def_cfa_offset 0
  588              	.LVL68:
-ARM GAS  /tmp/ccGJP4sM.s 			page 16
+ARM GAS  /tmp/cc3wozPN.s 			page 16
 
 
  589 006e 7047     		bx	lr
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  640 0024 FFF7FEFF 		bl	ble_whiten
  641              	.LVL73:
  117:Src/ble.c     **** 	
-ARM GAS  /tmp/ccGJP4sM.s 			page 17
+ARM GAS  /tmp/cc3wozPN.s 			page 17
 
 
  642              		.loc 1 117 0
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  687 0064 11B0     		add	sp, sp, #68
  688              	.LCFI16:
  689              		.cfi_def_cfa_offset 20
-ARM GAS  /tmp/ccGJP4sM.s 			page 18
+ARM GAS  /tmp/cc3wozPN.s 			page 18
 
 
  690              		@ sp needed
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  742              	.LVL85:
   48:Src/ble.c     **** 			return -1;
  743              		.loc 1 48 0
-ARM GAS  /tmp/ccGJP4sM.s 			page 19
+ARM GAS  /tmp/cc3wozPN.s 			page 19
 
 
  744 001c 20B9     		cbnz	r0, .L61
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  791              		.cfi_def_cfa_offset 24
  792 0004 0646     		mov	r6, r0
  243:Src/ble.c     **** 
-ARM GAS  /tmp/ccGJP4sM.s 			page 20
+ARM GAS  /tmp/cc3wozPN.s 			page 20
 
 
  244:Src/ble.c     **** 	ble->name = _name;
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  261:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
  830              		.loc 1 261 0
  831 0048 2246     		mov	r2, r4
-ARM GAS  /tmp/ccGJP4sM.s 			page 21
+ARM GAS  /tmp/cc3wozPN.s 			page 21
 
 
  832 004a 0121     		movs	r1, #1
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  872              		.loc 1 275 0
  873 0090 0623     		movs	r3, #6
  874 0092 8DF80730 		strb	r3, [sp, #7]
-ARM GAS  /tmp/ccGJP4sM.s 			page 22
+ARM GAS  /tmp/cc3wozPN.s 			page 22
 
 
  276:Src/ble.c     ****   nRF24_verified_write_register(W_REGISTER_MASK + CONFIG, 1, &writing_byte);
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  920              	.LC3:
  921 001c 0A00     		.ascii	"\012\000"
  922              		.section	.rodata.channel,"a",%progbits
-ARM GAS  /tmp/ccGJP4sM.s 			page 23
+ARM GAS  /tmp/cc3wozPN.s 			page 23
 
 
  923              		.align	2
@@ -1354,39 +1354,39 @@ ARM GAS  /tmp/ccGJP4sM.s 			page 1
  957              		.file 17 "Inc/ble.h"
  958              		.file 18 "/usr/include/newlib/stdio.h"
  959              		.file 19 "/usr/include/newlib/string.h"
-ARM GAS  /tmp/ccGJP4sM.s 			page 24
+ARM GAS  /tmp/cc3wozPN.s 			page 24
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 ble.c
-     /tmp/ccGJP4sM.s:18     .text.ble_addChunk:0000000000000000 $t
-     /tmp/ccGJP4sM.s:25     .text.ble_addChunk:0000000000000000 ble_addChunk
-     /tmp/ccGJP4sM.s:101    .text.ble_hopChannel:0000000000000000 $t
-     /tmp/ccGJP4sM.s:108    .text.ble_hopChannel:0000000000000000 ble_hopChannel
-     /tmp/ccGJP4sM.s:155    .text.ble_hopChannel:0000000000000038 $d
-     /tmp/ccGJP4sM.s:160    .text.ble_preparePacket:0000000000000000 $t
-     /tmp/ccGJP4sM.s:167    .text.ble_preparePacket:0000000000000000 ble_preparePacket
-     /tmp/ccGJP4sM.s:249    .text.ble_swapbuf:0000000000000000 $t
-     /tmp/ccGJP4sM.s:256    .text.ble_swapbuf:0000000000000000 ble_swapbuf
-     /tmp/ccGJP4sM.s:366    .text.ble_whiten:0000000000000000 $t
-     /tmp/ccGJP4sM.s:373    .text.ble_whiten:0000000000000000 ble_whiten
-     /tmp/ccGJP4sM.s:455    .text.ble_whiten:0000000000000044 $d
-     /tmp/ccGJP4sM.s:460    .text.ble_crc:0000000000000000 $t
-     /tmp/ccGJP4sM.s:467    .text.ble_crc:0000000000000000 ble_crc
-     /tmp/ccGJP4sM.s:594    .text.ble_transmitPacket:0000000000000000 $t
-     /tmp/ccGJP4sM.s:601    .text.ble_transmitPacket:0000000000000000 ble_transmitPacket
-     /tmp/ccGJP4sM.s:696    .text.ble_transmitPacket:0000000000000068 $d
-     /tmp/ccGJP4sM.s:703    .text.ble_advertise:0000000000000000 $t
-     /tmp/ccGJP4sM.s:710    .text.ble_advertise:0000000000000000 ble_advertise
-     /tmp/ccGJP4sM.s:768    .text.ble_begin:0000000000000000 $t
-     /tmp/ccGJP4sM.s:775    .text.ble_begin:0000000000000000 ble_begin
-     /tmp/ccGJP4sM.s:897    .text.ble_begin:00000000000000b0 $d
-     /tmp/ccGJP4sM.s:936    .rodata.frequency:0000000000000000 frequency
-     /tmp/ccGJP4sM.s:927    .rodata.channel:0000000000000000 channel
-     /tmp/ccGJP4sM.s:905    .rodata:0000000000000000 $d
-     /tmp/ccGJP4sM.s:913    .rodata.ble_transmitPacket.str1.4:0000000000000000 $d
-     /tmp/ccGJP4sM.s:923    .rodata.channel:0000000000000000 $d
-     /tmp/ccGJP4sM.s:932    .rodata.frequency:0000000000000000 $d
+     /tmp/cc3wozPN.s:18     .text.ble_addChunk:0000000000000000 $t
+     /tmp/cc3wozPN.s:25     .text.ble_addChunk:0000000000000000 ble_addChunk
+     /tmp/cc3wozPN.s:101    .text.ble_hopChannel:0000000000000000 $t
+     /tmp/cc3wozPN.s:108    .text.ble_hopChannel:0000000000000000 ble_hopChannel
+     /tmp/cc3wozPN.s:155    .text.ble_hopChannel:0000000000000038 $d
+     /tmp/cc3wozPN.s:160    .text.ble_preparePacket:0000000000000000 $t
+     /tmp/cc3wozPN.s:167    .text.ble_preparePacket:0000000000000000 ble_preparePacket
+     /tmp/cc3wozPN.s:249    .text.ble_swapbuf:0000000000000000 $t
+     /tmp/cc3wozPN.s:256    .text.ble_swapbuf:0000000000000000 ble_swapbuf
+     /tmp/cc3wozPN.s:366    .text.ble_whiten:0000000000000000 $t
+     /tmp/cc3wozPN.s:373    .text.ble_whiten:0000000000000000 ble_whiten
+     /tmp/cc3wozPN.s:455    .text.ble_whiten:0000000000000044 $d
+     /tmp/cc3wozPN.s:460    .text.ble_crc:0000000000000000 $t
+     /tmp/cc3wozPN.s:467    .text.ble_crc:0000000000000000 ble_crc
+     /tmp/cc3wozPN.s:594    .text.ble_transmitPacket:0000000000000000 $t
+     /tmp/cc3wozPN.s:601    .text.ble_transmitPacket:0000000000000000 ble_transmitPacket
+     /tmp/cc3wozPN.s:696    .text.ble_transmitPacket:0000000000000068 $d
+     /tmp/cc3wozPN.s:703    .text.ble_advertise:0000000000000000 $t
+     /tmp/cc3wozPN.s:710    .text.ble_advertise:0000000000000000 ble_advertise
+     /tmp/cc3wozPN.s:768    .text.ble_begin:0000000000000000 $t
+     /tmp/cc3wozPN.s:775    .text.ble_begin:0000000000000000 ble_begin
+     /tmp/cc3wozPN.s:897    .text.ble_begin:00000000000000b0 $d
+     /tmp/cc3wozPN.s:936    .rodata.frequency:0000000000000000 frequency
+     /tmp/cc3wozPN.s:927    .rodata.channel:0000000000000000 channel
+     /tmp/cc3wozPN.s:905    .rodata:0000000000000000 $d
+     /tmp/cc3wozPN.s:913    .rodata.ble_transmitPacket.str1.4:0000000000000000 $d
+     /tmp/cc3wozPN.s:923    .rodata.channel:0000000000000000 $d
+     /tmp/cc3wozPN.s:932    .rodata.frequency:0000000000000000 $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

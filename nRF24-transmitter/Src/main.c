@@ -38,7 +38,6 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define NRF24_DEBUG
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -90,8 +89,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  // nRF24_tx_self_test();
-  nRF24_mvt_configure_tx_mode();
+  // nRF24_mvt_tx_self_test();
+  // nRF24_config_tx_mode_primitive();
+	nRF24_config_enhanced_shockburst_tx_mode();
+	// nRF24_print_all_registers();
 
 	// ble - 1. ble_struct ble;
 	// ble - 2. ble_begin(&ble,"nRF24_BLE");
@@ -104,12 +105,20 @@ int main(void)
   while (1)
   {
       
-    // HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-    // HAL_Delay (200);
-    // HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-    // HAL_Delay (200);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+    HAL_Delay (200);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+    HAL_Delay (200);
 
-    nRF24_mvt_keep_sending();
+    HAL_Delay (1000);
+
+
+ 		uint8_t payload[32] = {0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE,
+													0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE,
+													0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE,
+													0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE
+		};
+    nRF24_send_packet(32, payload);
 
 		// send advertise packet
 		// ble - 4. ble_advertise(&ble,0xff,0,0);
