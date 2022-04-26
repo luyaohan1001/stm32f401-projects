@@ -966,6 +966,11 @@ void nRF24_set_RF_SETUP(uint8_t cont_wave, uint8_t rf_dr_low, uint8_t pll_lock, 
   nRF24_verified_write_register(W_REGISTER_MASK + RF_SETUP, 1, &writing_byte);
 }
 
+/**
+  * @brief   Read <RF_SETUP> register from nRF24L01+.
+  * @param   None.
+  * @retval  <RF_SETUP> register value.
+  */
 uint8_t nRF24_get_RF_SETUP()
 {
   uint8_t read_byte;
@@ -1050,7 +1055,6 @@ void nRF24_set_RX_ADDR_P0(uint8_t rx_addr_width, uint8_t* p_rx_addr_p0)
   nRF24_verified_write_register(W_REGISTER_MASK + RX_ADDR_P0, rx_addr_width, p_rx_addr_p0);
 }
 
-
 /**
   * @brief      Read <RX_ADDR_P0> register from nRF24.
   * @param[in]  rx_addr_width The width of RX address. Needs to be consistent with SET_AW.
@@ -1061,7 +1065,6 @@ void nRF24_get_RX_ADDR_P0(uint8_t rx_addr_width, uint8_t* p_read_buffer)
 {
   spi_read_register(R_REGISTER_MASK + RX_ADDR_P0, rx_addr_width, p_read_buffer);
 }
-
 
 /**
   * @brief  Set RX (receive) address for data pipe 1. Least Significant Byte written first.
@@ -1229,7 +1232,7 @@ void nRF24_set_TX_ADDR(uint8_t tx_addr_width, uint8_t* p_tx_addr)
   */
 void nRF24_get_TX_ADDR(uint8_t tx_addr_width, uint8_t* p_read_buffer) 
 {
-  spi_read_register(R_REGISTER_MASK + RX_ADDR_P5, tx_addr_width, p_read_buffer);
+  spi_read_register(R_REGISTER_MASK + TX_ADDR, tx_addr_width, p_read_buffer);
 }
 
 /**
@@ -1401,9 +1404,9 @@ void nRF24_set_RX_PW_P5(uint8_t rx_pw_p5)
 }
 
 /**
-  * @brief      Read <RX_PW_P5> register from nRF24.
-  * @param      None.
-  * @retval     <RX_PW_P5> register value.
+  * @brief  Read <RX_PW_P5> register from nRF24.
+  * @param  None.
+  * @retval <RX_PW_P5> register value.
   */
 uint8_t nRF24_get_RX_PW_P5() 
 {
@@ -1414,10 +1417,10 @@ uint8_t nRF24_get_RX_PW_P5()
 
 
 /**
-  * @brief      Read 'FIFO_STATUS' register from nRF24.
-  * @param      None.
-  * @retval     FIFO_STATUS register value.
-  * @note  Following masks can be used:
+  * @brief  Read 'FIFO_STATUS' register from nRF24.
+  * @param  None.
+  * @retval FIFO_STATUS register value.
+  * @note   Following masks can be used:
   *  TX_REUSE_READMASK  
   *  TX_EMPTY_READMASK  
   *  RX_FULL_READMASK 
@@ -1433,7 +1436,7 @@ uint8_t nRF24_get_FIFO_STATUS()
 /**
   * @brief Write the payload (data to transfer) to the TX FIFO.
   * @param tx_payload_width Length of the payload in number of bytes.
-              (!) tx_payload_width MUST be the same value as the receiver's <RX_PW_Px> to receive. x being the channel number.
+              (!) tx_payload_width MUST be the same value as the receiver's <RX_PW_Px>, x being the channel number.
   * @param payload  Actual data to transfer.
   * @retval None.
   */

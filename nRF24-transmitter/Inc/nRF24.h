@@ -297,73 +297,96 @@ void nRF24_config_enhanced_shockburst_tx_mode();
 /* Following functions are Getter / Setter Functions for register on nRF24-------------------------------------------------------*/
 void nRF24_print_all_registers();
 
+/* Configuration Register <CONFIG> */
 void nRF24_set_CONFIG(uint8_t mask_rx_dr, uint8_t mask_tx_ds, uint8_t mask_max_rt, uint8_t en_crc, uint8_t crco, uint8_t pwr_up, uint8_t prim_rx);
 uint8_t nRF24_get_CONFIG();
 
+/* Enable Auto-Acknowledgement (Enhanced ShockBurst) <EN_AA>*/
 void nRF24_set_EN_AA(uint8_t enaa_p5, uint8_t enaa_p4, uint8_t enaa_p3, uint8_t enaa_p2, uint8_t enaa_p1, uint8_t enaa_p0);
 uint8_t nRF24_get_EN_AA();
 
+/* Enable RX Addresses <EN_RXADDR>*/
 void nRF24_set_EN_RXADDR(uint8_t erx_p5, uint8_t erx_p4, uint8_t erx_p3, uint8_t erx_p2, uint8_t erx_p1, uint8_t erx_p0);
 uint8_t nRF24_get_EN_RXADDR();
 
+/* Setup of Address Widths <SETUP_AW>*/
 void nRF24_set_SETUP_AW(uint8_t aw);
 uint8_t nRF24_get_SETUP_AW();
 
+/* Setup of Automatic Retransmission (Enhanced ShockBurst) <SETUP_RETR> */
 void nRF24_set_SETUP_RETR(uint8_t ard, uint8_t arc);
 uint8_t nRF24_get_SETUP_RETR(uint8_t ARD, uint8_t ARC);
 
+/* RF Channel <RH_CH> Carrier Frequency = 2.4GHz + RF_CH = (2400 + RF_CH) MHz. */
 void nRF24_set_RF_CH(uint8_t ch);
 uint8_t nRF24_get_RF_CH();
 
+/* RF Setup Register, data rate, power, etc.. <RF_SETUP> */
 void nRF24_set_RF_SETUP(uint8_t cont_wave, uint8_t rf_dr_low, uint8_t pll_lock, uint8_t rf_dr_high, uint8_t rf_pwr);
 uint8_t nRF24_get_RF_SETUP();
 
+/* Status Register <STATUS> */
 void nRF24_clear_STATUS(uint8_t rx_dr, uint8_t tx_ds, uint8_t max_rt);
 uint8_t nRF24_get_STATUS(void);
 
 uint8_t nRF24_get_OBSERVE_TX();
 
+/* Received Power Detector <RPD> */
 uint8_t nRF24_get_RPD();
 
+/* Receive Address for pipe 0 */
 void nRF24_set_RX_ADDR_P0(uint8_t rx_addr_width, uint8_t* p_rx_addr_p0);
 void nRF24_get_RX_ADDR_P0(uint8_t rx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Address for pipe 1 */
 void nRF24_set_RX_ADDR_P1(uint8_t rx_addr_width, uint8_t* p_rx_addr_p1);
 void nRF24_get_RX_ADDR_P1(uint8_t rx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Address for pipe 2 */
 void nRF24_set_RX_ADDR_P2(uint8_t rx_addr_p2);
 void nRF24_get_RX_ADDR_P2(uint8_t rx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Address for pipe 3 */
 void nRF24_set_RX_ADDR_P3(uint8_t rx_addr_p3);
 void nRF24_get_RX_ADDR_P3(uint8_t rx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Address for pipe 4 */
 void nRF24_set_RX_ADDR_P4(uint8_t rx_addr_p4);
 void nRF24_get_RX_ADDR_P4(uint8_t rx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Address for pipe 5 */
 void nRF24_set_RX_ADDR_P5(uint8_t rx_addr_p5);
 void nRF24_get_RX_ADDR_P5(uint8_t rx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Address for pipe 1 */
 void nRF24_set_TX_ADDR(uint8_t tx_addr_width, uint8_t* p_tx_addr);
 void nRF24_get_TX_ADDR(uint8_t tx_addr_width, uint8_t* p_read_buffer);
 
+/* Receive Payload Width on Pipe 0 */
 void nRF24_set_RX_PW_P0(uint8_t rx_pw_p0);
 uint8_t nRF24_get_RX_PW_P0();
 
+/* Receive Payload Width on Pipe 1 */
 void nRF24_set_RX_PW_P1(uint8_t rx_pw_p1);
 uint8_t nRF24_get_RX_PW_P1();
 
+/* Receive Payload Width on Pipe 2 */
 void nRF24_set_RX_PW_P2(uint8_t rx_pw_p2);
 uint8_t nRF24_get_RX_PW_P2();
 
+/* Receive Payload Width on Pipe 3 */
 void nRF24_set_RX_PW_P3(uint8_t rx_pw_p3);
 uint8_t nRF24_get_RX_PW_P3();
 
+/* Receive Payload Width on Pipe 4 */
 void nRF24_set_RX_PW_P4(uint8_t rx_pw_p4);
 uint8_t nRF24_get_RX_PW_P4();
 
+/* Receive Payload Width on Pipe 5 */
 void nRF24_set_RX_PW_P5(uint8_t rx_pw_p5);
 uint8_t nRF24_get_RX_PW_P5();
 
+/* Status on TX/RX Fifio <FIFO_STATUS> */
 uint8_t nRF24_get_FIFO_STATUS();
 
 
