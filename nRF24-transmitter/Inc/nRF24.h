@@ -294,6 +294,10 @@ void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* payload);
 void nRF24_config_normal_tx_mode();
 void nRF24_config_enhanced_shockburst_tx_mode();
 
+
+void nRF24_config_normal_rx_mode();
+void nRF24_receive_packet();
+
 /* Following functions are Getter / Setter Functions for register on nRF24-------------------------------------------------------*/
 void nRF24_print_all_registers();
 
