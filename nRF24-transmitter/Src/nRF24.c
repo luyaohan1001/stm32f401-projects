@@ -341,20 +341,6 @@ void nRF24_CE_0()
 
 
 /**
-  * @TODO Convert an array of hex bytes to string.
-  */
-char* bytearray_to_string(uint8_t num_bytes, uint8_t* byte_array, char* result_string)
-{
-  char buf;
-  for (int i = 0; i < num_bytes; ++i)
-  {
-    sprintf(&buf, "%#02x", byte_array[i]);
-    strcat(result_string, &buf);
-  }
-  return result_string;
-}
-
-/**
   * @brief      Write to a register on nRF24L01+ through SPI. Read the same registers after write to confirm that the write has been successful.
   *               This function seems to waste cycles but SPI communication issues expose immediately.
   * @param[in]  reg            The target register to write value to.
@@ -544,7 +530,7 @@ void nRF24_tx_self_test()
 
 
 /**
-  * @brief  Make nRF24 send data with primitive methods.
+  * @brief  Send packet with nRF24.
   * @param  tx_payload_width. Length of data packet to send to the receiver. 
               (!) tx_payload_width Must be the same value as the receiver's <RX_PW_Px>. x being the channel number.
   * @param  payload Pointer to the actual data packet being sent to the receiver.
@@ -605,6 +591,7 @@ void nRF24_send_packet(uint8_t tx_payload_width, uint8_t* p_payload)
   *           The TX nRF24 may be successfully sending data, but RX nRF24 receives none.
   * @param  None.
   * @retval None.
+  * @note   The states (marked such as [TX Mode]) are found in "nRF24L01+ Product Spefication" -- 6.1.1 State Diagram.
   */
 void nRF24_config_normal_tx_mode() 
 {
@@ -649,6 +636,7 @@ void nRF24_config_normal_tx_mode()
   *         However, trasmit is successful only when an RX nRF, also with Enhanced ShockBurst turned on, 
   *           send Acknowledgement to the TX nRF.
   *         The TX nRF, in order to receive that Acknowledgement signal, needs to turn on receive on Pipe 0.
+  *         The states (marked such as [TX Mode]) are found in "nRF24L01+ Product Spefication" -- 6.1.1 State Diagram.
   */
 void nRF24_config_enhanced_shockburst_tx_mode() 
 {
@@ -677,9 +665,110 @@ void nRF24_config_enhanced_shockburst_tx_mode()
 }
 
 
+/**
+  * @brief  Configure nRF24L01+ in RX mode without Enhanced ShockBurst.
+  *           Without Enhanced ShockBurst, Auto Acknowledgement and Auto-Retransmission is masked off.
+	*           Make sure to setup a TX nRF24 first and keep transmitting so we can test if RX nRF24 is working.
+  *         (!) Auto Acknowledgement must also be masked off on the TX nRF24 in order for RX to receive data.
+  *           If TX and RX nRF24 module has different setting in parameters (expect for PRIM_RX), 
+  *           The TX nRF24 may be successfully sending data, but RX nRF24 receives none.
+  * @param  None.
+  * @retval None.
+  * @note   The states (marked such as [TX Mode]) are found in "nRF24L01+ Product Spefication" -- 6.1.1 State Diagram.
+  */
+void nRF24_config_normal_rx_mode() 
+{
+    nRF24_CE_0();
+
+    /* Set Address Width as 5 bytes. On the Receiver side, set RX_ADDR_P0 with same value. */
+    nRF24_set_SETUP_AW(SETUP_AW_MASK5bytes);
+ 
+    /* Set TX address to nRF24. */
+    uint8_t RX_ADDRESS[5] = {0x99,0xAA,0xBB,0xCC,0xDD};  /* 5 byte RX address, need to be same as TX address on the Transmitter NRF24. */
+    nRF24_set_RX_ADDR_P0(5, RX_ADDRESS); 
+
+    /* Disable Auto-Acknowledgement on Pipe 5 - Pipe 0, this also disables Enhanced ShockBurst. */
+    nRF24_set_EN_AA(ENAA_P5_MASK0, ENAA_P4_MASK0, ENAA_P3_MASK0, ENAA_P2_MASK0, ENAA_P1_MASK0, ENAA_P0_MASK0);
+
+    /* Enable only RX address on Pipe 0 */
+    nRF24_set_EN_RXADDR(ERX_P5_MASK0, ERX_P4_MASK0, ERX_P3_MASK0, ERX_P2_MASK0, ERX_P1_MASK0, ERX_P0_MASK1);
+
+    /* Disable Auto-Retransmission, this also disables Enhanced ShockBurst. */
+    nRF24_set_SETUP_RETR(ARD_MASKDEFAULT, ARC_MASK0);
+
+    /* Set Frquency Channel. Carrier Frequency = 2.4GHz + RF_CH = (2400 + RF_CH) = 2440 MHz. */
+    nRF24_set_RF_CH(40);
+
+    /* Set 'Continuous Carrier Transmit', RF Data Rate, and RF TX Power */
+    nRF24_set_RF_SETUP(CONT_WAVE_MASKDEFAULT, RF_DR_LOW_MASKDEFAULT, PLL_LOCK_MASKDEFAULT, RF_DR_HIGH_MASKDEFAULT, RF_PWR_MASKNEG0dBm);
+
+		/* Set receive payload width = 32. */
+		nRF24_set_RX_PW_P0(32);
+  
+    /* Set IRQ Masks, CRC, Power-Up and select RX mode. */
+    nRF24_set_CONFIG(MASK_RX_DR_MASKDEFAULT, MASK_TX_DS_MASKDEFAULT, MASK_MAX_RT_MASKDEFAULT, EN_CRC_MASK1, CRCO_MASK1, PWR_UP_MASK1, PRIM_RX_MASK1);
+
+    /* CE is set to 1, nRF24 transition from [Standby-I] to active [RX Mode]. */
+		nRF24_CE_1();
+		/* nRF24 starts hearing as RX. */
+}
 
 
 
+/**
+  * @TODO Convert an array of hex bytes to string.
+  */
+void print_bytearray(uint8_t num_bytes, uint8_t* byte_array)
+{
+  char buf;
+  for (int i = 0; i < num_bytes; ++i)
+  {
+    sprintf(&buf, "%#02x", byte_array[i]);
+		serial_print(&buf);
+		/* Print delimiter */
+		serial_print("-");
+  }
+	serial_print("\n");
+}
+
+/**
+	* @brief  Read received packet from RX FIFO.
+	* @param  None.
+	* @retval None.
+	* @note   This function polls the status register and determined whether there's data received available.
+	*/
+void nRF24_receive_packet() 
+{
+	uint8_t RX_WIDTH = 32;
+  uint8_t payload[RX_WIDTH];
+  char message[64];
+
+  uint8_t nRF24_status = nRF24_get_STATUS();
+
+	/* Check if RX_DR is set: RX Data Ready*/
+  if (nRF24_status & RX_DR_READMASK){
+		/* Transition from [RX Mode] to [Standby-I] */
+    nRF24_CE_0(); 
+
+		/* Read received payload */
+    spi_read_register(R_RX_PAYLOAD, RX_WIDTH, payload); 
+
+		#ifdef NRF24_DEBUG
+		strcpy(message, "> Data received: ");
+		serial_print(message);
+		print_bytearray(32, payload);
+		#endif
+
+		/* Clear status register */
+    nRF24_clear_STATUS(RX_DR_MASK1, TX_DS_MASK1, MAX_RT_MASK1);
+    nRF24_CE_1();
+  }else {
+		#ifdef NRF24_DEBUG
+		strcpy(message, "No data has been received.\n");
+		serial_print(message);
+		#endif
+  }
+}
 
 
 /**
@@ -893,8 +982,6 @@ void nRF24_set_SETUP_RETR(uint8_t ard, uint8_t arc)
   writing_byte |= ard | arc;
   nRF24_verified_write_register(W_REGISTER_MASK + SETUP_RETR, 1, &writing_byte);
 }
-
-
 
 /**
   * @brief      Read <SETUP_RETR> register from nRF24L01+.

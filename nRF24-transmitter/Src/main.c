@@ -90,7 +90,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   // nRF24_tx_self_test();
-  nRF24_config_normal_tx_mode();
+  // nRF24_config_normal_tx_mode();
+  nRF24_config_normal_rx_mode();
 	// nRF24_config_enhanced_shockburst_tx_mode();
 	// nRF24_print_all_registers();
 
@@ -110,16 +111,16 @@ int main(void)
     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
     HAL_Delay (200);
 
-    HAL_Delay (1000);
-
 
  		uint8_t payload[32] = {0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE,
 													0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE,
 													0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE,
 													0xC0, 0xC0, 0xCA, 0xFE, 0xC0, 0xC0, 0xCA, 0xFE
 		};
-    nRF24_send_packet(32, payload);
+    // nRF24_send_packet(32, payload);
+		nRF24_receive_packet();
 
+    HAL_Delay (1000);
 		// send advertise packet
 		// ble - 4. ble_advertise(&ble,0xff,0,0);
 		// hop on frequency
