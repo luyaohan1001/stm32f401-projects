@@ -3,7 +3,7 @@
   * @file      :     nRF24.h
   * @author    :     Luyao Han
   * @email     :     luyaohan1001@gmail.com
-  * @brief     :     C library header for Nordic nRF24L01 2.4GHz wireless transceiver.
+  * @brief     :     C library for Nordic nRF24L01+ (or nRF24L01p) 2.4GHz wireless transceiver.
   * @date      :     04-21-2022
   * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
   ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
