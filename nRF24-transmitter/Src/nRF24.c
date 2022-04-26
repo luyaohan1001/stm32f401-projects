@@ -6,6 +6,12 @@
   * @brief     :     C library for Nordic nRF24L01+ (or nRF24L01p) 2.4GHz wireless transceiver.
   * @date      :     04-21-2022
   * @note      :     The library strictly follows "nRF24L01+ Single Chip 2.4GHz Transceiver Product Specification v1.0" released by NORDIC SEMICONDUCTOR in 2008.
+	*                  On the fresh import of this library. How do I get nRF24L01+ working?
+	*                    1. Setup debugger such as OpenOCD. So you can single step debug.
+	*                    2. Setup UART serial connection. Make sure "Hello World\n" printing is possible.
+	*                    3. TODO: Modify the platform dependent functions labeled in nRF24.h (< 2 mins.) 
+	*                    3. Without a RX nRF24, setup a TX nRF24 and run nRF24_tx_self_test();
+	*                    4. Finally if we get TX nRF24 working, work on a RX nRF24 module.
   * Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.
   ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********  */
 
