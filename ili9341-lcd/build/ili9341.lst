@@ -1,0 +1,3585 @@
+ARM GAS  /tmp/ccS65nG0.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"ili9341.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LCD_RST_1,"ax",%progbits
+  18              		.align	1
+  19              		.global	LCD_RST_1
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	LCD_RST_1:
+  26              	.LFB131:
+  27              		.file 1 "libs/ili9341/ili9341.c"
+   1:libs/ili9341/ili9341.c **** #include "ili9341.h"
+   2:libs/ili9341/ili9341.c **** 
+   3:libs/ili9341/ili9341.c **** /* Includes ---------------------------------------------------------------------------------------
+   4:libs/ili9341/ili9341.c **** 
+   5:libs/ili9341/ili9341.c **** 
+   6:libs/ili9341/ili9341.c **** /* Macro Define -----------------------------------------------------------------------------------
+   7:libs/ili9341/ili9341.c **** 
+   8:libs/ili9341/ili9341.c **** 
+   9:libs/ili9341/ili9341.c **** 
+  10:libs/ili9341/ili9341.c **** /* gpio physical layer ----------------------------------------------------------------------------
+  11:libs/ili9341/ili9341.c **** /* GPIO Defined on STM32F401 */
+  12:libs/ili9341/ili9341.c **** /* LCD_RST   PC1 */
+  13:libs/ili9341/ili9341.c **** /* LCD_CS    PB0 */
+  14:libs/ili9341/ili9341.c **** /* LCD_RS (D/CX)    PA4 */
+  15:libs/ili9341/ili9341.c **** /* LCD_WR    PA1 */
+  16:libs/ili9341/ili9341.c **** /* LCD_RD    PA0 */
+  17:libs/ili9341/ili9341.c **** 
+  18:libs/ili9341/ili9341.c **** /* LCD_D2 PA10*/
+  19:libs/ili9341/ili9341.c **** /* LCD_D3 PB3*/
+  20:libs/ili9341/ili9341.c **** /* LCD_D4 PB5*/
+  21:libs/ili9341/ili9341.c **** /* LCD_D5 PB4*/
+  22:libs/ili9341/ili9341.c **** /* LCD_D6 PB10*/
+  23:libs/ili9341/ili9341.c **** /* LCD_D7 PA8*/
+  24:libs/ili9341/ili9341.c **** /* LCD_D0 PA9*/
+  25:libs/ili9341/ili9341.c **** /* LCD_D1 PC7*/
+  26:libs/ili9341/ili9341.c **** 
+  27:libs/ili9341/ili9341.c **** 
+  28:libs/ili9341/ili9341.c **** void LCD_RST_1()
+  29:libs/ili9341/ili9341.c **** {
+  28              		.loc 1 29 0
+  29              		.cfi_startproc
+ARM GAS  /tmp/ccS65nG0.s 			page 2
+
+
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 08B5     		push	{r3, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+  30:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);  
+  37              		.loc 1 30 0
+  38 0002 0122     		movs	r2, #1
+  39 0004 0221     		movs	r1, #2
+  40 0006 0248     		ldr	r0, .L3
+  41 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  42              	.LVL0:
+  43 000c 08BD     		pop	{r3, pc}
+  44              	.L4:
+  45 000e 00BF     		.align	2
+  46              	.L3:
+  47 0010 00080240 		.word	1073874944
+  48              		.cfi_endproc
+  49              	.LFE131:
+  51              		.section	.text.LCD_RST_0,"ax",%progbits
+  52              		.align	1
+  53              		.global	LCD_RST_0
+  54              		.syntax unified
+  55              		.thumb
+  56              		.thumb_func
+  57              		.fpu fpv4-sp-d16
+  59              	LCD_RST_0:
+  60              	.LFB132:
+  31:libs/ili9341/ili9341.c **** }
+  32:libs/ili9341/ili9341.c **** void LCD_RST_0()
+  33:libs/ili9341/ili9341.c **** {
+  61              		.loc 1 33 0
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+  65 0000 08B5     		push	{r3, lr}
+  66              	.LCFI1:
+  67              		.cfi_def_cfa_offset 8
+  68              		.cfi_offset 3, -8
+  69              		.cfi_offset 14, -4
+  34:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);  
+  70              		.loc 1 34 0
+  71 0002 0022     		movs	r2, #0
+  72 0004 0221     		movs	r1, #2
+  73 0006 0248     		ldr	r0, .L7
+  74 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  75              	.LVL1:
+  76 000c 08BD     		pop	{r3, pc}
+  77              	.L8:
+  78 000e 00BF     		.align	2
+  79              	.L7:
+  80 0010 00080240 		.word	1073874944
+  81              		.cfi_endproc
+  82              	.LFE132:
+  84              		.section	.text.LCD_CS_1,"ax",%progbits
+ARM GAS  /tmp/ccS65nG0.s 			page 3
+
+
+  85              		.align	1
+  86              		.global	LCD_CS_1
+  87              		.syntax unified
+  88              		.thumb
+  89              		.thumb_func
+  90              		.fpu fpv4-sp-d16
+  92              	LCD_CS_1:
+  93              	.LFB133:
+  35:libs/ili9341/ili9341.c **** }
+  36:libs/ili9341/ili9341.c ****  
+  37:libs/ili9341/ili9341.c **** 
+  38:libs/ili9341/ili9341.c **** 
+  39:libs/ili9341/ili9341.c **** void LCD_CS_1()
+  40:libs/ili9341/ili9341.c **** {
+  94              		.loc 1 40 0
+  95              		.cfi_startproc
+  96              		@ args = 0, pretend = 0, frame = 0
+  97              		@ frame_needed = 0, uses_anonymous_args = 0
+  98 0000 08B5     		push	{r3, lr}
+  99              	.LCFI2:
+ 100              		.cfi_def_cfa_offset 8
+ 101              		.cfi_offset 3, -8
+ 102              		.cfi_offset 14, -4
+  41:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);  
+ 103              		.loc 1 41 0
+ 104 0002 0122     		movs	r2, #1
+ 105 0004 1146     		mov	r1, r2
+ 106 0006 0248     		ldr	r0, .L11
+ 107 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 108              	.LVL2:
+ 109 000c 08BD     		pop	{r3, pc}
+ 110              	.L12:
+ 111 000e 00BF     		.align	2
+ 112              	.L11:
+ 113 0010 00040240 		.word	1073873920
+ 114              		.cfi_endproc
+ 115              	.LFE133:
+ 117              		.section	.text.LCD_CS_0,"ax",%progbits
+ 118              		.align	1
+ 119              		.global	LCD_CS_0
+ 120              		.syntax unified
+ 121              		.thumb
+ 122              		.thumb_func
+ 123              		.fpu fpv4-sp-d16
+ 125              	LCD_CS_0:
+ 126              	.LFB134:
+  42:libs/ili9341/ili9341.c **** }
+  43:libs/ili9341/ili9341.c **** void LCD_CS_0()
+  44:libs/ili9341/ili9341.c **** {
+ 127              		.loc 1 44 0
+ 128              		.cfi_startproc
+ 129              		@ args = 0, pretend = 0, frame = 0
+ 130              		@ frame_needed = 0, uses_anonymous_args = 0
+ 131 0000 08B5     		push	{r3, lr}
+ 132              	.LCFI3:
+ 133              		.cfi_def_cfa_offset 8
+ 134              		.cfi_offset 3, -8
+ARM GAS  /tmp/ccS65nG0.s 			page 4
+
+
+ 135              		.cfi_offset 14, -4
+  45:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);  
+ 136              		.loc 1 45 0
+ 137 0002 0022     		movs	r2, #0
+ 138 0004 0121     		movs	r1, #1
+ 139 0006 0248     		ldr	r0, .L15
+ 140 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 141              	.LVL3:
+ 142 000c 08BD     		pop	{r3, pc}
+ 143              	.L16:
+ 144 000e 00BF     		.align	2
+ 145              	.L15:
+ 146 0010 00040240 		.word	1073873920
+ 147              		.cfi_endproc
+ 148              	.LFE134:
+ 150              		.section	.text.LCD_RS_1,"ax",%progbits
+ 151              		.align	1
+ 152              		.global	LCD_RS_1
+ 153              		.syntax unified
+ 154              		.thumb
+ 155              		.thumb_func
+ 156              		.fpu fpv4-sp-d16
+ 158              	LCD_RS_1:
+ 159              	.LFB135:
+  46:libs/ili9341/ili9341.c **** }
+  47:libs/ili9341/ili9341.c **** 
+  48:libs/ili9341/ili9341.c ****  
+  49:libs/ili9341/ili9341.c **** 
+  50:libs/ili9341/ili9341.c **** void LCD_RS_1()
+  51:libs/ili9341/ili9341.c **** {
+ 160              		.loc 1 51 0
+ 161              		.cfi_startproc
+ 162              		@ args = 0, pretend = 0, frame = 0
+ 163              		@ frame_needed = 0, uses_anonymous_args = 0
+ 164 0000 08B5     		push	{r3, lr}
+ 165              	.LCFI4:
+ 166              		.cfi_def_cfa_offset 8
+ 167              		.cfi_offset 3, -8
+ 168              		.cfi_offset 14, -4
+  52:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);  
+ 169              		.loc 1 52 0
+ 170 0002 0122     		movs	r2, #1
+ 171 0004 1021     		movs	r1, #16
+ 172 0006 0248     		ldr	r0, .L19
+ 173 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 174              	.LVL4:
+ 175 000c 08BD     		pop	{r3, pc}
+ 176              	.L20:
+ 177 000e 00BF     		.align	2
+ 178              	.L19:
+ 179 0010 00000240 		.word	1073872896
+ 180              		.cfi_endproc
+ 181              	.LFE135:
+ 183              		.section	.text.LCD_RS_0,"ax",%progbits
+ 184              		.align	1
+ 185              		.global	LCD_RS_0
+ 186              		.syntax unified
+ARM GAS  /tmp/ccS65nG0.s 			page 5
+
+
+ 187              		.thumb
+ 188              		.thumb_func
+ 189              		.fpu fpv4-sp-d16
+ 191              	LCD_RS_0:
+ 192              	.LFB136:
+  53:libs/ili9341/ili9341.c **** }
+  54:libs/ili9341/ili9341.c **** void LCD_RS_0()
+  55:libs/ili9341/ili9341.c **** {
+ 193              		.loc 1 55 0
+ 194              		.cfi_startproc
+ 195              		@ args = 0, pretend = 0, frame = 0
+ 196              		@ frame_needed = 0, uses_anonymous_args = 0
+ 197 0000 08B5     		push	{r3, lr}
+ 198              	.LCFI5:
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 3, -8
+ 201              		.cfi_offset 14, -4
+  56:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);  
+ 202              		.loc 1 56 0
+ 203 0002 0022     		movs	r2, #0
+ 204 0004 1021     		movs	r1, #16
+ 205 0006 0248     		ldr	r0, .L23
+ 206 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 207              	.LVL5:
+ 208 000c 08BD     		pop	{r3, pc}
+ 209              	.L24:
+ 210 000e 00BF     		.align	2
+ 211              	.L23:
+ 212 0010 00000240 		.word	1073872896
+ 213              		.cfi_endproc
+ 214              	.LFE136:
+ 216              		.section	.text.LCD_WR_1,"ax",%progbits
+ 217              		.align	1
+ 218              		.global	LCD_WR_1
+ 219              		.syntax unified
+ 220              		.thumb
+ 221              		.thumb_func
+ 222              		.fpu fpv4-sp-d16
+ 224              	LCD_WR_1:
+ 225              	.LFB137:
+  57:libs/ili9341/ili9341.c **** }
+  58:libs/ili9341/ili9341.c **** 
+  59:libs/ili9341/ili9341.c **** 
+  60:libs/ili9341/ili9341.c **** void LCD_WR_1()
+  61:libs/ili9341/ili9341.c **** {
+ 226              		.loc 1 61 0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 230 0000 08B5     		push	{r3, lr}
+ 231              	.LCFI6:
+ 232              		.cfi_def_cfa_offset 8
+ 233              		.cfi_offset 3, -8
+ 234              		.cfi_offset 14, -4
+  62:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);  
+ 235              		.loc 1 62 0
+ 236 0002 0122     		movs	r2, #1
+ARM GAS  /tmp/ccS65nG0.s 			page 6
+
+
+ 237 0004 0221     		movs	r1, #2
+ 238 0006 0248     		ldr	r0, .L27
+ 239 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 240              	.LVL6:
+ 241 000c 08BD     		pop	{r3, pc}
+ 242              	.L28:
+ 243 000e 00BF     		.align	2
+ 244              	.L27:
+ 245 0010 00000240 		.word	1073872896
+ 246              		.cfi_endproc
+ 247              	.LFE137:
+ 249              		.section	.text.LCD_WR_0,"ax",%progbits
+ 250              		.align	1
+ 251              		.global	LCD_WR_0
+ 252              		.syntax unified
+ 253              		.thumb
+ 254              		.thumb_func
+ 255              		.fpu fpv4-sp-d16
+ 257              	LCD_WR_0:
+ 258              	.LFB138:
+  63:libs/ili9341/ili9341.c **** }
+  64:libs/ili9341/ili9341.c **** void LCD_WR_0()
+  65:libs/ili9341/ili9341.c **** {
+ 259              		.loc 1 65 0
+ 260              		.cfi_startproc
+ 261              		@ args = 0, pretend = 0, frame = 0
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263 0000 08B5     		push	{r3, lr}
+ 264              	.LCFI7:
+ 265              		.cfi_def_cfa_offset 8
+ 266              		.cfi_offset 3, -8
+ 267              		.cfi_offset 14, -4
+  66:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);  
+ 268              		.loc 1 66 0
+ 269 0002 0022     		movs	r2, #0
+ 270 0004 0221     		movs	r1, #2
+ 271 0006 0248     		ldr	r0, .L31
+ 272 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 273              	.LVL7:
+ 274 000c 08BD     		pop	{r3, pc}
+ 275              	.L32:
+ 276 000e 00BF     		.align	2
+ 277              	.L31:
+ 278 0010 00000240 		.word	1073872896
+ 279              		.cfi_endproc
+ 280              	.LFE138:
+ 282              		.section	.text.LCD_WR_RISING_EDGE,"ax",%progbits
+ 283              		.align	1
+ 284              		.global	LCD_WR_RISING_EDGE
+ 285              		.syntax unified
+ 286              		.thumb
+ 287              		.thumb_func
+ 288              		.fpu fpv4-sp-d16
+ 290              	LCD_WR_RISING_EDGE:
+ 291              	.LFB139:
+  67:libs/ili9341/ili9341.c **** }
+  68:libs/ili9341/ili9341.c **** 
+ARM GAS  /tmp/ccS65nG0.s 			page 7
+
+
+  69:libs/ili9341/ili9341.c **** void LCD_WR_RISING_EDGE()
+  70:libs/ili9341/ili9341.c **** {
+ 292              		.loc 1 70 0
+ 293              		.cfi_startproc
+ 294              		@ args = 0, pretend = 0, frame = 0
+ 295              		@ frame_needed = 0, uses_anonymous_args = 0
+ 296 0000 10B5     		push	{r4, lr}
+ 297              	.LCFI8:
+ 298              		.cfi_def_cfa_offset 8
+ 299              		.cfi_offset 4, -8
+ 300              		.cfi_offset 14, -4
+  71:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);  
+ 301              		.loc 1 71 0
+ 302 0002 064C     		ldr	r4, .L35
+ 303 0004 0022     		movs	r2, #0
+ 304 0006 0221     		movs	r1, #2
+ 305 0008 2046     		mov	r0, r4
+ 306 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 307              	.LVL8:
+  72:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);  
+ 308              		.loc 1 72 0
+ 309 000e 0122     		movs	r2, #1
+ 310 0010 0221     		movs	r1, #2
+ 311 0012 2046     		mov	r0, r4
+ 312 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 313              	.LVL9:
+ 314 0018 10BD     		pop	{r4, pc}
+ 315              	.L36:
+ 316 001a 00BF     		.align	2
+ 317              	.L35:
+ 318 001c 00000240 		.word	1073872896
+ 319              		.cfi_endproc
+ 320              	.LFE139:
+ 322              		.section	.text.LCD_RD_1,"ax",%progbits
+ 323              		.align	1
+ 324              		.global	LCD_RD_1
+ 325              		.syntax unified
+ 326              		.thumb
+ 327              		.thumb_func
+ 328              		.fpu fpv4-sp-d16
+ 330              	LCD_RD_1:
+ 331              	.LFB140:
+  73:libs/ili9341/ili9341.c **** }
+  74:libs/ili9341/ili9341.c **** 
+  75:libs/ili9341/ili9341.c **** 
+  76:libs/ili9341/ili9341.c **** void LCD_RD_1()
+  77:libs/ili9341/ili9341.c **** {
+ 332              		.loc 1 77 0
+ 333              		.cfi_startproc
+ 334              		@ args = 0, pretend = 0, frame = 0
+ 335              		@ frame_needed = 0, uses_anonymous_args = 0
+ 336 0000 08B5     		push	{r3, lr}
+ 337              	.LCFI9:
+ 338              		.cfi_def_cfa_offset 8
+ 339              		.cfi_offset 3, -8
+ 340              		.cfi_offset 14, -4
+  78:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);  
+ARM GAS  /tmp/ccS65nG0.s 			page 8
+
+
+ 341              		.loc 1 78 0
+ 342 0002 0122     		movs	r2, #1
+ 343 0004 1146     		mov	r1, r2
+ 344 0006 0248     		ldr	r0, .L39
+ 345 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 346              	.LVL10:
+ 347 000c 08BD     		pop	{r3, pc}
+ 348              	.L40:
+ 349 000e 00BF     		.align	2
+ 350              	.L39:
+ 351 0010 00000240 		.word	1073872896
+ 352              		.cfi_endproc
+ 353              	.LFE140:
+ 355              		.section	.text.LCD_RD_0,"ax",%progbits
+ 356              		.align	1
+ 357              		.global	LCD_RD_0
+ 358              		.syntax unified
+ 359              		.thumb
+ 360              		.thumb_func
+ 361              		.fpu fpv4-sp-d16
+ 363              	LCD_RD_0:
+ 364              	.LFB141:
+  79:libs/ili9341/ili9341.c **** }
+  80:libs/ili9341/ili9341.c **** void LCD_RD_0()
+  81:libs/ili9341/ili9341.c **** {
+ 365              		.loc 1 81 0
+ 366              		.cfi_startproc
+ 367              		@ args = 0, pretend = 0, frame = 0
+ 368              		@ frame_needed = 0, uses_anonymous_args = 0
+ 369 0000 08B5     		push	{r3, lr}
+ 370              	.LCFI10:
+ 371              		.cfi_def_cfa_offset 8
+ 372              		.cfi_offset 3, -8
+ 373              		.cfi_offset 14, -4
+  82:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);  
+ 374              		.loc 1 82 0
+ 375 0002 0022     		movs	r2, #0
+ 376 0004 0121     		movs	r1, #1
+ 377 0006 0248     		ldr	r0, .L43
+ 378 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 379              	.LVL11:
+ 380 000c 08BD     		pop	{r3, pc}
+ 381              	.L44:
+ 382 000e 00BF     		.align	2
+ 383              	.L43:
+ 384 0010 00000240 		.word	1073872896
+ 385              		.cfi_endproc
+ 386              	.LFE141:
+ 388              		.section	.text.LCD_D2_1,"ax",%progbits
+ 389              		.align	1
+ 390              		.global	LCD_D2_1
+ 391              		.syntax unified
+ 392              		.thumb
+ 393              		.thumb_func
+ 394              		.fpu fpv4-sp-d16
+ 396              	LCD_D2_1:
+ 397              	.LFB142:
+ARM GAS  /tmp/ccS65nG0.s 			page 9
+
+
+  83:libs/ili9341/ili9341.c **** }
+  84:libs/ili9341/ili9341.c **** 
+  85:libs/ili9341/ili9341.c **** 
+  86:libs/ili9341/ili9341.c **** void LCD_D2_1()
+  87:libs/ili9341/ili9341.c **** {
+ 398              		.loc 1 87 0
+ 399              		.cfi_startproc
+ 400              		@ args = 0, pretend = 0, frame = 0
+ 401              		@ frame_needed = 0, uses_anonymous_args = 0
+ 402 0000 08B5     		push	{r3, lr}
+ 403              	.LCFI11:
+ 404              		.cfi_def_cfa_offset 8
+ 405              		.cfi_offset 3, -8
+ 406              		.cfi_offset 14, -4
+  88:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_SET);  
+ 407              		.loc 1 88 0
+ 408 0002 0122     		movs	r2, #1
+ 409 0004 4FF48061 		mov	r1, #1024
+ 410 0008 0148     		ldr	r0, .L47
+ 411 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 412              	.LVL12:
+ 413 000e 08BD     		pop	{r3, pc}
+ 414              	.L48:
+ 415              		.align	2
+ 416              	.L47:
+ 417 0010 00000240 		.word	1073872896
+ 418              		.cfi_endproc
+ 419              	.LFE142:
+ 421              		.section	.text.LCD_D2_0,"ax",%progbits
+ 422              		.align	1
+ 423              		.global	LCD_D2_0
+ 424              		.syntax unified
+ 425              		.thumb
+ 426              		.thumb_func
+ 427              		.fpu fpv4-sp-d16
+ 429              	LCD_D2_0:
+ 430              	.LFB143:
+  89:libs/ili9341/ili9341.c **** }
+  90:libs/ili9341/ili9341.c **** void LCD_D2_0()
+  91:libs/ili9341/ili9341.c **** {
+ 431              		.loc 1 91 0
+ 432              		.cfi_startproc
+ 433              		@ args = 0, pretend = 0, frame = 0
+ 434              		@ frame_needed = 0, uses_anonymous_args = 0
+ 435 0000 08B5     		push	{r3, lr}
+ 436              	.LCFI12:
+ 437              		.cfi_def_cfa_offset 8
+ 438              		.cfi_offset 3, -8
+ 439              		.cfi_offset 14, -4
+  92:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);  
+ 440              		.loc 1 92 0
+ 441 0002 0022     		movs	r2, #0
+ 442 0004 4FF48061 		mov	r1, #1024
+ 443 0008 0148     		ldr	r0, .L51
+ 444 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 445              	.LVL13:
+ 446 000e 08BD     		pop	{r3, pc}
+ARM GAS  /tmp/ccS65nG0.s 			page 10
+
+
+ 447              	.L52:
+ 448              		.align	2
+ 449              	.L51:
+ 450 0010 00000240 		.word	1073872896
+ 451              		.cfi_endproc
+ 452              	.LFE143:
+ 454              		.section	.text.LCD_D3_1,"ax",%progbits
+ 455              		.align	1
+ 456              		.global	LCD_D3_1
+ 457              		.syntax unified
+ 458              		.thumb
+ 459              		.thumb_func
+ 460              		.fpu fpv4-sp-d16
+ 462              	LCD_D3_1:
+ 463              	.LFB144:
+  93:libs/ili9341/ili9341.c **** }
+  94:libs/ili9341/ili9341.c **** 
+  95:libs/ili9341/ili9341.c **** 
+  96:libs/ili9341/ili9341.c **** void LCD_D3_1()
+  97:libs/ili9341/ili9341.c **** {
+ 464              		.loc 1 97 0
+ 465              		.cfi_startproc
+ 466              		@ args = 0, pretend = 0, frame = 0
+ 467              		@ frame_needed = 0, uses_anonymous_args = 0
+ 468 0000 08B5     		push	{r3, lr}
+ 469              	.LCFI13:
+ 470              		.cfi_def_cfa_offset 8
+ 471              		.cfi_offset 3, -8
+ 472              		.cfi_offset 14, -4
+  98:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);  
+ 473              		.loc 1 98 0
+ 474 0002 0122     		movs	r2, #1
+ 475 0004 0821     		movs	r1, #8
+ 476 0006 0248     		ldr	r0, .L55
+ 477 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 478              	.LVL14:
+ 479 000c 08BD     		pop	{r3, pc}
+ 480              	.L56:
+ 481 000e 00BF     		.align	2
+ 482              	.L55:
+ 483 0010 00040240 		.word	1073873920
+ 484              		.cfi_endproc
+ 485              	.LFE144:
+ 487              		.section	.text.LCD_D3_0,"ax",%progbits
+ 488              		.align	1
+ 489              		.global	LCD_D3_0
+ 490              		.syntax unified
+ 491              		.thumb
+ 492              		.thumb_func
+ 493              		.fpu fpv4-sp-d16
+ 495              	LCD_D3_0:
+ 496              	.LFB145:
+  99:libs/ili9341/ili9341.c **** }
+ 100:libs/ili9341/ili9341.c **** void LCD_D3_0()
+ 101:libs/ili9341/ili9341.c **** {
+ 497              		.loc 1 101 0
+ 498              		.cfi_startproc
+ARM GAS  /tmp/ccS65nG0.s 			page 11
+
+
+ 499              		@ args = 0, pretend = 0, frame = 0
+ 500              		@ frame_needed = 0, uses_anonymous_args = 0
+ 501 0000 08B5     		push	{r3, lr}
+ 502              	.LCFI14:
+ 503              		.cfi_def_cfa_offset 8
+ 504              		.cfi_offset 3, -8
+ 505              		.cfi_offset 14, -4
+ 102:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);  
+ 506              		.loc 1 102 0
+ 507 0002 0022     		movs	r2, #0
+ 508 0004 0821     		movs	r1, #8
+ 509 0006 0248     		ldr	r0, .L59
+ 510 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 511              	.LVL15:
+ 512 000c 08BD     		pop	{r3, pc}
+ 513              	.L60:
+ 514 000e 00BF     		.align	2
+ 515              	.L59:
+ 516 0010 00040240 		.word	1073873920
+ 517              		.cfi_endproc
+ 518              	.LFE145:
+ 520              		.section	.text.LCD_D4_1,"ax",%progbits
+ 521              		.align	1
+ 522              		.global	LCD_D4_1
+ 523              		.syntax unified
+ 524              		.thumb
+ 525              		.thumb_func
+ 526              		.fpu fpv4-sp-d16
+ 528              	LCD_D4_1:
+ 529              	.LFB146:
+ 103:libs/ili9341/ili9341.c **** }
+ 104:libs/ili9341/ili9341.c **** 
+ 105:libs/ili9341/ili9341.c **** 
+ 106:libs/ili9341/ili9341.c **** void LCD_D4_1()
+ 107:libs/ili9341/ili9341.c **** {
+ 530              		.loc 1 107 0
+ 531              		.cfi_startproc
+ 532              		@ args = 0, pretend = 0, frame = 0
+ 533              		@ frame_needed = 0, uses_anonymous_args = 0
+ 534 0000 08B5     		push	{r3, lr}
+ 535              	.LCFI15:
+ 536              		.cfi_def_cfa_offset 8
+ 537              		.cfi_offset 3, -8
+ 538              		.cfi_offset 14, -4
+ 108:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);  
+ 539              		.loc 1 108 0
+ 540 0002 0122     		movs	r2, #1
+ 541 0004 2021     		movs	r1, #32
+ 542 0006 0248     		ldr	r0, .L63
+ 543 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 544              	.LVL16:
+ 545 000c 08BD     		pop	{r3, pc}
+ 546              	.L64:
+ 547 000e 00BF     		.align	2
+ 548              	.L63:
+ 549 0010 00040240 		.word	1073873920
+ 550              		.cfi_endproc
+ARM GAS  /tmp/ccS65nG0.s 			page 12
+
+
+ 551              	.LFE146:
+ 553              		.section	.text.LCD_D4_0,"ax",%progbits
+ 554              		.align	1
+ 555              		.global	LCD_D4_0
+ 556              		.syntax unified
+ 557              		.thumb
+ 558              		.thumb_func
+ 559              		.fpu fpv4-sp-d16
+ 561              	LCD_D4_0:
+ 562              	.LFB147:
+ 109:libs/ili9341/ili9341.c **** }
+ 110:libs/ili9341/ili9341.c **** void LCD_D4_0()
+ 111:libs/ili9341/ili9341.c **** {
+ 563              		.loc 1 111 0
+ 564              		.cfi_startproc
+ 565              		@ args = 0, pretend = 0, frame = 0
+ 566              		@ frame_needed = 0, uses_anonymous_args = 0
+ 567 0000 08B5     		push	{r3, lr}
+ 568              	.LCFI16:
+ 569              		.cfi_def_cfa_offset 8
+ 570              		.cfi_offset 3, -8
+ 571              		.cfi_offset 14, -4
+ 112:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);  
+ 572              		.loc 1 112 0
+ 573 0002 0022     		movs	r2, #0
+ 574 0004 2021     		movs	r1, #32
+ 575 0006 0248     		ldr	r0, .L67
+ 576 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 577              	.LVL17:
+ 578 000c 08BD     		pop	{r3, pc}
+ 579              	.L68:
+ 580 000e 00BF     		.align	2
+ 581              	.L67:
+ 582 0010 00040240 		.word	1073873920
+ 583              		.cfi_endproc
+ 584              	.LFE147:
+ 586              		.section	.text.LCD_D5_1,"ax",%progbits
+ 587              		.align	1
+ 588              		.global	LCD_D5_1
+ 589              		.syntax unified
+ 590              		.thumb
+ 591              		.thumb_func
+ 592              		.fpu fpv4-sp-d16
+ 594              	LCD_D5_1:
+ 595              	.LFB148:
+ 113:libs/ili9341/ili9341.c **** }
+ 114:libs/ili9341/ili9341.c **** 
+ 115:libs/ili9341/ili9341.c **** 
+ 116:libs/ili9341/ili9341.c **** 
+ 117:libs/ili9341/ili9341.c **** void LCD_D5_1()
+ 118:libs/ili9341/ili9341.c **** {
+ 596              		.loc 1 118 0
+ 597              		.cfi_startproc
+ 598              		@ args = 0, pretend = 0, frame = 0
+ 599              		@ frame_needed = 0, uses_anonymous_args = 0
+ 600 0000 08B5     		push	{r3, lr}
+ 601              	.LCFI17:
+ARM GAS  /tmp/ccS65nG0.s 			page 13
+
+
+ 602              		.cfi_def_cfa_offset 8
+ 603              		.cfi_offset 3, -8
+ 604              		.cfi_offset 14, -4
+ 119:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);  
+ 605              		.loc 1 119 0
+ 606 0002 0122     		movs	r2, #1
+ 607 0004 1021     		movs	r1, #16
+ 608 0006 0248     		ldr	r0, .L71
+ 609 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 610              	.LVL18:
+ 611 000c 08BD     		pop	{r3, pc}
+ 612              	.L72:
+ 613 000e 00BF     		.align	2
+ 614              	.L71:
+ 615 0010 00040240 		.word	1073873920
+ 616              		.cfi_endproc
+ 617              	.LFE148:
+ 619              		.section	.text.LCD_D5_0,"ax",%progbits
+ 620              		.align	1
+ 621              		.global	LCD_D5_0
+ 622              		.syntax unified
+ 623              		.thumb
+ 624              		.thumb_func
+ 625              		.fpu fpv4-sp-d16
+ 627              	LCD_D5_0:
+ 628              	.LFB149:
+ 120:libs/ili9341/ili9341.c **** }
+ 121:libs/ili9341/ili9341.c **** void LCD_D5_0()
+ 122:libs/ili9341/ili9341.c **** {
+ 629              		.loc 1 122 0
+ 630              		.cfi_startproc
+ 631              		@ args = 0, pretend = 0, frame = 0
+ 632              		@ frame_needed = 0, uses_anonymous_args = 0
+ 633 0000 08B5     		push	{r3, lr}
+ 634              	.LCFI18:
+ 635              		.cfi_def_cfa_offset 8
+ 636              		.cfi_offset 3, -8
+ 637              		.cfi_offset 14, -4
+ 123:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);  
+ 638              		.loc 1 123 0
+ 639 0002 0022     		movs	r2, #0
+ 640 0004 1021     		movs	r1, #16
+ 641 0006 0248     		ldr	r0, .L75
+ 642 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 643              	.LVL19:
+ 644 000c 08BD     		pop	{r3, pc}
+ 645              	.L76:
+ 646 000e 00BF     		.align	2
+ 647              	.L75:
+ 648 0010 00040240 		.word	1073873920
+ 649              		.cfi_endproc
+ 650              	.LFE149:
+ 652              		.section	.text.LCD_D6_1,"ax",%progbits
+ 653              		.align	1
+ 654              		.global	LCD_D6_1
+ 655              		.syntax unified
+ 656              		.thumb
+ARM GAS  /tmp/ccS65nG0.s 			page 14
+
+
+ 657              		.thumb_func
+ 658              		.fpu fpv4-sp-d16
+ 660              	LCD_D6_1:
+ 661              	.LFB150:
+ 124:libs/ili9341/ili9341.c **** }
+ 125:libs/ili9341/ili9341.c **** 
+ 126:libs/ili9341/ili9341.c **** 
+ 127:libs/ili9341/ili9341.c **** void LCD_D6_1()
+ 128:libs/ili9341/ili9341.c **** {
+ 662              		.loc 1 128 0
+ 663              		.cfi_startproc
+ 664              		@ args = 0, pretend = 0, frame = 0
+ 665              		@ frame_needed = 0, uses_anonymous_args = 0
+ 666 0000 08B5     		push	{r3, lr}
+ 667              	.LCFI19:
+ 668              		.cfi_def_cfa_offset 8
+ 669              		.cfi_offset 3, -8
+ 670              		.cfi_offset 14, -4
+ 129:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);  
+ 671              		.loc 1 129 0
+ 672 0002 0122     		movs	r2, #1
+ 673 0004 4FF48061 		mov	r1, #1024
+ 674 0008 0148     		ldr	r0, .L79
+ 675 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 676              	.LVL20:
+ 677 000e 08BD     		pop	{r3, pc}
+ 678              	.L80:
+ 679              		.align	2
+ 680              	.L79:
+ 681 0010 00040240 		.word	1073873920
+ 682              		.cfi_endproc
+ 683              	.LFE150:
+ 685              		.section	.text.LCD_D6_0,"ax",%progbits
+ 686              		.align	1
+ 687              		.global	LCD_D6_0
+ 688              		.syntax unified
+ 689              		.thumb
+ 690              		.thumb_func
+ 691              		.fpu fpv4-sp-d16
+ 693              	LCD_D6_0:
+ 694              	.LFB151:
+ 130:libs/ili9341/ili9341.c **** }
+ 131:libs/ili9341/ili9341.c **** void LCD_D6_0()
+ 132:libs/ili9341/ili9341.c **** {
+ 695              		.loc 1 132 0
+ 696              		.cfi_startproc
+ 697              		@ args = 0, pretend = 0, frame = 0
+ 698              		@ frame_needed = 0, uses_anonymous_args = 0
+ 699 0000 08B5     		push	{r3, lr}
+ 700              	.LCFI20:
+ 701              		.cfi_def_cfa_offset 8
+ 702              		.cfi_offset 3, -8
+ 703              		.cfi_offset 14, -4
+ 133:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);  
+ 704              		.loc 1 133 0
+ 705 0002 0022     		movs	r2, #0
+ 706 0004 4FF48061 		mov	r1, #1024
+ARM GAS  /tmp/ccS65nG0.s 			page 15
+
+
+ 707 0008 0148     		ldr	r0, .L83
+ 708 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 709              	.LVL21:
+ 710 000e 08BD     		pop	{r3, pc}
+ 711              	.L84:
+ 712              		.align	2
+ 713              	.L83:
+ 714 0010 00040240 		.word	1073873920
+ 715              		.cfi_endproc
+ 716              	.LFE151:
+ 718              		.section	.text.LCD_D7_1,"ax",%progbits
+ 719              		.align	1
+ 720              		.global	LCD_D7_1
+ 721              		.syntax unified
+ 722              		.thumb
+ 723              		.thumb_func
+ 724              		.fpu fpv4-sp-d16
+ 726              	LCD_D7_1:
+ 727              	.LFB152:
+ 134:libs/ili9341/ili9341.c **** }
+ 135:libs/ili9341/ili9341.c **** 
+ 136:libs/ili9341/ili9341.c **** 
+ 137:libs/ili9341/ili9341.c **** void LCD_D7_1()
+ 138:libs/ili9341/ili9341.c **** {
+ 728              		.loc 1 138 0
+ 729              		.cfi_startproc
+ 730              		@ args = 0, pretend = 0, frame = 0
+ 731              		@ frame_needed = 0, uses_anonymous_args = 0
+ 732 0000 08B5     		push	{r3, lr}
+ 733              	.LCFI21:
+ 734              		.cfi_def_cfa_offset 8
+ 735              		.cfi_offset 3, -8
+ 736              		.cfi_offset 14, -4
+ 139:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);  
+ 737              		.loc 1 139 0
+ 738 0002 0122     		movs	r2, #1
+ 739 0004 4FF48071 		mov	r1, #256
+ 740 0008 0148     		ldr	r0, .L87
+ 741 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 742              	.LVL22:
+ 743 000e 08BD     		pop	{r3, pc}
+ 744              	.L88:
+ 745              		.align	2
+ 746              	.L87:
+ 747 0010 00000240 		.word	1073872896
+ 748              		.cfi_endproc
+ 749              	.LFE152:
+ 751              		.section	.text.LCD_D7_0,"ax",%progbits
+ 752              		.align	1
+ 753              		.global	LCD_D7_0
+ 754              		.syntax unified
+ 755              		.thumb
+ 756              		.thumb_func
+ 757              		.fpu fpv4-sp-d16
+ 759              	LCD_D7_0:
+ 760              	.LFB153:
+ 140:libs/ili9341/ili9341.c **** }
+ARM GAS  /tmp/ccS65nG0.s 			page 16
+
+
+ 141:libs/ili9341/ili9341.c **** void LCD_D7_0()
+ 142:libs/ili9341/ili9341.c **** {
+ 761              		.loc 1 142 0
+ 762              		.cfi_startproc
+ 763              		@ args = 0, pretend = 0, frame = 0
+ 764              		@ frame_needed = 0, uses_anonymous_args = 0
+ 765 0000 08B5     		push	{r3, lr}
+ 766              	.LCFI22:
+ 767              		.cfi_def_cfa_offset 8
+ 768              		.cfi_offset 3, -8
+ 769              		.cfi_offset 14, -4
+ 143:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);  
+ 770              		.loc 1 143 0
+ 771 0002 0022     		movs	r2, #0
+ 772 0004 4FF48071 		mov	r1, #256
+ 773 0008 0148     		ldr	r0, .L91
+ 774 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 775              	.LVL23:
+ 776 000e 08BD     		pop	{r3, pc}
+ 777              	.L92:
+ 778              		.align	2
+ 779              	.L91:
+ 780 0010 00000240 		.word	1073872896
+ 781              		.cfi_endproc
+ 782              	.LFE153:
+ 784              		.section	.text.LCD_D0_1,"ax",%progbits
+ 785              		.align	1
+ 786              		.global	LCD_D0_1
+ 787              		.syntax unified
+ 788              		.thumb
+ 789              		.thumb_func
+ 790              		.fpu fpv4-sp-d16
+ 792              	LCD_D0_1:
+ 793              	.LFB154:
+ 144:libs/ili9341/ili9341.c **** }
+ 145:libs/ili9341/ili9341.c **** 
+ 146:libs/ili9341/ili9341.c **** 
+ 147:libs/ili9341/ili9341.c **** 
+ 148:libs/ili9341/ili9341.c **** void LCD_D0_1()
+ 149:libs/ili9341/ili9341.c **** {
+ 794              		.loc 1 149 0
+ 795              		.cfi_startproc
+ 796              		@ args = 0, pretend = 0, frame = 0
+ 797              		@ frame_needed = 0, uses_anonymous_args = 0
+ 798 0000 08B5     		push	{r3, lr}
+ 799              	.LCFI23:
+ 800              		.cfi_def_cfa_offset 8
+ 801              		.cfi_offset 3, -8
+ 802              		.cfi_offset 14, -4
+ 150:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);  
+ 803              		.loc 1 150 0
+ 804 0002 0122     		movs	r2, #1
+ 805 0004 4FF40071 		mov	r1, #512
+ 806 0008 0148     		ldr	r0, .L95
+ 807 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 808              	.LVL24:
+ 809 000e 08BD     		pop	{r3, pc}
+ARM GAS  /tmp/ccS65nG0.s 			page 17
+
+
+ 810              	.L96:
+ 811              		.align	2
+ 812              	.L95:
+ 813 0010 00000240 		.word	1073872896
+ 814              		.cfi_endproc
+ 815              	.LFE154:
+ 817              		.section	.text.LCD_D0_0,"ax",%progbits
+ 818              		.align	1
+ 819              		.global	LCD_D0_0
+ 820              		.syntax unified
+ 821              		.thumb
+ 822              		.thumb_func
+ 823              		.fpu fpv4-sp-d16
+ 825              	LCD_D0_0:
+ 826              	.LFB155:
+ 151:libs/ili9341/ili9341.c **** }
+ 152:libs/ili9341/ili9341.c **** void LCD_D0_0()
+ 153:libs/ili9341/ili9341.c **** {
+ 827              		.loc 1 153 0
+ 828              		.cfi_startproc
+ 829              		@ args = 0, pretend = 0, frame = 0
+ 830              		@ frame_needed = 0, uses_anonymous_args = 0
+ 831 0000 08B5     		push	{r3, lr}
+ 832              	.LCFI24:
+ 833              		.cfi_def_cfa_offset 8
+ 834              		.cfi_offset 3, -8
+ 835              		.cfi_offset 14, -4
+ 154:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  
+ 836              		.loc 1 154 0
+ 837 0002 0022     		movs	r2, #0
+ 838 0004 4FF40071 		mov	r1, #512
+ 839 0008 0148     		ldr	r0, .L99
+ 840 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 841              	.LVL25:
+ 842 000e 08BD     		pop	{r3, pc}
+ 843              	.L100:
+ 844              		.align	2
+ 845              	.L99:
+ 846 0010 00000240 		.word	1073872896
+ 847              		.cfi_endproc
+ 848              	.LFE155:
+ 850              		.section	.text.LCD_D1_1,"ax",%progbits
+ 851              		.align	1
+ 852              		.global	LCD_D1_1
+ 853              		.syntax unified
+ 854              		.thumb
+ 855              		.thumb_func
+ 856              		.fpu fpv4-sp-d16
+ 858              	LCD_D1_1:
+ 859              	.LFB156:
+ 155:libs/ili9341/ili9341.c **** }
+ 156:libs/ili9341/ili9341.c **** 
+ 157:libs/ili9341/ili9341.c **** 
+ 158:libs/ili9341/ili9341.c **** void LCD_D1_1()
+ 159:libs/ili9341/ili9341.c **** {
+ 860              		.loc 1 159 0
+ 861              		.cfi_startproc
+ARM GAS  /tmp/ccS65nG0.s 			page 18
+
+
+ 862              		@ args = 0, pretend = 0, frame = 0
+ 863              		@ frame_needed = 0, uses_anonymous_args = 0
+ 864 0000 08B5     		push	{r3, lr}
+ 865              	.LCFI25:
+ 866              		.cfi_def_cfa_offset 8
+ 867              		.cfi_offset 3, -8
+ 868              		.cfi_offset 14, -4
+ 160:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);  
+ 869              		.loc 1 160 0
+ 870 0002 0122     		movs	r2, #1
+ 871 0004 8021     		movs	r1, #128
+ 872 0006 0248     		ldr	r0, .L103
+ 873 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 874              	.LVL26:
+ 875 000c 08BD     		pop	{r3, pc}
+ 876              	.L104:
+ 877 000e 00BF     		.align	2
+ 878              	.L103:
+ 879 0010 00080240 		.word	1073874944
+ 880              		.cfi_endproc
+ 881              	.LFE156:
+ 883              		.section	.text.LCD_D1_0,"ax",%progbits
+ 884              		.align	1
+ 885              		.global	LCD_D1_0
+ 886              		.syntax unified
+ 887              		.thumb
+ 888              		.thumb_func
+ 889              		.fpu fpv4-sp-d16
+ 891              	LCD_D1_0:
+ 892              	.LFB157:
+ 161:libs/ili9341/ili9341.c **** }
+ 162:libs/ili9341/ili9341.c **** void LCD_D1_0()
+ 163:libs/ili9341/ili9341.c **** {
+ 893              		.loc 1 163 0
+ 894              		.cfi_startproc
+ 895              		@ args = 0, pretend = 0, frame = 0
+ 896              		@ frame_needed = 0, uses_anonymous_args = 0
+ 897 0000 08B5     		push	{r3, lr}
+ 898              	.LCFI26:
+ 899              		.cfi_def_cfa_offset 8
+ 900              		.cfi_offset 3, -8
+ 901              		.cfi_offset 14, -4
+ 164:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);  
+ 902              		.loc 1 164 0
+ 903 0002 0022     		movs	r2, #0
+ 904 0004 8021     		movs	r1, #128
+ 905 0006 0248     		ldr	r0, .L107
+ 906 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 907              	.LVL27:
+ 908 000c 08BD     		pop	{r3, pc}
+ 909              	.L108:
+ 910 000e 00BF     		.align	2
+ 911              	.L107:
+ 912 0010 00080240 		.word	1073874944
+ 913              		.cfi_endproc
+ 914              	.LFE157:
+ 916              		.section	.text.gpio_configure_8080_datapins_input_mode,"ax",%progbits
+ARM GAS  /tmp/ccS65nG0.s 			page 19
+
+
+ 917              		.align	1
+ 918              		.global	gpio_configure_8080_datapins_input_mode
+ 919              		.syntax unified
+ 920              		.thumb
+ 921              		.thumb_func
+ 922              		.fpu fpv4-sp-d16
+ 924              	gpio_configure_8080_datapins_input_mode:
+ 925              	.LFB158:
+ 165:libs/ili9341/ili9341.c **** }
+ 166:libs/ili9341/ili9341.c **** 
+ 167:libs/ili9341/ili9341.c **** 
+ 168:libs/ili9341/ili9341.c **** void gpio_configure_8080_datapins_input_mode()
+ 169:libs/ili9341/ili9341.c **** {
+ 926              		.loc 1 169 0
+ 927              		.cfi_startproc
+ 928              		@ args = 0, pretend = 0, frame = 24
+ 929              		@ frame_needed = 0, uses_anonymous_args = 0
+ 930 0000 30B5     		push	{r4, r5, lr}
+ 931              	.LCFI27:
+ 932              		.cfi_def_cfa_offset 12
+ 933              		.cfi_offset 4, -12
+ 934              		.cfi_offset 5, -8
+ 935              		.cfi_offset 14, -4
+ 936 0002 87B0     		sub	sp, sp, #28
+ 937              	.LCFI28:
+ 938              		.cfi_def_cfa_offset 40
+ 170:libs/ili9341/ili9341.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+ 171:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10;
+ 939              		.loc 1 171 0
+ 940 0004 4FF4E063 		mov	r3, #1792
+ 941 0008 0193     		str	r3, [sp, #4]
+ 172:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 942              		.loc 1 172 0
+ 943 000a 0025     		movs	r5, #0
+ 944 000c 0295     		str	r5, [sp, #8]
+ 173:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+ 945              		.loc 1 173 0
+ 946 000e 0224     		movs	r4, #2
+ 947 0010 0394     		str	r4, [sp, #12]
+ 174:libs/ili9341/ili9341.c ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 948              		.loc 1 174 0
+ 949 0012 01A9     		add	r1, sp, #4
+ 950 0014 0A48     		ldr	r0, .L111
+ 951 0016 FFF7FEFF 		bl	HAL_GPIO_Init
+ 952              	.LVL28:
+ 175:libs/ili9341/ili9341.c **** 
+ 176:libs/ili9341/ili9341.c **** 
+ 177:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_10;
+ 953              		.loc 1 177 0
+ 954 001a 4FF48763 		mov	r3, #1080
+ 955 001e 0193     		str	r3, [sp, #4]
+ 178:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 956              		.loc 1 178 0
+ 957 0020 0295     		str	r5, [sp, #8]
+ 179:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+ 958              		.loc 1 179 0
+ 959 0022 0394     		str	r4, [sp, #12]
+ARM GAS  /tmp/ccS65nG0.s 			page 20
+
+
+ 180:libs/ili9341/ili9341.c ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 960              		.loc 1 180 0
+ 961 0024 01A9     		add	r1, sp, #4
+ 962 0026 0748     		ldr	r0, .L111+4
+ 963 0028 FFF7FEFF 		bl	HAL_GPIO_Init
+ 964              	.LVL29:
+ 181:libs/ili9341/ili9341.c **** 
+ 182:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pin = GPIO_PIN_7;
+ 965              		.loc 1 182 0
+ 966 002c 8023     		movs	r3, #128
+ 967 002e 0193     		str	r3, [sp, #4]
+ 183:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 968              		.loc 1 183 0
+ 969 0030 0295     		str	r5, [sp, #8]
+ 184:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+ 970              		.loc 1 184 0
+ 971 0032 0394     		str	r4, [sp, #12]
+ 185:libs/ili9341/ili9341.c ****   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 972              		.loc 1 185 0
+ 973 0034 01A9     		add	r1, sp, #4
+ 974 0036 0448     		ldr	r0, .L111+8
+ 975 0038 FFF7FEFF 		bl	HAL_GPIO_Init
+ 976              	.LVL30:
+ 186:libs/ili9341/ili9341.c **** }
+ 977              		.loc 1 186 0
+ 978 003c 07B0     		add	sp, sp, #28
+ 979              	.LCFI29:
+ 980              		.cfi_def_cfa_offset 12
+ 981              		@ sp needed
+ 982 003e 30BD     		pop	{r4, r5, pc}
+ 983              	.L112:
+ 984              		.align	2
+ 985              	.L111:
+ 986 0040 00000240 		.word	1073872896
+ 987 0044 00040240 		.word	1073873920
+ 988 0048 00080240 		.word	1073874944
+ 989              		.cfi_endproc
+ 990              	.LFE158:
+ 992              		.section	.text.gpio_configure_8080_datapins_output_mode,"ax",%progbits
+ 993              		.align	1
+ 994              		.global	gpio_configure_8080_datapins_output_mode
+ 995              		.syntax unified
+ 996              		.thumb
+ 997              		.thumb_func
+ 998              		.fpu fpv4-sp-d16
+ 1000              	gpio_configure_8080_datapins_output_mode:
+ 1001              	.LFB159:
+ 187:libs/ili9341/ili9341.c **** 
+ 188:libs/ili9341/ili9341.c **** 
+ 189:libs/ili9341/ili9341.c **** void gpio_configure_8080_datapins_output_mode()
+ 190:libs/ili9341/ili9341.c **** {
+ 1002              		.loc 1 190 0
+ 1003              		.cfi_startproc
+ 1004              		@ args = 0, pretend = 0, frame = 24
+ 1005              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1006 0000 30B5     		push	{r4, r5, lr}
+ 1007              	.LCFI30:
+ARM GAS  /tmp/ccS65nG0.s 			page 21
+
+
+ 1008              		.cfi_def_cfa_offset 12
+ 1009              		.cfi_offset 4, -12
+ 1010              		.cfi_offset 5, -8
+ 1011              		.cfi_offset 14, -4
+ 1012 0002 87B0     		sub	sp, sp, #28
+ 1013              	.LCFI31:
+ 1014              		.cfi_def_cfa_offset 40
+ 191:libs/ili9341/ili9341.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+ 192:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10;
+ 1015              		.loc 1 192 0
+ 1016 0004 4FF4E063 		mov	r3, #1792
+ 1017 0008 0193     		str	r3, [sp, #4]
+ 193:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 1018              		.loc 1 193 0
+ 1019 000a 0125     		movs	r5, #1
+ 1020 000c 0295     		str	r5, [sp, #8]
+ 194:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 1021              		.loc 1 194 0
+ 1022 000e 0024     		movs	r4, #0
+ 1023 0010 0394     		str	r4, [sp, #12]
+ 195:libs/ili9341/ili9341.c ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 1024              		.loc 1 195 0
+ 1025 0012 01A9     		add	r1, sp, #4
+ 1026 0014 0A48     		ldr	r0, .L115
+ 1027 0016 FFF7FEFF 		bl	HAL_GPIO_Init
+ 1028              	.LVL31:
+ 196:libs/ili9341/ili9341.c **** 
+ 197:libs/ili9341/ili9341.c **** 
+ 198:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pin = GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_10;
+ 1029              		.loc 1 198 0
+ 1030 001a 4FF48763 		mov	r3, #1080
+ 1031 001e 0193     		str	r3, [sp, #4]
+ 199:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 1032              		.loc 1 199 0
+ 1033 0020 0295     		str	r5, [sp, #8]
+ 200:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 1034              		.loc 1 200 0
+ 1035 0022 0394     		str	r4, [sp, #12]
+ 201:libs/ili9341/ili9341.c ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 1036              		.loc 1 201 0
+ 1037 0024 01A9     		add	r1, sp, #4
+ 1038 0026 0748     		ldr	r0, .L115+4
+ 1039 0028 FFF7FEFF 		bl	HAL_GPIO_Init
+ 1040              	.LVL32:
+ 202:libs/ili9341/ili9341.c **** 
+ 203:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pin = GPIO_PIN_7;
+ 1041              		.loc 1 203 0
+ 1042 002c 8023     		movs	r3, #128
+ 1043 002e 0193     		str	r3, [sp, #4]
+ 204:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 1044              		.loc 1 204 0
+ 1045 0030 0295     		str	r5, [sp, #8]
+ 205:libs/ili9341/ili9341.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 1046              		.loc 1 205 0
+ 1047 0032 0394     		str	r4, [sp, #12]
+ 206:libs/ili9341/ili9341.c ****   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 1048              		.loc 1 206 0
+ARM GAS  /tmp/ccS65nG0.s 			page 22
+
+
+ 1049 0034 01A9     		add	r1, sp, #4
+ 1050 0036 0448     		ldr	r0, .L115+8
+ 1051 0038 FFF7FEFF 		bl	HAL_GPIO_Init
+ 1052              	.LVL33:
+ 207:libs/ili9341/ili9341.c **** }
+ 1053              		.loc 1 207 0
+ 1054 003c 07B0     		add	sp, sp, #28
+ 1055              	.LCFI32:
+ 1056              		.cfi_def_cfa_offset 12
+ 1057              		@ sp needed
+ 1058 003e 30BD     		pop	{r4, r5, pc}
+ 1059              	.L116:
+ 1060              		.align	2
+ 1061              	.L115:
+ 1062 0040 00000240 		.word	1073872896
+ 1063 0044 00040240 		.word	1073873920
+ 1064 0048 00080240 		.word	1073874944
+ 1065              		.cfi_endproc
+ 1066              	.LFE159:
+ 1068              		.section	.text.gpio_8080_read_parallel_datapins,"ax",%progbits
+ 1069              		.align	1
+ 1070              		.global	gpio_8080_read_parallel_datapins
+ 1071              		.syntax unified
+ 1072              		.thumb
+ 1073              		.thumb_func
+ 1074              		.fpu fpv4-sp-d16
+ 1076              	gpio_8080_read_parallel_datapins:
+ 1077              	.LFB160:
+ 208:libs/ili9341/ili9341.c **** 
+ 209:libs/ili9341/ili9341.c **** uint8_t gpio_8080_read_parallel_datapins() 
+ 210:libs/ili9341/ili9341.c **** {
+ 1078              		.loc 1 210 0
+ 1079              		.cfi_startproc
+ 1080              		@ args = 0, pretend = 0, frame = 0
+ 1081              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1082 0000 70B5     		push	{r4, r5, r6, lr}
+ 1083              	.LCFI33:
+ 1084              		.cfi_def_cfa_offset 16
+ 1085              		.cfi_offset 4, -16
+ 1086              		.cfi_offset 5, -12
+ 1087              		.cfi_offset 6, -8
+ 1088              		.cfi_offset 14, -4
+ 211:libs/ili9341/ili9341.c ****   uint8_t read_data;
+ 212:libs/ili9341/ili9341.c ****   read_data = \
+ 213:libs/ili9341/ili9341.c ****                 HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)  << 7   \
+ 1089              		.loc 1 213 0
+ 1090 0002 1E4D     		ldr	r5, .L119
+ 1091 0004 4FF48071 		mov	r1, #256
+ 1092 0008 2846     		mov	r0, r5
+ 1093 000a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1094              	.LVL34:
+ 1095 000e C401     		lsls	r4, r0, #7
+ 214:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10) << 6   \
+ 1096              		.loc 1 214 0
+ 1097 0010 1B4E     		ldr	r6, .L119+4
+ 1098 0012 4FF48061 		mov	r1, #1024
+ 1099 0016 3046     		mov	r0, r6
+ARM GAS  /tmp/ccS65nG0.s 			page 23
+
+
+ 1100 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1101              	.LVL35:
+ 1102 001c 44EA8014 		orr	r4, r4, r0, lsl #6
+ 1103 0020 64B2     		sxtb	r4, r4
+ 215:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4)  << 5   \
+ 1104              		.loc 1 215 0
+ 1105 0022 1021     		movs	r1, #16
+ 1106 0024 3046     		mov	r0, r6
+ 1107 0026 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1108              	.LVL36:
+ 1109 002a 44EA4014 		orr	r4, r4, r0, lsl #5
+ 1110 002e 64B2     		sxtb	r4, r4
+ 216:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5)  << 4   \
+ 1111              		.loc 1 216 0
+ 1112 0030 2021     		movs	r1, #32
+ 1113 0032 3046     		mov	r0, r6
+ 1114 0034 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1115              	.LVL37:
+ 1116 0038 44EA0014 		orr	r4, r4, r0, lsl #4
+ 1117 003c 64B2     		sxtb	r4, r4
+ 217:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3)  << 3   \
+ 1118              		.loc 1 217 0
+ 1119 003e 0821     		movs	r1, #8
+ 1120 0040 3046     		mov	r0, r6
+ 1121 0042 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1122              	.LVL38:
+ 1123 0046 44EAC004 		orr	r4, r4, r0, lsl #3
+ 1124 004a 64B2     		sxtb	r4, r4
+ 218:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) << 2   \
+ 1125              		.loc 1 218 0
+ 1126 004c 4FF48061 		mov	r1, #1024
+ 1127 0050 2846     		mov	r0, r5
+ 1128 0052 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1129              	.LVL39:
+ 1130 0056 44EA8004 		orr	r4, r4, r0, lsl #2
+ 1131 005a 64B2     		sxtb	r4, r4
+ 219:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7)  << 1   \
+ 1132              		.loc 1 219 0
+ 1133 005c 8021     		movs	r1, #128
+ 1134 005e 0948     		ldr	r0, .L119+8
+ 1135 0060 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1136              	.LVL40:
+ 1137 0064 44EA4004 		orr	r4, r4, r0, lsl #1
+ 1138 0068 64B2     		sxtb	r4, r4
+ 220:libs/ili9341/ili9341.c ****               | HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9);
+ 1139              		.loc 1 220 0
+ 1140 006a 4FF40071 		mov	r1, #512
+ 1141 006e 2846     		mov	r0, r5
+ 1142 0070 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1143              	.LVL41:
+ 1144 0074 40B2     		sxtb	r0, r0
+ 1145 0076 2043     		orrs	r0, r0, r4
+ 1146              	.LVL42:
+ 221:libs/ili9341/ili9341.c ****     /*
+ 222:libs/ili9341/ili9341.c ****     char msg[64];
+ 223:libs/ili9341/ili9341.c ****     sprintf(msg, "D7: %d  ", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8) );
+ 224:libs/ili9341/ili9341.c ****     serial_print(msg);
+ARM GAS  /tmp/ccS65nG0.s 			page 24
+
+
+ 225:libs/ili9341/ili9341.c ****     sprintf(msg, "D6: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10));
+ 226:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 227:libs/ili9341/ili9341.c ****     sprintf(msg, "D5: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) );
+ 228:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 229:libs/ili9341/ili9341.c ****     sprintf(msg, "D4: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) );
+ 230:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 231:libs/ili9341/ili9341.c ****     sprintf(msg, "D3: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) );
+ 232:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 233:libs/ili9341/ili9341.c ****     sprintf(msg, "D2: %d  ", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10));
+ 234:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 235:libs/ili9341/ili9341.c ****     sprintf(msg, "D1: %d  ", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) );
+ 236:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 237:libs/ili9341/ili9341.c ****     sprintf(msg, "D0: %d\n", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9));
+ 238:libs/ili9341/ili9341.c ****     serial_print(msg);
+ 239:libs/ili9341/ili9341.c ****     */
+ 240:libs/ili9341/ili9341.c **** 
+ 241:libs/ili9341/ili9341.c ****   return read_data;
+ 242:libs/ili9341/ili9341.c **** }
+ 1147              		.loc 1 242 0
+ 1148 0078 C0B2     		uxtb	r0, r0
+ 1149 007a 70BD     		pop	{r4, r5, r6, pc}
+ 1150              	.L120:
+ 1151              		.align	2
+ 1152              	.L119:
+ 1153 007c 00000240 		.word	1073872896
+ 1154 0080 00040240 		.word	1073873920
+ 1155 0084 00080240 		.word	1073874944
+ 1156              		.cfi_endproc
+ 1157              	.LFE160:
+ 1159              		.section	.text.gpio_8080_write_parallel_datapins,"ax",%progbits
+ 1160              		.align	1
+ 1161              		.global	gpio_8080_write_parallel_datapins
+ 1162              		.syntax unified
+ 1163              		.thumb
+ 1164              		.thumb_func
+ 1165              		.fpu fpv4-sp-d16
+ 1167              	gpio_8080_write_parallel_datapins:
+ 1168              	.LFB161:
+ 243:libs/ili9341/ili9341.c **** 
+ 244:libs/ili9341/ili9341.c **** void gpio_8080_write_parallel_datapins(uint8_t write_data) 
+ 245:libs/ili9341/ili9341.c **** {
+ 1169              		.loc 1 245 0
+ 1170              		.cfi_startproc
+ 1171              		@ args = 0, pretend = 0, frame = 0
+ 1172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1173              	.LVL43:
+ 1174 0000 70B5     		push	{r4, r5, r6, lr}
+ 1175              	.LCFI34:
+ 1176              		.cfi_def_cfa_offset 16
+ 1177              		.cfi_offset 4, -16
+ 1178              		.cfi_offset 5, -12
+ 1179              		.cfi_offset 6, -8
+ 1180              		.cfi_offset 14, -4
+ 1181 0002 0446     		mov	r4, r0
+ 246:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8,  (write_data & 0x80) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+ 1182              		.loc 1 246 0
+ 1183 0004 1A4E     		ldr	r6, .L123
+ARM GAS  /tmp/ccS65nG0.s 			page 25
+
+
+ 1184 0006 C209     		lsrs	r2, r0, #7
+ 1185 0008 4FF48071 		mov	r1, #256
+ 1186 000c 3046     		mov	r0, r6
+ 1187              	.LVL44:
+ 1188 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1189              	.LVL45:
+ 247:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, (write_data & 0x40) ? GPIO_PIN_SET : GPIO_PIN_RESET); 
+ 1190              		.loc 1 247 0
+ 1191 0012 184D     		ldr	r5, .L123+4
+ 1192 0014 C4F38012 		ubfx	r2, r4, #6, #1
+ 1193 0018 4FF48061 		mov	r1, #1024
+ 1194 001c 2846     		mov	r0, r5
+ 1195 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1196              	.LVL46:
+ 248:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4,  (write_data & 0x20) ? GPIO_PIN_SET : GPIO_PIN_RESET);  
+ 1197              		.loc 1 248 0
+ 1198 0022 C4F34012 		ubfx	r2, r4, #5, #1
+ 1199 0026 1021     		movs	r1, #16
+ 1200 0028 2846     		mov	r0, r5
+ 1201 002a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1202              	.LVL47:
+ 249:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5,  (write_data & 0x10) ? GPIO_PIN_SET : GPIO_PIN_RESET); 
+ 1203              		.loc 1 249 0
+ 1204 002e C4F30012 		ubfx	r2, r4, #4, #1
+ 1205 0032 2021     		movs	r1, #32
+ 1206 0034 2846     		mov	r0, r5
+ 1207 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1208              	.LVL48:
+ 250:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3,  (write_data & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET); 
+ 1209              		.loc 1 250 0
+ 1210 003a C4F3C002 		ubfx	r2, r4, #3, #1
+ 1211 003e 0821     		movs	r1, #8
+ 1212 0040 2846     		mov	r0, r5
+ 1213 0042 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1214              	.LVL49:
+ 251:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, (write_data & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+ 1215              		.loc 1 251 0
+ 1216 0046 C4F38002 		ubfx	r2, r4, #2, #1
+ 1217 004a 4FF48061 		mov	r1, #1024
+ 1218 004e 3046     		mov	r0, r6
+ 1219 0050 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1220              	.LVL50:
+ 252:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7,  (write_data & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+ 1221              		.loc 1 252 0
+ 1222 0054 C4F34002 		ubfx	r2, r4, #1, #1
+ 1223 0058 8021     		movs	r1, #128
+ 1224 005a 0748     		ldr	r0, .L123+8
+ 1225 005c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1226              	.LVL51:
+ 253:libs/ili9341/ili9341.c ****   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9,  (write_data & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+ 1227              		.loc 1 253 0
+ 1228 0060 04F00102 		and	r2, r4, #1
+ 1229 0064 4FF40071 		mov	r1, #512
+ 1230 0068 3046     		mov	r0, r6
+ 1231 006a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1232              	.LVL52:
+ 1233 006e 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  /tmp/ccS65nG0.s 			page 26
+
+
+ 1234              	.L124:
+ 1235              		.align	2
+ 1236              	.L123:
+ 1237 0070 00000240 		.word	1073872896
+ 1238 0074 00040240 		.word	1073873920
+ 1239 0078 00080240 		.word	1073874944
+ 1240              		.cfi_endproc
+ 1241              	.LFE161:
+ 1243              		.section	.text.serial_print,"ax",%progbits
+ 1244              		.align	1
+ 1245              		.global	serial_print
+ 1246              		.syntax unified
+ 1247              		.thumb
+ 1248              		.thumb_func
+ 1249              		.fpu fpv4-sp-d16
+ 1251              	serial_print:
+ 1252              	.LFB162:
+ 254:libs/ili9341/ili9341.c **** }
+ 255:libs/ili9341/ili9341.c **** 
+ 256:libs/ili9341/ili9341.c **** /**
+ 257:libs/ili9341/ili9341.c ****   * @brief   Print debug string through USART.
+ 258:libs/ili9341/ili9341.c ****   * @param   p_message Pointer to a message string.
+ 259:libs/ili9341/ili9341.c ****   * @retval  None.
+ 260:libs/ili9341/ili9341.c ****   * @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port
+ 261:libs/ili9341/ili9341.c ****   *            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will n
+ 262:libs/ili9341/ili9341.c ****   *             In the datasheet it has been confirmed that the USART2 pins have been to multiplexe
+ 263:libs/ili9341/ili9341.c ****   *             On the PC, look for port /dev/ttyACM0 as the virtual serial port in CuteCom / MiniC
+ 264:libs/ili9341/ili9341.c ****   */
+ 265:libs/ili9341/ili9341.c **** __inline__ void serial_print(char* p_message)
+ 266:libs/ili9341/ili9341.c **** {
+ 1253              		.loc 1 266 0
+ 1254              		.cfi_startproc
+ 1255              		@ args = 0, pretend = 0, frame = 0
+ 1256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1257              	.LVL53:
+ 1258 0000 10B5     		push	{r4, lr}
+ 1259              	.LCFI35:
+ 1260              		.cfi_def_cfa_offset 8
+ 1261              		.cfi_offset 4, -8
+ 1262              		.cfi_offset 14, -4
+ 1263 0002 0446     		mov	r4, r0
+ 267:libs/ili9341/ili9341.c ****   /* Call STM32 HAL library function to UART, pass uart hander, string, length to UART. */
+ 268:libs/ili9341/ili9341.c ****   HAL_UART_Transmit(&huart2, (uint8_t*)p_message, strlen(p_message), 100);
+ 1264              		.loc 1 268 0
+ 1265 0004 FFF7FEFF 		bl	strlen
+ 1266              	.LVL54:
+ 1267 0008 6423     		movs	r3, #100
+ 1268 000a 82B2     		uxth	r2, r0
+ 1269 000c 2146     		mov	r1, r4
+ 1270 000e 0248     		ldr	r0, .L127
+ 1271 0010 FFF7FEFF 		bl	HAL_UART_Transmit
+ 1272              	.LVL55:
+ 1273 0014 10BD     		pop	{r4, pc}
+ 1274              	.LVL56:
+ 1275              	.L128:
+ 1276 0016 00BF     		.align	2
+ 1277              	.L127:
+ARM GAS  /tmp/ccS65nG0.s 			page 27
+
+
+ 1278 0018 00000000 		.word	huart2
+ 1279              		.cfi_endproc
+ 1280              	.LFE162:
+ 1282              		.section	.text.gpio_8080_write_command,"ax",%progbits
+ 1283              		.align	1
+ 1284              		.global	gpio_8080_write_command
+ 1285              		.syntax unified
+ 1286              		.thumb
+ 1287              		.thumb_func
+ 1288              		.fpu fpv4-sp-d16
+ 1290              	gpio_8080_write_command:
+ 1291              	.LFB163:
+ 269:libs/ili9341/ili9341.c **** }
+ 270:libs/ili9341/ili9341.c **** 
+ 271:libs/ili9341/ili9341.c **** 
+ 272:libs/ili9341/ili9341.c **** void gpio_8080_write_command(uint8_t cmd)
+ 273:libs/ili9341/ili9341.c **** {
+ 1292              		.loc 1 273 0
+ 1293              		.cfi_startproc
+ 1294              		@ args = 0, pretend = 0, frame = 0
+ 1295              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1296              	.LVL57:
+ 1297 0000 10B5     		push	{r4, lr}
+ 1298              	.LCFI36:
+ 1299              		.cfi_def_cfa_offset 8
+ 1300              		.cfi_offset 4, -8
+ 1301              		.cfi_offset 14, -4
+ 1302 0002 0446     		mov	r4, r0
+ 274:libs/ili9341/ili9341.c ****   /* Chip Select */
+ 275:libs/ili9341/ili9341.c ****   LCD_CS_0();
+ 1303              		.loc 1 275 0
+ 1304 0004 FFF7FEFF 		bl	LCD_CS_0
+ 1305              	.LVL58:
+ 276:libs/ili9341/ili9341.c ****   LCD_RS_0();  
+ 1306              		.loc 1 276 0
+ 1307 0008 FFF7FEFF 		bl	LCD_RS_0
+ 1308              	.LVL59:
+ 277:libs/ili9341/ili9341.c ****   LCD_RD_1();
+ 1309              		.loc 1 277 0
+ 1310 000c FFF7FEFF 		bl	LCD_RD_1
+ 1311              	.LVL60:
+ 278:libs/ili9341/ili9341.c **** 
+ 279:libs/ili9341/ili9341.c ****   /* Write data to data bus D7-D0. */  
+ 280:libs/ili9341/ili9341.c ****   gpio_configure_8080_datapins_output_mode();
+ 1312              		.loc 1 280 0
+ 1313 0010 FFF7FEFF 		bl	gpio_configure_8080_datapins_output_mode
+ 1314              	.LVL61:
+ 281:libs/ili9341/ili9341.c ****   gpio_8080_write_parallel_datapins(cmd);
+ 1315              		.loc 1 281 0
+ 1316 0014 2046     		mov	r0, r4
+ 1317 0016 FFF7FEFF 		bl	gpio_8080_write_parallel_datapins
+ 1318              	.LVL62:
+ 282:libs/ili9341/ili9341.c ****   LCD_WR_RISING_EDGE();
+ 1319              		.loc 1 282 0
+ 1320 001a FFF7FEFF 		bl	LCD_WR_RISING_EDGE
+ 1321              	.LVL63:
+ 283:libs/ili9341/ili9341.c **** 
+ARM GAS  /tmp/ccS65nG0.s 			page 28
+
+
+ 284:libs/ili9341/ili9341.c ****   /* De-select Chip. */
+ 285:libs/ili9341/ili9341.c ****   LCD_CS_1();
+ 1322              		.loc 1 285 0
+ 1323 001e FFF7FEFF 		bl	LCD_CS_1
+ 1324              	.LVL64:
+ 1325 0022 10BD     		pop	{r4, pc}
+ 1326              		.cfi_endproc
+ 1327              	.LFE163:
+ 1329              		.section	.text.gpio_8080_write_data,"ax",%progbits
+ 1330              		.align	1
+ 1331              		.global	gpio_8080_write_data
+ 1332              		.syntax unified
+ 1333              		.thumb
+ 1334              		.thumb_func
+ 1335              		.fpu fpv4-sp-d16
+ 1337              	gpio_8080_write_data:
+ 1338              	.LFB164:
+ 286:libs/ili9341/ili9341.c **** }
+ 287:libs/ili9341/ili9341.c **** 
+ 288:libs/ili9341/ili9341.c **** void gpio_8080_write_data(uint8_t data) 
+ 289:libs/ili9341/ili9341.c **** {
+ 1339              		.loc 1 289 0
+ 1340              		.cfi_startproc
+ 1341              		@ args = 0, pretend = 0, frame = 0
+ 1342              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1343              	.LVL65:
+ 1344 0000 10B5     		push	{r4, lr}
+ 1345              	.LCFI37:
+ 1346              		.cfi_def_cfa_offset 8
+ 1347              		.cfi_offset 4, -8
+ 1348              		.cfi_offset 14, -4
+ 1349 0002 0446     		mov	r4, r0
+ 290:libs/ili9341/ili9341.c ****   LCD_CS_0();
+ 1350              		.loc 1 290 0
+ 1351 0004 FFF7FEFF 		bl	LCD_CS_0
+ 1352              	.LVL66:
+ 291:libs/ili9341/ili9341.c ****   LCD_RS_1();  
+ 1353              		.loc 1 291 0
+ 1354 0008 FFF7FEFF 		bl	LCD_RS_1
+ 1355              	.LVL67:
+ 292:libs/ili9341/ili9341.c ****   LCD_RD_1();
+ 1356              		.loc 1 292 0
+ 1357 000c FFF7FEFF 		bl	LCD_RD_1
+ 1358              	.LVL68:
+ 293:libs/ili9341/ili9341.c **** 
+ 294:libs/ili9341/ili9341.c ****   gpio_configure_8080_datapins_output_mode();
+ 1359              		.loc 1 294 0
+ 1360 0010 FFF7FEFF 		bl	gpio_configure_8080_datapins_output_mode
+ 1361              	.LVL69:
+ 295:libs/ili9341/ili9341.c ****   gpio_8080_write_parallel_datapins(data);
+ 1362              		.loc 1 295 0
+ 1363 0014 2046     		mov	r0, r4
+ 1364 0016 FFF7FEFF 		bl	gpio_8080_write_parallel_datapins
+ 1365              	.LVL70:
+ 296:libs/ili9341/ili9341.c ****   LCD_WR_RISING_EDGE();
+ 1366              		.loc 1 296 0
+ 1367 001a FFF7FEFF 		bl	LCD_WR_RISING_EDGE
+ARM GAS  /tmp/ccS65nG0.s 			page 29
+
+
+ 1368              	.LVL71:
+ 297:libs/ili9341/ili9341.c ****   LCD_CS_1();
+ 1369              		.loc 1 297 0
+ 1370 001e FFF7FEFF 		bl	LCD_CS_1
+ 1371              	.LVL72:
+ 1372 0022 10BD     		pop	{r4, pc}
+ 1373              		.cfi_endproc
+ 1374              	.LFE164:
+ 1376              		.section	.text.gpio_8080_read_data,"ax",%progbits
+ 1377              		.align	1
+ 1378              		.global	gpio_8080_read_data
+ 1379              		.syntax unified
+ 1380              		.thumb
+ 1381              		.thumb_func
+ 1382              		.fpu fpv4-sp-d16
+ 1384              	gpio_8080_read_data:
+ 1385              	.LFB165:
+ 298:libs/ili9341/ili9341.c **** }
+ 299:libs/ili9341/ili9341.c **** 
+ 300:libs/ili9341/ili9341.c **** void gpio_8080_read_data(uint8_t* p_read_data, uint8_t length) 
+ 301:libs/ili9341/ili9341.c **** {
+ 1386              		.loc 1 301 0
+ 1387              		.cfi_startproc
+ 1388              		@ args = 0, pretend = 0, frame = 0
+ 1389              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1390              	.LVL73:
+ 1391 0000 70B5     		push	{r4, r5, r6, lr}
+ 1392              	.LCFI38:
+ 1393              		.cfi_def_cfa_offset 16
+ 1394              		.cfi_offset 4, -16
+ 1395              		.cfi_offset 5, -12
+ 1396              		.cfi_offset 6, -8
+ 1397              		.cfi_offset 14, -4
+ 1398 0002 0646     		mov	r6, r0
+ 1399 0004 0D46     		mov	r5, r1
+ 302:libs/ili9341/ili9341.c ****   LCD_CS_0();
+ 1400              		.loc 1 302 0
+ 1401 0006 FFF7FEFF 		bl	LCD_CS_0
+ 1402              	.LVL74:
+ 303:libs/ili9341/ili9341.c ****   LCD_RS_1();  
+ 1403              		.loc 1 303 0
+ 1404 000a FFF7FEFF 		bl	LCD_RS_1
+ 1405              	.LVL75:
+ 304:libs/ili9341/ili9341.c ****   LCD_WR_1();
+ 1406              		.loc 1 304 0
+ 1407 000e FFF7FEFF 		bl	LCD_WR_1
+ 1408              	.LVL76:
+ 305:libs/ili9341/ili9341.c **** 
+ 306:libs/ili9341/ili9341.c ****   gpio_configure_8080_datapins_input_mode();
+ 1409              		.loc 1 306 0
+ 1410 0012 FFF7FEFF 		bl	gpio_configure_8080_datapins_input_mode
+ 1411              	.LVL77:
+ 1412              	.LBB2:
+ 307:libs/ili9341/ili9341.c ****   for (int i = 0; i < length; ++i)
+ 1413              		.loc 1 307 0
+ 1414 0016 0024     		movs	r4, #0
+ 1415 0018 07E0     		b	.L134
+ARM GAS  /tmp/ccS65nG0.s 			page 30
+
+
+ 1416              	.LVL78:
+ 1417              	.L135:
+ 308:libs/ili9341/ili9341.c ****   {
+ 309:libs/ili9341/ili9341.c ****     LCD_RD_0();
+ 1418              		.loc 1 309 0 discriminator 3
+ 1419 001a FFF7FEFF 		bl	LCD_RD_0
+ 1420              	.LVL79:
+ 310:libs/ili9341/ili9341.c ****     p_read_data[i] = gpio_8080_read_parallel_datapins();
+ 1421              		.loc 1 310 0 discriminator 3
+ 1422 001e FFF7FEFF 		bl	gpio_8080_read_parallel_datapins
+ 1423              	.LVL80:
+ 1424 0022 3055     		strb	r0, [r6, r4]
+ 311:libs/ili9341/ili9341.c ****     LCD_RD_1();
+ 1425              		.loc 1 311 0 discriminator 3
+ 1426 0024 FFF7FEFF 		bl	LCD_RD_1
+ 1427              	.LVL81:
+ 307:libs/ili9341/ili9341.c ****   {
+ 1428              		.loc 1 307 0 discriminator 3
+ 1429 0028 0134     		adds	r4, r4, #1
+ 1430              	.LVL82:
+ 1431              	.L134:
+ 307:libs/ili9341/ili9341.c ****   {
+ 1432              		.loc 1 307 0 is_stmt 0 discriminator 1
+ 1433 002a AC42     		cmp	r4, r5
+ 1434 002c F5DB     		blt	.L135
+ 1435              	.LBE2:
+ 312:libs/ili9341/ili9341.c ****   }
+ 313:libs/ili9341/ili9341.c **** 
+ 314:libs/ili9341/ili9341.c ****   LCD_CS_1();
+ 1436              		.loc 1 314 0 is_stmt 1
+ 1437 002e FFF7FEFF 		bl	LCD_CS_1
+ 1438              	.LVL83:
+ 1439 0032 70BD     		pop	{r4, r5, r6, pc}
+ 1440              		.cfi_endproc
+ 1441              	.LFE165:
+ 1443              		.section	.text.ili9341_set_power_control_a,"ax",%progbits
+ 1444              		.align	1
+ 1445              		.global	ili9341_set_power_control_a
+ 1446              		.syntax unified
+ 1447              		.thumb
+ 1448              		.thumb_func
+ 1449              		.fpu fpv4-sp-d16
+ 1451              	ili9341_set_power_control_a:
+ 1452              	.LFB166:
+ 315:libs/ili9341/ili9341.c **** }
+ 316:libs/ili9341/ili9341.c **** 
+ 317:libs/ili9341/ili9341.c **** 
+ 318:libs/ili9341/ili9341.c **** /** 
+ 319:libs/ili9341/ili9341.c ****   * @brief Set Power Control A. 
+ 320:libs/ili9341/ili9341.c ****   */
+ 321:libs/ili9341/ili9341.c **** void ili9341_set_power_control_a()
+ 322:libs/ili9341/ili9341.c **** {
+ 1453              		.loc 1 322 0
+ 1454              		.cfi_startproc
+ 1455              		@ args = 0, pretend = 0, frame = 0
+ 1456              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1457 0000 08B5     		push	{r3, lr}
+ARM GAS  /tmp/ccS65nG0.s 			page 31
+
+
+ 1458              	.LCFI39:
+ 1459              		.cfi_def_cfa_offset 8
+ 1460              		.cfi_offset 3, -8
+ 1461              		.cfi_offset 14, -4
+ 323:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xCB);    
+ 1462              		.loc 1 323 0
+ 1463 0002 CB20     		movs	r0, #203
+ 1464 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1465              	.LVL84:
+ 324:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x39); 
+ 1466              		.loc 1 324 0
+ 1467 0008 3920     		movs	r0, #57
+ 1468 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1469              	.LVL85:
+ 325:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x2C); 
+ 1470              		.loc 1 325 0
+ 1471 000e 2C20     		movs	r0, #44
+ 1472 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1473              	.LVL86:
+ 326:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x00); 
+ 1474              		.loc 1 326 0
+ 1475 0014 0020     		movs	r0, #0
+ 1476 0016 FFF7FEFF 		bl	gpio_8080_write_data
+ 1477              	.LVL87:
+ 327:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x34);   //设置 Vcore=1.6V
+ 1478              		.loc 1 327 0
+ 1479 001a 3420     		movs	r0, #52
+ 1480 001c FFF7FEFF 		bl	gpio_8080_write_data
+ 1481              	.LVL88:
+ 328:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x02);   //设置DDVDH=5.6V
+ 1482              		.loc 1 328 0
+ 1483 0020 0220     		movs	r0, #2
+ 1484 0022 FFF7FEFF 		bl	gpio_8080_write_data
+ 1485              	.LVL89:
+ 1486 0026 08BD     		pop	{r3, pc}
+ 1487              		.cfi_endproc
+ 1488              	.LFE166:
+ 1490              		.section	.text.ili9341_set_power_control_b,"ax",%progbits
+ 1491              		.align	1
+ 1492              		.global	ili9341_set_power_control_b
+ 1493              		.syntax unified
+ 1494              		.thumb
+ 1495              		.thumb_func
+ 1496              		.fpu fpv4-sp-d16
+ 1498              	ili9341_set_power_control_b:
+ 1499              	.LFB167:
+ 329:libs/ili9341/ili9341.c **** }
+ 330:libs/ili9341/ili9341.c **** 
+ 331:libs/ili9341/ili9341.c **** void ili9341_set_power_control_b()
+ 332:libs/ili9341/ili9341.c **** {
+ 1500              		.loc 1 332 0
+ 1501              		.cfi_startproc
+ 1502              		@ args = 0, pretend = 0, frame = 0
+ 1503              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1504 0000 08B5     		push	{r3, lr}
+ 1505              	.LCFI40:
+ 1506              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccS65nG0.s 			page 32
+
+
+ 1507              		.cfi_offset 3, -8
+ 1508              		.cfi_offset 14, -4
+ 333:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xCF);   // 指令Power Control B
+ 1509              		.loc 1 333 0
+ 1510 0002 CF20     		movs	r0, #207
+ 1511 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1512              	.LVL90:
+ 334:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x00); 
+ 1513              		.loc 1 334 0
+ 1514 0008 0020     		movs	r0, #0
+ 1515 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1516              	.LVL91:
+ 335:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0XC1); 
+ 1517              		.loc 1 335 0
+ 1518 000e C120     		movs	r0, #193
+ 1519 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1520              	.LVL92:
+ 336:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0X30); 
+ 1521              		.loc 1 336 0
+ 1522 0014 3020     		movs	r0, #48
+ 1523 0016 FFF7FEFF 		bl	gpio_8080_write_data
+ 1524              	.LVL93:
+ 1525 001a 08BD     		pop	{r3, pc}
+ 1526              		.cfi_endproc
+ 1527              	.LFE167:
+ 1529              		.section	.text.ili9341_set_driver_timing_control_a,"ax",%progbits
+ 1530              		.align	1
+ 1531              		.global	ili9341_set_driver_timing_control_a
+ 1532              		.syntax unified
+ 1533              		.thumb
+ 1534              		.thumb_func
+ 1535              		.fpu fpv4-sp-d16
+ 1537              	ili9341_set_driver_timing_control_a:
+ 1538              	.LFB168:
+ 337:libs/ili9341/ili9341.c **** }
+ 338:libs/ili9341/ili9341.c **** 
+ 339:libs/ili9341/ili9341.c **** 
+ 340:libs/ili9341/ili9341.c **** void ili9341_set_driver_timing_control_a()
+ 341:libs/ili9341/ili9341.c **** {
+ 1539              		.loc 1 341 0
+ 1540              		.cfi_startproc
+ 1541              		@ args = 0, pretend = 0, frame = 0
+ 1542              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1543 0000 08B5     		push	{r3, lr}
+ 1544              	.LCFI41:
+ 1545              		.cfi_def_cfa_offset 8
+ 1546              		.cfi_offset 3, -8
+ 1547              		.cfi_offset 14, -4
+ 342:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xE8);   //指令 Driver timing Congrol A 
+ 1548              		.loc 1 342 0
+ 1549 0002 E820     		movs	r0, #232
+ 1550 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1551              	.LVL94:
+ 343:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x85); 
+ 1552              		.loc 1 343 0
+ 1553 0008 8520     		movs	r0, #133
+ 1554 000a FFF7FEFF 		bl	gpio_8080_write_data
+ARM GAS  /tmp/ccS65nG0.s 			page 33
+
+
+ 1555              	.LVL95:
+ 344:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x00); 
+ 1556              		.loc 1 344 0
+ 1557 000e 0020     		movs	r0, #0
+ 1558 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1559              	.LVL96:
+ 345:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x78); 
+ 1560              		.loc 1 345 0
+ 1561 0014 7820     		movs	r0, #120
+ 1562 0016 FFF7FEFF 		bl	gpio_8080_write_data
+ 1563              	.LVL97:
+ 1564 001a 08BD     		pop	{r3, pc}
+ 1565              		.cfi_endproc
+ 1566              	.LFE168:
+ 1568              		.section	.text.ili9341_set_driver_timing_control_b,"ax",%progbits
+ 1569              		.align	1
+ 1570              		.global	ili9341_set_driver_timing_control_b
+ 1571              		.syntax unified
+ 1572              		.thumb
+ 1573              		.thumb_func
+ 1574              		.fpu fpv4-sp-d16
+ 1576              	ili9341_set_driver_timing_control_b:
+ 1577              	.LFB169:
+ 346:libs/ili9341/ili9341.c **** }
+ 347:libs/ili9341/ili9341.c **** 
+ 348:libs/ili9341/ili9341.c **** void ili9341_set_driver_timing_control_b()
+ 349:libs/ili9341/ili9341.c **** {
+ 1578              		.loc 1 349 0
+ 1579              		.cfi_startproc
+ 1580              		@ args = 0, pretend = 0, frame = 0
+ 1581              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1582 0000 08B5     		push	{r3, lr}
+ 1583              	.LCFI42:
+ 1584              		.cfi_def_cfa_offset 8
+ 1585              		.cfi_offset 3, -8
+ 1586              		.cfi_offset 14, -4
+ 350:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xEA);  //指令 Driver timing Congrol B
+ 1587              		.loc 1 350 0
+ 1588 0002 EA20     		movs	r0, #234
+ 1589 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1590              	.LVL98:
+ 351:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x00); 
+ 1591              		.loc 1 351 0
+ 1592 0008 0020     		movs	r0, #0
+ 1593 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1594              	.LVL99:
+ 352:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x00); 
+ 1595              		.loc 1 352 0
+ 1596 000e 0020     		movs	r0, #0
+ 1597 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1598              	.LVL100:
+ 1599 0014 08BD     		pop	{r3, pc}
+ 1600              		.cfi_endproc
+ 1601              	.LFE169:
+ 1603              		.section	.text.ili9341_set_poweron_sequence_control_b,"ax",%progbits
+ 1604              		.align	1
+ 1605              		.global	ili9341_set_poweron_sequence_control_b
+ARM GAS  /tmp/ccS65nG0.s 			page 34
+
+
+ 1606              		.syntax unified
+ 1607              		.thumb
+ 1608              		.thumb_func
+ 1609              		.fpu fpv4-sp-d16
+ 1611              	ili9341_set_poweron_sequence_control_b:
+ 1612              	.LFB170:
+ 353:libs/ili9341/ili9341.c **** }
+ 354:libs/ili9341/ili9341.c **** 
+ 355:libs/ili9341/ili9341.c **** void ili9341_set_poweron_sequence_control_b()
+ 356:libs/ili9341/ili9341.c **** {
+ 1613              		.loc 1 356 0
+ 1614              		.cfi_startproc
+ 1615              		@ args = 0, pretend = 0, frame = 0
+ 1616              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1617 0000 08B5     		push	{r3, lr}
+ 1618              	.LCFI43:
+ 1619              		.cfi_def_cfa_offset 8
+ 1620              		.cfi_offset 3, -8
+ 1621              		.cfi_offset 14, -4
+ 357:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xED);  //指令 Power on sequence control 
+ 1622              		.loc 1 357 0
+ 1623 0002 ED20     		movs	r0, #237
+ 1624 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1625              	.LVL101:
+ 358:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x64); 
+ 1626              		.loc 1 358 0
+ 1627 0008 6420     		movs	r0, #100
+ 1628 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1629              	.LVL102:
+ 359:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x03); 
+ 1630              		.loc 1 359 0
+ 1631 000e 0320     		movs	r0, #3
+ 1632 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1633              	.LVL103:
+ 360:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0X12); 
+ 1634              		.loc 1 360 0
+ 1635 0014 1220     		movs	r0, #18
+ 1636 0016 FFF7FEFF 		bl	gpio_8080_write_data
+ 1637              	.LVL104:
+ 361:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0X81); 
+ 1638              		.loc 1 361 0
+ 1639 001a 8120     		movs	r0, #129
+ 1640 001c FFF7FEFF 		bl	gpio_8080_write_data
+ 1641              	.LVL105:
+ 1642 0020 08BD     		pop	{r3, pc}
+ 1643              		.cfi_endproc
+ 1644              	.LFE170:
+ 1646              		.section	.text.ili9341_set_pump_ratio_control,"ax",%progbits
+ 1647              		.align	1
+ 1648              		.global	ili9341_set_pump_ratio_control
+ 1649              		.syntax unified
+ 1650              		.thumb
+ 1651              		.thumb_func
+ 1652              		.fpu fpv4-sp-d16
+ 1654              	ili9341_set_pump_ratio_control:
+ 1655              	.LFB171:
+ 362:libs/ili9341/ili9341.c **** }
+ARM GAS  /tmp/ccS65nG0.s 			page 35
+
+
+ 363:libs/ili9341/ili9341.c **** 
+ 364:libs/ili9341/ili9341.c **** /**/
+ 365:libs/ili9341/ili9341.c **** void ili9341_set_pump_ratio_control()
+ 366:libs/ili9341/ili9341.c **** {
+ 1656              		.loc 1 366 0
+ 1657              		.cfi_startproc
+ 1658              		@ args = 0, pretend = 0, frame = 0
+ 1659              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1660 0000 08B5     		push	{r3, lr}
+ 1661              	.LCFI44:
+ 1662              		.cfi_def_cfa_offset 8
+ 1663              		.cfi_offset 3, -8
+ 1664              		.cfi_offset 14, -4
+ 367:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xF7);  //指令Pump ratio control
+ 1665              		.loc 1 367 0
+ 1666 0002 F720     		movs	r0, #247
+ 1667 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1668              	.LVL106:
+ 368:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x20); //DDVDH=2*VCL
+ 1669              		.loc 1 368 0
+ 1670 0008 2020     		movs	r0, #32
+ 1671 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1672              	.LVL107:
+ 1673 000e 08BD     		pop	{r3, pc}
+ 1674              		.cfi_endproc
+ 1675              	.LFE171:
+ 1677              		.section	.text.ili9341_set_power_control1,"ax",%progbits
+ 1678              		.align	1
+ 1679              		.global	ili9341_set_power_control1
+ 1680              		.syntax unified
+ 1681              		.thumb
+ 1682              		.thumb_func
+ 1683              		.fpu fpv4-sp-d16
+ 1685              	ili9341_set_power_control1:
+ 1686              	.LFB172:
+ 369:libs/ili9341/ili9341.c **** }
+ 370:libs/ili9341/ili9341.c **** 
+ 371:libs/ili9341/ili9341.c **** void ili9341_set_power_control1()
+ 372:libs/ili9341/ili9341.c **** {
+ 1687              		.loc 1 372 0
+ 1688              		.cfi_startproc
+ 1689              		@ args = 0, pretend = 0, frame = 0
+ 1690              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1691 0000 08B5     		push	{r3, lr}
+ 1692              	.LCFI45:
+ 1693              		.cfi_def_cfa_offset 8
+ 1694              		.cfi_offset 3, -8
+ 1695              		.cfi_offset 14, -4
+ 373:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xC0);    //Power control 
+ 1696              		.loc 1 373 0
+ 1697 0002 C020     		movs	r0, #192
+ 1698 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1699              	.LVL108:
+ 374:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x23);   //VRH[5:0]  GVDD=4.6V
+ 1700              		.loc 1 374 0
+ 1701 0008 2320     		movs	r0, #35
+ 1702 000a FFF7FEFF 		bl	gpio_8080_write_data
+ARM GAS  /tmp/ccS65nG0.s 			page 36
+
+
+ 1703              	.LVL109:
+ 1704 000e 08BD     		pop	{r3, pc}
+ 1705              		.cfi_endproc
+ 1706              	.LFE172:
+ 1708              		.section	.text.ili9341_set_power_control2,"ax",%progbits
+ 1709              		.align	1
+ 1710              		.global	ili9341_set_power_control2
+ 1711              		.syntax unified
+ 1712              		.thumb
+ 1713              		.thumb_func
+ 1714              		.fpu fpv4-sp-d16
+ 1716              	ili9341_set_power_control2:
+ 1717              	.LFB173:
+ 375:libs/ili9341/ili9341.c **** }
+ 376:libs/ili9341/ili9341.c **** 
+ 377:libs/ili9341/ili9341.c **** void ili9341_set_power_control2()
+ 378:libs/ili9341/ili9341.c **** {
+ 1718              		.loc 1 378 0
+ 1719              		.cfi_startproc
+ 1720              		@ args = 0, pretend = 0, frame = 0
+ 1721              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1722 0000 08B5     		push	{r3, lr}
+ 1723              	.LCFI46:
+ 1724              		.cfi_def_cfa_offset 8
+ 1725              		.cfi_offset 3, -8
+ 1726              		.cfi_offset 14, -4
+ 379:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xC1);    //Power control 
+ 1727              		.loc 1 379 0
+ 1728 0002 C120     		movs	r0, #193
+ 1729 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1730              	.LVL110:
+ 380:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x10);   //SAP[2:0];BT[3:0] 
+ 1731              		.loc 1 380 0
+ 1732 0008 1020     		movs	r0, #16
+ 1733 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1734              	.LVL111:
+ 1735 000e 08BD     		pop	{r3, pc}
+ 1736              		.cfi_endproc
+ 1737              	.LFE173:
+ 1739              		.section	.text.ili9341_set_vcom_control1,"ax",%progbits
+ 1740              		.align	1
+ 1741              		.global	ili9341_set_vcom_control1
+ 1742              		.syntax unified
+ 1743              		.thumb
+ 1744              		.thumb_func
+ 1745              		.fpu fpv4-sp-d16
+ 1747              	ili9341_set_vcom_control1:
+ 1748              	.LFB174:
+ 381:libs/ili9341/ili9341.c **** }
+ 382:libs/ili9341/ili9341.c **** 
+ 383:libs/ili9341/ili9341.c **** 
+ 384:libs/ili9341/ili9341.c **** void ili9341_set_vcom_control1()
+ 385:libs/ili9341/ili9341.c **** {
+ 1749              		.loc 1 385 0
+ 1750              		.cfi_startproc
+ 1751              		@ args = 0, pretend = 0, frame = 0
+ 1752              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccS65nG0.s 			page 37
+
+
+ 1753 0000 08B5     		push	{r3, lr}
+ 1754              	.LCFI47:
+ 1755              		.cfi_def_cfa_offset 8
+ 1756              		.cfi_offset 3, -8
+ 1757              		.cfi_offset 14, -4
+ 386:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xC5);    //VCM control  1  
+ 1758              		.loc 1 386 0
+ 1759 0002 C520     		movs	r0, #197
+ 1760 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1761              	.LVL112:
+ 387:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x3e);   //Contrast  VCOMH=3.45V VCOML=-1.5V
+ 1762              		.loc 1 387 0
+ 1763 0008 3E20     		movs	r0, #62
+ 1764 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1765              	.LVL113:
+ 388:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x28); 
+ 1766              		.loc 1 388 0
+ 1767 000e 2820     		movs	r0, #40
+ 1768 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1769              	.LVL114:
+ 1770 0014 08BD     		pop	{r3, pc}
+ 1771              		.cfi_endproc
+ 1772              	.LFE174:
+ 1774              		.section	.text.ili9341_set_vcom_control2,"ax",%progbits
+ 1775              		.align	1
+ 1776              		.global	ili9341_set_vcom_control2
+ 1777              		.syntax unified
+ 1778              		.thumb
+ 1779              		.thumb_func
+ 1780              		.fpu fpv4-sp-d16
+ 1782              	ili9341_set_vcom_control2:
+ 1783              	.LFB175:
+ 389:libs/ili9341/ili9341.c **** }
+ 390:libs/ili9341/ili9341.c **** 
+ 391:libs/ili9341/ili9341.c **** void ili9341_set_vcom_control2()
+ 392:libs/ili9341/ili9341.c **** {
+ 1784              		.loc 1 392 0
+ 1785              		.cfi_startproc
+ 1786              		@ args = 0, pretend = 0, frame = 0
+ 1787              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1788 0000 08B5     		push	{r3, lr}
+ 1789              	.LCFI48:
+ 1790              		.cfi_def_cfa_offset 8
+ 1791              		.cfi_offset 3, -8
+ 1792              		.cfi_offset 14, -4
+ 393:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xC7);    //VCM control2 
+ 1793              		.loc 1 393 0
+ 1794 0002 C720     		movs	r0, #199
+ 1795 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1796              	.LVL115:
+ 394:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x86);   //--
+ 1797              		.loc 1 394 0
+ 1798 0008 8620     		movs	r0, #134
+ 1799 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1800              	.LVL116:
+ 1801 000e 08BD     		pop	{r3, pc}
+ 1802              		.cfi_endproc
+ARM GAS  /tmp/ccS65nG0.s 			page 38
+
+
+ 1803              	.LFE175:
+ 1805              		.section	.text.ili9341_set_memory_access_control,"ax",%progbits
+ 1806              		.align	1
+ 1807              		.global	ili9341_set_memory_access_control
+ 1808              		.syntax unified
+ 1809              		.thumb
+ 1810              		.thumb_func
+ 1811              		.fpu fpv4-sp-d16
+ 1813              	ili9341_set_memory_access_control:
+ 1814              	.LFB176:
+ 395:libs/ili9341/ili9341.c **** }
+ 396:libs/ili9341/ili9341.c **** 
+ 397:libs/ili9341/ili9341.c **** void ili9341_set_memory_access_control()
+ 398:libs/ili9341/ili9341.c **** {
+ 1815              		.loc 1 398 0
+ 1816              		.cfi_startproc
+ 1817              		@ args = 0, pretend = 0, frame = 0
+ 1818              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1819 0000 08B5     		push	{r3, lr}
+ 1820              	.LCFI49:
+ 1821              		.cfi_def_cfa_offset 8
+ 1822              		.cfi_offset 3, -8
+ 1823              		.cfi_offset 14, -4
+ 399:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x36);    // Memory Access Control 
+ 1824              		.loc 1 399 0
+ 1825 0002 3620     		movs	r0, #54
+ 1826 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1827              	.LVL117:
+ 400:libs/ili9341/ili9341.c ****   //gpio_8080_write_data(0x48);  // MX=1 Column Address Order ; BGR=1 RGB(IC)-->BGR(LCD Panel)
+ 401:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x08);  // MX=0,BGR =1
+ 1828              		.loc 1 401 0
+ 1829 0008 0820     		movs	r0, #8
+ 1830 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1831              	.LVL118:
+ 1832 000e 08BD     		pop	{r3, pc}
+ 1833              		.cfi_endproc
+ 1834              	.LFE176:
+ 1836              		.section	.text.ili9341_set_pixel_format_set,"ax",%progbits
+ 1837              		.align	1
+ 1838              		.global	ili9341_set_pixel_format_set
+ 1839              		.syntax unified
+ 1840              		.thumb
+ 1841              		.thumb_func
+ 1842              		.fpu fpv4-sp-d16
+ 1844              	ili9341_set_pixel_format_set:
+ 1845              	.LFB177:
+ 402:libs/ili9341/ili9341.c **** }
+ 403:libs/ili9341/ili9341.c **** 
+ 404:libs/ili9341/ili9341.c **** void ili9341_set_pixel_format_set()
+ 405:libs/ili9341/ili9341.c **** {
+ 1846              		.loc 1 405 0
+ 1847              		.cfi_startproc
+ 1848              		@ args = 0, pretend = 0, frame = 0
+ 1849              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1850 0000 08B5     		push	{r3, lr}
+ 1851              	.LCFI50:
+ 1852              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccS65nG0.s 			page 39
+
+
+ 1853              		.cfi_offset 3, -8
+ 1854              		.cfi_offset 14, -4
+ 406:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x3A);    //指令Pixel Format Set 
+ 1855              		.loc 1 406 0
+ 1856 0002 3A20     		movs	r0, #58
+ 1857 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1858              	.LVL119:
+ 407:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x55);   //RGB 接口和MCU接口模式的像素数据格式为16bit/pixel  
+ 1859              		.loc 1 407 0
+ 1860 0008 5520     		movs	r0, #85
+ 1861 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1862              	.LVL120:
+ 1863 000e 08BD     		pop	{r3, pc}
+ 1864              		.cfi_endproc
+ 1865              	.LFE177:
+ 1867              		.section	.text.ili9341_set_frame_rate_control,"ax",%progbits
+ 1868              		.align	1
+ 1869              		.global	ili9341_set_frame_rate_control
+ 1870              		.syntax unified
+ 1871              		.thumb
+ 1872              		.thumb_func
+ 1873              		.fpu fpv4-sp-d16
+ 1875              	ili9341_set_frame_rate_control:
+ 1876              	.LFB178:
+ 408:libs/ili9341/ili9341.c **** }
+ 409:libs/ili9341/ili9341.c **** 
+ 410:libs/ili9341/ili9341.c **** void ili9341_set_frame_rate_control()
+ 411:libs/ili9341/ili9341.c **** {
+ 1877              		.loc 1 411 0
+ 1878              		.cfi_startproc
+ 1879              		@ args = 0, pretend = 0, frame = 0
+ 1880              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1881 0000 08B5     		push	{r3, lr}
+ 1882              	.LCFI51:
+ 1883              		.cfi_def_cfa_offset 8
+ 1884              		.cfi_offset 3, -8
+ 1885              		.cfi_offset 14, -4
+ 412:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xB1);    //Frame Rate Control (B1h)（In Normal Mode /Full colors ）
+ 1886              		.loc 1 412 0
+ 1887 0002 B120     		movs	r0, #177
+ 1888 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1889              	.LVL121:
+ 413:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x00);  
+ 1890              		.loc 1 413 0
+ 1891 0008 0020     		movs	r0, #0
+ 1892 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1893              	.LVL122:
+ 414:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x18);  //79HZ(frame rate)
+ 1894              		.loc 1 414 0
+ 1895 000e 1820     		movs	r0, #24
+ 1896 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1897              	.LVL123:
+ 1898 0014 08BD     		pop	{r3, pc}
+ 1899              		.cfi_endproc
+ 1900              	.LFE178:
+ 1902              		.section	.text.ili9341_set_display_function_control,"ax",%progbits
+ 1903              		.align	1
+ARM GAS  /tmp/ccS65nG0.s 			page 40
+
+
+ 1904              		.global	ili9341_set_display_function_control
+ 1905              		.syntax unified
+ 1906              		.thumb
+ 1907              		.thumb_func
+ 1908              		.fpu fpv4-sp-d16
+ 1910              	ili9341_set_display_function_control:
+ 1911              	.LFB179:
+ 415:libs/ili9341/ili9341.c **** }
+ 416:libs/ili9341/ili9341.c **** 
+ 417:libs/ili9341/ili9341.c **** void ili9341_set_display_function_control()
+ 418:libs/ili9341/ili9341.c **** {
+ 1912              		.loc 1 418 0
+ 1913              		.cfi_startproc
+ 1914              		@ args = 0, pretend = 0, frame = 0
+ 1915              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1916 0000 08B5     		push	{r3, lr}
+ 1917              	.LCFI52:
+ 1918              		.cfi_def_cfa_offset 8
+ 1919              		.cfi_offset 3, -8
+ 1920              		.cfi_offset 14, -4
+ 419:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xB6);    // Display Function Control 
+ 1921              		.loc 1 419 0
+ 1922 0002 B620     		movs	r0, #182
+ 1923 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1924              	.LVL124:
+ 420:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x08);   // Interval Scan 
+ 1925              		.loc 1 420 0
+ 1926 0008 0820     		movs	r0, #8
+ 1927 000a FFF7FEFF 		bl	gpio_8080_write_data
+ 1928              	.LVL125:
+ 421:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x82);   //底背景为白屏， 5 frams Scan Cycle
+ 1929              		.loc 1 421 0
+ 1930 000e 8220     		movs	r0, #130
+ 1931 0010 FFF7FEFF 		bl	gpio_8080_write_data
+ 1932              	.LVL126:
+ 422:libs/ili9341/ili9341.c ****   gpio_8080_write_data(0x27);   //320 line
+ 1933              		.loc 1 422 0
+ 1934 0014 2720     		movs	r0, #39
+ 1935 0016 FFF7FEFF 		bl	gpio_8080_write_data
+ 1936              	.LVL127:
+ 1937 001a 08BD     		pop	{r3, pc}
+ 1938              		.cfi_endproc
+ 1939              	.LFE179:
+ 1941              		.section	.text.ili9341_exit_sleep_mode,"ax",%progbits
+ 1942              		.align	1
+ 1943              		.global	ili9341_exit_sleep_mode
+ 1944              		.syntax unified
+ 1945              		.thumb
+ 1946              		.thumb_func
+ 1947              		.fpu fpv4-sp-d16
+ 1949              	ili9341_exit_sleep_mode:
+ 1950              	.LFB180:
+ 423:libs/ili9341/ili9341.c **** }
+ 424:libs/ili9341/ili9341.c **** 
+ 425:libs/ili9341/ili9341.c **** void ili9341_exit_sleep_mode()
+ 426:libs/ili9341/ili9341.c **** {
+ 1951              		.loc 1 426 0
+ARM GAS  /tmp/ccS65nG0.s 			page 41
+
+
+ 1952              		.cfi_startproc
+ 1953              		@ args = 0, pretend = 0, frame = 0
+ 1954              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1955 0000 08B5     		push	{r3, lr}
+ 1956              	.LCFI53:
+ 1957              		.cfi_def_cfa_offset 8
+ 1958              		.cfi_offset 3, -8
+ 1959              		.cfi_offset 14, -4
+ 427:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x11);    //Exit Sleep 
+ 1960              		.loc 1 427 0
+ 1961 0002 1120     		movs	r0, #17
+ 1962 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1963              	.LVL128:
+ 428:libs/ili9341/ili9341.c ****   HAL_Delay(120);             //必须120ms的延迟
+ 1964              		.loc 1 428 0
+ 1965 0008 7820     		movs	r0, #120
+ 1966 000a FFF7FEFF 		bl	HAL_Delay
+ 1967              	.LVL129:
+ 1968 000e 08BD     		pop	{r3, pc}
+ 1969              		.cfi_endproc
+ 1970              	.LFE180:
+ 1972              		.section	.text.ili9341_set_display_on,"ax",%progbits
+ 1973              		.align	1
+ 1974              		.global	ili9341_set_display_on
+ 1975              		.syntax unified
+ 1976              		.thumb
+ 1977              		.thumb_func
+ 1978              		.fpu fpv4-sp-d16
+ 1980              	ili9341_set_display_on:
+ 1981              	.LFB181:
+ 429:libs/ili9341/ili9341.c **** }
+ 430:libs/ili9341/ili9341.c **** 
+ 431:libs/ili9341/ili9341.c **** void ili9341_set_display_on()
+ 432:libs/ili9341/ili9341.c **** {
+ 1982              		.loc 1 432 0
+ 1983              		.cfi_startproc
+ 1984              		@ args = 0, pretend = 0, frame = 0
+ 1985              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1986 0000 08B5     		push	{r3, lr}
+ 1987              	.LCFI54:
+ 1988              		.cfi_def_cfa_offset 8
+ 1989              		.cfi_offset 3, -8
+ 1990              		.cfi_offset 14, -4
+ 433:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x29);    //Display on 
+ 1991              		.loc 1 433 0
+ 1992 0002 2920     		movs	r0, #41
+ 1993 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 1994              	.LVL130:
+ 1995 0008 08BD     		pop	{r3, pc}
+ 1996              		.cfi_endproc
+ 1997              	.LFE181:
+ 1999              		.section	.text.ili9341_memory_write,"ax",%progbits
+ 2000              		.align	1
+ 2001              		.global	ili9341_memory_write
+ 2002              		.syntax unified
+ 2003              		.thumb
+ 2004              		.thumb_func
+ARM GAS  /tmp/ccS65nG0.s 			page 42
+
+
+ 2005              		.fpu fpv4-sp-d16
+ 2007              	ili9341_memory_write:
+ 2008              	.LFB182:
+ 434:libs/ili9341/ili9341.c **** 
+ 435:libs/ili9341/ili9341.c **** }
+ 436:libs/ili9341/ili9341.c **** 
+ 437:libs/ili9341/ili9341.c **** void ili9341_memory_write()
+ 438:libs/ili9341/ili9341.c **** {
+ 2009              		.loc 1 438 0
+ 2010              		.cfi_startproc
+ 2011              		@ args = 0, pretend = 0, frame = 0
+ 2012              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2013 0000 08B5     		push	{r3, lr}
+ 2014              	.LCFI55:
+ 2015              		.cfi_def_cfa_offset 8
+ 2016              		.cfi_offset 3, -8
+ 2017              		.cfi_offset 14, -4
+ 439:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x2c);    //Memory Write Start(2C) 或 Memory Write Continue(3ch)
+ 2018              		.loc 1 439 0
+ 2019 0002 2C20     		movs	r0, #44
+ 2020 0004 FFF7FEFF 		bl	gpio_8080_write_command
+ 2021              	.LVL131:
+ 2022 0008 08BD     		pop	{r3, pc}
+ 2023              		.cfi_endproc
+ 2024              	.LFE182:
+ 2026              		.section	.text.ili9341_hard_reset,"ax",%progbits
+ 2027              		.align	1
+ 2028              		.global	ili9341_hard_reset
+ 2029              		.syntax unified
+ 2030              		.thumb
+ 2031              		.thumb_func
+ 2032              		.fpu fpv4-sp-d16
+ 2034              	ili9341_hard_reset:
+ 2035              	.LFB183:
+ 440:libs/ili9341/ili9341.c **** }
+ 441:libs/ili9341/ili9341.c **** 
+ 442:libs/ili9341/ili9341.c **** void ili9341_hard_reset() 
+ 443:libs/ili9341/ili9341.c **** {
+ 2036              		.loc 1 443 0
+ 2037              		.cfi_startproc
+ 2038              		@ args = 0, pretend = 0, frame = 0
+ 2039              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2040 0000 08B5     		push	{r3, lr}
+ 2041              	.LCFI56:
+ 2042              		.cfi_def_cfa_offset 8
+ 2043              		.cfi_offset 3, -8
+ 2044              		.cfi_offset 14, -4
+ 444:libs/ili9341/ili9341.c ****   LCD_RST_1();
+ 2045              		.loc 1 444 0
+ 2046 0002 FFF7FEFF 		bl	LCD_RST_1
+ 2047              	.LVL132:
+ 445:libs/ili9341/ili9341.c ****   HAL_Delay(1);
+ 2048              		.loc 1 445 0
+ 2049 0006 0120     		movs	r0, #1
+ 2050 0008 FFF7FEFF 		bl	HAL_Delay
+ 2051              	.LVL133:
+ 446:libs/ili9341/ili9341.c ****   LCD_RST_0();
+ARM GAS  /tmp/ccS65nG0.s 			page 43
+
+
+ 2052              		.loc 1 446 0
+ 2053 000c FFF7FEFF 		bl	LCD_RST_0
+ 2054              	.LVL134:
+ 447:libs/ili9341/ili9341.c ****   HAL_Delay(1);
+ 2055              		.loc 1 447 0
+ 2056 0010 0120     		movs	r0, #1
+ 2057 0012 FFF7FEFF 		bl	HAL_Delay
+ 2058              	.LVL135:
+ 448:libs/ili9341/ili9341.c ****   LCD_RST_1();
+ 2059              		.loc 1 448 0
+ 2060 0016 FFF7FEFF 		bl	LCD_RST_1
+ 2061              	.LVL136:
+ 449:libs/ili9341/ili9341.c ****   HAL_Delay(1);
+ 2062              		.loc 1 449 0
+ 2063 001a 0120     		movs	r0, #1
+ 2064 001c FFF7FEFF 		bl	HAL_Delay
+ 2065              	.LVL137:
+ 2066 0020 08BD     		pop	{r3, pc}
+ 2067              		.cfi_endproc
+ 2068              	.LFE183:
+ 2070              		.section	.text.ili9341_read_id4,"ax",%progbits
+ 2071              		.align	1
+ 2072              		.global	ili9341_read_id4
+ 2073              		.syntax unified
+ 2074              		.thumb
+ 2075              		.thumb_func
+ 2076              		.fpu fpv4-sp-d16
+ 2078              	ili9341_read_id4:
+ 2079              	.LFB184:
+ 450:libs/ili9341/ili9341.c **** }
+ 451:libs/ili9341/ili9341.c **** 
+ 452:libs/ili9341/ili9341.c **** /**
+ 453:libs/ili9341/ili9341.c **** 	* @brief Read LCD Controller Chip (ILI9341) ID. 
+ 454:libs/ili9341/ili9341.c **** 	* @note  It has been tested that some display modules has all manufacturer/version set to 0.
+ 455:libs/ili9341/ili9341.c **** 	*        Thus a more trustworthy way to test 8080 Read is to read the controller IC (ILI9341)'s ID
+ 456:libs/ili9341/ili9341.c **** 	*/
+ 457:libs/ili9341/ili9341.c **** void ili9341_read_id4(uint8_t* p_read_data) 
+ 458:libs/ili9341/ili9341.c **** {
+ 2080              		.loc 1 458 0
+ 2081              		.cfi_startproc
+ 2082              		@ args = 0, pretend = 0, frame = 64
+ 2083              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2084              	.LVL138:
+ 2085 0000 70B5     		push	{r4, r5, r6, lr}
+ 2086              	.LCFI57:
+ 2087              		.cfi_def_cfa_offset 16
+ 2088              		.cfi_offset 4, -16
+ 2089              		.cfi_offset 5, -12
+ 2090              		.cfi_offset 6, -8
+ 2091              		.cfi_offset 14, -4
+ 2092 0002 92B0     		sub	sp, sp, #72
+ 2093              	.LCFI58:
+ 2094              		.cfi_def_cfa_offset 88
+ 2095 0004 0646     		mov	r6, r0
+ 459:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0xD3);
+ 2096              		.loc 1 459 0
+ 2097 0006 D320     		movs	r0, #211
+ARM GAS  /tmp/ccS65nG0.s 			page 44
+
+
+ 2098              	.LVL139:
+ 2099 0008 FFF7FEFF 		bl	gpio_8080_write_command
+ 2100              	.LVL140:
+ 460:libs/ili9341/ili9341.c ****   gpio_8080_read_data(p_read_data, 4);
+ 2101              		.loc 1 460 0
+ 2102 000c 0421     		movs	r1, #4
+ 2103 000e 3046     		mov	r0, r6
+ 2104 0010 FFF7FEFF 		bl	gpio_8080_read_data
+ 2105              	.LVL141:
+ 461:libs/ili9341/ili9341.c **** 
+ 462:libs/ili9341/ili9341.c ****   char msg[64];
+ 463:libs/ili9341/ili9341.c **** 	sprintf(msg, "- Printing ID4 register value -\n");
+ 2106              		.loc 1 463 0
+ 2107 0014 02AC     		add	r4, sp, #8
+ 2108 0016 124D     		ldr	r5, .L175
+ 2109 0018 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 2110 001a 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 2111 001c 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 2112 001e 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 2113 0020 2B68     		ldr	r3, [r5]
+ 2114 0022 2370     		strb	r3, [r4]
+ 2115              	.LVL142:
+ 2116              	.LBB7:
+ 2117              	.LBB8:
+ 268:libs/ili9341/ili9341.c **** }
+ 2118              		.loc 1 268 0
+ 2119 0024 02A8     		add	r0, sp, #8
+ 2120              	.LVL143:
+ 2121 0026 FFF7FEFF 		bl	strlen
+ 2122              	.LVL144:
+ 2123 002a 0E4C     		ldr	r4, .L175+4
+ 2124              	.LVL145:
+ 2125 002c 6423     		movs	r3, #100
+ 2126 002e 82B2     		uxth	r2, r0
+ 2127 0030 02A9     		add	r1, sp, #8
+ 2128              	.LVL146:
+ 2129 0032 2046     		mov	r0, r4
+ 2130 0034 FFF7FEFF 		bl	HAL_UART_Transmit
+ 2131              	.LVL147:
+ 2132              	.LBE8:
+ 2133              	.LBE7:
+ 464:libs/ili9341/ili9341.c **** 	serial_print(msg);
+ 465:libs/ili9341/ili9341.c **** 	sprintf(msg, "ILI9341 IC Version: %d \nIC Model: 0x%02x%02x\n", p_read_data[1], p_read_data[2], p_
+ 2134              		.loc 1 465 0
+ 2135 0038 7278     		ldrb	r2, [r6, #1]	@ zero_extendqisi2
+ 2136 003a B378     		ldrb	r3, [r6, #2]	@ zero_extendqisi2
+ 2137 003c F178     		ldrb	r1, [r6, #3]	@ zero_extendqisi2
+ 2138 003e 0091     		str	r1, [sp]
+ 2139 0040 0949     		ldr	r1, .L175+8
+ 2140 0042 02A8     		add	r0, sp, #8
+ 2141 0044 FFF7FEFF 		bl	sprintf
+ 2142              	.LVL148:
+ 2143              	.LBB9:
+ 2144              	.LBB10:
+ 268:libs/ili9341/ili9341.c **** }
+ 2145              		.loc 1 268 0
+ 2146 0048 02A8     		add	r0, sp, #8
+ARM GAS  /tmp/ccS65nG0.s 			page 45
+
+
+ 2147              	.LVL149:
+ 2148 004a FFF7FEFF 		bl	strlen
+ 2149              	.LVL150:
+ 2150 004e 6423     		movs	r3, #100
+ 2151 0050 82B2     		uxth	r2, r0
+ 2152 0052 02A9     		add	r1, sp, #8
+ 2153              	.LVL151:
+ 2154 0054 2046     		mov	r0, r4
+ 2155 0056 FFF7FEFF 		bl	HAL_UART_Transmit
+ 2156              	.LVL152:
+ 2157              	.LBE10:
+ 2158              	.LBE9:
+ 466:libs/ili9341/ili9341.c **** 	serial_print(msg);
+ 467:libs/ili9341/ili9341.c **** }
+ 2159              		.loc 1 467 0
+ 2160 005a 12B0     		add	sp, sp, #72
+ 2161              	.LCFI59:
+ 2162              		.cfi_def_cfa_offset 16
+ 2163              		@ sp needed
+ 2164 005c 70BD     		pop	{r4, r5, r6, pc}
+ 2165              	.LVL153:
+ 2166              	.L176:
+ 2167 005e 00BF     		.align	2
+ 2168              	.L175:
+ 2169 0060 00000000 		.word	.LC0
+ 2170 0064 00000000 		.word	huart2
+ 2171 0068 24000000 		.word	.LC1
+ 2172              		.cfi_endproc
+ 2173              	.LFE184:
+ 2175              		.section	.text.ili9341_init,"ax",%progbits
+ 2176              		.align	1
+ 2177              		.global	ili9341_init
+ 2178              		.syntax unified
+ 2179              		.thumb
+ 2180              		.thumb_func
+ 2181              		.fpu fpv4-sp-d16
+ 2183              	ili9341_init:
+ 2184              	.LFB185:
+ 468:libs/ili9341/ili9341.c **** 
+ 469:libs/ili9341/ili9341.c **** 
+ 470:libs/ili9341/ili9341.c **** 
+ 471:libs/ili9341/ili9341.c **** void ili9341_init()
+ 472:libs/ili9341/ili9341.c **** {
+ 2185              		.loc 1 472 0
+ 2186              		.cfi_startproc
+ 2187              		@ args = 0, pretend = 0, frame = 0
+ 2188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2189 0000 08B5     		push	{r3, lr}
+ 2190              	.LCFI60:
+ 2191              		.cfi_def_cfa_offset 8
+ 2192              		.cfi_offset 3, -8
+ 2193              		.cfi_offset 14, -4
+ 473:libs/ili9341/ili9341.c **** 
+ 474:libs/ili9341/ili9341.c ****   ili9341_hard_reset();
+ 2194              		.loc 1 474 0
+ 2195 0002 FFF7FEFF 		bl	ili9341_hard_reset
+ 2196              	.LVL154:
+ARM GAS  /tmp/ccS65nG0.s 			page 46
+
+
+ 475:libs/ili9341/ili9341.c **** 
+ 476:libs/ili9341/ili9341.c **** 
+ 477:libs/ili9341/ili9341.c **** 
+ 478:libs/ili9341/ili9341.c ****   ili9341_set_power_control_a();
+ 2197              		.loc 1 478 0
+ 2198 0006 FFF7FEFF 		bl	ili9341_set_power_control_a
+ 2199              	.LVL155:
+ 479:libs/ili9341/ili9341.c ****   ili9341_set_power_control_b();
+ 2200              		.loc 1 479 0
+ 2201 000a FFF7FEFF 		bl	ili9341_set_power_control_b
+ 2202              	.LVL156:
+ 480:libs/ili9341/ili9341.c ****   ili9341_set_driver_timing_control_a();
+ 2203              		.loc 1 480 0
+ 2204 000e FFF7FEFF 		bl	ili9341_set_driver_timing_control_a
+ 2205              	.LVL157:
+ 481:libs/ili9341/ili9341.c ****   ili9341_set_driver_timing_control_b();
+ 2206              		.loc 1 481 0
+ 2207 0012 FFF7FEFF 		bl	ili9341_set_driver_timing_control_b
+ 2208              	.LVL158:
+ 482:libs/ili9341/ili9341.c ****   ili9341_set_poweron_sequence_control_b();
+ 2209              		.loc 1 482 0
+ 2210 0016 FFF7FEFF 		bl	ili9341_set_poweron_sequence_control_b
+ 2211              	.LVL159:
+ 483:libs/ili9341/ili9341.c ****   ili9341_set_pump_ratio_control();
+ 2212              		.loc 1 483 0
+ 2213 001a FFF7FEFF 		bl	ili9341_set_pump_ratio_control
+ 2214              	.LVL160:
+ 484:libs/ili9341/ili9341.c ****   ili9341_set_power_control1();
+ 2215              		.loc 1 484 0
+ 2216 001e FFF7FEFF 		bl	ili9341_set_power_control1
+ 2217              	.LVL161:
+ 485:libs/ili9341/ili9341.c ****   ili9341_set_power_control2();
+ 2218              		.loc 1 485 0
+ 2219 0022 FFF7FEFF 		bl	ili9341_set_power_control2
+ 2220              	.LVL162:
+ 486:libs/ili9341/ili9341.c ****   ili9341_set_vcom_control1();
+ 2221              		.loc 1 486 0
+ 2222 0026 FFF7FEFF 		bl	ili9341_set_vcom_control1
+ 2223              	.LVL163:
+ 487:libs/ili9341/ili9341.c ****   ili9341_set_vcom_control2();
+ 2224              		.loc 1 487 0
+ 2225 002a FFF7FEFF 		bl	ili9341_set_vcom_control2
+ 2226              	.LVL164:
+ 488:libs/ili9341/ili9341.c ****   ili9341_set_memory_access_control();
+ 2227              		.loc 1 488 0
+ 2228 002e FFF7FEFF 		bl	ili9341_set_memory_access_control
+ 2229              	.LVL165:
+ 489:libs/ili9341/ili9341.c ****   ili9341_set_pixel_format_set();
+ 2230              		.loc 1 489 0
+ 2231 0032 FFF7FEFF 		bl	ili9341_set_pixel_format_set
+ 2232              	.LVL166:
+ 490:libs/ili9341/ili9341.c ****   ili9341_set_frame_rate_control();
+ 2233              		.loc 1 490 0
+ 2234 0036 FFF7FEFF 		bl	ili9341_set_frame_rate_control
+ 2235              	.LVL167:
+ 491:libs/ili9341/ili9341.c ****   ili9341_set_display_function_control();
+ 2236              		.loc 1 491 0
+ARM GAS  /tmp/ccS65nG0.s 			page 47
+
+
+ 2237 003a FFF7FEFF 		bl	ili9341_set_display_function_control
+ 2238              	.LVL168:
+ 492:libs/ili9341/ili9341.c ****   ili9341_exit_sleep_mode();
+ 2239              		.loc 1 492 0
+ 2240 003e FFF7FEFF 		bl	ili9341_exit_sleep_mode
+ 2241              	.LVL169:
+ 493:libs/ili9341/ili9341.c ****   ili9341_set_display_on();
+ 2242              		.loc 1 493 0
+ 2243 0042 FFF7FEFF 		bl	ili9341_set_display_on
+ 2244              	.LVL170:
+ 494:libs/ili9341/ili9341.c ****   ili9341_memory_write();
+ 2245              		.loc 1 494 0
+ 2246 0046 FFF7FEFF 		bl	ili9341_memory_write
+ 2247              	.LVL171:
+ 2248 004a 08BD     		pop	{r3, pc}
+ 2249              		.cfi_endproc
+ 2250              	.LFE185:
+ 2252              		.section	.text.Address_set,"ax",%progbits
+ 2253              		.align	1
+ 2254              		.global	Address_set
+ 2255              		.syntax unified
+ 2256              		.thumb
+ 2257              		.thumb_func
+ 2258              		.fpu fpv4-sp-d16
+ 2260              	Address_set:
+ 2261              	.LFB186:
+ 495:libs/ili9341/ili9341.c **** 
+ 496:libs/ili9341/ili9341.c **** 
+ 497:libs/ili9341/ili9341.c **** 
+ 498:libs/ili9341/ili9341.c **** 
+ 499:libs/ili9341/ili9341.c **** }
+ 500:libs/ili9341/ili9341.c **** 
+ 501:libs/ili9341/ili9341.c **** 
+ 502:libs/ili9341/ili9341.c **** 
+ 503:libs/ili9341/ili9341.c **** 
+ 504:libs/ili9341/ili9341.c **** //地址区域设置。涉及指令2Ah、2Bh
+ 505:libs/ili9341/ili9341.c **** void Address_set(unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2)
+ 506:libs/ili9341/ili9341.c **** {
+ 2262              		.loc 1 506 0
+ 2263              		.cfi_startproc
+ 2264              		@ args = 0, pretend = 0, frame = 0
+ 2265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2266              	.LVL172:
+ 2267 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2268              	.LCFI61:
+ 2269              		.cfi_def_cfa_offset 24
+ 2270              		.cfi_offset 3, -24
+ 2271              		.cfi_offset 4, -20
+ 2272              		.cfi_offset 5, -16
+ 2273              		.cfi_offset 6, -12
+ 2274              		.cfi_offset 7, -8
+ 2275              		.cfi_offset 14, -4
+ 2276 0002 0746     		mov	r7, r0
+ 2277 0004 0D46     		mov	r5, r1
+ 2278 0006 1646     		mov	r6, r2
+ 2279 0008 1C46     		mov	r4, r3
+ 507:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x2a);
+ARM GAS  /tmp/ccS65nG0.s 			page 48
+
+
+ 2280              		.loc 1 507 0
+ 2281 000a 2A20     		movs	r0, #42
+ 2282              	.LVL173:
+ 2283 000c FFF7FEFF 		bl	gpio_8080_write_command
+ 2284              	.LVL174:
+ 508:libs/ili9341/ili9341.c ****   gpio_8080_write_data(x1>>8);   //设定屏幕数据操作区域的列首地址数据，，先写�
+ 2285              		.loc 1 508 0
+ 2286 0010 C7F30720 		ubfx	r0, r7, #8, #8
+ 2287 0014 FFF7FEFF 		bl	gpio_8080_write_data
+ 2288              	.LVL175:
+ 509:libs/ili9341/ili9341.c ****   gpio_8080_write_data(x1);      //写入16bit数据位的低位
+ 2289              		.loc 1 509 0
+ 2290 0018 F8B2     		uxtb	r0, r7
+ 2291 001a FFF7FEFF 		bl	gpio_8080_write_data
+ 2292              	.LVL176:
+ 510:libs/ili9341/ili9341.c ****   gpio_8080_write_data(x2>>8);   //设定屏幕数据操作区域的列尾地址数据，，先写�
+ 2293              		.loc 1 510 0
+ 2294 001e C6F30720 		ubfx	r0, r6, #8, #8
+ 2295 0022 FFF7FEFF 		bl	gpio_8080_write_data
+ 2296              	.LVL177:
+ 511:libs/ili9341/ili9341.c ****   gpio_8080_write_data(x2);      //写入16bit数据位的低位
+ 2297              		.loc 1 511 0
+ 2298 0026 F0B2     		uxtb	r0, r6
+ 2299 0028 FFF7FEFF 		bl	gpio_8080_write_data
+ 2300              	.LVL178:
+ 512:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x2b);
+ 2301              		.loc 1 512 0
+ 2302 002c 2B20     		movs	r0, #43
+ 2303 002e FFF7FEFF 		bl	gpio_8080_write_command
+ 2304              	.LVL179:
+ 513:libs/ili9341/ili9341.c ****   gpio_8080_write_data(y1>>8);     //设定屏幕数据操作区域的行首地址数据，，先�
+ 2305              		.loc 1 513 0
+ 2306 0032 C5F30720 		ubfx	r0, r5, #8, #8
+ 2307 0036 FFF7FEFF 		bl	gpio_8080_write_data
+ 2308              	.LVL180:
+ 514:libs/ili9341/ili9341.c ****   gpio_8080_write_data(y1);         //写入16bit数据位的低位
+ 2309              		.loc 1 514 0
+ 2310 003a E8B2     		uxtb	r0, r5
+ 2311 003c FFF7FEFF 		bl	gpio_8080_write_data
+ 2312              	.LVL181:
+ 515:libs/ili9341/ili9341.c ****   gpio_8080_write_data(y2>>8);      //设定屏幕数据操作区域的行尾地址数据，，先�
+ 2313              		.loc 1 515 0
+ 2314 0040 C4F30720 		ubfx	r0, r4, #8, #8
+ 2315 0044 FFF7FEFF 		bl	gpio_8080_write_data
+ 2316              	.LVL182:
+ 516:libs/ili9341/ili9341.c ****   gpio_8080_write_data(y2);         //写入16bit数据位的低位
+ 2317              		.loc 1 516 0
+ 2318 0048 E0B2     		uxtb	r0, r4
+ 2319 004a FFF7FEFF 		bl	gpio_8080_write_data
+ 2320              	.LVL183:
+ 517:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x2c);  //开启RAM数据持续写入状态。         
+ 2321              		.loc 1 517 0
+ 2322 004e 2C20     		movs	r0, #44
+ 2323 0050 FFF7FEFF 		bl	gpio_8080_write_command
+ 2324              	.LVL184:
+ 2325 0054 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2326              		.cfi_endproc
+ARM GAS  /tmp/ccS65nG0.s 			page 49
+
+
+ 2327              	.LFE186:
+ 2329              		.section	.text.H_line,"ax",%progbits
+ 2330              		.align	1
+ 2331              		.global	H_line
+ 2332              		.syntax unified
+ 2333              		.thumb
+ 2334              		.thumb_func
+ 2335              		.fpu fpv4-sp-d16
+ 2337              	H_line:
+ 2338              	.LFB187:
+ 518:libs/ili9341/ili9341.c **** }
+ 519:libs/ili9341/ili9341.c **** 
+ 520:libs/ili9341/ili9341.c **** 
+ 521:libs/ili9341/ili9341.c **** 
+ 522:libs/ili9341/ili9341.c **** 
+ 523:libs/ili9341/ili9341.c **** //画水平线。。设定需填色的行列起止地址范围后往里填色
+ 524:libs/ili9341/ili9341.c **** void H_line(unsigned int x, unsigned int y, unsigned int l, unsigned int c)                   
+ 525:libs/ili9341/ili9341.c **** { 
+ 2339              		.loc 1 525 0
+ 2340              		.cfi_startproc
+ 2341              		@ args = 0, pretend = 0, frame = 0
+ 2342              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2343              	.LVL185:
+ 2344 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2345              	.LCFI62:
+ 2346              		.cfi_def_cfa_offset 24
+ 2347              		.cfi_offset 3, -24
+ 2348              		.cfi_offset 4, -20
+ 2349              		.cfi_offset 5, -16
+ 2350              		.cfi_offset 6, -12
+ 2351              		.cfi_offset 7, -8
+ 2352              		.cfi_offset 14, -4
+ 2353 0002 0446     		mov	r4, r0
+ 2354 0004 0F46     		mov	r7, r1
+ 2355 0006 1646     		mov	r6, r2
+ 2356 0008 1D46     		mov	r5, r3
+ 526:libs/ili9341/ili9341.c **** 
+ 527:libs/ili9341/ili9341.c ****   //x,y 为水平线的起始坐标 ，，l为水平线长度单位为像素，c为颜色参数
+ 528:libs/ili9341/ili9341.c ****   unsigned int i,j;
+ 529:libs/ili9341/ili9341.c **** 
+ 530:libs/ili9341/ili9341.c ****   
+ 531:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x02c);       //write_memory_start
+ 2357              		.loc 1 531 0
+ 2358 000a 2C20     		movs	r0, #44
+ 2359              	.LVL186:
+ 2360 000c FFF7FEFF 		bl	gpio_8080_write_command
+ 2361              	.LVL187:
+ 532:libs/ili9341/ili9341.c ****   LCD_RS_1();
+ 2362              		.loc 1 532 0
+ 2363 0010 FFF7FEFF 		bl	LCD_RS_1
+ 2364              	.LVL188:
+ 533:libs/ili9341/ili9341.c ****   LCD_CS_0();
+ 2365              		.loc 1 533 0
+ 2366 0014 FFF7FEFF 		bl	LCD_CS_0
+ 2367              	.LVL189:
+ 534:libs/ili9341/ili9341.c **** 
+ 535:libs/ili9341/ili9341.c ****   l=l+x;  //转换成终止列的X坐标  
+ARM GAS  /tmp/ccS65nG0.s 			page 50
+
+
+ 2368              		.loc 1 535 0
+ 2369 0018 2644     		add	r6, r6, r4
+ 2370              	.LVL190:
+ 536:libs/ili9341/ili9341.c ****   Address_set(x,y,l,y);   //框出要填色的区域
+ 2371              		.loc 1 536 0
+ 2372 001a 3B46     		mov	r3, r7
+ 2373 001c 3246     		mov	r2, r6
+ 2374 001e 3946     		mov	r1, r7
+ 2375 0020 2046     		mov	r0, r4
+ 2376 0022 FFF7FEFF 		bl	Address_set
+ 2377              	.LVL191:
+ 537:libs/ili9341/ili9341.c **** 
+ 538:libs/ili9341/ili9341.c ****   j=l;                //确定要填入的像素个数
+ 539:libs/ili9341/ili9341.c ****   for(i=1;i<=j;i++)
+ 2378              		.loc 1 539 0
+ 2379 0026 0124     		movs	r4, #1
+ 2380              	.LVL192:
+ 2381 0028 07E0     		b	.L182
+ 2382              	.LVL193:
+ 2383              	.L183:
+ 540:libs/ili9341/ili9341.c ****   {
+ 541:libs/ili9341/ili9341.c ****     gpio_8080_write_data(c>>8);   //写入颜色数据的高8位
+ 2384              		.loc 1 541 0 discriminator 3
+ 2385 002a C5F30720 		ubfx	r0, r5, #8, #8
+ 2386 002e FFF7FEFF 		bl	gpio_8080_write_data
+ 2387              	.LVL194:
+ 542:libs/ili9341/ili9341.c ****     gpio_8080_write_data(c);      //写入颜色数据的低8位
+ 2388              		.loc 1 542 0 discriminator 3
+ 2389 0032 E8B2     		uxtb	r0, r5
+ 2390 0034 FFF7FEFF 		bl	gpio_8080_write_data
+ 2391              	.LVL195:
+ 539:libs/ili9341/ili9341.c ****   {
+ 2392              		.loc 1 539 0 discriminator 3
+ 2393 0038 0134     		adds	r4, r4, #1
+ 2394              	.LVL196:
+ 2395              	.L182:
+ 539:libs/ili9341/ili9341.c ****   {
+ 2396              		.loc 1 539 0 is_stmt 0 discriminator 1
+ 2397 003a B442     		cmp	r4, r6
+ 2398 003c F5D9     		bls	.L183
+ 543:libs/ili9341/ili9341.c ****   }
+ 544:libs/ili9341/ili9341.c ****   LCD_CS_1();
+ 2399              		.loc 1 544 0 is_stmt 1
+ 2400 003e FFF7FEFF 		bl	LCD_CS_1
+ 2401              	.LVL197:
+ 2402 0042 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2403              		.cfi_endproc
+ 2404              	.LFE187:
+ 2406              		.section	.text.V_line,"ax",%progbits
+ 2407              		.align	1
+ 2408              		.global	V_line
+ 2409              		.syntax unified
+ 2410              		.thumb
+ 2411              		.thumb_func
+ 2412              		.fpu fpv4-sp-d16
+ 2414              	V_line:
+ 2415              	.LFB188:
+ARM GAS  /tmp/ccS65nG0.s 			page 51
+
+
+ 545:libs/ili9341/ili9341.c **** }
+ 546:libs/ili9341/ili9341.c **** 
+ 547:libs/ili9341/ili9341.c **** 
+ 548:libs/ili9341/ili9341.c **** //画垂直线。。设定需填色的行列起止地址范围后往里填色
+ 549:libs/ili9341/ili9341.c **** void V_line(unsigned int x, unsigned int y, unsigned int l, unsigned int c)                   
+ 550:libs/ili9341/ili9341.c **** { 
+ 2416              		.loc 1 550 0
+ 2417              		.cfi_startproc
+ 2418              		@ args = 0, pretend = 0, frame = 0
+ 2419              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2420              	.LVL198:
+ 2421 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2422              	.LCFI63:
+ 2423              		.cfi_def_cfa_offset 24
+ 2424              		.cfi_offset 3, -24
+ 2425              		.cfi_offset 4, -20
+ 2426              		.cfi_offset 5, -16
+ 2427              		.cfi_offset 6, -12
+ 2428              		.cfi_offset 7, -8
+ 2429              		.cfi_offset 14, -4
+ 2430 0002 0446     		mov	r4, r0
+ 2431 0004 0F46     		mov	r7, r1
+ 2432 0006 1646     		mov	r6, r2
+ 2433 0008 1D46     		mov	r5, r3
+ 551:libs/ili9341/ili9341.c ****   unsigned int i,j;
+ 552:libs/ili9341/ili9341.c ****   
+ 553:libs/ili9341/ili9341.c ****   gpio_8080_write_command(0x02c); //write_memory_start
+ 2434              		.loc 1 553 0
+ 2435 000a 2C20     		movs	r0, #44
+ 2436              	.LVL199:
+ 2437 000c FFF7FEFF 		bl	gpio_8080_write_command
+ 2438              	.LVL200:
+ 554:libs/ili9341/ili9341.c ****   LCD_RS_1();
+ 2439              		.loc 1 554 0
+ 2440 0010 FFF7FEFF 		bl	LCD_RS_1
+ 2441              	.LVL201:
+ 555:libs/ili9341/ili9341.c ****   LCD_CS_0();
+ 2442              		.loc 1 555 0
+ 2443 0014 FFF7FEFF 		bl	LCD_CS_0
+ 2444              	.LVL202:
+ 556:libs/ili9341/ili9341.c ****   
+ 557:libs/ili9341/ili9341.c ****   l=l+y;  //转换成终止行的Y坐标
+ 2445              		.loc 1 557 0
+ 2446 0018 3E44     		add	r6, r6, r7
+ 2447              	.LVL203:
+ 558:libs/ili9341/ili9341.c ****   Address_set(x,y,x,l); //框出要填色的区域
+ 2448              		.loc 1 558 0
+ 2449 001a 3346     		mov	r3, r6
+ 2450 001c 2246     		mov	r2, r4
+ 2451 001e 3946     		mov	r1, r7
+ 2452 0020 2046     		mov	r0, r4
+ 2453 0022 FFF7FEFF 		bl	Address_set
+ 2454              	.LVL204:
+ 559:libs/ili9341/ili9341.c ****   j=l;             //确定要填入的像素个数
+ 560:libs/ili9341/ili9341.c ****   for(i=1;i<=j;i++)
+ 2455              		.loc 1 560 0
+ 2456 0026 0124     		movs	r4, #1
+ARM GAS  /tmp/ccS65nG0.s 			page 52
+
+
+ 2457              	.LVL205:
+ 2458 0028 07E0     		b	.L186
+ 2459              	.LVL206:
+ 2460              	.L187:
+ 561:libs/ili9341/ili9341.c ****   { 
+ 562:libs/ili9341/ili9341.c ****     gpio_8080_write_data(c>>8);    //写入颜色数据的高8位
+ 2461              		.loc 1 562 0 discriminator 3
+ 2462 002a C5F30720 		ubfx	r0, r5, #8, #8
+ 2463 002e FFF7FEFF 		bl	gpio_8080_write_data
+ 2464              	.LVL207:
+ 563:libs/ili9341/ili9341.c ****     gpio_8080_write_data(c);       //写入颜色数据的低8位
+ 2465              		.loc 1 563 0 discriminator 3
+ 2466 0032 E8B2     		uxtb	r0, r5
+ 2467 0034 FFF7FEFF 		bl	gpio_8080_write_data
+ 2468              	.LVL208:
+ 560:libs/ili9341/ili9341.c ****   { 
+ 2469              		.loc 1 560 0 discriminator 3
+ 2470 0038 0134     		adds	r4, r4, #1
+ 2471              	.LVL209:
+ 2472              	.L186:
+ 560:libs/ili9341/ili9341.c ****   { 
+ 2473              		.loc 1 560 0 is_stmt 0 discriminator 1
+ 2474 003a B442     		cmp	r4, r6
+ 2475 003c F5D9     		bls	.L187
+ 564:libs/ili9341/ili9341.c ****   }
+ 565:libs/ili9341/ili9341.c ****   LCD_CS_1();
+ 2476              		.loc 1 565 0 is_stmt 1
+ 2477 003e FFF7FEFF 		bl	LCD_CS_1
+ 2478              	.LVL210:
+ 2479 0042 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2480              		.cfi_endproc
+ 2481              	.LFE188:
+ 2483              		.section	.text.Rect,"ax",%progbits
+ 2484              		.align	1
+ 2485              		.global	Rect
+ 2486              		.syntax unified
+ 2487              		.thumb
+ 2488              		.thumb_func
+ 2489              		.fpu fpv4-sp-d16
+ 2491              	Rect:
+ 2492              	.LFB189:
+ 566:libs/ili9341/ili9341.c **** }
+ 567:libs/ili9341/ili9341.c **** 
+ 568:libs/ili9341/ili9341.c **** 
+ 569:libs/ili9341/ili9341.c **** //画空心矩形
+ 570:libs/ili9341/ili9341.c **** void Rect(unsigned int x,unsigned int y,unsigned int w,unsigned int h,unsigned int c)
+ 571:libs/ili9341/ili9341.c **** {
+ 2493              		.loc 1 571 0
+ 2494              		.cfi_startproc
+ 2495              		@ args = 4, pretend = 0, frame = 0
+ 2496              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2497              	.LVL211:
+ 2498 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 2499              	.LCFI64:
+ 2500              		.cfi_def_cfa_offset 24
+ 2501              		.cfi_offset 3, -24
+ 2502              		.cfi_offset 4, -20
+ARM GAS  /tmp/ccS65nG0.s 			page 53
+
+
+ 2503              		.cfi_offset 5, -16
+ 2504              		.cfi_offset 6, -12
+ 2505              		.cfi_offset 7, -8
+ 2506              		.cfi_offset 14, -4
+ 2507 0002 0446     		mov	r4, r0
+ 2508 0004 0D46     		mov	r5, r1
+ 2509 0006 1746     		mov	r7, r2
+ 2510 0008 1E46     		mov	r6, r3
+ 572:libs/ili9341/ili9341.c ****   H_line(x  , y  , w, c);
+ 2511              		.loc 1 572 0
+ 2512 000a 069B     		ldr	r3, [sp, #24]
+ 2513              	.LVL212:
+ 2514 000c FFF7FEFF 		bl	H_line
+ 2515              	.LVL213:
+ 573:libs/ili9341/ili9341.c ****   H_line(x  , y+h, w, c);
+ 2516              		.loc 1 573 0
+ 2517 0010 069B     		ldr	r3, [sp, #24]
+ 2518 0012 3A46     		mov	r2, r7
+ 2519 0014 A919     		adds	r1, r5, r6
+ 2520 0016 2046     		mov	r0, r4
+ 2521 0018 FFF7FEFF 		bl	H_line
+ 2522              	.LVL214:
+ 574:libs/ili9341/ili9341.c ****   V_line(x  , y  , h, c);
+ 2523              		.loc 1 574 0
+ 2524 001c 069B     		ldr	r3, [sp, #24]
+ 2525 001e 3246     		mov	r2, r6
+ 2526 0020 2946     		mov	r1, r5
+ 2527 0022 2046     		mov	r0, r4
+ 2528 0024 FFF7FEFF 		bl	V_line
+ 2529              	.LVL215:
+ 575:libs/ili9341/ili9341.c ****   V_line(x+w, y  , h, c);
+ 2530              		.loc 1 575 0
+ 2531 0028 069B     		ldr	r3, [sp, #24]
+ 2532 002a 3246     		mov	r2, r6
+ 2533 002c 2946     		mov	r1, r5
+ 2534 002e E019     		adds	r0, r4, r7
+ 2535 0030 FFF7FEFF 		bl	V_line
+ 2536              	.LVL216:
+ 2537 0034 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 2538              		.cfi_endproc
+ 2539              	.LFE189:
+ 2541              		.section	.text.Rectf,"ax",%progbits
+ 2542              		.align	1
+ 2543              		.global	Rectf
+ 2544              		.syntax unified
+ 2545              		.thumb
+ 2546              		.thumb_func
+ 2547              		.fpu fpv4-sp-d16
+ 2549              	Rectf:
+ 2550              	.LFB190:
+ 576:libs/ili9341/ili9341.c **** }
+ 577:libs/ili9341/ili9341.c **** 
+ 578:libs/ili9341/ili9341.c **** 
+ 579:libs/ili9341/ili9341.c **** //画实心矩形
+ 580:libs/ili9341/ili9341.c **** void Rectf(unsigned int x,unsigned int y,unsigned int w,unsigned int h,unsigned int c)
+ 581:libs/ili9341/ili9341.c **** {
+ 2551              		.loc 1 581 0
+ARM GAS  /tmp/ccS65nG0.s 			page 54
+
+
+ 2552              		.cfi_startproc
+ 2553              		@ args = 4, pretend = 0, frame = 0
+ 2554              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2555              	.LVL217:
+ 2556 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 2557              	.LCFI65:
+ 2558              		.cfi_def_cfa_offset 32
+ 2559              		.cfi_offset 3, -32
+ 2560              		.cfi_offset 4, -28
+ 2561              		.cfi_offset 5, -24
+ 2562              		.cfi_offset 6, -20
+ 2563              		.cfi_offset 7, -16
+ 2564              		.cfi_offset 8, -12
+ 2565              		.cfi_offset 9, -8
+ 2566              		.cfi_offset 14, -4
+ 2567 0004 8146     		mov	r9, r0
+ 2568 0006 8846     		mov	r8, r1
+ 2569 0008 1746     		mov	r7, r2
+ 2570 000a 1D46     		mov	r5, r3
+ 2571 000c 089E     		ldr	r6, [sp, #32]
+ 2572              	.LVL218:
+ 582:libs/ili9341/ili9341.c ****   unsigned int i;
+ 583:libs/ili9341/ili9341.c ****   for(i=0;i<h;i++)
+ 2573              		.loc 1 583 0
+ 2574 000e 0024     		movs	r4, #0
+ 2575 0010 07E0     		b	.L192
+ 2576              	.LVL219:
+ 2577              	.L193:
+ 584:libs/ili9341/ili9341.c ****   {
+ 585:libs/ili9341/ili9341.c ****     H_line(x  , y+i, w, c);
+ 2578              		.loc 1 585 0 discriminator 3
+ 2579 0012 3346     		mov	r3, r6
+ 2580 0014 3A46     		mov	r2, r7
+ 2581 0016 04EB0801 		add	r1, r4, r8
+ 2582 001a 4846     		mov	r0, r9
+ 2583 001c FFF7FEFF 		bl	H_line
+ 2584              	.LVL220:
+ 583:libs/ili9341/ili9341.c ****   {
+ 2585              		.loc 1 583 0 discriminator 3
+ 2586 0020 0134     		adds	r4, r4, #1
+ 2587              	.LVL221:
+ 2588              	.L192:
+ 583:libs/ili9341/ili9341.c ****   {
+ 2589              		.loc 1 583 0 is_stmt 0 discriminator 1
+ 2590 0022 AC42     		cmp	r4, r5
+ 2591 0024 F5D3     		bcc	.L193
+ 586:libs/ili9341/ili9341.c ****   }
+ 587:libs/ili9341/ili9341.c **** }
+ 2592              		.loc 1 587 0 is_stmt 1
+ 2593 0026 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 2594              		.cfi_endproc
+ 2595              	.LFE190:
+ 2597              		.section	.text.RGB,"ax",%progbits
+ 2598              		.align	1
+ 2599              		.global	RGB
+ 2600              		.syntax unified
+ 2601              		.thumb
+ARM GAS  /tmp/ccS65nG0.s 			page 55
+
+
+ 2602              		.thumb_func
+ 2603              		.fpu fpv4-sp-d16
+ 2605              	RGB:
+ 2606              	.LFB191:
+ 588:libs/ili9341/ili9341.c **** 
+ 589:libs/ili9341/ili9341.c **** 
+ 590:libs/ili9341/ili9341.c **** int RGB(int r,int g,int b)
+ 591:libs/ili9341/ili9341.c **** {return r << 16 | g << 8 | b;
+ 2607              		.loc 1 591 0
+ 2608              		.cfi_startproc
+ 2609              		@ args = 0, pretend = 0, frame = 0
+ 2610              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2611              		@ link register save eliminated.
+ 2612              	.LVL222:
+ 2613              		.loc 1 591 0
+ 2614 0000 0902     		lsls	r1, r1, #8
+ 2615              	.LVL223:
+ 2616 0002 41EA0040 		orr	r0, r1, r0, lsl #16
+ 2617              	.LVL224:
+ 592:libs/ili9341/ili9341.c **** }
+ 2618              		.loc 1 592 0
+ 2619 0006 1043     		orrs	r0, r0, r2
+ 2620 0008 7047     		bx	lr
+ 2621              		.cfi_endproc
+ 2622              	.LFE191:
+ 2624              		.section	.text.LCD_Clear,"ax",%progbits
+ 2625              		.align	1
+ 2626              		.global	LCD_Clear
+ 2627              		.syntax unified
+ 2628              		.thumb
+ 2629              		.thumb_func
+ 2630              		.fpu fpv4-sp-d16
+ 2632              	LCD_Clear:
+ 2633              	.LFB192:
+ 593:libs/ili9341/ili9341.c **** 
+ 594:libs/ili9341/ili9341.c **** 
+ 595:libs/ili9341/ili9341.c **** 
+ 596:libs/ili9341/ili9341.c **** 
+ 597:libs/ili9341/ili9341.c **** //满屏填充
+ 598:libs/ili9341/ili9341.c **** void LCD_Clear(unsigned int j)                   
+ 599:libs/ili9341/ili9341.c **** { 
+ 2634              		.loc 1 599 0
+ 2635              		.cfi_startproc
+ 2636              		@ args = 0, pretend = 0, frame = 0
+ 2637              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2638              	.LVL225:
+ 2639 0000 70B5     		push	{r4, r5, r6, lr}
+ 2640              	.LCFI66:
+ 2641              		.cfi_def_cfa_offset 16
+ 2642              		.cfi_offset 4, -16
+ 2643              		.cfi_offset 5, -12
+ 2644              		.cfi_offset 6, -8
+ 2645              		.cfi_offset 14, -4
+ 2646 0002 0546     		mov	r5, r0
+ 600:libs/ili9341/ili9341.c ****   unsigned int i,m;
+ 601:libs/ili9341/ili9341.c **** 
+ 602:libs/ili9341/ili9341.c ****   LCD_CS_0();
+ARM GAS  /tmp/ccS65nG0.s 			page 56
+
+
+ 2647              		.loc 1 602 0
+ 2648 0004 FFF7FEFF 		bl	LCD_CS_0
+ 2649              	.LVL226:
+ 603:libs/ili9341/ili9341.c ****   Address_set(0,0,239,319);
+ 2650              		.loc 1 603 0
+ 2651 0008 40F23F13 		movw	r3, #319
+ 2652 000c EF22     		movs	r2, #239
+ 2653 000e 0021     		movs	r1, #0
+ 2654 0010 0846     		mov	r0, r1
+ 2655 0012 FFF7FEFF 		bl	Address_set
+ 2656              	.LVL227:
+ 604:libs/ili9341/ili9341.c **** 
+ 605:libs/ili9341/ili9341.c **** 
+ 606:libs/ili9341/ili9341.c ****   for(i=0;i<320;i++)  //320个行
+ 2657              		.loc 1 606 0
+ 2658 0016 0026     		movs	r6, #0
+ 2659 0018 0AE0     		b	.L197
+ 2660              	.LVL228:
+ 2661              	.L198:
+ 607:libs/ili9341/ili9341.c ****     for(m=0;m<240;m++) //240列
+ 608:libs/ili9341/ili9341.c ****     {
+ 609:libs/ili9341/ili9341.c ****       gpio_8080_write_data(j>>8);
+ 2662              		.loc 1 609 0 discriminator 3
+ 2663 001a C5F30720 		ubfx	r0, r5, #8, #8
+ 2664 001e FFF7FEFF 		bl	gpio_8080_write_data
+ 2665              	.LVL229:
+ 610:libs/ili9341/ili9341.c ****       gpio_8080_write_data(j);
+ 2666              		.loc 1 610 0 discriminator 3
+ 2667 0022 E8B2     		uxtb	r0, r5
+ 2668 0024 FFF7FEFF 		bl	gpio_8080_write_data
+ 2669              	.LVL230:
+ 607:libs/ili9341/ili9341.c ****     for(m=0;m<240;m++) //240列
+ 2670              		.loc 1 607 0 discriminator 3
+ 2671 0028 0134     		adds	r4, r4, #1
+ 2672              	.LVL231:
+ 2673              	.L199:
+ 607:libs/ili9341/ili9341.c ****     for(m=0;m<240;m++) //240列
+ 2674              		.loc 1 607 0 is_stmt 0 discriminator 1
+ 2675 002a EF2C     		cmp	r4, #239
+ 2676 002c F5D9     		bls	.L198
+ 606:libs/ili9341/ili9341.c ****     for(m=0;m<240;m++) //240列
+ 2677              		.loc 1 606 0 is_stmt 1 discriminator 2
+ 2678 002e 0136     		adds	r6, r6, #1
+ 2679              	.LVL232:
+ 2680              	.L197:
+ 606:libs/ili9341/ili9341.c ****     for(m=0;m<240;m++) //240列
+ 2681              		.loc 1 606 0 is_stmt 0 discriminator 1
+ 2682 0030 B6F5A07F 		cmp	r6, #320
+ 2683 0034 01D2     		bcs	.L202
+ 2684 0036 0024     		movs	r4, #0
+ 2685 0038 F7E7     		b	.L199
+ 2686              	.L202:
+ 611:libs/ili9341/ili9341.c **** 
+ 612:libs/ili9341/ili9341.c ****     }
+ 613:libs/ili9341/ili9341.c ****   LCD_CS_1();
+ 2687              		.loc 1 613 0 is_stmt 1
+ 2688 003a FFF7FEFF 		bl	LCD_CS_1
+ARM GAS  /tmp/ccS65nG0.s 			page 57
+
+
+ 2689              	.LVL233:
+ 2690 003e 70BD     		pop	{r4, r5, r6, pc}
+ 2691              		.cfi_endproc
+ 2692              	.LFE192:
+ 2694              		.section	.rodata.ili9341_read_id4.str1.4,"aMS",%progbits,1
+ 2695              		.align	2
+ 2696              	.LC0:
+ 2697 0000 2D205072 		.ascii	"- Printing ID4 register value -\012\000"
+ 2697      696E7469 
+ 2697      6E672049 
+ 2697      44342072 
+ 2697      65676973 
+ 2698 0021 000000   		.space	3
+ 2699              	.LC1:
+ 2700 0024 494C4939 		.ascii	"ILI9341 IC Version: %d \012IC Model: 0x%02x%02x\012"
+ 2700      33343120 
+ 2700      49432056 
+ 2700      65727369 
+ 2700      6F6E3A20 
+ 2701 0051 00       		.ascii	"\000"
+ 2702              		.text
+ 2703              	.Letext0:
+ 2704              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 2705              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 2706              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 2707              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 2708              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h"
+ 2709              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 2710              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 2711              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 2712              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 2713              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 2714              		.file 12 "/usr/include/newlib/sys/lock.h"
+ 2715              		.file 13 "/usr/include/newlib/sys/_types.h"
+ 2716              		.file 14 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 2717              		.file 15 "/usr/include/newlib/sys/reent.h"
+ 2718              		.file 16 "libs/ili9341/ili9341.h"
+ 2719              		.file 17 "/usr/include/newlib/string.h"
+ 2720              		.file 18 "/usr/include/newlib/stdio.h"
+ARM GAS  /tmp/ccS65nG0.s 			page 58
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ili9341.c
+     /tmp/ccS65nG0.s:18     .text.LCD_RST_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:25     .text.LCD_RST_1:0000000000000000 LCD_RST_1
+     /tmp/ccS65nG0.s:47     .text.LCD_RST_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:52     .text.LCD_RST_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:59     .text.LCD_RST_0:0000000000000000 LCD_RST_0
+     /tmp/ccS65nG0.s:80     .text.LCD_RST_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:85     .text.LCD_CS_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:92     .text.LCD_CS_1:0000000000000000 LCD_CS_1
+     /tmp/ccS65nG0.s:113    .text.LCD_CS_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:118    .text.LCD_CS_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:125    .text.LCD_CS_0:0000000000000000 LCD_CS_0
+     /tmp/ccS65nG0.s:146    .text.LCD_CS_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:151    .text.LCD_RS_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:158    .text.LCD_RS_1:0000000000000000 LCD_RS_1
+     /tmp/ccS65nG0.s:179    .text.LCD_RS_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:184    .text.LCD_RS_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:191    .text.LCD_RS_0:0000000000000000 LCD_RS_0
+     /tmp/ccS65nG0.s:212    .text.LCD_RS_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:217    .text.LCD_WR_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:224    .text.LCD_WR_1:0000000000000000 LCD_WR_1
+     /tmp/ccS65nG0.s:245    .text.LCD_WR_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:250    .text.LCD_WR_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:257    .text.LCD_WR_0:0000000000000000 LCD_WR_0
+     /tmp/ccS65nG0.s:278    .text.LCD_WR_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:283    .text.LCD_WR_RISING_EDGE:0000000000000000 $t
+     /tmp/ccS65nG0.s:290    .text.LCD_WR_RISING_EDGE:0000000000000000 LCD_WR_RISING_EDGE
+     /tmp/ccS65nG0.s:318    .text.LCD_WR_RISING_EDGE:000000000000001c $d
+     /tmp/ccS65nG0.s:323    .text.LCD_RD_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:330    .text.LCD_RD_1:0000000000000000 LCD_RD_1
+     /tmp/ccS65nG0.s:351    .text.LCD_RD_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:356    .text.LCD_RD_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:363    .text.LCD_RD_0:0000000000000000 LCD_RD_0
+     /tmp/ccS65nG0.s:384    .text.LCD_RD_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:389    .text.LCD_D2_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:396    .text.LCD_D2_1:0000000000000000 LCD_D2_1
+     /tmp/ccS65nG0.s:417    .text.LCD_D2_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:422    .text.LCD_D2_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:429    .text.LCD_D2_0:0000000000000000 LCD_D2_0
+     /tmp/ccS65nG0.s:450    .text.LCD_D2_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:455    .text.LCD_D3_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:462    .text.LCD_D3_1:0000000000000000 LCD_D3_1
+     /tmp/ccS65nG0.s:483    .text.LCD_D3_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:488    .text.LCD_D3_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:495    .text.LCD_D3_0:0000000000000000 LCD_D3_0
+     /tmp/ccS65nG0.s:516    .text.LCD_D3_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:521    .text.LCD_D4_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:528    .text.LCD_D4_1:0000000000000000 LCD_D4_1
+     /tmp/ccS65nG0.s:549    .text.LCD_D4_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:554    .text.LCD_D4_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:561    .text.LCD_D4_0:0000000000000000 LCD_D4_0
+     /tmp/ccS65nG0.s:582    .text.LCD_D4_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:587    .text.LCD_D5_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:594    .text.LCD_D5_1:0000000000000000 LCD_D5_1
+     /tmp/ccS65nG0.s:615    .text.LCD_D5_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:620    .text.LCD_D5_0:0000000000000000 $t
+ARM GAS  /tmp/ccS65nG0.s 			page 59
+
+
+     /tmp/ccS65nG0.s:627    .text.LCD_D5_0:0000000000000000 LCD_D5_0
+     /tmp/ccS65nG0.s:648    .text.LCD_D5_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:653    .text.LCD_D6_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:660    .text.LCD_D6_1:0000000000000000 LCD_D6_1
+     /tmp/ccS65nG0.s:681    .text.LCD_D6_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:686    .text.LCD_D6_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:693    .text.LCD_D6_0:0000000000000000 LCD_D6_0
+     /tmp/ccS65nG0.s:714    .text.LCD_D6_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:719    .text.LCD_D7_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:726    .text.LCD_D7_1:0000000000000000 LCD_D7_1
+     /tmp/ccS65nG0.s:747    .text.LCD_D7_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:752    .text.LCD_D7_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:759    .text.LCD_D7_0:0000000000000000 LCD_D7_0
+     /tmp/ccS65nG0.s:780    .text.LCD_D7_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:785    .text.LCD_D0_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:792    .text.LCD_D0_1:0000000000000000 LCD_D0_1
+     /tmp/ccS65nG0.s:813    .text.LCD_D0_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:818    .text.LCD_D0_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:825    .text.LCD_D0_0:0000000000000000 LCD_D0_0
+     /tmp/ccS65nG0.s:846    .text.LCD_D0_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:851    .text.LCD_D1_1:0000000000000000 $t
+     /tmp/ccS65nG0.s:858    .text.LCD_D1_1:0000000000000000 LCD_D1_1
+     /tmp/ccS65nG0.s:879    .text.LCD_D1_1:0000000000000010 $d
+     /tmp/ccS65nG0.s:884    .text.LCD_D1_0:0000000000000000 $t
+     /tmp/ccS65nG0.s:891    .text.LCD_D1_0:0000000000000000 LCD_D1_0
+     /tmp/ccS65nG0.s:912    .text.LCD_D1_0:0000000000000010 $d
+     /tmp/ccS65nG0.s:917    .text.gpio_configure_8080_datapins_input_mode:0000000000000000 $t
+     /tmp/ccS65nG0.s:924    .text.gpio_configure_8080_datapins_input_mode:0000000000000000 gpio_configure_8080_datapins_input_mode
+     /tmp/ccS65nG0.s:986    .text.gpio_configure_8080_datapins_input_mode:0000000000000040 $d
+     /tmp/ccS65nG0.s:993    .text.gpio_configure_8080_datapins_output_mode:0000000000000000 $t
+     /tmp/ccS65nG0.s:1000   .text.gpio_configure_8080_datapins_output_mode:0000000000000000 gpio_configure_8080_datapins_output_mode
+     /tmp/ccS65nG0.s:1062   .text.gpio_configure_8080_datapins_output_mode:0000000000000040 $d
+     /tmp/ccS65nG0.s:1069   .text.gpio_8080_read_parallel_datapins:0000000000000000 $t
+     /tmp/ccS65nG0.s:1076   .text.gpio_8080_read_parallel_datapins:0000000000000000 gpio_8080_read_parallel_datapins
+     /tmp/ccS65nG0.s:1153   .text.gpio_8080_read_parallel_datapins:000000000000007c $d
+     /tmp/ccS65nG0.s:1160   .text.gpio_8080_write_parallel_datapins:0000000000000000 $t
+     /tmp/ccS65nG0.s:1167   .text.gpio_8080_write_parallel_datapins:0000000000000000 gpio_8080_write_parallel_datapins
+     /tmp/ccS65nG0.s:1237   .text.gpio_8080_write_parallel_datapins:0000000000000070 $d
+     /tmp/ccS65nG0.s:1244   .text.serial_print:0000000000000000 $t
+     /tmp/ccS65nG0.s:1251   .text.serial_print:0000000000000000 serial_print
+     /tmp/ccS65nG0.s:1278   .text.serial_print:0000000000000018 $d
+     /tmp/ccS65nG0.s:1283   .text.gpio_8080_write_command:0000000000000000 $t
+     /tmp/ccS65nG0.s:1290   .text.gpio_8080_write_command:0000000000000000 gpio_8080_write_command
+     /tmp/ccS65nG0.s:1330   .text.gpio_8080_write_data:0000000000000000 $t
+     /tmp/ccS65nG0.s:1337   .text.gpio_8080_write_data:0000000000000000 gpio_8080_write_data
+     /tmp/ccS65nG0.s:1377   .text.gpio_8080_read_data:0000000000000000 $t
+     /tmp/ccS65nG0.s:1384   .text.gpio_8080_read_data:0000000000000000 gpio_8080_read_data
+     /tmp/ccS65nG0.s:1444   .text.ili9341_set_power_control_a:0000000000000000 $t
+     /tmp/ccS65nG0.s:1451   .text.ili9341_set_power_control_a:0000000000000000 ili9341_set_power_control_a
+     /tmp/ccS65nG0.s:1491   .text.ili9341_set_power_control_b:0000000000000000 $t
+     /tmp/ccS65nG0.s:1498   .text.ili9341_set_power_control_b:0000000000000000 ili9341_set_power_control_b
+     /tmp/ccS65nG0.s:1530   .text.ili9341_set_driver_timing_control_a:0000000000000000 $t
+     /tmp/ccS65nG0.s:1537   .text.ili9341_set_driver_timing_control_a:0000000000000000 ili9341_set_driver_timing_control_a
+     /tmp/ccS65nG0.s:1569   .text.ili9341_set_driver_timing_control_b:0000000000000000 $t
+     /tmp/ccS65nG0.s:1576   .text.ili9341_set_driver_timing_control_b:0000000000000000 ili9341_set_driver_timing_control_b
+     /tmp/ccS65nG0.s:1604   .text.ili9341_set_poweron_sequence_control_b:0000000000000000 $t
+     /tmp/ccS65nG0.s:1611   .text.ili9341_set_poweron_sequence_control_b:0000000000000000 ili9341_set_poweron_sequence_control_b
+ARM GAS  /tmp/ccS65nG0.s 			page 60
+
+
+     /tmp/ccS65nG0.s:1647   .text.ili9341_set_pump_ratio_control:0000000000000000 $t
+     /tmp/ccS65nG0.s:1654   .text.ili9341_set_pump_ratio_control:0000000000000000 ili9341_set_pump_ratio_control
+     /tmp/ccS65nG0.s:1678   .text.ili9341_set_power_control1:0000000000000000 $t
+     /tmp/ccS65nG0.s:1685   .text.ili9341_set_power_control1:0000000000000000 ili9341_set_power_control1
+     /tmp/ccS65nG0.s:1709   .text.ili9341_set_power_control2:0000000000000000 $t
+     /tmp/ccS65nG0.s:1716   .text.ili9341_set_power_control2:0000000000000000 ili9341_set_power_control2
+     /tmp/ccS65nG0.s:1740   .text.ili9341_set_vcom_control1:0000000000000000 $t
+     /tmp/ccS65nG0.s:1747   .text.ili9341_set_vcom_control1:0000000000000000 ili9341_set_vcom_control1
+     /tmp/ccS65nG0.s:1775   .text.ili9341_set_vcom_control2:0000000000000000 $t
+     /tmp/ccS65nG0.s:1782   .text.ili9341_set_vcom_control2:0000000000000000 ili9341_set_vcom_control2
+     /tmp/ccS65nG0.s:1806   .text.ili9341_set_memory_access_control:0000000000000000 $t
+     /tmp/ccS65nG0.s:1813   .text.ili9341_set_memory_access_control:0000000000000000 ili9341_set_memory_access_control
+     /tmp/ccS65nG0.s:1837   .text.ili9341_set_pixel_format_set:0000000000000000 $t
+     /tmp/ccS65nG0.s:1844   .text.ili9341_set_pixel_format_set:0000000000000000 ili9341_set_pixel_format_set
+     /tmp/ccS65nG0.s:1868   .text.ili9341_set_frame_rate_control:0000000000000000 $t
+     /tmp/ccS65nG0.s:1875   .text.ili9341_set_frame_rate_control:0000000000000000 ili9341_set_frame_rate_control
+     /tmp/ccS65nG0.s:1903   .text.ili9341_set_display_function_control:0000000000000000 $t
+     /tmp/ccS65nG0.s:1910   .text.ili9341_set_display_function_control:0000000000000000 ili9341_set_display_function_control
+     /tmp/ccS65nG0.s:1942   .text.ili9341_exit_sleep_mode:0000000000000000 $t
+     /tmp/ccS65nG0.s:1949   .text.ili9341_exit_sleep_mode:0000000000000000 ili9341_exit_sleep_mode
+     /tmp/ccS65nG0.s:1973   .text.ili9341_set_display_on:0000000000000000 $t
+     /tmp/ccS65nG0.s:1980   .text.ili9341_set_display_on:0000000000000000 ili9341_set_display_on
+     /tmp/ccS65nG0.s:2000   .text.ili9341_memory_write:0000000000000000 $t
+     /tmp/ccS65nG0.s:2007   .text.ili9341_memory_write:0000000000000000 ili9341_memory_write
+     /tmp/ccS65nG0.s:2027   .text.ili9341_hard_reset:0000000000000000 $t
+     /tmp/ccS65nG0.s:2034   .text.ili9341_hard_reset:0000000000000000 ili9341_hard_reset
+     /tmp/ccS65nG0.s:2071   .text.ili9341_read_id4:0000000000000000 $t
+     /tmp/ccS65nG0.s:2078   .text.ili9341_read_id4:0000000000000000 ili9341_read_id4
+     /tmp/ccS65nG0.s:2169   .text.ili9341_read_id4:0000000000000060 $d
+     /tmp/ccS65nG0.s:2176   .text.ili9341_init:0000000000000000 $t
+     /tmp/ccS65nG0.s:2183   .text.ili9341_init:0000000000000000 ili9341_init
+     /tmp/ccS65nG0.s:2253   .text.Address_set:0000000000000000 $t
+     /tmp/ccS65nG0.s:2260   .text.Address_set:0000000000000000 Address_set
+     /tmp/ccS65nG0.s:2330   .text.H_line:0000000000000000 $t
+     /tmp/ccS65nG0.s:2337   .text.H_line:0000000000000000 H_line
+     /tmp/ccS65nG0.s:2407   .text.V_line:0000000000000000 $t
+     /tmp/ccS65nG0.s:2414   .text.V_line:0000000000000000 V_line
+     /tmp/ccS65nG0.s:2484   .text.Rect:0000000000000000 $t
+     /tmp/ccS65nG0.s:2491   .text.Rect:0000000000000000 Rect
+     /tmp/ccS65nG0.s:2542   .text.Rectf:0000000000000000 $t
+     /tmp/ccS65nG0.s:2549   .text.Rectf:0000000000000000 Rectf
+     /tmp/ccS65nG0.s:2598   .text.RGB:0000000000000000 $t
+     /tmp/ccS65nG0.s:2605   .text.RGB:0000000000000000 RGB
+     /tmp/ccS65nG0.s:2625   .text.LCD_Clear:0000000000000000 $t
+     /tmp/ccS65nG0.s:2632   .text.LCD_Clear:0000000000000000 LCD_Clear
+     /tmp/ccS65nG0.s:2695   .rodata.ili9341_read_id4.str1.4:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init
+HAL_GPIO_ReadPin
+strlen
+HAL_UART_Transmit
+huart2
+HAL_Delay
+sprintf
+ARM GAS  /tmp/ccS65nG0.s 			page 61
+
+

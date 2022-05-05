@@ -34,32 +34,8 @@ read brief
 date=`date +%m-%d-%Y`
 copyright_message='Copyright (C) 2022-2122 Luyao Han. The following code may be shared or modified for personal use / non-commercial use only.'
 
-# Construct the header paragraph according to file type. ( .sh / .c / .cpp )
-if [[ `echo $1 | grep .h$` ]]; then  # check if file has .h as file extension. '$' indicates that .h must be the last character as file name.
-	header+="/**\n"
-	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********\n"
-	header+="  * @file      :     $file\n"
-	header+="  * @author    :     $author\n"
-	header+="  * @email     :     $email\n"
-	header+="  * @brief     :     $brief\n"
-	header+="  * @date      :     $date\n"
-	header+="  * $copyright_message\n"
-	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********"
-	header+="  */\n"
-	header+="\n"
-elif [[ `echo $1 | grep .c$` ]]; then  # check if file has .h as file extension. '$' indicates that .h must be the last character as file name.
-	header+="/**\n"
-	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********\n"
-	header+="  * @file      :     $file\n"
-	header+="  * @author    :     $author\n"
-	header+="  * @email     :     $email\n"
-	header+="  * @brief     :     $brief\n"
-	header+="  * @date      :     $date\n"
-	header+="  * $copyright_message\n"
-	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********"
-	header+="  */\n"
-	header+="\n"
-elif [[ `echo $1 | grep .sh$` ]]; then # check if the input file is a bash .sh file.
+# Construct the header paragraph according to file type. ( .sh / .c / .cpp / .s)
+if [[ `echo $1 | grep .sh$` ]]; then # check if the input file is a bash .sh file.
 	header+="# file      :     $file\n"
 	header+="# author    :     $author\n"
 	header+="# email     :     $email\n"
@@ -67,6 +43,42 @@ elif [[ `echo $1 | grep .sh$` ]]; then # check if the input file is a bash .sh f
 	header+="# date      :     $date\n"
 	header+="# $copyright_message\n"
 	header+="# -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- -------- --------\n"
+	header+="\n"
+elif [[ `echo $1 | grep .h$` ]]; then  # C Header. check if file has .h as file extension. '$' indicates that .h must be the last character as file name.
+	header+="/**\n"
+	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********\n"
+	header+="  * @file      :     $file\n"
+	header+="  * @author    :     $author\n"
+	header+="  * @email     :     $email\n"
+	header+="  * @brief     :     $brief\n"
+	header+="  * @date      :     $date\n"
+	header+="  * $copyright_message\n"
+	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********"
+	header+="  */\n"
+	header+="\n"
+elif [[ `echo $1 | grep .c$` ]]; then  # C source. check if file has .c as file extension. '$' indicates that .c must be the last character as file name.
+	header+="/**\n"
+	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********\n"
+	header+="  * @file      :     $file\n"
+	header+="  * @author    :     $author\n"
+	header+="  * @email     :     $email\n"
+	header+="  * @brief     :     $brief\n"
+	header+="  * @date      :     $date\n"
+	header+="  * $copyright_message\n"
+	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********"
+	header+="  */\n"
+	header+="\n"
+elif [[ `echo $1 | grep .S$` ]]; then  # Assembly. check if file has .s as file extension. '$' indicates that .s must be the last character as file name.
+	header+="/**\n"
+	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********\n"
+	header+="  * @file      :     $file\n"
+	header+="  * @author    :     $author\n"
+	header+="  * @email     :     $email\n"
+	header+="  * @brief     :     $brief\n"
+	header+="  * @date      :     $date\n"
+	header+="  * $copyright_message\n"
+	header+="  ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ******** ********"
+	header+="  */\n"
 	header+="\n"
 
 else 

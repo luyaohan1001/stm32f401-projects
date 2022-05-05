@@ -1,3 +1,6 @@
 [submodule "stlink"]
 	path = stlink
 	url = https://github.com/stlink-org/stlink
+[submodule "nRF24-transmitter/libs/nRF24"]
+	path = nRF24-transmitter/libs/nRF24
+	url = https://github.com/luyaohan1001/nRF24
