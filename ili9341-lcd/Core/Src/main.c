@@ -94,28 +94,66 @@ int main(void)
 	serial_print("hello world!\n");
 
 	uint8_t id4[4];
-	ili9341_read_id4(id4);
+	ili9341_get_id4(id4);
 
   /* USER CODE END 2 */
 
+  lcd_set_rotation(3);
 
+  lcd_clear_all(0xFFFF);
+	char message[64] = "> Hello. My Name is Luyao Han. Great to meet you!";
+	lcd_write_message(message, 0, 10, 1, 0x001F, 0xFFFF);
+	
+	strcpy(message, "> What's your name?");
+	lcd_write_message(message, 0, 20, 1, 0x001F, 0xFFFF);
+
+
+
+
+	char* p_char = (char*) malloc (1);
+	free(p_char);
+	strcpy(message, "Some say the world will end in fire,");
+	lcd_write_message(message, 0, 30, 1, 0x001F, 0xFFFF);
+  strcpy(message, "Some say in ice.");
+	lcd_write_message(message, 0, 40, 1, 0x001F, 0xFFFF);
+  strcpy(message, "From what Ive tasted of desire");
+	lcd_write_message(message, 0, 50, 1, 0x001F, 0xFFFF);
+  strcpy(message, "I hold with those who favour fire.");
+	lcd_write_message(message, 0, 60, 1, 0x001F, 0xFFFF);
+  strcpy(message, "But if it had to perish twice,");
+	lcd_write_message(message, 0, 70, 1, 0x001F, 0xFFFF);
+  strcpy(message, "I think I know enough of hate");
+	lcd_write_message(message, 0, 80, 1, 0x001F, 0xFFFF);
+  strcpy(message, "To say that for destruction ice");
+	lcd_write_message(message, 0, 90, 1, 0x001F, 0xFFFF);
+  strcpy(message, "Is also great");
+	lcd_write_message(message, 0, 100, 1, 0x001F, 0xFFFF);
+  strcpy(message, "And would suffice.");
+	lcd_write_message(message, 0, 110, 1, 0x001F, 0xFFFF);
+
+
+	
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		LCD_Clear(0x001F);
-		LCD_Clear(0x07E0);
-		LCD_Clear(0xF800);
+		lcd_clear_all(0x0000);
+		lcd_clear_all(0xFFFF);
+		// lcd_clear_all(0x001F);
+		// lcd_clear_all(0x07E0);
+		// lcd_clear_all(0xF800);
 
-    for(int i=0;i<500;i++)
-    {
-      Rect(rand() % 300,rand() % 300,rand() % 300,rand() % 300,rand() % 65535); // rectangle at x, y, with, hight, color
-    }
+    //for(int i=0;i<500;i++)
+    //{
+    //  lcd_draw_rectangle_unfilled(rand() % 300,rand() % 300,rand() % 300,rand() % 300,rand() % 65535); // rectangle at x, y, with, hight, color
+    //}
 
-    for(int i=0;i<10;i++)
-    { 
-      Rectf(rand() % 300,rand() % 300,rand() % 300,rand() % 300,rand() % 65535); // rectangle at x, y, with, hight, color
-    }
+
+
+    // for(int i=0;i<10;i++)
+    // { 
+    //  lcd_draw_rectangle_filled(rand() % 300,rand() % 300,rand() % 300,rand() % 300,rand() % 65535); // rectangle at x, y, with, hight, color
+    //}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

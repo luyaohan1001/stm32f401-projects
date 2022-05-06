@@ -25,21 +25,38 @@
 /* LCD_D1 PC7*/
 
 
+/**
+  * @brief   Print debug string through USART.
+  * @param   p_message Pointer to a message string.
+  * @retval  None.
+  * @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port through USB.
+  *            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will not receive data.
+  *             In the datasheet it has been confirmed that the USART2 pins have been to multiplexed for the virtual COM feature.
+  *             On the PC, look for port /dev/ttyACM0 as the virtual serial port in CuteCom / MiniCom / Screen / Putty.
+  */
+__inline__ void serial_print(char* p_message)
+{
+  /* Call STM32 HAL library function to UART, pass uart hander, string, length to UART. */
+  HAL_UART_Transmit(&huart2, (uint8_t*)p_message, strlen(p_message), 100);
+}
+
+
 void LCD_RST_1()
 {
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);  
 }
+
 void LCD_RST_0()
 {
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);  
 }
  
 
-
 void LCD_CS_1()
 {
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);  
 }
+
 void LCD_CS_0()
 {
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);  
@@ -138,6 +155,7 @@ void LCD_D7_1()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);  
 }
+
 void LCD_D7_0()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);  
@@ -149,6 +167,7 @@ void LCD_D0_1()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);  
 }
+
 void LCD_D0_0()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);  
@@ -218,26 +237,6 @@ uint8_t gpio_8080_read_parallel_datapins()
               | HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) << 2   \
               | HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7)  << 1   \
               | HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9);
-    /*
-    char msg[64];
-    sprintf(msg, "D7: %d  ", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8) );
-    serial_print(msg);
-    sprintf(msg, "D6: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10));
-    serial_print(msg);
-    sprintf(msg, "D5: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) );
-    serial_print(msg);
-    sprintf(msg, "D4: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5) );
-    serial_print(msg);
-    sprintf(msg, "D3: %d  ", HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3) );
-    serial_print(msg);
-    sprintf(msg, "D2: %d  ", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10));
-    serial_print(msg);
-    sprintf(msg, "D1: %d  ", HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) );
-    serial_print(msg);
-    sprintf(msg, "D0: %d\n", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9));
-    serial_print(msg);
-    */
-
   return read_data;
 }
 
@@ -253,20 +252,7 @@ void gpio_8080_write_parallel_datapins(uint8_t write_data)
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9,  (write_data & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-/**
-  * @brief   Print debug string through USART.
-  * @param   p_message Pointer to a message string.
-  * @retval  None.
-  * @note    When testing on STM32F401RE Nucleo Board, the board supports virtual COM (serial) port through USB.
-  *            Connecting a USB-TTL adapter such as CH340 to the 'TX/D1' on morpho connector will not receive data.
-  *             In the datasheet it has been confirmed that the USART2 pins have been to multiplexed for the virtual COM feature.
-  *             On the PC, look for port /dev/ttyACM0 as the virtual serial port in CuteCom / MiniCom / Screen / Putty.
-  */
-__inline__ void serial_print(char* p_message)
-{
-  /* Call STM32 HAL library function to UART, pass uart hander, string, length to UART. */
-  HAL_UART_Transmit(&huart2, (uint8_t*)p_message, strlen(p_message), 100);
-}
+
 
 
 void gpio_8080_write_command(uint8_t cmd)
@@ -411,7 +397,7 @@ void ili9341_set_frame_rate_control()
 {
   gpio_8080_write_command(0xB1);    //Frame Rate Control (B1h)（In Normal Mode /Full colors ）
   gpio_8080_write_data(0x00);  
-  gpio_8080_write_data(0x18);  //79HZ(frame rate)
+  gpio_8080_write_data(0x10);  //79HZ(frame rate)
 }
 
 void ili9341_set_display_function_control()
@@ -454,7 +440,7 @@ void ili9341_hard_reset()
 	* @note  It has been tested that some display modules has all manufacturer/version set to 0.
 	*        Thus a more trustworthy way to test 8080 Read is to read the controller IC (ILI9341)'s ID through ID4 register.
 	*/
-void ili9341_read_id4(uint8_t* p_read_data) 
+void ili9341_get_id4(uint8_t* p_read_data) 
 {
   gpio_8080_write_command(0xD3);
   gpio_8080_read_data(p_read_data, 4);
@@ -472,9 +458,6 @@ void ili9341_init()
 {
 
   ili9341_hard_reset();
-
-
-
   ili9341_set_power_control_a();
   ili9341_set_power_control_b();
   ili9341_set_driver_timing_control_a();
@@ -492,124 +475,210 @@ void ili9341_init()
   ili9341_exit_sleep_mode();
   ili9341_set_display_on();
   ili9341_memory_write();
-
-
-
-
 }
 
 
 
-
-//地址区域设置。涉及指令2Ah、2Bh
-void Address_set(unsigned int x1,unsigned int y1,unsigned int x2,unsigned int y2)
+void ili9341_set_column_address(uint16_t x1, uint16_t x2)
 {
   gpio_8080_write_command(0x2a);
   gpio_8080_write_data(x1>>8);   //设定屏幕数据操作区域的列首地址数据，，先写入16bit数据位的高位
   gpio_8080_write_data(x1);      //写入16bit数据位的低位
   gpio_8080_write_data(x2>>8);   //设定屏幕数据操作区域的列尾地址数据，，先写入16bit数据位的高位
   gpio_8080_write_data(x2);      //写入16bit数据位的低位
+}
+
+void ili9341_set_page_address(uint16_t y1, uint16_t y2)
+{
   gpio_8080_write_command(0x2b);
   gpio_8080_write_data(y1>>8);     //设定屏幕数据操作区域的行首地址数据，，先写入16bit数据位的高位
   gpio_8080_write_data(y1);         //写入16bit数据位的低位
   gpio_8080_write_data(y2>>8);      //设定屏幕数据操作区域的行尾地址数据，，先写入16bit数据位的高位
   gpio_8080_write_data(y2);         //写入16bit数据位的低位
-  gpio_8080_write_command(0x2c);  //开启RAM数据持续写入状态。         
+}
+
+
+/**
+	* @brief Send to ILI9341 the define area of frame memory where MCU can access.
+	*/
+void ili9341_set_frame_address(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
+{
+	ili9341_set_column_address(x1, x2);
+	ili9341_set_page_address(y1, y2);
+	ili9341_memory_write();
 }
 
 
 
 
-//画水平线。。设定需填色的行列起止地址范围后往里填色
-void H_line(unsigned int x, unsigned int y, unsigned int l, unsigned int c)                   
+/**
+	* @brief Draw a horizontal line.
+	*/
+void lcd_draw_horizontal_line(uint16_t start_coordinate_x, uint16_t start_coordinate_y, uint16_t length, uint16_t line_color)                   
 { 
+  gpio_8080_write_command(0x2C);       //write_memory_start
+	uint16_t end_coordinate_x = start_coordinate_x + length;
+	uint16_t end_coordinate_y = start_coordinate_y;
 
-  //x,y 为水平线的起始坐标 ，，l为水平线长度单位为像素，c为颜色参数
-  unsigned int i,j;
+	/* Sets the frame memory area. */
+  ili9341_set_frame_address(start_coordinate_x, start_coordinate_y, end_coordinate_x, end_coordinate_y);  
 
-  
-  gpio_8080_write_command(0x02c);       //write_memory_start
-  LCD_RS_1();
-  LCD_CS_0();
-
-  l=l+x;  //转换成终止列的X坐标  
-  Address_set(x,y,l,y);   //框出要填色的区域
-
-  j=l;                //确定要填入的像素个数
-  for(i=1;i<=j;i++)
+	/* Fill with line_color. */
+  for(uint16_t i = 1; i<=length; ++i)
   {
-    gpio_8080_write_data(c>>8);   //写入颜色数据的高8位
-    gpio_8080_write_data(c);      //写入颜色数据的低8位
+    gpio_8080_write_data(line_color >> 8);  /* MSB first. */
+    gpio_8080_write_data(line_color);      
   }
-  LCD_CS_1();
 }
 
-
-//画垂直线。。设定需填色的行列起止地址范围后往里填色
-void V_line(unsigned int x, unsigned int y, unsigned int l, unsigned int c)                   
+/**
+	* Draw a vertical line. Fill color if necessary.
+	*/
+void lcd_draw_vertical_line(uint16_t start_coordinate_x, uint16_t start_coordinate_y, uint16_t length, uint16_t line_color)                   
 { 
-  unsigned int i,j;
   
-  gpio_8080_write_command(0x02c); //write_memory_start
-  LCD_RS_1();
-  LCD_CS_0();
+  gpio_8080_write_command(0x2c); //write_memory_start
   
-  l=l+y;  //转换成终止行的Y坐标
-  Address_set(x,y,x,l); //框出要填色的区域
-  j=l;             //确定要填入的像素个数
-  for(i=1;i<=j;i++)
+	uint16_t end_coordinate_x = start_coordinate_x;
+	uint16_t end_coordinate_y = start_coordinate_y + length;
+	/* Sets the frame memory area. */
+  ili9341_set_frame_address(start_coordinate_x, start_coordinate_y, end_coordinate_x, end_coordinate_y); 
+
+	/* Fill with line_color. */
+  for(uint16_t i=1; i<=length; ++i)
   { 
-    gpio_8080_write_data(c>>8);    //写入颜色数据的高8位
-    gpio_8080_write_data(c);       //写入颜色数据的低8位
+    gpio_8080_write_data(line_color>>8);   
+    gpio_8080_write_data(line_color);       
   }
-  LCD_CS_1();
 }
 
-
-//画空心矩形
-void Rect(unsigned int x,unsigned int y,unsigned int w,unsigned int h,unsigned int c)
+/**
+	* @brief Draw an empty rectangle frame.
+	* @note  This is equivalent to drawing two vertical lines plus two horizontal lines.
+	*/
+void lcd_draw_rectangle_unfilled(uint16_t start_coordinate_x, uint16_t start_coordinate_y, uint16_t rect_width, uint16_t rect_height, uint16_t frame_color)
 {
-  H_line(x  , y  , w, c);
-  H_line(x  , y+h, w, c);
-  V_line(x  , y  , h, c);
-  V_line(x+w, y  , h, c);
+  lcd_draw_horizontal_line(start_coordinate_x, start_coordinate_y, rect_width, frame_color);
+  lcd_draw_horizontal_line(start_coordinate_x, start_coordinate_y + rect_height, rect_width, frame_color);
+
+  lcd_draw_vertical_line(start_coordinate_x, start_coordinate_y, rect_height, frame_color);
+  lcd_draw_vertical_line(start_coordinate_x + rect_width, start_coordinate_y, rect_height, frame_color);
 }
 
-
-//画实心矩形
-void Rectf(unsigned int x,unsigned int y,unsigned int w,unsigned int h,unsigned int c)
+/**
+	* @brief Draw a solid color-filled rectangle.
+	*/
+void lcd_draw_rectangle_filled(uint16_t start_coordinate_x, uint16_t start_coordinate_y, uint16_t rect_width, uint16_t rect_height, uint16_t rect_color)
 {
-  unsigned int i;
-  for(i=0;i<h;i++)
+  for (uint16_t i = 0; i < rect_height; ++i)
   {
-    H_line(x  , y+i, w, c);
+    lcd_draw_horizontal_line(start_coordinate_x, start_coordinate_y + i, rect_width, rect_color);
   }
 }
 
-
-int RGB(int r,int g,int b)
-{return r << 16 | g << 8 | b;
-}
-
-
-
-
-//满屏填充
-void LCD_Clear(unsigned int j)                   
+/**
+	* @brief Clear the entire screen and fill with color.
+	*/
+void lcd_clear_all(uint16_t fill_color)                   
 { 
-  unsigned int i,m;
+	uint16_t start_coordinate_x = 0;
+	uint16_t start_coordinate_y = 0;
+	uint16_t end_coordinate_x = TFT_PIXEL_H_LENGTH - 1;
+	uint16_t end_coordinate_y = TFT_PIXEL_V_WIDTH - 1;
 
-  LCD_CS_0();
-  Address_set(0,0,239,319);
-
-
-  for(i=0;i<320;i++)  //320个行
-    for(m=0;m<240;m++) //240列
+  ili9341_set_frame_address(start_coordinate_x, start_coordinate_y, end_coordinate_x, end_coordinate_y);
+  for(uint16_t i = 0; i < TFT_PIXEL_V_WIDTH; ++i)  
+    for(uint16_t m = 0; m < TFT_PIXEL_H_LENGTH; ++m) 
     {
-      gpio_8080_write_data(j>>8);
-      gpio_8080_write_data(j);
-
+			/* Write color to fill. */
+      gpio_8080_write_data(fill_color>>8);
+      gpio_8080_write_data(fill_color);
     }
-  LCD_CS_1();
 }
 
+
+void lcd_draw_dot(uint16_t start_coordinate_x, uint16_t start_coordinate_y, uint16_t dot_color) 
+{
+	uint16_t end_coordinate_x = start_coordinate_x + 1;
+	uint16_t end_coordinate_y = start_coordinate_y + 1;
+  ili9341_set_frame_address(start_coordinate_x, start_coordinate_y, end_coordinate_x, end_coordinate_y);  
+  gpio_8080_write_data(dot_color >> 8); 
+  gpio_8080_write_data(dot_color);      
+}
+
+
+void lcd_plot_char(int16_t x, int16_t y, unsigned char c,uint16_t color, uint16_t bg, uint8_t size) 
+{
+
+ 
+	for (int8_t i=0; i<6; i++ )
+	{
+		uint8_t line;
+
+		if (i == 5)
+		{
+			line = 0x0;
+		}
+		else 
+		{
+			line = *((uint8_t*)(font+(c*5)+i));
+		}
+
+		for (int8_t j = 0; j<8; j++)
+		{
+			if (line & 0x1)
+			{
+				if (size == 1) // default size
+				{
+					lcd_draw_dot(x+i, y+j, color);
+				}
+				else {  // big size
+					// ili9341_plot_color_block(x+(i*size), y+(j*size), size, size, color);
+				} 
+			} else if (bg != color)
+			{
+				if (size == 1) // default size
+				{
+					lcd_draw_dot(x+i, y+j, bg);
+				}
+				else 
+				{  // big size
+					//ili9341_plot_color_block(x+i*size, y+j*size, size, size, bg);
+				}
+			}
+
+			line >>= 1;
+		}
+	}
+}
+
+void lcd_set_rotation(uint8_t orientation) 
+{
+
+  gpio_8080_write_command(0x36);    
+
+	switch (orientation) 
+	{
+		case 0:
+			gpio_8080_write_data(0x40|0x08);
+			break;
+		case 1:
+			gpio_8080_write_data(0x20|0x08);
+			break;
+		case 2:
+			gpio_8080_write_data(0x80|0x08);
+			break;
+		case 3:
+			gpio_8080_write_data(0x40|0x80|0x20|0x08);
+			break;
+	}
+}
+
+
+void lcd_write_message(char* message, uint16_t start_coordinate_x, uint16_t start_coordinate_y, uint8_t size, uint16_t text_color, uint16_t text_bg_color){
+	for(uint8_t i = 0; i< strlen(message); i++){
+		char single_char = message[i];
+		lcd_plot_char(start_coordinate_x, start_coordinate_y, single_char, text_color, text_bg_color, 1);
+		start_coordinate_x += 6;
+	}
+}
