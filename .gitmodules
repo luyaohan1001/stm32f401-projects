@@ -4,3 +4,6 @@
 [submodule "nRF24-transmitter/libs/nRF24"]
 	path = nRF24-transmitter/libs/nRF24
 	url = https://github.com/luyaohan1001/nRF24
+[submodule "nrf24-transceiver/application-library/nrf24"]
+	path = nrf24-transceiver/application-library/nrf24
+	url = git@github.com:luyaohan1001/nrf24.git
