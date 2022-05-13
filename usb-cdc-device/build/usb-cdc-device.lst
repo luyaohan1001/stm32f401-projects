@@ -1,0 +1,3314 @@
+ARM GAS  /tmp/cc51CT0k.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"usb-cdc-device.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.CDC_DeInit_FS,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu fpv4-sp-d16
+  24              	CDC_DeInit_FS:
+  25              	.LFB133:
+  26              		.file 1 "application-library/usb-cdc-device.c"
+   1:application-library/usb-cdc-device.c **** 
+   2:application-library/usb-cdc-device.c **** /* Includes ------------------------------------------------------------------*/
+   3:application-library/usb-cdc-device.c **** 
+   4:application-library/usb-cdc-device.c **** #include "usb_device.h"
+   5:application-library/usb-cdc-device.c **** #include "usbd_core.h"
+   6:application-library/usb-cdc-device.c **** #include "usbd_desc.h"
+   7:application-library/usb-cdc-device.c **** // #include "usbd_cdc.h"
+   8:application-library/usb-cdc-device.c **** // #include "usbd_cdc_if.h"
+   9:application-library/usb-cdc-device.c **** #include "usb-cdc-device.h"
+  10:application-library/usb-cdc-device.c **** #include "usbd_def.h" /* defines USBD_StatusTypeDef */
+  11:application-library/usb-cdc-device.c **** 
+  12:application-library/usb-cdc-device.c **** 
+  13:application-library/usb-cdc-device.c **** /* usb_device_if layer ---- ---- ---- ---- ---- ---- ---- ---- */
+  14:application-library/usb-cdc-device.c **** /* Originally usbd_cdc_if.c */
+  15:application-library/usb-cdc-device.c **** 
+  16:application-library/usb-cdc-device.c **** /* Create buffer for reception and transmission           */
+  17:application-library/usb-cdc-device.c **** /* It's up to user to redefine and/or remove those define */
+  18:application-library/usb-cdc-device.c **** /** Received data over USB are stored in this buffer      */
+  19:application-library/usb-cdc-device.c **** uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
+  20:application-library/usb-cdc-device.c **** 
+  21:application-library/usb-cdc-device.c **** /** Data to send over USB CDC are stored in this buffer   */
+  22:application-library/usb-cdc-device.c **** uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
+  23:application-library/usb-cdc-device.c **** 
+  24:application-library/usb-cdc-device.c **** 
+  25:application-library/usb-cdc-device.c **** extern USBD_HandleTypeDef hUsbDeviceFS;
+  26:application-library/usb-cdc-device.c **** 
+  27:application-library/usb-cdc-device.c **** static int8_t CDC_Init_FS(void);
+  28:application-library/usb-cdc-device.c **** static int8_t CDC_DeInit_FS(void);
+  29:application-library/usb-cdc-device.c **** static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
+  30:application-library/usb-cdc-device.c **** static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
+  31:application-library/usb-cdc-device.c **** static int8_t CDC_TransmitCplt_FS(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
+  32:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 2
+
+
+  33:application-library/usb-cdc-device.c **** 
+  34:application-library/usb-cdc-device.c **** USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
+  35:application-library/usb-cdc-device.c **** {
+  36:application-library/usb-cdc-device.c ****   CDC_Init_FS,
+  37:application-library/usb-cdc-device.c ****   CDC_DeInit_FS,
+  38:application-library/usb-cdc-device.c ****   CDC_Control_FS,
+  39:application-library/usb-cdc-device.c ****   CDC_Receive_FS,
+  40:application-library/usb-cdc-device.c ****   CDC_TransmitCplt_FS
+  41:application-library/usb-cdc-device.c **** };
+  42:application-library/usb-cdc-device.c **** 
+  43:application-library/usb-cdc-device.c **** /* Private functions ---------------------------------------------------------*/
+  44:application-library/usb-cdc-device.c **** /**
+  45:application-library/usb-cdc-device.c ****   * @brief  Initializes the CDC media low layer over the FS USB IP
+  46:application-library/usb-cdc-device.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL
+  47:application-library/usb-cdc-device.c ****   */
+  48:application-library/usb-cdc-device.c **** static int8_t CDC_Init_FS(void)
+  49:application-library/usb-cdc-device.c **** {
+  50:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 3 */
+  51:application-library/usb-cdc-device.c ****   /* Set Application Buffers */
+  52:application-library/usb-cdc-device.c ****   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 0);
+  53:application-library/usb-cdc-device.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, UserRxBufferFS);
+  54:application-library/usb-cdc-device.c ****   return (USBD_OK);
+  55:application-library/usb-cdc-device.c ****   /* USER CODE END 3 */
+  56:application-library/usb-cdc-device.c **** }
+  57:application-library/usb-cdc-device.c **** 
+  58:application-library/usb-cdc-device.c **** /**
+  59:application-library/usb-cdc-device.c ****   * @brief  DeInitializes the CDC media low layer
+  60:application-library/usb-cdc-device.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL
+  61:application-library/usb-cdc-device.c ****   */
+  62:application-library/usb-cdc-device.c **** static int8_t CDC_DeInit_FS(void)
+  63:application-library/usb-cdc-device.c **** {
+  27              		.loc 1 63 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  64:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 4 */
+  65:application-library/usb-cdc-device.c ****   return (USBD_OK);
+  66:application-library/usb-cdc-device.c ****   /* USER CODE END 4 */
+  67:application-library/usb-cdc-device.c **** }
+  32              		.loc 1 67 0
+  33 0000 0020     		movs	r0, #0
+  34 0002 7047     		bx	lr
+  35              		.cfi_endproc
+  36              	.LFE133:
+  38              		.section	.text.CDC_Control_FS,"ax",%progbits
+  39              		.align	1
+  40              		.syntax unified
+  41              		.thumb
+  42              		.thumb_func
+  43              		.fpu fpv4-sp-d16
+  45              	CDC_Control_FS:
+  46              	.LFB134:
+  68:application-library/usb-cdc-device.c **** 
+  69:application-library/usb-cdc-device.c **** /**
+  70:application-library/usb-cdc-device.c ****   * @brief  Manage the CDC class requests
+  71:application-library/usb-cdc-device.c ****   * @param  cmd: Command code
+ARM GAS  /tmp/cc51CT0k.s 			page 3
+
+
+  72:application-library/usb-cdc-device.c ****   * @param  pbuf: Buffer containing command data (request parameters)
+  73:application-library/usb-cdc-device.c ****   * @param  length: Number of data to be sent (in bytes)
+  74:application-library/usb-cdc-device.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
+  75:application-library/usb-cdc-device.c ****   */
+  76:application-library/usb-cdc-device.c **** static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
+  77:application-library/usb-cdc-device.c **** {
+  47              		.loc 1 77 0
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              		@ link register save eliminated.
+  52              	.LVL0:
+  78:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 5 */
+  79:application-library/usb-cdc-device.c ****   switch(cmd)
+  80:application-library/usb-cdc-device.c ****   {
+  81:application-library/usb-cdc-device.c ****     case CDC_SEND_ENCAPSULATED_COMMAND:
+  82:application-library/usb-cdc-device.c **** 
+  83:application-library/usb-cdc-device.c ****     break;
+  84:application-library/usb-cdc-device.c **** 
+  85:application-library/usb-cdc-device.c ****     case CDC_GET_ENCAPSULATED_RESPONSE:
+  86:application-library/usb-cdc-device.c **** 
+  87:application-library/usb-cdc-device.c ****     break;
+  88:application-library/usb-cdc-device.c **** 
+  89:application-library/usb-cdc-device.c ****     case CDC_SET_COMM_FEATURE:
+  90:application-library/usb-cdc-device.c **** 
+  91:application-library/usb-cdc-device.c ****     break;
+  92:application-library/usb-cdc-device.c **** 
+  93:application-library/usb-cdc-device.c ****     case CDC_GET_COMM_FEATURE:
+  94:application-library/usb-cdc-device.c **** 
+  95:application-library/usb-cdc-device.c ****     break;
+  96:application-library/usb-cdc-device.c **** 
+  97:application-library/usb-cdc-device.c ****     case CDC_CLEAR_COMM_FEATURE:
+  98:application-library/usb-cdc-device.c **** 
+  99:application-library/usb-cdc-device.c ****     break;
+ 100:application-library/usb-cdc-device.c **** 
+ 101:application-library/usb-cdc-device.c ****   /*******************************************************************************/
+ 102:application-library/usb-cdc-device.c ****   /* Line Coding Structure                                                       */
+ 103:application-library/usb-cdc-device.c ****   /*-----------------------------------------------------------------------------*/
+ 104:application-library/usb-cdc-device.c ****   /* Offset | Field       | Size | Value  | Description                          */
+ 105:application-library/usb-cdc-device.c ****   /* 0      | dwDTERate   |   4  | Number |Data terminal rate, in bits per second*/
+ 106:application-library/usb-cdc-device.c ****   /* 4      | bCharFormat |   1  | Number | Stop bits                            */
+ 107:application-library/usb-cdc-device.c ****   /*                                        0 - 1 Stop bit                       */
+ 108:application-library/usb-cdc-device.c ****   /*                                        1 - 1.5 Stop bits                    */
+ 109:application-library/usb-cdc-device.c ****   /*                                        2 - 2 Stop bits                      */
+ 110:application-library/usb-cdc-device.c ****   /* 5      | bParityType |  1   | Number | Parity                               */
+ 111:application-library/usb-cdc-device.c ****   /*                                        0 - None                             */
+ 112:application-library/usb-cdc-device.c ****   /*                                        1 - Odd                              */
+ 113:application-library/usb-cdc-device.c ****   /*                                        2 - Even                             */
+ 114:application-library/usb-cdc-device.c ****   /*                                        3 - Mark                             */
+ 115:application-library/usb-cdc-device.c ****   /*                                        4 - Space                            */
+ 116:application-library/usb-cdc-device.c ****   /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
+ 117:application-library/usb-cdc-device.c ****   /*******************************************************************************/
+ 118:application-library/usb-cdc-device.c ****     case CDC_SET_LINE_CODING:
+ 119:application-library/usb-cdc-device.c ****     break;
+ 120:application-library/usb-cdc-device.c ****     case CDC_GET_LINE_CODING:
+ 121:application-library/usb-cdc-device.c ****     break;
+ 122:application-library/usb-cdc-device.c ****     case CDC_SET_CONTROL_LINE_STATE:
+ARM GAS  /tmp/cc51CT0k.s 			page 4
+
+
+ 123:application-library/usb-cdc-device.c ****     break;
+ 124:application-library/usb-cdc-device.c ****     case CDC_SEND_BREAK:
+ 125:application-library/usb-cdc-device.c ****     break;
+ 126:application-library/usb-cdc-device.c ****   default:
+ 127:application-library/usb-cdc-device.c ****     break;
+ 128:application-library/usb-cdc-device.c ****   }
+ 129:application-library/usb-cdc-device.c ****   return (USBD_OK);
+ 130:application-library/usb-cdc-device.c **** }
+  53              		.loc 1 130 0
+  54 0000 0020     		movs	r0, #0
+  55              	.LVL1:
+  56 0002 7047     		bx	lr
+  57              		.cfi_endproc
+  58              	.LFE134:
+  60              		.section	.text.CDC_TransmitCplt_FS,"ax",%progbits
+  61              		.align	1
+  62              		.syntax unified
+  63              		.thumb
+  64              		.thumb_func
+  65              		.fpu fpv4-sp-d16
+  67              	CDC_TransmitCplt_FS:
+  68              	.LFB137:
+ 131:application-library/usb-cdc-device.c **** 
+ 132:application-library/usb-cdc-device.c **** /**
+ 133:application-library/usb-cdc-device.c ****   * @brief  Data received over USB OUT endpoint are sent over CDC interface
+ 134:application-library/usb-cdc-device.c ****   *         through this function.
+ 135:application-library/usb-cdc-device.c ****   *
+ 136:application-library/usb-cdc-device.c ****   *         @note
+ 137:application-library/usb-cdc-device.c ****   *         This function will issue a NAK packet on any OUT packet received on
+ 138:application-library/usb-cdc-device.c ****   *         USB endpoint until exiting this function. If you exit this function
+ 139:application-library/usb-cdc-device.c ****   *         before transfer is complete on CDC interface (ie. using DMA controller)
+ 140:application-library/usb-cdc-device.c ****   *         it will result in receiving more data while previous ones are still
+ 141:application-library/usb-cdc-device.c ****   *         not sent.
+ 142:application-library/usb-cdc-device.c ****   *
+ 143:application-library/usb-cdc-device.c ****   * @param  Buf: Buffer of data to be received
+ 144:application-library/usb-cdc-device.c ****   * @param  Len: Number of data received (in bytes)
+ 145:application-library/usb-cdc-device.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
+ 146:application-library/usb-cdc-device.c ****   */
+ 147:application-library/usb-cdc-device.c **** static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
+ 148:application-library/usb-cdc-device.c **** {
+ 149:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 6 */
+ 150:application-library/usb-cdc-device.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+ 151:application-library/usb-cdc-device.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 152:application-library/usb-cdc-device.c ****   return (USBD_OK);
+ 153:application-library/usb-cdc-device.c ****   /* USER CODE END 6 */
+ 154:application-library/usb-cdc-device.c **** }
+ 155:application-library/usb-cdc-device.c **** 
+ 156:application-library/usb-cdc-device.c **** /**
+ 157:application-library/usb-cdc-device.c ****   * @brief  CDC_Transmit_FS
+ 158:application-library/usb-cdc-device.c ****   *         Data to send over USB IN endpoint are sent over CDC interface
+ 159:application-library/usb-cdc-device.c ****   *         through this function.
+ 160:application-library/usb-cdc-device.c ****   *         @note
+ 161:application-library/usb-cdc-device.c ****   *
+ 162:application-library/usb-cdc-device.c ****   *
+ 163:application-library/usb-cdc-device.c ****   * @param  Buf: Buffer of data to be sent
+ 164:application-library/usb-cdc-device.c ****   * @param  Len: Number of data to be sent (in bytes)
+ 165:application-library/usb-cdc-device.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL or USBD_BUSY
+ARM GAS  /tmp/cc51CT0k.s 			page 5
+
+
+ 166:application-library/usb-cdc-device.c ****   */
+ 167:application-library/usb-cdc-device.c **** uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
+ 168:application-library/usb-cdc-device.c **** {
+ 169:application-library/usb-cdc-device.c ****   uint8_t result = USBD_OK;
+ 170:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 7 */
+ 171:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+ 172:application-library/usb-cdc-device.c ****   if (hcdc->TxState != 0){
+ 173:application-library/usb-cdc-device.c ****     return USBD_BUSY;
+ 174:application-library/usb-cdc-device.c ****   }
+ 175:application-library/usb-cdc-device.c ****   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
+ 176:application-library/usb-cdc-device.c ****   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+ 177:application-library/usb-cdc-device.c ****   /* USER CODE END 7 */
+ 178:application-library/usb-cdc-device.c ****   return result;
+ 179:application-library/usb-cdc-device.c **** }
+ 180:application-library/usb-cdc-device.c **** 
+ 181:application-library/usb-cdc-device.c **** /**
+ 182:application-library/usb-cdc-device.c ****   * @brief  CDC_TransmitCplt_FS
+ 183:application-library/usb-cdc-device.c ****   *         Data transmitted callback
+ 184:application-library/usb-cdc-device.c ****   *
+ 185:application-library/usb-cdc-device.c ****   *         @note
+ 186:application-library/usb-cdc-device.c ****   *         This function is IN transfer complete callback used to inform user that
+ 187:application-library/usb-cdc-device.c ****   *         the submitted Data is successfully sent over USB.
+ 188:application-library/usb-cdc-device.c ****   *
+ 189:application-library/usb-cdc-device.c ****   * @param  Buf: Buffer of data to be received
+ 190:application-library/usb-cdc-device.c ****   * @param  Len: Number of data received (in bytes)
+ 191:application-library/usb-cdc-device.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
+ 192:application-library/usb-cdc-device.c ****   */
+ 193:application-library/usb-cdc-device.c **** static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
+ 194:application-library/usb-cdc-device.c **** {
+  69              		.loc 1 194 0
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73              		@ link register save eliminated.
+  74              	.LVL2:
+ 195:application-library/usb-cdc-device.c ****   uint8_t result = USBD_OK;
+ 196:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 13 */
+ 197:application-library/usb-cdc-device.c ****   UNUSED(Buf);
+ 198:application-library/usb-cdc-device.c ****   UNUSED(Len);
+ 199:application-library/usb-cdc-device.c ****   UNUSED(epnum);
+ 200:application-library/usb-cdc-device.c ****   /* USER CODE END 13 */
+ 201:application-library/usb-cdc-device.c ****   return result;
+ 202:application-library/usb-cdc-device.c **** }
+  75              		.loc 1 202 0
+  76 0000 0020     		movs	r0, #0
+  77              	.LVL3:
+  78 0002 7047     		bx	lr
+  79              		.cfi_endproc
+  80              	.LFE137:
+  82              		.section	.text.USBD_CDC_EP0_RxReady,"ax",%progbits
+  83              		.align	1
+  84              		.syntax unified
+  85              		.thumb
+  86              		.thumb_func
+  87              		.fpu fpv4-sp-d16
+  89              	USBD_CDC_EP0_RxReady:
+  90              	.LFB144:
+ARM GAS  /tmp/cc51CT0k.s 			page 6
+
+
+ 203:application-library/usb-cdc-device.c **** 
+ 204:application-library/usb-cdc-device.c **** /* usb_device_if layer END ---- ---- ---- ---- ---- ---- ---- ---- */
+ 205:application-library/usb-cdc-device.c **** 
+ 206:application-library/usb-cdc-device.c **** 
+ 207:application-library/usb-cdc-device.c **** 
+ 208:application-library/usb-cdc-device.c **** 
+ 209:application-library/usb-cdc-device.c **** 
+ 210:application-library/usb-cdc-device.c **** 
+ 211:application-library/usb-cdc-device.c **** 
+ 212:application-library/usb-cdc-device.c **** 
+ 213:application-library/usb-cdc-device.c **** 
+ 214:application-library/usb-cdc-device.c **** 
+ 215:application-library/usb-cdc-device.c **** 
+ 216:application-library/usb-cdc-device.c **** 
+ 217:application-library/usb-cdc-device.c **** /* usb_device.c ---- ---- ---- ---- ---- ---- ---- ---- */
+ 218:application-library/usb-cdc-device.c **** /* USB Device Core handle declaration. */
+ 219:application-library/usb-cdc-device.c **** USBD_HandleTypeDef hUsbDeviceFS;
+ 220:application-library/usb-cdc-device.c **** // extern USBD_HandleTypeDef hUsbDeviceFS; /* from usbd_cdc_if.c */
+ 221:application-library/usb-cdc-device.c **** USBD_HandleTypeDef* p_usbd_handle = &hUsbDeviceFS;
+ 222:application-library/usb-cdc-device.c **** 
+ 223:application-library/usb-cdc-device.c **** /**
+ 224:application-library/usb-cdc-device.c ****   * Init USB device Library, add supported class and start the library
+ 225:application-library/usb-cdc-device.c ****   * @retval None
+ 226:application-library/usb-cdc-device.c ****   */
+ 227:application-library/usb-cdc-device.c **** void usb_device_init(void)
+ 228:application-library/usb-cdc-device.c **** {
+ 229:application-library/usb-cdc-device.c **** 
+ 230:application-library/usb-cdc-device.c ****   // USBD_Init(p_usbd_handle, &FS_Desc, DEVICE_FS);
+ 231:application-library/usb-cdc-device.c ****   // USBD_RegisterClass(p_usbd_handle, &USBD_CDC);
+ 232:application-library/usb-cdc-device.c ****   // USBD_CDC_RegisterInterface(p_usbd_handle, &USBD_Interface_fops_FS);
+ 233:application-library/usb-cdc-device.c ****   // USBD_Start(p_usbd_handle);
+ 234:application-library/usb-cdc-device.c ****   // return;
+ 235:application-library/usb-cdc-device.c **** 
+ 236:application-library/usb-cdc-device.c ****   /* Init Device Library, add supported class and start the library. */
+ 237:application-library/usb-cdc-device.c ****   // 1. USBD_Init(&p_usbd_handle, &FS_Desc, DEVICE_FS);
+ 238:application-library/usb-cdc-device.c ****   /* Unlink previous class*/
+ 239:application-library/usb-cdc-device.c ****   p_usbd_handle->pClass[0] = NULL;
+ 240:application-library/usb-cdc-device.c ****   p_usbd_handle->pUserData[0] = NULL;
+ 241:application-library/usb-cdc-device.c ****   p_usbd_handle->pConfDesc = NULL;
+ 242:application-library/usb-cdc-device.c **** 
+ 243:application-library/usb-cdc-device.c ****   /* Assign USBD Descriptors */
+ 244:application-library/usb-cdc-device.c ****   p_usbd_handle->pDesc = &FS_Desc;
+ 245:application-library/usb-cdc-device.c **** 
+ 246:application-library/usb-cdc-device.c ****   /* Set Device initial State */
+ 247:application-library/usb-cdc-device.c ****   p_usbd_handle->dev_state = USBD_STATE_DEFAULT;  // DEFAULT - ADDRESSED - CONFIGURED - SUSPEND
+ 248:application-library/usb-cdc-device.c ****   p_usbd_handle->id = DEVICE_FS; // DEVICE_FS (0)
+ 249:application-library/usb-cdc-device.c **** 
+ 250:application-library/usb-cdc-device.c ****   /* Initialize low level driver */
+ 251:application-library/usb-cdc-device.c ****   // USBD_LL_Init(p_usbd_handle); // configure the TX or the RX FIFO of the new defined endport
+ 252:application-library/usb-cdc-device.c ****                                   // From usbd_conf.c expanded below. 
+ 253:application-library/usb-cdc-device.c **** 
+ 254:application-library/usb-cdc-device.c ****   /* Init USB Ip. */
+ 255:application-library/usb-cdc-device.c ****   extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
+ 256:application-library/usb-cdc-device.c ****   if (p_usbd_handle->id == DEVICE_FS) {
+ 257:application-library/usb-cdc-device.c ****   /* Link the driver to the stack. */
+ 258:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.pData = p_usbd_handle;
+ 259:application-library/usb-cdc-device.c ****                                            /* pData is the pointer to upper stack handler. */
+ARM GAS  /tmp/cc51CT0k.s 			page 7
+
+
+ 260:application-library/usb-cdc-device.c ****   p_usbd_handle->pData = &hpcd_USB_OTG_FS; /* connect usbd_handle with the lower-level pcd_handle*/
+ 261:application-library/usb-cdc-device.c **** 
+ 262:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
+ 263:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.dev_endpoints = 4;
+ 264:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
+ 265:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
+ 266:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
+ 267:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
+ 268:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
+ 269:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
+ 270:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.vbus_sensing_enable = DISABLE;
+ 271:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
+ 272:application-library/usb-cdc-device.c **** 
+ 273:application-library/usb-cdc-device.c ****   
+ 274:application-library/usb-cdc-device.c ****   HAL_PCD_Init(&hpcd_USB_OTG_FS);
+ 275:application-library/usb-cdc-device.c **** 
+ 276:application-library/usb-cdc-device.c ****   /* in stm32f4xx_hal_pcd_ex.h */ 
+ 277:application-library/usb-cdc-device.c ****   HAL_PCDEx_SetRxFiFo(&hpcd_USB_OTG_FS, 0x80);    /* set RX FIFO size 0x80*/
+ 278:application-library/usb-cdc-device.c ****   HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_FS, 0, 0x40); /* set TX FIFO 0 with size 0x40 */ 
+ 279:application-library/usb-cdc-device.c ****   HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_FS, 1, 0x80); /* set TX FIFO 1 with size 0x80 */
+ 280:application-library/usb-cdc-device.c ****   }
+ 281:application-library/usb-cdc-device.c ****   // return USBD_OK;
+ 282:application-library/usb-cdc-device.c **** 
+ 283:application-library/usb-cdc-device.c **** 
+ 284:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 285:application-library/usb-cdc-device.c ****   // 2. USBD_RegisterClass(&p_usbd_handle, &USBD_CDC); // usbd_core.c
+ 286:application-library/usb-cdc-device.c ****   
+ 287:application-library/usb-cdc-device.c ****   /* link the class to the USB Device handle */
+ 288:application-library/usb-cdc-device.c ****   /* This will populate the functions, the actual implementation is in usbd_cdc. */
+ 289:application-library/usb-cdc-device.c ****   p_usbd_handle->pClass[0] = &USBD_CDC;
+ 290:application-library/usb-cdc-device.c **** 
+ 291:application-library/usb-cdc-device.c ****   /* Get Device Configuration Descriptor */
+ 292:application-library/usb-cdc-device.c ****   /*
+ 293:application-library/usb-cdc-device.c ****   uint16_t len = 0U;
+ 294:application-library/usb-cdc-device.c ****   if (p_usbd_handle->pClass[p_usbd_handle->classId]->GetFSConfigDescriptor != NULL)
+ 295:application-library/usb-cdc-device.c ****   {
+ 296:application-library/usb-cdc-device.c ****     // pClass is of type USBD_ClassTypeDef.
+ 297:application-library/usb-cdc-device.c ****     // p_usbd_handle is of type USBD_HandleTypeDef
+ 298:application-library/usb-cdc-device.c ****     // The actual GetFSConfigDescriptor is implemented as  USBD_CDC_GetFSCfgDesc(uint16_t *length) 
+ 299:application-library/usb-cdc-device.c ****     p_usbd_handle->pConfDesc = (void *)p_usbd_handle->pClass[p_usbd_handle->classId]->GetFSConfigDe
+ 300:application-library/usb-cdc-device.c ****   }
+ 301:application-library/usb-cdc-device.c ****   */
+ 302:application-library/usb-cdc-device.c ****   // p_usbd_handle->pConfDesc = (void *)p_usbd_handle->pClass[p_usbd_handle->classId]->GetFSConfigD
+ 303:application-library/usb-cdc-device.c ****   // p_usbd_handle->pConfDesc = (void *)p_usbd_handle->pClass[0]->GetFSConfigDescriptor(0); 
+ 304:application-library/usb-cdc-device.c ****   /* p_usbd_handle->pClass[0] = (USBD_CDC)*/
+ 305:application-library/usb-cdc-device.c ****   p_usbd_handle->pConfDesc = (&USBD_CDC)->GetFSConfigDescriptor(0) ;
+ 306:application-library/usb-cdc-device.c **** 
+ 307:application-library/usb-cdc-device.c ****   /* Increment the NumClasses */
+ 308:application-library/usb-cdc-device.c ****   // p_usbd_handle->NumClasses ++;
+ 309:application-library/usb-cdc-device.c **** 
+ 310:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 311:application-library/usb-cdc-device.c ****   /*  Commented Out, USB still discoverable but not able to be used as VCP. */
+ 312:application-library/usb-cdc-device.c ****   // 3. USBD_CDC_RegisterInterface(&p_usbd_handle, &USBD_Interface_fops_FS);
+ 313:application-library/usb-cdc-device.c ****   /* USBD_Interface_fops_FS defined in usbd_cdc_if.c */
+ 314:application-library/usb-cdc-device.c ****   /* Valid operations: CDC_Init_FS, CDC_DeInit_FS, CDC_Control_FS, CDC_Receive_FS, CDC*/
+ 315:application-library/usb-cdc-device.c ****   p_usbd_handle->pUserData[p_usbd_handle->classId] = &USBD_Interface_fops_FS;
+ 316:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 8
+
+
+ 317:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 318:application-library/usb-cdc-device.c ****   // 4. USBD_Startp_usbd_handle;
+ 319:application-library/usb-cdc-device.c ****   /* Enable USB Transciver HAL_PCD_Start takes a PCD_HandleTypeDef *hpcd argument and initialize. *
+ 320:application-library/usb-cdc-device.c ****   // HAL_PCD_Start(p_usbd_handle->pData);  /* p_usbd_handle->pData has type void */
+ 321:application-library/usb-cdc-device.c ****                                            /* pData = hpcd_USB_OTG_FS was assigned in step 1. USBD_
+ 322:application-library/usb-cdc-device.c ****   HAL_PCD_Start(&hpcd_USB_OTG_FS);
+ 323:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 324:application-library/usb-cdc-device.c **** }
+ 325:application-library/usb-cdc-device.c **** 
+ 326:application-library/usb-cdc-device.c **** 
+ 327:application-library/usb-cdc-device.c **** 
+ 328:application-library/usb-cdc-device.c **** 
+ 329:application-library/usb-cdc-device.c **** /**
+ 330:application-library/usb-cdc-device.c ****   ******************************************************************************
+ 331:application-library/usb-cdc-device.c ****   * @file    usbd_cdc.c
+ 332:application-library/usb-cdc-device.c ****   * @author  MCD Application Team
+ 333:application-library/usb-cdc-device.c ****   * @brief   This file provides the high layer firmware functions to manage the
+ 334:application-library/usb-cdc-device.c ****   *          following functionalities of the USB CDC Class:
+ 335:application-library/usb-cdc-device.c ****   *           - Initialization and Configuration of high and low layer
+ 336:application-library/usb-cdc-device.c ****   *           - Enumeration as CDC Device (and enumeration for each implemented memory interface)
+ 337:application-library/usb-cdc-device.c ****   *           - OUT/IN data transfer
+ 338:application-library/usb-cdc-device.c ****   *           - Command IN transfer (class requests management)
+ 339:application-library/usb-cdc-device.c ****   *           - Error management
+ 340:application-library/usb-cdc-device.c ****   *
+ 341:application-library/usb-cdc-device.c ****   ******************************************************************************
+ 342:application-library/usb-cdc-device.c ****   * @attention
+ 343:application-library/usb-cdc-device.c ****   *
+ 344:application-library/usb-cdc-device.c ****   * Copyright (c) 2015 STMicroelectronics.
+ 345:application-library/usb-cdc-device.c ****   * All rights reserved.
+ 346:application-library/usb-cdc-device.c ****   *
+ 347:application-library/usb-cdc-device.c ****   * This software is licensed under terms that can be found in the LICENSE file
+ 348:application-library/usb-cdc-device.c ****   * in the root directory of this software component.
+ 349:application-library/usb-cdc-device.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+ 350:application-library/usb-cdc-device.c ****   *
+ 351:application-library/usb-cdc-device.c ****   ******************************************************************************
+ 352:application-library/usb-cdc-device.c ****   *  @verbatim
+ 353:application-library/usb-cdc-device.c ****   *
+ 354:application-library/usb-cdc-device.c ****   *          ===================================================================
+ 355:application-library/usb-cdc-device.c ****   *                                CDC Class Driver Description
+ 356:application-library/usb-cdc-device.c ****   *          ===================================================================
+ 357:application-library/usb-cdc-device.c ****   *           This driver manages the "Universal Serial Bus Class Definitions for Communications De
+ 358:application-library/usb-cdc-device.c ****   *           Revision 1.2 November 16, 2007" and the sub-protocol specification of "Universal Seri
+ 359:application-library/usb-cdc-device.c ****   *           Communications Class Subclass Specification for PSTN Devices Revision 1.2 February 9,
+ 360:application-library/usb-cdc-device.c ****   *           This driver implements the following aspects of the specification:
+ 361:application-library/usb-cdc-device.c ****   *             - Device descriptor management
+ 362:application-library/usb-cdc-device.c ****   *             - Configuration descriptor management
+ 363:application-library/usb-cdc-device.c ****   *             - Enumeration as CDC device with 2 data endpoints (IN and OUT) and 1 command endpoi
+ 364:application-library/usb-cdc-device.c ****   *             - Requests management (as described in section 6.2 in specification)
+ 365:application-library/usb-cdc-device.c ****   *             - Abstract Control Model compliant
+ 366:application-library/usb-cdc-device.c ****   *             - Union Functional collection (using 1 IN endpoint for control)
+ 367:application-library/usb-cdc-device.c ****   *             - Data interface class
+ 368:application-library/usb-cdc-device.c ****   *
+ 369:application-library/usb-cdc-device.c ****   *           These aspects may be enriched or modified for a specific user application.
+ 370:application-library/usb-cdc-device.c ****   *
+ 371:application-library/usb-cdc-device.c ****   *            This driver doesn't implement the following aspects of the specification
+ 372:application-library/usb-cdc-device.c ****   *            (but it is possible to manage these features with some modifications on this driver)
+ 373:application-library/usb-cdc-device.c ****   *             - Any class-specific aspect relative to communication classes should be managed by 
+ARM GAS  /tmp/cc51CT0k.s 			page 9
+
+
+ 374:application-library/usb-cdc-device.c ****   *             - All communication classes other than PSTN are not managed
+ 375:application-library/usb-cdc-device.c ****   *
+ 376:application-library/usb-cdc-device.c ****   *  @endverbatim
+ 377:application-library/usb-cdc-device.c ****   *
+ 378:application-library/usb-cdc-device.c ****   ******************************************************************************
+ 379:application-library/usb-cdc-device.c ****   */
+ 380:application-library/usb-cdc-device.c **** 
+ 381:application-library/usb-cdc-device.c **** /* BSPDependencies
+ 382:application-library/usb-cdc-device.c **** - "stm32xxxxx_{eval}{discovery}{nucleo_144}.c"
+ 383:application-library/usb-cdc-device.c **** - "stm32xxxxx_{eval}{discovery}_io.c"
+ 384:application-library/usb-cdc-device.c **** EndBSPDependencies */
+ 385:application-library/usb-cdc-device.c **** 
+ 386:application-library/usb-cdc-device.c **** /* Includes ------------------------------------------------------------------*/
+ 387:application-library/usb-cdc-device.c **** // #include "usbd_cdc.h"
+ 388:application-library/usb-cdc-device.c **** #include "usbd_ctlreq.h"
+ 389:application-library/usb-cdc-device.c **** 
+ 390:application-library/usb-cdc-device.c **** 
+ 391:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
+ 392:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
+ 393:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
+ 394:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
+ 395:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
+ 396:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev);
+ 397:application-library/usb-cdc-device.c **** #ifndef USE_USBD_COMPOSITE
+ 398:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length);
+ 399:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length);
+ 400:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
+ 401:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
+ 402:application-library/usb-cdc-device.c **** uint8_t *USBD_CDC_GetDeviceQualifierDescriptor(uint16_t *length);
+ 403:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE  */
+ 404:application-library/usb-cdc-device.c **** 
+ 405:application-library/usb-cdc-device.c **** #ifndef USE_USBD_COMPOSITE
+ 406:application-library/usb-cdc-device.c **** /* USB Standard Device Descriptor */
+ 407:application-library/usb-cdc-device.c **** __ALIGN_BEGIN static uint8_t USBD_CDC_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_DESC] __ALIGN_END =
+ 408:application-library/usb-cdc-device.c **** {
+ 409:application-library/usb-cdc-device.c ****   USB_LEN_DEV_QUALIFIER_DESC,
+ 410:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_DEVICE_QUALIFIER,
+ 411:application-library/usb-cdc-device.c ****   0x00,
+ 412:application-library/usb-cdc-device.c ****   0x02,
+ 413:application-library/usb-cdc-device.c ****   0x00,
+ 414:application-library/usb-cdc-device.c ****   0x00,
+ 415:application-library/usb-cdc-device.c ****   0x00,
+ 416:application-library/usb-cdc-device.c ****   0x40,
+ 417:application-library/usb-cdc-device.c ****   0x01,
+ 418:application-library/usb-cdc-device.c ****   0x00,
+ 419:application-library/usb-cdc-device.c **** };
+ 420:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE  */
+ 421:application-library/usb-cdc-device.c **** /**
+ 422:application-library/usb-cdc-device.c ****   * @}
+ 423:application-library/usb-cdc-device.c ****   */
+ 424:application-library/usb-cdc-device.c **** 
+ 425:application-library/usb-cdc-device.c **** /** @defgroup USBD_CDC_Private_Variables
+ 426:application-library/usb-cdc-device.c ****   * @{
+ 427:application-library/usb-cdc-device.c ****   */
+ 428:application-library/usb-cdc-device.c **** 
+ 429:application-library/usb-cdc-device.c **** 
+ 430:application-library/usb-cdc-device.c **** /* CDC interface class callbacks structure */
+ARM GAS  /tmp/cc51CT0k.s 			page 10
+
+
+ 431:application-library/usb-cdc-device.c **** USBD_ClassTypeDef  USBD_CDC =
+ 432:application-library/usb-cdc-device.c **** {
+ 433:application-library/usb-cdc-device.c ****   USBD_CDC_Init,
+ 434:application-library/usb-cdc-device.c ****   USBD_CDC_DeInit,
+ 435:application-library/usb-cdc-device.c ****   USBD_CDC_Setup,
+ 436:application-library/usb-cdc-device.c ****   NULL,                 /* EP0_TxSent */
+ 437:application-library/usb-cdc-device.c ****   USBD_CDC_EP0_RxReady,
+ 438:application-library/usb-cdc-device.c ****   USBD_CDC_DataIn,
+ 439:application-library/usb-cdc-device.c ****   USBD_CDC_DataOut,
+ 440:application-library/usb-cdc-device.c ****   NULL,
+ 441:application-library/usb-cdc-device.c ****   NULL,
+ 442:application-library/usb-cdc-device.c ****   NULL,
+ 443:application-library/usb-cdc-device.c **** #ifdef USE_USBD_COMPOSITE
+ 444:application-library/usb-cdc-device.c ****   NULL,
+ 445:application-library/usb-cdc-device.c ****   NULL,
+ 446:application-library/usb-cdc-device.c ****   NULL,
+ 447:application-library/usb-cdc-device.c ****   NULL,
+ 448:application-library/usb-cdc-device.c **** #else
+ 449:application-library/usb-cdc-device.c ****   USBD_CDC_GetHSCfgDesc,
+ 450:application-library/usb-cdc-device.c ****   USBD_CDC_GetFSCfgDesc,
+ 451:application-library/usb-cdc-device.c ****   USBD_CDC_GetOtherSpeedCfgDesc,
+ 452:application-library/usb-cdc-device.c ****   USBD_CDC_GetDeviceQualifierDescriptor,
+ 453:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE  */
+ 454:application-library/usb-cdc-device.c **** };
+ 455:application-library/usb-cdc-device.c **** 
+ 456:application-library/usb-cdc-device.c **** #ifndef USE_USBD_COMPOSITE
+ 457:application-library/usb-cdc-device.c **** /* USB CDC device Configuration Descriptor */
+ 458:application-library/usb-cdc-device.c **** __ALIGN_BEGIN static uint8_t USBD_CDC_CfgDesc[USB_CDC_CONFIG_DESC_SIZ] __ALIGN_END =
+ 459:application-library/usb-cdc-device.c **** {
+ 460:application-library/usb-cdc-device.c ****   /* Configuration Descriptor */
+ 461:application-library/usb-cdc-device.c ****   0x09,                                       /* bLength: Configuration Descriptor size */
+ 462:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_CONFIGURATION,                /* bDescriptorType: Configuration */
+ 463:application-library/usb-cdc-device.c ****   USB_CDC_CONFIG_DESC_SIZ,                    /* wTotalLength */
+ 464:application-library/usb-cdc-device.c ****   0x00,
+ 465:application-library/usb-cdc-device.c ****   0x02,                                       /* bNumInterfaces: 2 interfaces */
+ 466:application-library/usb-cdc-device.c ****   0x01,                                       /* bConfigurationValue: Configuration value */
+ 467:application-library/usb-cdc-device.c ****   0x00,                                       /* iConfiguration: Index of string descriptor
+ 468:application-library/usb-cdc-device.c ****                                                  describing the configuration */
+ 469:application-library/usb-cdc-device.c **** #if (USBD_SELF_POWERED == 1U)
+ 470:application-library/usb-cdc-device.c ****   0xC0,                                       /* bmAttributes: Bus Powered according to user config
+ 471:application-library/usb-cdc-device.c **** #else
+ 472:application-library/usb-cdc-device.c ****   0x80,                                       /* bmAttributes: Bus Powered according to user config
+ 473:application-library/usb-cdc-device.c **** #endif /* USBD_SELF_POWERED */
+ 474:application-library/usb-cdc-device.c ****   USBD_MAX_POWER,                             /* MaxPower (mA) */
+ 475:application-library/usb-cdc-device.c **** 
+ 476:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 477:application-library/usb-cdc-device.c **** 
+ 478:application-library/usb-cdc-device.c ****   /* Interface Descriptor */
+ 479:application-library/usb-cdc-device.c ****   0x09,                                       /* bLength: Interface Descriptor size */
+ 480:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_INTERFACE,                    /* bDescriptorType: Interface */
+ 481:application-library/usb-cdc-device.c ****   /* Interface descriptor type */
+ 482:application-library/usb-cdc-device.c ****   0x00,                                       /* bInterfaceNumber: Number of Interface */
+ 483:application-library/usb-cdc-device.c ****   0x00,                                       /* bAlternateSetting: Alternate setting */
+ 484:application-library/usb-cdc-device.c ****   0x01,                                       /* bNumEndpoints: One endpoint used */
+ 485:application-library/usb-cdc-device.c ****   0x02,                                       /* bInterfaceClass: Communication Interface Class */
+ 486:application-library/usb-cdc-device.c ****   0x02,                                       /* bInterfaceSubClass: Abstract Control Model */
+ 487:application-library/usb-cdc-device.c ****   0x01,                                       /* bInterfaceProtocol: Common AT commands */
+ARM GAS  /tmp/cc51CT0k.s 			page 11
+
+
+ 488:application-library/usb-cdc-device.c ****   0x00,                                       /* iInterface */
+ 489:application-library/usb-cdc-device.c **** 
+ 490:application-library/usb-cdc-device.c ****   /* Header Functional Descriptor */
+ 491:application-library/usb-cdc-device.c ****   0x05,                                       /* bLength: Endpoint Descriptor size */
+ 492:application-library/usb-cdc-device.c ****   0x24,                                       /* bDescriptorType: CS_INTERFACE */
+ 493:application-library/usb-cdc-device.c ****   0x00,                                       /* bDescriptorSubtype: Header Func Desc */
+ 494:application-library/usb-cdc-device.c ****   0x10,                                       /* bcdCDC: spec release number */
+ 495:application-library/usb-cdc-device.c ****   0x01,
+ 496:application-library/usb-cdc-device.c **** 
+ 497:application-library/usb-cdc-device.c ****   /* Call Management Functional Descriptor */
+ 498:application-library/usb-cdc-device.c ****   0x05,                                       /* bFunctionLength */
+ 499:application-library/usb-cdc-device.c ****   0x24,                                       /* bDescriptorType: CS_INTERFACE */
+ 500:application-library/usb-cdc-device.c ****   0x01,                                       /* bDescriptorSubtype: Call Management Func Desc */
+ 501:application-library/usb-cdc-device.c ****   0x00,                                       /* bmCapabilities: D0+D1 */
+ 502:application-library/usb-cdc-device.c ****   0x01,                                       /* bDataInterface */
+ 503:application-library/usb-cdc-device.c **** 
+ 504:application-library/usb-cdc-device.c ****   /* ACM Functional Descriptor */
+ 505:application-library/usb-cdc-device.c ****   0x04,                                       /* bFunctionLength */
+ 506:application-library/usb-cdc-device.c ****   0x24,                                       /* bDescriptorType: CS_INTERFACE */
+ 507:application-library/usb-cdc-device.c ****   0x02,                                       /* bDescriptorSubtype: Abstract Control Management de
+ 508:application-library/usb-cdc-device.c ****   0x02,                                       /* bmCapabilities */
+ 509:application-library/usb-cdc-device.c **** 
+ 510:application-library/usb-cdc-device.c ****   /* Union Functional Descriptor */
+ 511:application-library/usb-cdc-device.c ****   0x05,                                       /* bFunctionLength */
+ 512:application-library/usb-cdc-device.c ****   0x24,                                       /* bDescriptorType: CS_INTERFACE */
+ 513:application-library/usb-cdc-device.c ****   0x06,                                       /* bDescriptorSubtype: Union func desc */
+ 514:application-library/usb-cdc-device.c ****   0x00,                                       /* bMasterInterface: Communication class interface */
+ 515:application-library/usb-cdc-device.c ****   0x01,                                       /* bSlaveInterface0: Data Class Interface */
+ 516:application-library/usb-cdc-device.c **** 
+ 517:application-library/usb-cdc-device.c ****   /* Endpoint 2 Descriptor */
+ 518:application-library/usb-cdc-device.c ****   0x07,                                       /* bLength: Endpoint Descriptor size */
+ 519:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_ENDPOINT,                     /* bDescriptorType: Endpoint */
+ 520:application-library/usb-cdc-device.c ****   CDC_CMD_EP,                                 /* bEndpointAddress */
+ 521:application-library/usb-cdc-device.c ****   0x03,                                       /* bmAttributes: Interrupt */
+ 522:application-library/usb-cdc-device.c ****   LOBYTE(CDC_CMD_PACKET_SIZE),                /* wMaxPacketSize */
+ 523:application-library/usb-cdc-device.c ****   HIBYTE(CDC_CMD_PACKET_SIZE),
+ 524:application-library/usb-cdc-device.c ****   CDC_FS_BINTERVAL,                           /* bInterval */
+ 525:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 526:application-library/usb-cdc-device.c **** 
+ 527:application-library/usb-cdc-device.c ****   /* Data class interface descriptor */
+ 528:application-library/usb-cdc-device.c ****   0x09,                                       /* bLength: Endpoint Descriptor size */
+ 529:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_INTERFACE,                    /* bDescriptorType: */
+ 530:application-library/usb-cdc-device.c ****   0x01,                                       /* bInterfaceNumber: Number of Interface */
+ 531:application-library/usb-cdc-device.c ****   0x00,                                       /* bAlternateSetting: Alternate setting */
+ 532:application-library/usb-cdc-device.c ****   0x02,                                       /* bNumEndpoints: Two endpoints used */
+ 533:application-library/usb-cdc-device.c ****   0x0A,                                       /* bInterfaceClass: CDC */
+ 534:application-library/usb-cdc-device.c ****   0x00,                                       /* bInterfaceSubClass */
+ 535:application-library/usb-cdc-device.c ****   0x00,                                       /* bInterfaceProtocol */
+ 536:application-library/usb-cdc-device.c ****   0x00,                                       /* iInterface */
+ 537:application-library/usb-cdc-device.c **** 
+ 538:application-library/usb-cdc-device.c ****   /* Endpoint OUT Descriptor */
+ 539:application-library/usb-cdc-device.c ****   0x07,                                       /* bLength: Endpoint Descriptor size */
+ 540:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_ENDPOINT,                     /* bDescriptorType: Endpoint */
+ 541:application-library/usb-cdc-device.c ****   CDC_OUT_EP,                                 /* bEndpointAddress */
+ 542:application-library/usb-cdc-device.c ****   0x02,                                       /* bmAttributes: Bulk */
+ 543:application-library/usb-cdc-device.c ****   LOBYTE(CDC_DATA_FS_MAX_PACKET_SIZE),        /* wMaxPacketSize */
+ 544:application-library/usb-cdc-device.c ****   HIBYTE(CDC_DATA_FS_MAX_PACKET_SIZE),
+ARM GAS  /tmp/cc51CT0k.s 			page 12
+
+
+ 545:application-library/usb-cdc-device.c ****   0x00,                                       /* bInterval */
+ 546:application-library/usb-cdc-device.c **** 
+ 547:application-library/usb-cdc-device.c ****   /* Endpoint IN Descriptor */
+ 548:application-library/usb-cdc-device.c ****   0x07,                                       /* bLength: Endpoint Descriptor size */
+ 549:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_ENDPOINT,                     /* bDescriptorType: Endpoint */
+ 550:application-library/usb-cdc-device.c ****   CDC_IN_EP,                                  /* bEndpointAddress */
+ 551:application-library/usb-cdc-device.c ****   0x02,                                       /* bmAttributes: Bulk */
+ 552:application-library/usb-cdc-device.c ****   LOBYTE(CDC_DATA_FS_MAX_PACKET_SIZE),        /* wMaxPacketSize */
+ 553:application-library/usb-cdc-device.c ****   HIBYTE(CDC_DATA_FS_MAX_PACKET_SIZE),
+ 554:application-library/usb-cdc-device.c ****   0x00                                        /* bInterval */
+ 555:application-library/usb-cdc-device.c **** };
+ 556:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE  */
+ 557:application-library/usb-cdc-device.c **** 
+ 558:application-library/usb-cdc-device.c **** static uint8_t CDCInEpAdd = CDC_IN_EP;
+ 559:application-library/usb-cdc-device.c **** static uint8_t CDCOutEpAdd = CDC_OUT_EP;
+ 560:application-library/usb-cdc-device.c **** static uint8_t CDCCmdEpAdd = CDC_CMD_EP;
+ 561:application-library/usb-cdc-device.c **** 
+ 562:application-library/usb-cdc-device.c **** /**
+ 563:application-library/usb-cdc-device.c ****   * @}
+ 564:application-library/usb-cdc-device.c ****   */
+ 565:application-library/usb-cdc-device.c **** 
+ 566:application-library/usb-cdc-device.c **** /** @defgroup USBD_CDC_Private_Functions
+ 567:application-library/usb-cdc-device.c ****   * @{
+ 568:application-library/usb-cdc-device.c ****   */
+ 569:application-library/usb-cdc-device.c **** 
+ 570:application-library/usb-cdc-device.c **** /**
+ 571:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_Init
+ 572:application-library/usb-cdc-device.c ****   *         Initialize the CDC interface
+ 573:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+ 574:application-library/usb-cdc-device.c ****   * @param  cfgidx: Configuration index
+ 575:application-library/usb-cdc-device.c ****   * @retval status
+ 576:application-library/usb-cdc-device.c ****   */
+ 577:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+ 578:application-library/usb-cdc-device.c **** {
+ 579:application-library/usb-cdc-device.c ****   UNUSED(cfgidx);
+ 580:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc;
+ 581:application-library/usb-cdc-device.c **** 
+ 582:application-library/usb-cdc-device.c ****   hcdc = (USBD_CDC_HandleTypeDef *)USBD_malloc(sizeof(USBD_CDC_HandleTypeDef));
+ 583:application-library/usb-cdc-device.c **** 
+ 584:application-library/usb-cdc-device.c ****   if (hcdc == NULL)
+ 585:application-library/usb-cdc-device.c ****   {
+ 586:application-library/usb-cdc-device.c ****     pdev->pClassDataCmsit[pdev->classId] = NULL;
+ 587:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_EMEM;
+ 588:application-library/usb-cdc-device.c ****   }
+ 589:application-library/usb-cdc-device.c **** 
+ 590:application-library/usb-cdc-device.c ****   (void)USBD_memset(hcdc, 0, sizeof(USBD_CDC_HandleTypeDef));
+ 591:application-library/usb-cdc-device.c **** 
+ 592:application-library/usb-cdc-device.c ****   pdev->pClassDataCmsit[pdev->classId] = (void *)hcdc;
+ 593:application-library/usb-cdc-device.c ****   pdev->pClassData = pdev->pClassDataCmsit[pdev->classId];
+ 594:application-library/usb-cdc-device.c **** 
+ 595:application-library/usb-cdc-device.c **** #ifdef USE_USBD_COMPOSITE
+ 596:application-library/usb-cdc-device.c ****   /* Get the Endpoints addresses allocated for this class instance */
+ 597:application-library/usb-cdc-device.c ****   CDCInEpAdd  = USBD_CoreGetEPAdd(pdev, USBD_EP_IN, USBD_EP_TYPE_BULK);
+ 598:application-library/usb-cdc-device.c ****   CDCOutEpAdd = USBD_CoreGetEPAdd(pdev, USBD_EP_OUT, USBD_EP_TYPE_BULK);
+ 599:application-library/usb-cdc-device.c ****   CDCCmdEpAdd = USBD_CoreGetEPAdd(pdev, USBD_EP_IN, USBD_EP_TYPE_INTR);
+ 600:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE */
+ 601:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 13
+
+
+ 602:application-library/usb-cdc-device.c ****   if (pdev->dev_speed == USBD_SPEED_HIGH)
+ 603:application-library/usb-cdc-device.c ****   {
+ 604:application-library/usb-cdc-device.c ****     /* Open EP IN */
+ 605:application-library/usb-cdc-device.c ****     (void)USBD_LL_OpenEP(pdev, CDCInEpAdd, USBD_EP_TYPE_BULK,
+ 606:application-library/usb-cdc-device.c ****                          CDC_DATA_HS_IN_PACKET_SIZE);
+ 607:application-library/usb-cdc-device.c **** 
+ 608:application-library/usb-cdc-device.c ****     pdev->ep_in[CDCInEpAdd & 0xFU].is_used = 1U;
+ 609:application-library/usb-cdc-device.c **** 
+ 610:application-library/usb-cdc-device.c ****     /* Open EP OUT */
+ 611:application-library/usb-cdc-device.c ****     (void)USBD_LL_OpenEP(pdev, CDCOutEpAdd, USBD_EP_TYPE_BULK,
+ 612:application-library/usb-cdc-device.c ****                          CDC_DATA_HS_OUT_PACKET_SIZE);
+ 613:application-library/usb-cdc-device.c **** 
+ 614:application-library/usb-cdc-device.c ****     pdev->ep_out[CDCOutEpAdd & 0xFU].is_used = 1U;
+ 615:application-library/usb-cdc-device.c **** 
+ 616:application-library/usb-cdc-device.c ****     /* Set bInterval for CDC CMD Endpoint */
+ 617:application-library/usb-cdc-device.c ****     pdev->ep_in[CDCCmdEpAdd & 0xFU].bInterval = CDC_HS_BINTERVAL;
+ 618:application-library/usb-cdc-device.c ****   }
+ 619:application-library/usb-cdc-device.c ****   else
+ 620:application-library/usb-cdc-device.c ****   {
+ 621:application-library/usb-cdc-device.c ****     /* Open EP IN */
+ 622:application-library/usb-cdc-device.c ****     (void)USBD_LL_OpenEP(pdev, CDCInEpAdd, USBD_EP_TYPE_BULK,
+ 623:application-library/usb-cdc-device.c ****                          CDC_DATA_FS_IN_PACKET_SIZE);
+ 624:application-library/usb-cdc-device.c **** 
+ 625:application-library/usb-cdc-device.c ****     pdev->ep_in[CDCInEpAdd & 0xFU].is_used = 1U;
+ 626:application-library/usb-cdc-device.c **** 
+ 627:application-library/usb-cdc-device.c ****     /* Open EP OUT */
+ 628:application-library/usb-cdc-device.c ****     (void)USBD_LL_OpenEP(pdev, CDCOutEpAdd, USBD_EP_TYPE_BULK,
+ 629:application-library/usb-cdc-device.c ****                          CDC_DATA_FS_OUT_PACKET_SIZE);
+ 630:application-library/usb-cdc-device.c **** 
+ 631:application-library/usb-cdc-device.c ****     pdev->ep_out[CDCOutEpAdd & 0xFU].is_used = 1U;
+ 632:application-library/usb-cdc-device.c **** 
+ 633:application-library/usb-cdc-device.c ****     /* Set bInterval for CMD Endpoint */
+ 634:application-library/usb-cdc-device.c ****     pdev->ep_in[CDCCmdEpAdd & 0xFU].bInterval = CDC_FS_BINTERVAL;
+ 635:application-library/usb-cdc-device.c ****   }
+ 636:application-library/usb-cdc-device.c **** 
+ 637:application-library/usb-cdc-device.c ****   /* Open Command IN EP */
+ 638:application-library/usb-cdc-device.c ****   (void)USBD_LL_OpenEP(pdev, CDCCmdEpAdd, USBD_EP_TYPE_INTR, CDC_CMD_PACKET_SIZE);
+ 639:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCCmdEpAdd & 0xFU].is_used = 1U;
+ 640:application-library/usb-cdc-device.c **** 
+ 641:application-library/usb-cdc-device.c ****   hcdc->RxBuffer = NULL;
+ 642:application-library/usb-cdc-device.c **** 
+ 643:application-library/usb-cdc-device.c ****   /* Init  physical Interface components */
+ 644:application-library/usb-cdc-device.c ****   ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Init();
+ 645:application-library/usb-cdc-device.c **** 
+ 646:application-library/usb-cdc-device.c ****   /* Init Xfer states */
+ 647:application-library/usb-cdc-device.c ****   hcdc->TxState = 0U;
+ 648:application-library/usb-cdc-device.c ****   hcdc->RxState = 0U;
+ 649:application-library/usb-cdc-device.c **** 
+ 650:application-library/usb-cdc-device.c ****   if (hcdc->RxBuffer == NULL)
+ 651:application-library/usb-cdc-device.c ****   {
+ 652:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_EMEM;
+ 653:application-library/usb-cdc-device.c ****   }
+ 654:application-library/usb-cdc-device.c **** 
+ 655:application-library/usb-cdc-device.c ****   if (pdev->dev_speed == USBD_SPEED_HIGH)
+ 656:application-library/usb-cdc-device.c ****   {
+ 657:application-library/usb-cdc-device.c ****     /* Prepare Out endpoint to receive next packet */
+ 658:application-library/usb-cdc-device.c ****     (void)USBD_LL_PrepareReceive(pdev, CDCOutEpAdd, hcdc->RxBuffer,
+ARM GAS  /tmp/cc51CT0k.s 			page 14
+
+
+ 659:application-library/usb-cdc-device.c ****                                  CDC_DATA_HS_OUT_PACKET_SIZE);
+ 660:application-library/usb-cdc-device.c ****   }
+ 661:application-library/usb-cdc-device.c ****   else
+ 662:application-library/usb-cdc-device.c ****   {
+ 663:application-library/usb-cdc-device.c ****     /* Prepare Out endpoint to receive next packet */
+ 664:application-library/usb-cdc-device.c ****     (void)USBD_LL_PrepareReceive(pdev, CDCOutEpAdd, hcdc->RxBuffer,
+ 665:application-library/usb-cdc-device.c ****                                  CDC_DATA_FS_OUT_PACKET_SIZE);
+ 666:application-library/usb-cdc-device.c ****   }
+ 667:application-library/usb-cdc-device.c **** 
+ 668:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 669:application-library/usb-cdc-device.c **** }
+ 670:application-library/usb-cdc-device.c **** 
+ 671:application-library/usb-cdc-device.c **** /**
+ 672:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_Init
+ 673:application-library/usb-cdc-device.c ****   *         DeInitialize the CDC layer
+ 674:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+ 675:application-library/usb-cdc-device.c ****   * @param  cfgidx: Configuration index
+ 676:application-library/usb-cdc-device.c ****   * @retval status
+ 677:application-library/usb-cdc-device.c ****   */
+ 678:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+ 679:application-library/usb-cdc-device.c **** {
+ 680:application-library/usb-cdc-device.c ****   UNUSED(cfgidx);
+ 681:application-library/usb-cdc-device.c **** 
+ 682:application-library/usb-cdc-device.c **** 
+ 683:application-library/usb-cdc-device.c **** #ifdef USE_USBD_COMPOSITE
+ 684:application-library/usb-cdc-device.c ****   /* Get the Endpoints addresses allocated for this CDC class instance */
+ 685:application-library/usb-cdc-device.c ****   CDCInEpAdd  = USBD_CoreGetEPAdd(pdev, USBD_EP_IN, USBD_EP_TYPE_BULK);
+ 686:application-library/usb-cdc-device.c ****   CDCOutEpAdd = USBD_CoreGetEPAdd(pdev, USBD_EP_OUT, USBD_EP_TYPE_BULK);
+ 687:application-library/usb-cdc-device.c ****   CDCCmdEpAdd = USBD_CoreGetEPAdd(pdev, USBD_EP_IN, USBD_EP_TYPE_INTR);
+ 688:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE */
+ 689:application-library/usb-cdc-device.c **** 
+ 690:application-library/usb-cdc-device.c ****   /* Close EP IN */
+ 691:application-library/usb-cdc-device.c ****   (void)USBD_LL_CloseEP(pdev, CDCInEpAdd);
+ 692:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCInEpAdd & 0xFU].is_used = 0U;
+ 693:application-library/usb-cdc-device.c **** 
+ 694:application-library/usb-cdc-device.c ****   /* Close EP OUT */
+ 695:application-library/usb-cdc-device.c ****   (void)USBD_LL_CloseEP(pdev, CDCOutEpAdd);
+ 696:application-library/usb-cdc-device.c ****   pdev->ep_out[CDCOutEpAdd & 0xFU].is_used = 0U;
+ 697:application-library/usb-cdc-device.c **** 
+ 698:application-library/usb-cdc-device.c ****   /* Close Command IN EP */
+ 699:application-library/usb-cdc-device.c ****   (void)USBD_LL_CloseEP(pdev, CDCCmdEpAdd);
+ 700:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCCmdEpAdd & 0xFU].is_used = 0U;
+ 701:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCCmdEpAdd & 0xFU].bInterval = 0U;
+ 702:application-library/usb-cdc-device.c **** 
+ 703:application-library/usb-cdc-device.c ****   /* DeInit  physical Interface components */
+ 704:application-library/usb-cdc-device.c ****   if (pdev->pClassDataCmsit[pdev->classId] != NULL)
+ 705:application-library/usb-cdc-device.c ****   {
+ 706:application-library/usb-cdc-device.c ****     ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->DeInit();
+ 707:application-library/usb-cdc-device.c ****     (void)USBD_free(pdev->pClassDataCmsit[pdev->classId]);
+ 708:application-library/usb-cdc-device.c ****     pdev->pClassDataCmsit[pdev->classId] = NULL;
+ 709:application-library/usb-cdc-device.c ****     pdev->pClassData = NULL;
+ 710:application-library/usb-cdc-device.c ****   }
+ 711:application-library/usb-cdc-device.c **** 
+ 712:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 713:application-library/usb-cdc-device.c **** }
+ 714:application-library/usb-cdc-device.c **** 
+ 715:application-library/usb-cdc-device.c **** /**
+ARM GAS  /tmp/cc51CT0k.s 			page 15
+
+
+ 716:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_Setup
+ 717:application-library/usb-cdc-device.c ****   *         Handle the CDC specific requests
+ 718:application-library/usb-cdc-device.c ****   * @param  pdev: instance
+ 719:application-library/usb-cdc-device.c ****   * @param  req: usb requests
+ 720:application-library/usb-cdc-device.c ****   * @retval status
+ 721:application-library/usb-cdc-device.c ****   */
+ 722:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev,
+ 723:application-library/usb-cdc-device.c ****                               USBD_SetupReqTypedef *req)
+ 724:application-library/usb-cdc-device.c **** {
+ 725:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 726:application-library/usb-cdc-device.c ****   uint16_t len;
+ 727:application-library/usb-cdc-device.c ****   uint8_t ifalt = 0U;
+ 728:application-library/usb-cdc-device.c ****   uint16_t status_info = 0U;
+ 729:application-library/usb-cdc-device.c ****   USBD_StatusTypeDef ret = USBD_OK;
+ 730:application-library/usb-cdc-device.c **** 
+ 731:application-library/usb-cdc-device.c ****   if (hcdc == NULL)
+ 732:application-library/usb-cdc-device.c ****   {
+ 733:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+ 734:application-library/usb-cdc-device.c ****   }
+ 735:application-library/usb-cdc-device.c **** 
+ 736:application-library/usb-cdc-device.c ****   switch (req->bmRequest & USB_REQ_TYPE_MASK)
+ 737:application-library/usb-cdc-device.c ****   {
+ 738:application-library/usb-cdc-device.c ****     case USB_REQ_TYPE_CLASS:
+ 739:application-library/usb-cdc-device.c ****       if (req->wLength != 0U)
+ 740:application-library/usb-cdc-device.c ****       {
+ 741:application-library/usb-cdc-device.c ****         if ((req->bmRequest & 0x80U) != 0U)
+ 742:application-library/usb-cdc-device.c ****         {
+ 743:application-library/usb-cdc-device.c ****           ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Control(req->bRequest,
+ 744:application-library/usb-cdc-device.c ****                                                                            (uint8_t *)hcdc->data,
+ 745:application-library/usb-cdc-device.c ****                                                                            req->wLength);
+ 746:application-library/usb-cdc-device.c **** 
+ 747:application-library/usb-cdc-device.c ****           len = MIN(CDC_REQ_MAX_DATA_SIZE, req->wLength);
+ 748:application-library/usb-cdc-device.c ****           (void)USBD_CtlSendData(pdev, (uint8_t *)hcdc->data, len);
+ 749:application-library/usb-cdc-device.c ****         }
+ 750:application-library/usb-cdc-device.c ****         else
+ 751:application-library/usb-cdc-device.c ****         {
+ 752:application-library/usb-cdc-device.c ****           hcdc->CmdOpCode = req->bRequest;
+ 753:application-library/usb-cdc-device.c ****           hcdc->CmdLength = (uint8_t)MIN(req->wLength, USB_MAX_EP0_SIZE);
+ 754:application-library/usb-cdc-device.c **** 
+ 755:application-library/usb-cdc-device.c ****           (void)USBD_CtlPrepareRx(pdev, (uint8_t *)hcdc->data, hcdc->CmdLength);
+ 756:application-library/usb-cdc-device.c ****         }
+ 757:application-library/usb-cdc-device.c ****       }
+ 758:application-library/usb-cdc-device.c ****       else
+ 759:application-library/usb-cdc-device.c ****       {
+ 760:application-library/usb-cdc-device.c ****         ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Control(req->bRequest,
+ 761:application-library/usb-cdc-device.c ****                                                                          (uint8_t *)req, 0U);
+ 762:application-library/usb-cdc-device.c ****       }
+ 763:application-library/usb-cdc-device.c ****       break;
+ 764:application-library/usb-cdc-device.c **** 
+ 765:application-library/usb-cdc-device.c ****     case USB_REQ_TYPE_STANDARD:
+ 766:application-library/usb-cdc-device.c ****       switch (req->bRequest)
+ 767:application-library/usb-cdc-device.c ****       {
+ 768:application-library/usb-cdc-device.c ****         case USB_REQ_GET_STATUS:
+ 769:application-library/usb-cdc-device.c ****           if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 770:application-library/usb-cdc-device.c ****           {
+ 771:application-library/usb-cdc-device.c ****             (void)USBD_CtlSendData(pdev, (uint8_t *)&status_info, 2U);
+ 772:application-library/usb-cdc-device.c ****           }
+ARM GAS  /tmp/cc51CT0k.s 			page 16
+
+
+ 773:application-library/usb-cdc-device.c ****           else
+ 774:application-library/usb-cdc-device.c ****           {
+ 775:application-library/usb-cdc-device.c ****             USBD_CtlError(pdev, req);
+ 776:application-library/usb-cdc-device.c ****             ret = USBD_FAIL;
+ 777:application-library/usb-cdc-device.c ****           }
+ 778:application-library/usb-cdc-device.c ****           break;
+ 779:application-library/usb-cdc-device.c **** 
+ 780:application-library/usb-cdc-device.c ****         case USB_REQ_GET_INTERFACE:
+ 781:application-library/usb-cdc-device.c ****           if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 782:application-library/usb-cdc-device.c ****           {
+ 783:application-library/usb-cdc-device.c ****             (void)USBD_CtlSendData(pdev, &ifalt, 1U);
+ 784:application-library/usb-cdc-device.c ****           }
+ 785:application-library/usb-cdc-device.c ****           else
+ 786:application-library/usb-cdc-device.c ****           {
+ 787:application-library/usb-cdc-device.c ****             USBD_CtlError(pdev, req);
+ 788:application-library/usb-cdc-device.c ****             ret = USBD_FAIL;
+ 789:application-library/usb-cdc-device.c ****           }
+ 790:application-library/usb-cdc-device.c ****           break;
+ 791:application-library/usb-cdc-device.c **** 
+ 792:application-library/usb-cdc-device.c ****         case USB_REQ_SET_INTERFACE:
+ 793:application-library/usb-cdc-device.c ****           if (pdev->dev_state != USBD_STATE_CONFIGURED)
+ 794:application-library/usb-cdc-device.c ****           {
+ 795:application-library/usb-cdc-device.c ****             USBD_CtlError(pdev, req);
+ 796:application-library/usb-cdc-device.c ****             ret = USBD_FAIL;
+ 797:application-library/usb-cdc-device.c ****           }
+ 798:application-library/usb-cdc-device.c ****           break;
+ 799:application-library/usb-cdc-device.c **** 
+ 800:application-library/usb-cdc-device.c ****         case USB_REQ_CLEAR_FEATURE:
+ 801:application-library/usb-cdc-device.c ****           break;
+ 802:application-library/usb-cdc-device.c **** 
+ 803:application-library/usb-cdc-device.c ****         default:
+ 804:application-library/usb-cdc-device.c ****           USBD_CtlError(pdev, req);
+ 805:application-library/usb-cdc-device.c ****           ret = USBD_FAIL;
+ 806:application-library/usb-cdc-device.c ****           break;
+ 807:application-library/usb-cdc-device.c ****       }
+ 808:application-library/usb-cdc-device.c ****       break;
+ 809:application-library/usb-cdc-device.c **** 
+ 810:application-library/usb-cdc-device.c ****     default:
+ 811:application-library/usb-cdc-device.c ****       USBD_CtlError(pdev, req);
+ 812:application-library/usb-cdc-device.c ****       ret = USBD_FAIL;
+ 813:application-library/usb-cdc-device.c ****       break;
+ 814:application-library/usb-cdc-device.c ****   }
+ 815:application-library/usb-cdc-device.c **** 
+ 816:application-library/usb-cdc-device.c ****   return (uint8_t)ret;
+ 817:application-library/usb-cdc-device.c **** }
+ 818:application-library/usb-cdc-device.c **** 
+ 819:application-library/usb-cdc-device.c **** /**
+ 820:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_DataIn
+ 821:application-library/usb-cdc-device.c ****   *         Data sent on non-control IN endpoint
+ 822:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+ 823:application-library/usb-cdc-device.c ****   * @param  epnum: endpoint number
+ 824:application-library/usb-cdc-device.c ****   * @retval status
+ 825:application-library/usb-cdc-device.c ****   */
+ 826:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
+ 827:application-library/usb-cdc-device.c **** {
+ 828:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc;
+ 829:application-library/usb-cdc-device.c ****   PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef *)pdev->pData;
+ARM GAS  /tmp/cc51CT0k.s 			page 17
+
+
+ 830:application-library/usb-cdc-device.c **** 
+ 831:application-library/usb-cdc-device.c ****   if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+ 832:application-library/usb-cdc-device.c ****   {
+ 833:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+ 834:application-library/usb-cdc-device.c ****   }
+ 835:application-library/usb-cdc-device.c **** 
+ 836:application-library/usb-cdc-device.c ****   hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 837:application-library/usb-cdc-device.c **** 
+ 838:application-library/usb-cdc-device.c ****   if ((pdev->ep_in[epnum & 0xFU].total_length > 0U) &&
+ 839:application-library/usb-cdc-device.c ****       ((pdev->ep_in[epnum & 0xFU].total_length % hpcd->IN_ep[epnum & 0xFU].maxpacket) == 0U))
+ 840:application-library/usb-cdc-device.c ****   {
+ 841:application-library/usb-cdc-device.c ****     /* Update the packet total length */
+ 842:application-library/usb-cdc-device.c ****     pdev->ep_in[epnum & 0xFU].total_length = 0U;
+ 843:application-library/usb-cdc-device.c **** 
+ 844:application-library/usb-cdc-device.c ****     /* Send ZLP */
+ 845:application-library/usb-cdc-device.c ****     (void)USBD_LL_Transmit(pdev, epnum, NULL, 0U);
+ 846:application-library/usb-cdc-device.c ****   }
+ 847:application-library/usb-cdc-device.c ****   else
+ 848:application-library/usb-cdc-device.c ****   {
+ 849:application-library/usb-cdc-device.c ****     hcdc->TxState = 0U;
+ 850:application-library/usb-cdc-device.c **** 
+ 851:application-library/usb-cdc-device.c ****     if (((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->TransmitCplt != NULL)
+ 852:application-library/usb-cdc-device.c ****     {
+ 853:application-library/usb-cdc-device.c ****       ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->TransmitCplt(hcdc->TxBuffer, &hcdc->
+ 854:application-library/usb-cdc-device.c ****     }
+ 855:application-library/usb-cdc-device.c ****   }
+ 856:application-library/usb-cdc-device.c **** 
+ 857:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 858:application-library/usb-cdc-device.c **** }
+ 859:application-library/usb-cdc-device.c **** 
+ 860:application-library/usb-cdc-device.c **** /**
+ 861:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_DataOut
+ 862:application-library/usb-cdc-device.c ****   *         Data received on non-control Out endpoint
+ 863:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+ 864:application-library/usb-cdc-device.c ****   * @param  epnum: endpoint number
+ 865:application-library/usb-cdc-device.c ****   * @retval status
+ 866:application-library/usb-cdc-device.c ****   */
+ 867:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
+ 868:application-library/usb-cdc-device.c **** {
+ 869:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 870:application-library/usb-cdc-device.c **** 
+ 871:application-library/usb-cdc-device.c ****   if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+ 872:application-library/usb-cdc-device.c ****   {
+ 873:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+ 874:application-library/usb-cdc-device.c ****   }
+ 875:application-library/usb-cdc-device.c **** 
+ 876:application-library/usb-cdc-device.c ****   /* Get the received data length */
+ 877:application-library/usb-cdc-device.c ****   hcdc->RxLength = USBD_LL_GetRxDataSize(pdev, epnum);
+ 878:application-library/usb-cdc-device.c **** 
+ 879:application-library/usb-cdc-device.c ****   /* USB data will be immediately processed, this allow next USB traffic being
+ 880:application-library/usb-cdc-device.c ****   NAKed till the end of the application Xfer */
+ 881:application-library/usb-cdc-device.c **** 
+ 882:application-library/usb-cdc-device.c ****   ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Receive(hcdc->RxBuffer, &hcdc->RxLength)
+ 883:application-library/usb-cdc-device.c **** 
+ 884:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 885:application-library/usb-cdc-device.c **** }
+ 886:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 18
+
+
+ 887:application-library/usb-cdc-device.c **** /**
+ 888:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_EP0_RxReady
+ 889:application-library/usb-cdc-device.c ****   *         Handle EP0 Rx Ready event
+ 890:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+ 891:application-library/usb-cdc-device.c ****   * @retval status
+ 892:application-library/usb-cdc-device.c ****   */
+ 893:application-library/usb-cdc-device.c **** static uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev)
+ 894:application-library/usb-cdc-device.c **** {
+  91              		.loc 1 894 0
+  92              		.cfi_startproc
+  93              		@ args = 0, pretend = 0, frame = 0
+  94              		@ frame_needed = 0, uses_anonymous_args = 0
+  95              	.LVL4:
+  96 0000 10B5     		push	{r4, lr}
+  97              	.LCFI0:
+  98              		.cfi_def_cfa_offset 8
+  99              		.cfi_offset 4, -8
+ 100              		.cfi_offset 14, -4
+ 895:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 101              		.loc 1 895 0
+ 102 0002 D0F8D432 		ldr	r3, [r0, #724]
+ 103 0006 03F1B002 		add	r2, r3, #176
+ 104 000a 50F82240 		ldr	r4, [r0, r2, lsl #2]
+ 105              	.LVL5:
+ 896:application-library/usb-cdc-device.c **** 
+ 897:application-library/usb-cdc-device.c ****   if (hcdc == NULL)
+ 106              		.loc 1 897 0
+ 107 000e 8CB1     		cbz	r4, .L6
+ 898:application-library/usb-cdc-device.c ****   {
+ 899:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+ 900:application-library/usb-cdc-device.c ****   }
+ 901:application-library/usb-cdc-device.c **** 
+ 902:application-library/usb-cdc-device.c ****   if ((pdev->pUserData[pdev->classId] != NULL) && (hcdc->CmdOpCode != 0xFFU))
+ 108              		.loc 1 902 0
+ 109 0010 00EB8200 		add	r0, r0, r2, lsl #2
+ 110              	.LVL6:
+ 111 0014 4368     		ldr	r3, [r0, #4]
+ 112 0016 7BB1     		cbz	r3, .L7
+ 113              		.loc 1 902 0 is_stmt 0 discriminator 1
+ 114 0018 94F80002 		ldrb	r0, [r4, #512]	@ zero_extendqisi2
+ 115 001c FF28     		cmp	r0, #255
+ 116 001e 0DD0     		beq	.L8
+ 903:application-library/usb-cdc-device.c ****   {
+ 904:application-library/usb-cdc-device.c ****     ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Control(hcdc->CmdOpCode,
+ 117              		.loc 1 904 0 is_stmt 1
+ 118 0020 9B68     		ldr	r3, [r3, #8]
+ 119 0022 94F80122 		ldrb	r2, [r4, #513]	@ zero_extendqisi2
+ 120 0026 2146     		mov	r1, r4
+ 121 0028 9847     		blx	r3
+ 122              	.LVL7:
+ 905:application-library/usb-cdc-device.c ****                                                                      (uint8_t *)hcdc->data,
+ 906:application-library/usb-cdc-device.c ****                                                                      (uint16_t)hcdc->CmdLength);
+ 907:application-library/usb-cdc-device.c ****     hcdc->CmdOpCode = 0xFFU;
+ 123              		.loc 1 907 0
+ 124 002a FF23     		movs	r3, #255
+ 125 002c 84F80032 		strb	r3, [r4, #512]
+ 908:application-library/usb-cdc-device.c ****   }
+ARM GAS  /tmp/cc51CT0k.s 			page 19
+
+
+ 909:application-library/usb-cdc-device.c **** 
+ 910:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 126              		.loc 1 910 0
+ 127 0030 0020     		movs	r0, #0
+ 128 0032 10BD     		pop	{r4, pc}
+ 129              	.LVL8:
+ 130              	.L6:
+ 899:application-library/usb-cdc-device.c ****   }
+ 131              		.loc 1 899 0
+ 132 0034 0320     		movs	r0, #3
+ 133              	.LVL9:
+ 134 0036 10BD     		pop	{r4, pc}
+ 135              	.LVL10:
+ 136              	.L7:
+ 137              		.loc 1 910 0
+ 138 0038 0020     		movs	r0, #0
+ 139 003a 10BD     		pop	{r4, pc}
+ 140              	.LVL11:
+ 141              	.L8:
+ 142 003c 0020     		movs	r0, #0
+ 911:application-library/usb-cdc-device.c **** }
+ 143              		.loc 1 911 0
+ 144 003e 10BD     		pop	{r4, pc}
+ 145              		.cfi_endproc
+ 146              	.LFE144:
+ 148              		.section	.text.USBD_CDC_GetDeviceQualifierDescriptor,"ax",%progbits
+ 149              		.align	1
+ 150              		.global	USBD_CDC_GetDeviceQualifierDescriptor
+ 151              		.syntax unified
+ 152              		.thumb
+ 153              		.thumb_func
+ 154              		.fpu fpv4-sp-d16
+ 156              	USBD_CDC_GetDeviceQualifierDescriptor:
+ 157              	.LFB148:
+ 912:application-library/usb-cdc-device.c **** #ifndef USE_USBD_COMPOSITE
+ 913:application-library/usb-cdc-device.c **** /**
+ 914:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_GetFSCfgDesc
+ 915:application-library/usb-cdc-device.c ****   *         Return configuration descriptor
+ 916:application-library/usb-cdc-device.c ****   * @param  length : pointer data length
+ 917:application-library/usb-cdc-device.c ****   * @retval pointer to descriptor buffer
+ 918:application-library/usb-cdc-device.c ****   */
+ 919:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length)
+ 920:application-library/usb-cdc-device.c **** {
+ 921:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
+ 922:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
+ 923:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpInDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_IN_EP);
+ 924:application-library/usb-cdc-device.c **** 
+ 925:application-library/usb-cdc-device.c ****   if (pEpCmdDesc != NULL)
+ 926:application-library/usb-cdc-device.c ****   {
+ 927:application-library/usb-cdc-device.c ****     pEpCmdDesc->bInterval = CDC_FS_BINTERVAL;
+ 928:application-library/usb-cdc-device.c ****   }
+ 929:application-library/usb-cdc-device.c **** 
+ 930:application-library/usb-cdc-device.c ****   if (pEpOutDesc != NULL)
+ 931:application-library/usb-cdc-device.c ****   {
+ 932:application-library/usb-cdc-device.c ****     pEpOutDesc->wMaxPacketSize = CDC_DATA_FS_MAX_PACKET_SIZE;
+ 933:application-library/usb-cdc-device.c ****   }
+ 934:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 20
+
+
+ 935:application-library/usb-cdc-device.c ****   if (pEpInDesc != NULL)
+ 936:application-library/usb-cdc-device.c ****   {
+ 937:application-library/usb-cdc-device.c ****     pEpInDesc->wMaxPacketSize = CDC_DATA_FS_MAX_PACKET_SIZE;
+ 938:application-library/usb-cdc-device.c ****   }
+ 939:application-library/usb-cdc-device.c **** 
+ 940:application-library/usb-cdc-device.c ****   *length = (uint16_t)sizeof(USBD_CDC_CfgDesc);
+ 941:application-library/usb-cdc-device.c ****   return USBD_CDC_CfgDesc;
+ 942:application-library/usb-cdc-device.c **** }
+ 943:application-library/usb-cdc-device.c **** 
+ 944:application-library/usb-cdc-device.c **** /**
+ 945:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_GetHSCfgDesc
+ 946:application-library/usb-cdc-device.c ****   *         Return configuration descriptor
+ 947:application-library/usb-cdc-device.c ****   * @param  length : pointer data length
+ 948:application-library/usb-cdc-device.c ****   * @retval pointer to descriptor buffer
+ 949:application-library/usb-cdc-device.c ****   */
+ 950:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length)
+ 951:application-library/usb-cdc-device.c **** {
+ 952:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
+ 953:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
+ 954:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpInDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_IN_EP);
+ 955:application-library/usb-cdc-device.c **** 
+ 956:application-library/usb-cdc-device.c ****   if (pEpCmdDesc != NULL)
+ 957:application-library/usb-cdc-device.c ****   {
+ 958:application-library/usb-cdc-device.c ****     pEpCmdDesc->bInterval = CDC_HS_BINTERVAL;
+ 959:application-library/usb-cdc-device.c ****   }
+ 960:application-library/usb-cdc-device.c **** 
+ 961:application-library/usb-cdc-device.c ****   if (pEpOutDesc != NULL)
+ 962:application-library/usb-cdc-device.c ****   {
+ 963:application-library/usb-cdc-device.c ****     pEpOutDesc->wMaxPacketSize = CDC_DATA_HS_MAX_PACKET_SIZE;
+ 964:application-library/usb-cdc-device.c ****   }
+ 965:application-library/usb-cdc-device.c **** 
+ 966:application-library/usb-cdc-device.c ****   if (pEpInDesc != NULL)
+ 967:application-library/usb-cdc-device.c ****   {
+ 968:application-library/usb-cdc-device.c ****     pEpInDesc->wMaxPacketSize = CDC_DATA_HS_MAX_PACKET_SIZE;
+ 969:application-library/usb-cdc-device.c ****   }
+ 970:application-library/usb-cdc-device.c **** 
+ 971:application-library/usb-cdc-device.c ****   *length = (uint16_t)sizeof(USBD_CDC_CfgDesc);
+ 972:application-library/usb-cdc-device.c ****   return USBD_CDC_CfgDesc;
+ 973:application-library/usb-cdc-device.c **** }
+ 974:application-library/usb-cdc-device.c **** 
+ 975:application-library/usb-cdc-device.c **** /**
+ 976:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_GetOtherSpeedCfgDesc
+ 977:application-library/usb-cdc-device.c ****   *         Return configuration descriptor
+ 978:application-library/usb-cdc-device.c ****   * @param  length : pointer data length
+ 979:application-library/usb-cdc-device.c ****   * @retval pointer to descriptor buffer
+ 980:application-library/usb-cdc-device.c ****   */
+ 981:application-library/usb-cdc-device.c **** static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length)
+ 982:application-library/usb-cdc-device.c **** {
+ 983:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
+ 984:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
+ 985:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpInDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_IN_EP);
+ 986:application-library/usb-cdc-device.c **** 
+ 987:application-library/usb-cdc-device.c ****   if (pEpCmdDesc != NULL)
+ 988:application-library/usb-cdc-device.c ****   {
+ 989:application-library/usb-cdc-device.c ****     pEpCmdDesc->bInterval = CDC_FS_BINTERVAL;
+ 990:application-library/usb-cdc-device.c ****   }
+ 991:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 21
+
+
+ 992:application-library/usb-cdc-device.c ****   if (pEpOutDesc != NULL)
+ 993:application-library/usb-cdc-device.c ****   {
+ 994:application-library/usb-cdc-device.c ****     pEpOutDesc->wMaxPacketSize = CDC_DATA_FS_MAX_PACKET_SIZE;
+ 995:application-library/usb-cdc-device.c ****   }
+ 996:application-library/usb-cdc-device.c **** 
+ 997:application-library/usb-cdc-device.c ****   if (pEpInDesc != NULL)
+ 998:application-library/usb-cdc-device.c ****   {
+ 999:application-library/usb-cdc-device.c ****     pEpInDesc->wMaxPacketSize = CDC_DATA_FS_MAX_PACKET_SIZE;
+1000:application-library/usb-cdc-device.c ****   }
+1001:application-library/usb-cdc-device.c **** 
+1002:application-library/usb-cdc-device.c ****   *length = (uint16_t)sizeof(USBD_CDC_CfgDesc);
+1003:application-library/usb-cdc-device.c ****   return USBD_CDC_CfgDesc;
+1004:application-library/usb-cdc-device.c **** }
+1005:application-library/usb-cdc-device.c **** 
+1006:application-library/usb-cdc-device.c **** /**
+1007:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_GetDeviceQualifierDescriptor
+1008:application-library/usb-cdc-device.c ****   *         return Device Qualifier descriptor
+1009:application-library/usb-cdc-device.c ****   * @param  length : pointer data length
+1010:application-library/usb-cdc-device.c ****   * @retval pointer to descriptor buffer
+1011:application-library/usb-cdc-device.c ****   */
+1012:application-library/usb-cdc-device.c **** uint8_t *USBD_CDC_GetDeviceQualifierDescriptor(uint16_t *length)
+1013:application-library/usb-cdc-device.c **** {
+ 158              		.loc 1 1013 0
+ 159              		.cfi_startproc
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 162              		@ link register save eliminated.
+ 163              	.LVL12:
+1014:application-library/usb-cdc-device.c ****   *length = (uint16_t)sizeof(USBD_CDC_DeviceQualifierDesc);
+ 164              		.loc 1 1014 0
+ 165 0000 0A23     		movs	r3, #10
+ 166 0002 0380     		strh	r3, [r0]	@ movhi
+1015:application-library/usb-cdc-device.c **** 
+1016:application-library/usb-cdc-device.c ****   return USBD_CDC_DeviceQualifierDesc;
+1017:application-library/usb-cdc-device.c **** }
+ 167              		.loc 1 1017 0
+ 168 0004 0048     		ldr	r0, .L11
+ 169              	.LVL13:
+ 170 0006 7047     		bx	lr
+ 171              	.L12:
+ 172              		.align	2
+ 173              	.L11:
+ 174 0008 00000000 		.word	.LANCHOR0
+ 175              		.cfi_endproc
+ 176              	.LFE148:
+ 178              		.section	.text.USBD_CDC_GetOtherSpeedCfgDesc,"ax",%progbits
+ 179              		.align	1
+ 180              		.syntax unified
+ 181              		.thumb
+ 182              		.thumb_func
+ 183              		.fpu fpv4-sp-d16
+ 185              	USBD_CDC_GetOtherSpeedCfgDesc:
+ 186              	.LFB147:
+ 982:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
+ 187              		.loc 1 982 0
+ 188              		.cfi_startproc
+ 189              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cc51CT0k.s 			page 22
+
+
+ 190              		@ frame_needed = 0, uses_anonymous_args = 0
+ 191              	.LVL14:
+ 192 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 193              	.LCFI1:
+ 194              		.cfi_def_cfa_offset 24
+ 195              		.cfi_offset 3, -24
+ 196              		.cfi_offset 4, -20
+ 197              		.cfi_offset 5, -16
+ 198              		.cfi_offset 6, -12
+ 199              		.cfi_offset 7, -8
+ 200              		.cfi_offset 14, -4
+ 201 0002 0746     		mov	r7, r0
+ 983:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
+ 202              		.loc 1 983 0
+ 203 0004 0F4C     		ldr	r4, .L18
+ 204 0006 8221     		movs	r1, #130
+ 205 0008 2046     		mov	r0, r4
+ 206              	.LVL15:
+ 207 000a FFF7FEFF 		bl	USBD_GetEpDesc
+ 208              	.LVL16:
+ 209 000e 0646     		mov	r6, r0
+ 210              	.LVL17:
+ 984:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpInDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_IN_EP);
+ 211              		.loc 1 984 0
+ 212 0010 0121     		movs	r1, #1
+ 213 0012 2046     		mov	r0, r4
+ 214              	.LVL18:
+ 215 0014 FFF7FEFF 		bl	USBD_GetEpDesc
+ 216              	.LVL19:
+ 217 0018 0546     		mov	r5, r0
+ 218              	.LVL20:
+ 985:application-library/usb-cdc-device.c **** 
+ 219              		.loc 1 985 0
+ 220 001a 8121     		movs	r1, #129
+ 221 001c 2046     		mov	r0, r4
+ 222              	.LVL21:
+ 223 001e FFF7FEFF 		bl	USBD_GetEpDesc
+ 224              	.LVL22:
+ 987:application-library/usb-cdc-device.c ****   {
+ 225              		.loc 1 987 0
+ 226 0022 0EB1     		cbz	r6, .L14
+ 989:application-library/usb-cdc-device.c ****   }
+ 227              		.loc 1 989 0
+ 228 0024 1023     		movs	r3, #16
+ 229 0026 B371     		strb	r3, [r6, #6]
+ 230              	.L14:
+ 992:application-library/usb-cdc-device.c ****   {
+ 231              		.loc 1 992 0
+ 232 0028 1DB1     		cbz	r5, .L15
+ 994:application-library/usb-cdc-device.c ****   }
+ 233              		.loc 1 994 0
+ 234 002a 4023     		movs	r3, #64
+ 235 002c 2B71     		strb	r3, [r5, #4]
+ 236 002e 0023     		movs	r3, #0
+ 237 0030 6B71     		strb	r3, [r5, #5]
+ 238              	.L15:
+ 997:application-library/usb-cdc-device.c ****   {
+ARM GAS  /tmp/cc51CT0k.s 			page 23
+
+
+ 239              		.loc 1 997 0
+ 240 0032 18B1     		cbz	r0, .L16
+ 999:application-library/usb-cdc-device.c ****   }
+ 241              		.loc 1 999 0
+ 242 0034 4023     		movs	r3, #64
+ 243 0036 0371     		strb	r3, [r0, #4]
+ 244 0038 0023     		movs	r3, #0
+ 245 003a 4371     		strb	r3, [r0, #5]
+ 246              	.L16:
+1002:application-library/usb-cdc-device.c ****   return USBD_CDC_CfgDesc;
+ 247              		.loc 1 1002 0
+ 248 003c 4323     		movs	r3, #67
+ 249 003e 3B80     		strh	r3, [r7]	@ movhi
+1004:application-library/usb-cdc-device.c **** 
+ 250              		.loc 1 1004 0
+ 251 0040 0048     		ldr	r0, .L18
+ 252              	.LVL23:
+ 253 0042 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 254              	.LVL24:
+ 255              	.L19:
+ 256              		.align	2
+ 257              	.L18:
+ 258 0044 00000000 		.word	.LANCHOR1
+ 259              		.cfi_endproc
+ 260              	.LFE147:
+ 262              		.section	.text.USBD_CDC_GetFSCfgDesc,"ax",%progbits
+ 263              		.align	1
+ 264              		.syntax unified
+ 265              		.thumb
+ 266              		.thumb_func
+ 267              		.fpu fpv4-sp-d16
+ 269              	USBD_CDC_GetFSCfgDesc:
+ 270              	.LFB145:
+ 920:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
+ 271              		.loc 1 920 0
+ 272              		.cfi_startproc
+ 273              		@ args = 0, pretend = 0, frame = 0
+ 274              		@ frame_needed = 0, uses_anonymous_args = 0
+ 275              	.LVL25:
+ 276 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 277              	.LCFI2:
+ 278              		.cfi_def_cfa_offset 24
+ 279              		.cfi_offset 3, -24
+ 280              		.cfi_offset 4, -20
+ 281              		.cfi_offset 5, -16
+ 282              		.cfi_offset 6, -12
+ 283              		.cfi_offset 7, -8
+ 284              		.cfi_offset 14, -4
+ 285 0002 0746     		mov	r7, r0
+ 921:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
+ 286              		.loc 1 921 0
+ 287 0004 0F4C     		ldr	r4, .L25
+ 288 0006 8221     		movs	r1, #130
+ 289 0008 2046     		mov	r0, r4
+ 290              	.LVL26:
+ 291 000a FFF7FEFF 		bl	USBD_GetEpDesc
+ 292              	.LVL27:
+ARM GAS  /tmp/cc51CT0k.s 			page 24
+
+
+ 293 000e 0646     		mov	r6, r0
+ 294              	.LVL28:
+ 922:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpInDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_IN_EP);
+ 295              		.loc 1 922 0
+ 296 0010 0121     		movs	r1, #1
+ 297 0012 2046     		mov	r0, r4
+ 298              	.LVL29:
+ 299 0014 FFF7FEFF 		bl	USBD_GetEpDesc
+ 300              	.LVL30:
+ 301 0018 0546     		mov	r5, r0
+ 302              	.LVL31:
+ 923:application-library/usb-cdc-device.c **** 
+ 303              		.loc 1 923 0
+ 304 001a 8121     		movs	r1, #129
+ 305 001c 2046     		mov	r0, r4
+ 306              	.LVL32:
+ 307 001e FFF7FEFF 		bl	USBD_GetEpDesc
+ 308              	.LVL33:
+ 925:application-library/usb-cdc-device.c ****   {
+ 309              		.loc 1 925 0
+ 310 0022 0EB1     		cbz	r6, .L21
+ 927:application-library/usb-cdc-device.c ****   }
+ 311              		.loc 1 927 0
+ 312 0024 1023     		movs	r3, #16
+ 313 0026 B371     		strb	r3, [r6, #6]
+ 314              	.L21:
+ 930:application-library/usb-cdc-device.c ****   {
+ 315              		.loc 1 930 0
+ 316 0028 1DB1     		cbz	r5, .L22
+ 932:application-library/usb-cdc-device.c ****   }
+ 317              		.loc 1 932 0
+ 318 002a 4023     		movs	r3, #64
+ 319 002c 2B71     		strb	r3, [r5, #4]
+ 320 002e 0023     		movs	r3, #0
+ 321 0030 6B71     		strb	r3, [r5, #5]
+ 322              	.L22:
+ 935:application-library/usb-cdc-device.c ****   {
+ 323              		.loc 1 935 0
+ 324 0032 18B1     		cbz	r0, .L23
+ 937:application-library/usb-cdc-device.c ****   }
+ 325              		.loc 1 937 0
+ 326 0034 4023     		movs	r3, #64
+ 327 0036 0371     		strb	r3, [r0, #4]
+ 328 0038 0023     		movs	r3, #0
+ 329 003a 4371     		strb	r3, [r0, #5]
+ 330              	.L23:
+ 940:application-library/usb-cdc-device.c ****   return USBD_CDC_CfgDesc;
+ 331              		.loc 1 940 0
+ 332 003c 4323     		movs	r3, #67
+ 333 003e 3B80     		strh	r3, [r7]	@ movhi
+ 942:application-library/usb-cdc-device.c **** 
+ 334              		.loc 1 942 0
+ 335 0040 0048     		ldr	r0, .L25
+ 336              	.LVL34:
+ 337 0042 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 338              	.LVL35:
+ 339              	.L26:
+ARM GAS  /tmp/cc51CT0k.s 			page 25
+
+
+ 340              		.align	2
+ 341              	.L25:
+ 342 0044 00000000 		.word	.LANCHOR1
+ 343              		.cfi_endproc
+ 344              	.LFE145:
+ 346              		.section	.text.USBD_CDC_GetHSCfgDesc,"ax",%progbits
+ 347              		.align	1
+ 348              		.syntax unified
+ 349              		.thumb
+ 350              		.thumb_func
+ 351              		.fpu fpv4-sp-d16
+ 353              	USBD_CDC_GetHSCfgDesc:
+ 354              	.LFB146:
+ 951:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
+ 355              		.loc 1 951 0
+ 356              		.cfi_startproc
+ 357              		@ args = 0, pretend = 0, frame = 0
+ 358              		@ frame_needed = 0, uses_anonymous_args = 0
+ 359              	.LVL36:
+ 360 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 361              	.LCFI3:
+ 362              		.cfi_def_cfa_offset 24
+ 363              		.cfi_offset 3, -24
+ 364              		.cfi_offset 4, -20
+ 365              		.cfi_offset 5, -16
+ 366              		.cfi_offset 6, -12
+ 367              		.cfi_offset 7, -8
+ 368              		.cfi_offset 14, -4
+ 369 0002 0746     		mov	r7, r0
+ 952:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
+ 370              		.loc 1 952 0
+ 371 0004 0F4C     		ldr	r4, .L32
+ 372 0006 8221     		movs	r1, #130
+ 373 0008 2046     		mov	r0, r4
+ 374              	.LVL37:
+ 375 000a FFF7FEFF 		bl	USBD_GetEpDesc
+ 376              	.LVL38:
+ 377 000e 0646     		mov	r6, r0
+ 378              	.LVL39:
+ 953:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpInDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_IN_EP);
+ 379              		.loc 1 953 0
+ 380 0010 0121     		movs	r1, #1
+ 381 0012 2046     		mov	r0, r4
+ 382              	.LVL40:
+ 383 0014 FFF7FEFF 		bl	USBD_GetEpDesc
+ 384              	.LVL41:
+ 385 0018 0546     		mov	r5, r0
+ 386              	.LVL42:
+ 954:application-library/usb-cdc-device.c **** 
+ 387              		.loc 1 954 0
+ 388 001a 8121     		movs	r1, #129
+ 389 001c 2046     		mov	r0, r4
+ 390              	.LVL43:
+ 391 001e FFF7FEFF 		bl	USBD_GetEpDesc
+ 392              	.LVL44:
+ 956:application-library/usb-cdc-device.c ****   {
+ 393              		.loc 1 956 0
+ARM GAS  /tmp/cc51CT0k.s 			page 26
+
+
+ 394 0022 0EB1     		cbz	r6, .L28
+ 958:application-library/usb-cdc-device.c ****   }
+ 395              		.loc 1 958 0
+ 396 0024 1023     		movs	r3, #16
+ 397 0026 B371     		strb	r3, [r6, #6]
+ 398              	.L28:
+ 961:application-library/usb-cdc-device.c ****   {
+ 399              		.loc 1 961 0
+ 400 0028 1DB1     		cbz	r5, .L29
+ 963:application-library/usb-cdc-device.c ****   }
+ 401              		.loc 1 963 0
+ 402 002a 0023     		movs	r3, #0
+ 403 002c 2B71     		strb	r3, [r5, #4]
+ 404 002e 0223     		movs	r3, #2
+ 405 0030 6B71     		strb	r3, [r5, #5]
+ 406              	.L29:
+ 966:application-library/usb-cdc-device.c ****   {
+ 407              		.loc 1 966 0
+ 408 0032 18B1     		cbz	r0, .L30
+ 968:application-library/usb-cdc-device.c ****   }
+ 409              		.loc 1 968 0
+ 410 0034 0023     		movs	r3, #0
+ 411 0036 0371     		strb	r3, [r0, #4]
+ 412 0038 0223     		movs	r3, #2
+ 413 003a 4371     		strb	r3, [r0, #5]
+ 414              	.L30:
+ 971:application-library/usb-cdc-device.c ****   return USBD_CDC_CfgDesc;
+ 415              		.loc 1 971 0
+ 416 003c 4323     		movs	r3, #67
+ 417 003e 3B80     		strh	r3, [r7]	@ movhi
+ 973:application-library/usb-cdc-device.c **** 
+ 418              		.loc 1 973 0
+ 419 0040 0048     		ldr	r0, .L32
+ 420              	.LVL45:
+ 421 0042 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 422              	.LVL46:
+ 423              	.L33:
+ 424              		.align	2
+ 425              	.L32:
+ 426 0044 00000000 		.word	.LANCHOR1
+ 427              		.cfi_endproc
+ 428              	.LFE146:
+ 430              		.section	.text.USBD_CDC_DataOut,"ax",%progbits
+ 431              		.align	1
+ 432              		.syntax unified
+ 433              		.thumb
+ 434              		.thumb_func
+ 435              		.fpu fpv4-sp-d16
+ 437              	USBD_CDC_DataOut:
+ 438              	.LFB143:
+ 868:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 439              		.loc 1 868 0
+ 440              		.cfi_startproc
+ 441              		@ args = 0, pretend = 0, frame = 0
+ 442              		@ frame_needed = 0, uses_anonymous_args = 0
+ 443              	.LVL47:
+ 444 0000 38B5     		push	{r3, r4, r5, lr}
+ARM GAS  /tmp/cc51CT0k.s 			page 27
+
+
+ 445              	.LCFI4:
+ 446              		.cfi_def_cfa_offset 16
+ 447              		.cfi_offset 3, -16
+ 448              		.cfi_offset 4, -12
+ 449              		.cfi_offset 5, -8
+ 450              		.cfi_offset 14, -4
+ 869:application-library/usb-cdc-device.c **** 
+ 451              		.loc 1 869 0
+ 452 0002 D0F8D432 		ldr	r3, [r0, #724]
+ 453 0006 B033     		adds	r3, r3, #176
+ 454 0008 50F82350 		ldr	r5, [r0, r3, lsl #2]
+ 455              	.LVL48:
+ 871:application-library/usb-cdc-device.c ****   {
+ 456              		.loc 1 871 0
+ 457 000c 95B1     		cbz	r5, .L36
+ 458 000e 0446     		mov	r4, r0
+ 877:application-library/usb-cdc-device.c **** 
+ 459              		.loc 1 877 0
+ 460 0010 FFF7FEFF 		bl	USBD_LL_GetRxDataSize
+ 461              	.LVL49:
+ 462 0014 C5F80C02 		str	r0, [r5, #524]
+ 882:application-library/usb-cdc-device.c **** 
+ 463              		.loc 1 882 0
+ 464 0018 D4F8D402 		ldr	r0, [r4, #724]
+ 465 001c B030     		adds	r0, r0, #176
+ 466 001e 04EB8000 		add	r0, r4, r0, lsl #2
+ 467 0022 4368     		ldr	r3, [r0, #4]
+ 468 0024 DB68     		ldr	r3, [r3, #12]
+ 469 0026 05F50371 		add	r1, r5, #524
+ 470 002a D5F80402 		ldr	r0, [r5, #516]
+ 471 002e 9847     		blx	r3
+ 472              	.LVL50:
+ 884:application-library/usb-cdc-device.c **** }
+ 473              		.loc 1 884 0
+ 474 0030 0020     		movs	r0, #0
+ 475 0032 38BD     		pop	{r3, r4, r5, pc}
+ 476              	.LVL51:
+ 477              	.L36:
+ 873:application-library/usb-cdc-device.c ****   }
+ 478              		.loc 1 873 0
+ 479 0034 0320     		movs	r0, #3
+ 480              	.LVL52:
+ 885:application-library/usb-cdc-device.c **** 
+ 481              		.loc 1 885 0
+ 482 0036 38BD     		pop	{r3, r4, r5, pc}
+ 483              		.cfi_endproc
+ 484              	.LFE143:
+ 486              		.section	.text.USBD_CDC_DataIn,"ax",%progbits
+ 487              		.align	1
+ 488              		.syntax unified
+ 489              		.thumb
+ 490              		.thumb_func
+ 491              		.fpu fpv4-sp-d16
+ 493              	USBD_CDC_DataIn:
+ 494              	.LFB142:
+ 827:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc;
+ 495              		.loc 1 827 0
+ARM GAS  /tmp/cc51CT0k.s 			page 28
+
+
+ 496              		.cfi_startproc
+ 497              		@ args = 0, pretend = 0, frame = 0
+ 498              		@ frame_needed = 0, uses_anonymous_args = 0
+ 499              	.LVL53:
+ 500 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 501              	.LCFI5:
+ 502              		.cfi_def_cfa_offset 24
+ 503              		.cfi_offset 3, -24
+ 504              		.cfi_offset 4, -20
+ 505              		.cfi_offset 5, -16
+ 506              		.cfi_offset 6, -12
+ 507              		.cfi_offset 7, -8
+ 508              		.cfi_offset 14, -4
+ 829:application-library/usb-cdc-device.c **** 
+ 509              		.loc 1 829 0
+ 510 0002 D0F8C862 		ldr	r6, [r0, #712]
+ 511              	.LVL54:
+ 831:application-library/usb-cdc-device.c ****   {
+ 512              		.loc 1 831 0
+ 513 0006 D0F8D432 		ldr	r3, [r0, #724]
+ 514 000a B033     		adds	r3, r3, #176
+ 515 000c 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 516 0010 83B3     		cbz	r3, .L41
+ 517              	.LVL55:
+ 838:application-library/usb-cdc-device.c ****       ((pdev->ep_in[epnum & 0xFU].total_length % hpcd->IN_ep[epnum & 0xFU].maxpacket) == 0U))
+ 518              		.loc 1 838 0
+ 519 0012 01F00F04 		and	r4, r1, #15
+ 520 0016 04EB8405 		add	r5, r4, r4, lsl #2
+ 521 001a AA00     		lsls	r2, r5, #2
+ 522 001c 0244     		add	r2, r2, r0
+ 523 001e 9269     		ldr	r2, [r2, #24]
+ 524 0020 4AB1     		cbz	r2, .L40
+ 839:application-library/usb-cdc-device.c ****   {
+ 525              		.loc 1 839 0 discriminator 1
+ 526 0022 04EBC407 		add	r7, r4, r4, lsl #3
+ 527 0026 BD00     		lsls	r5, r7, #2
+ 528 0028 2E44     		add	r6, r6, r5
+ 529              	.LVL56:
+ 530 002a B66C     		ldr	r6, [r6, #72]
+ 531 002c B2FBF6F5 		udiv	r5, r2, r6
+ 532 0030 06FB1522 		mls	r2, r6, r5, r2
+ 838:application-library/usb-cdc-device.c ****       ((pdev->ep_in[epnum & 0xFU].total_length % hpcd->IN_ep[epnum & 0xFU].maxpacket) == 0U))
+ 533              		.loc 1 838 0 discriminator 1
+ 534 0034 92B1     		cbz	r2, .L44
+ 535              	.L40:
+ 849:application-library/usb-cdc-device.c **** 
+ 536              		.loc 1 849 0
+ 537 0036 0022     		movs	r2, #0
+ 538 0038 C3F81422 		str	r2, [r3, #532]
+ 539              	.LVL57:
+ 851:application-library/usb-cdc-device.c ****     {
+ 540              		.loc 1 851 0
+ 541 003c D0F8D422 		ldr	r2, [r0, #724]
+ 542 0040 B032     		adds	r2, r2, #176
+ 543 0042 00EB8200 		add	r0, r0, r2, lsl #2
+ 544              	.LVL58:
+ 545 0046 4268     		ldr	r2, [r0, #4]
+ARM GAS  /tmp/cc51CT0k.s 			page 29
+
+
+ 546 0048 1469     		ldr	r4, [r2, #16]
+ 547 004a ACB1     		cbz	r4, .L42
+ 853:application-library/usb-cdc-device.c ****     }
+ 548              		.loc 1 853 0
+ 549 004c 0A46     		mov	r2, r1
+ 550 004e 03F50471 		add	r1, r3, #528
+ 551              	.LVL59:
+ 552 0052 D3F80802 		ldr	r0, [r3, #520]
+ 553 0056 A047     		blx	r4
+ 554              	.LVL60:
+ 857:application-library/usb-cdc-device.c **** }
+ 555              		.loc 1 857 0
+ 556 0058 0020     		movs	r0, #0
+ 557 005a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 558              	.LVL61:
+ 559              	.L44:
+ 842:application-library/usb-cdc-device.c **** 
+ 560              		.loc 1 842 0
+ 561 005c 04EB8404 		add	r4, r4, r4, lsl #2
+ 562 0060 A300     		lsls	r3, r4, #2
+ 563              	.LVL62:
+ 564 0062 0344     		add	r3, r3, r0
+ 565 0064 0024     		movs	r4, #0
+ 566 0066 9C61     		str	r4, [r3, #24]
+ 567              	.LVL63:
+ 845:application-library/usb-cdc-device.c ****   }
+ 568              		.loc 1 845 0
+ 569 0068 2346     		mov	r3, r4
+ 570 006a 2246     		mov	r2, r4
+ 571 006c FFF7FEFF 		bl	USBD_LL_Transmit
+ 572              	.LVL64:
+ 857:application-library/usb-cdc-device.c **** }
+ 573              		.loc 1 857 0
+ 574 0070 2046     		mov	r0, r4
+ 845:application-library/usb-cdc-device.c ****   }
+ 575              		.loc 1 845 0
+ 576 0072 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 577              	.LVL65:
+ 578              	.L41:
+ 833:application-library/usb-cdc-device.c ****   }
+ 579              		.loc 1 833 0
+ 580 0074 0320     		movs	r0, #3
+ 581              	.LVL66:
+ 582 0076 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 583              	.LVL67:
+ 584              	.L42:
+ 857:application-library/usb-cdc-device.c **** }
+ 585              		.loc 1 857 0
+ 586 0078 0020     		movs	r0, #0
+ 858:application-library/usb-cdc-device.c **** 
+ 587              		.loc 1 858 0
+ 588 007a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 589              		.cfi_endproc
+ 590              	.LFE142:
+ 592              		.section	.text.USBD_CDC_Setup,"ax",%progbits
+ 593              		.align	1
+ 594              		.syntax unified
+ARM GAS  /tmp/cc51CT0k.s 			page 30
+
+
+ 595              		.thumb
+ 596              		.thumb_func
+ 597              		.fpu fpv4-sp-d16
+ 599              	USBD_CDC_Setup:
+ 600              	.LFB141:
+ 724:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 601              		.loc 1 724 0
+ 602              		.cfi_startproc
+ 603              		@ args = 0, pretend = 0, frame = 8
+ 604              		@ frame_needed = 0, uses_anonymous_args = 0
+ 605              	.LVL68:
+ 606 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 607              	.LCFI6:
+ 608              		.cfi_def_cfa_offset 20
+ 609              		.cfi_offset 4, -20
+ 610              		.cfi_offset 5, -16
+ 611              		.cfi_offset 6, -12
+ 612              		.cfi_offset 7, -8
+ 613              		.cfi_offset 14, -4
+ 614 0002 83B0     		sub	sp, sp, #12
+ 615              	.LCFI7:
+ 616              		.cfi_def_cfa_offset 32
+ 725:application-library/usb-cdc-device.c ****   uint16_t len;
+ 617              		.loc 1 725 0
+ 618 0004 D0F8D472 		ldr	r7, [r0, #724]
+ 619 0008 07F1B003 		add	r3, r7, #176
+ 620 000c 50F82360 		ldr	r6, [r0, r3, lsl #2]
+ 621              	.LVL69:
+ 727:application-library/usb-cdc-device.c ****   uint16_t status_info = 0U;
+ 622              		.loc 1 727 0
+ 623 0010 0023     		movs	r3, #0
+ 624 0012 8DF80730 		strb	r3, [sp, #7]
+ 728:application-library/usb-cdc-device.c ****   USBD_StatusTypeDef ret = USBD_OK;
+ 625              		.loc 1 728 0
+ 626 0016 ADF80430 		strh	r3, [sp, #4]	@ movhi
+ 627              	.LVL70:
+ 731:application-library/usb-cdc-device.c ****   {
+ 628              		.loc 1 731 0
+ 629 001a 002E     		cmp	r6, #0
+ 630 001c 75D0     		beq	.L60
+ 631 001e 0D46     		mov	r5, r1
+ 632 0020 0446     		mov	r4, r0
+ 736:application-library/usb-cdc-device.c ****   {
+ 633              		.loc 1 736 0
+ 634 0022 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 635 0024 13F06002 		ands	r2, r3, #96
+ 636 0028 34D0     		beq	.L48
+ 637 002a 202A     		cmp	r2, #32
+ 638 002c 69D1     		bne	.L64
+ 739:application-library/usb-cdc-device.c ****       {
+ 639              		.loc 1 739 0
+ 640 002e CA88     		ldrh	r2, [r1, #6]
+ 641 0030 2AB3     		cbz	r2, .L50
+ 741:application-library/usb-cdc-device.c ****         {
+ 642              		.loc 1 741 0
+ 643 0032 13F0800F 		tst	r3, #128
+ 644 0036 0ED1     		bne	.L66
+ARM GAS  /tmp/cc51CT0k.s 			page 31
+
+
+ 752:application-library/usb-cdc-device.c ****           hcdc->CmdLength = (uint8_t)MIN(req->wLength, USB_MAX_EP0_SIZE);
+ 645              		.loc 1 752 0
+ 646 0038 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 647 003a 86F80032 		strb	r3, [r6, #512]
+ 753:application-library/usb-cdc-device.c **** 
+ 648              		.loc 1 753 0
+ 649 003e CA88     		ldrh	r2, [r1, #6]
+ 650 0040 3F2A     		cmp	r2, #63
+ 651 0042 1AD8     		bhi	.L61
+ 753:application-library/usb-cdc-device.c **** 
+ 652              		.loc 1 753 0 is_stmt 0 discriminator 1
+ 653 0044 D2B2     		uxtb	r2, r2
+ 654              	.L52:
+ 753:application-library/usb-cdc-device.c **** 
+ 655              		.loc 1 753 0 discriminator 4
+ 656 0046 86F80122 		strb	r2, [r6, #513]
+ 755:application-library/usb-cdc-device.c ****         }
+ 657              		.loc 1 755 0 is_stmt 1 discriminator 4
+ 658 004a 3146     		mov	r1, r6
+ 659              	.LVL71:
+ 660 004c 2046     		mov	r0, r4
+ 661              	.LVL72:
+ 662 004e FFF7FEFF 		bl	USBD_CtlPrepareRx
+ 663              	.LVL73:
+ 729:application-library/usb-cdc-device.c **** 
+ 664              		.loc 1 729 0 discriminator 4
+ 665 0052 0020     		movs	r0, #0
+ 666 0054 5AE0     		b	.L46
+ 667              	.LVL74:
+ 668              	.L66:
+ 743:application-library/usb-cdc-device.c ****                                                                            (uint8_t *)hcdc->data,
+ 669              		.loc 1 743 0
+ 670 0056 B037     		adds	r7, r7, #176
+ 671 0058 00EB8707 		add	r7, r0, r7, lsl #2
+ 672 005c 7B68     		ldr	r3, [r7, #4]
+ 673 005e 9B68     		ldr	r3, [r3, #8]
+ 674 0060 3146     		mov	r1, r6
+ 675              	.LVL75:
+ 676 0062 6878     		ldrb	r0, [r5, #1]	@ zero_extendqisi2
+ 677              	.LVL76:
+ 678 0064 9847     		blx	r3
+ 679              	.LVL77:
+ 747:application-library/usb-cdc-device.c ****           (void)USBD_CtlSendData(pdev, (uint8_t *)hcdc->data, len);
+ 680              		.loc 1 747 0
+ 681 0066 EA88     		ldrh	r2, [r5, #6]
+ 682              	.LVL78:
+ 748:application-library/usb-cdc-device.c ****         }
+ 683              		.loc 1 748 0
+ 684 0068 072A     		cmp	r2, #7
+ 685 006a 28BF     		it	cs
+ 686 006c 0722     		movcs	r2, #7
+ 687              	.LVL79:
+ 688 006e 3146     		mov	r1, r6
+ 689 0070 2046     		mov	r0, r4
+ 690 0072 FFF7FEFF 		bl	USBD_CtlSendData
+ 691              	.LVL80:
+ 729:application-library/usb-cdc-device.c **** 
+ARM GAS  /tmp/cc51CT0k.s 			page 32
+
+
+ 692              		.loc 1 729 0
+ 693 0076 0020     		movs	r0, #0
+ 694 0078 48E0     		b	.L46
+ 695              	.LVL81:
+ 696              	.L61:
+ 753:application-library/usb-cdc-device.c **** 
+ 697              		.loc 1 753 0
+ 698 007a 4022     		movs	r2, #64
+ 699 007c E3E7     		b	.L52
+ 700              	.L50:
+ 760:application-library/usb-cdc-device.c ****                                                                          (uint8_t *)req, 0U);
+ 701              		.loc 1 760 0
+ 702 007e 07F1B000 		add	r0, r7, #176
+ 703              	.LVL82:
+ 704 0082 04EB8000 		add	r0, r4, r0, lsl #2
+ 705 0086 4368     		ldr	r3, [r0, #4]
+ 706 0088 9B68     		ldr	r3, [r3, #8]
+ 707 008a 0022     		movs	r2, #0
+ 708 008c 4878     		ldrb	r0, [r1, #1]	@ zero_extendqisi2
+ 709 008e 9847     		blx	r3
+ 710              	.LVL83:
+ 729:application-library/usb-cdc-device.c **** 
+ 711              		.loc 1 729 0
+ 712 0090 0020     		movs	r0, #0
+ 713 0092 3BE0     		b	.L46
+ 714              	.LVL84:
+ 715              	.L48:
+ 766:application-library/usb-cdc-device.c ****       {
+ 716              		.loc 1 766 0
+ 717 0094 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 718 0096 0B2B     		cmp	r3, #11
+ 719 0098 2FD8     		bhi	.L53
+ 720 009a DFE803F0 		tbb	[pc, r3]
+ 721              	.L55:
+ 722 009e 06       		.byte	(.L54-.L55)/2
+ 723 009f 39       		.byte	(.L62-.L55)/2
+ 724 00a0 2E       		.byte	(.L53-.L55)/2
+ 725 00a1 2E       		.byte	(.L53-.L55)/2
+ 726 00a2 2E       		.byte	(.L53-.L55)/2
+ 727 00a3 2E       		.byte	(.L53-.L55)/2
+ 728 00a4 2E       		.byte	(.L53-.L55)/2
+ 729 00a5 2E       		.byte	(.L53-.L55)/2
+ 730 00a6 2E       		.byte	(.L53-.L55)/2
+ 731 00a7 2E       		.byte	(.L53-.L55)/2
+ 732 00a8 15       		.byte	(.L56-.L55)/2
+ 733 00a9 25       		.byte	(.L57-.L55)/2
+ 734              		.p2align 1
+ 735              	.L54:
+ 769:application-library/usb-cdc-device.c ****           {
+ 736              		.loc 1 769 0
+ 737 00aa 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 738 00ae DBB2     		uxtb	r3, r3
+ 739 00b0 032B     		cmp	r3, #3
+ 740 00b2 03D0     		beq	.L67
+ 775:application-library/usb-cdc-device.c ****             ret = USBD_FAIL;
+ 741              		.loc 1 775 0
+ 742 00b4 FFF7FEFF 		bl	USBD_CtlError
+ARM GAS  /tmp/cc51CT0k.s 			page 33
+
+
+ 743              	.LVL85:
+ 776:application-library/usb-cdc-device.c ****           }
+ 744              		.loc 1 776 0
+ 745 00b8 0320     		movs	r0, #3
+ 746 00ba 27E0     		b	.L46
+ 747              	.LVL86:
+ 748              	.L67:
+ 771:application-library/usb-cdc-device.c ****           }
+ 749              		.loc 1 771 0
+ 750 00bc 0222     		movs	r2, #2
+ 751 00be 01A9     		add	r1, sp, #4
+ 752              	.LVL87:
+ 753 00c0 FFF7FEFF 		bl	USBD_CtlSendData
+ 754              	.LVL88:
+ 729:application-library/usb-cdc-device.c **** 
+ 755              		.loc 1 729 0
+ 756 00c4 0020     		movs	r0, #0
+ 757 00c6 21E0     		b	.L46
+ 758              	.LVL89:
+ 759              	.L56:
+ 781:application-library/usb-cdc-device.c ****           {
+ 760              		.loc 1 781 0
+ 761 00c8 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 762 00cc DBB2     		uxtb	r3, r3
+ 763 00ce 032B     		cmp	r3, #3
+ 764 00d0 03D0     		beq	.L68
+ 787:application-library/usb-cdc-device.c ****             ret = USBD_FAIL;
+ 765              		.loc 1 787 0
+ 766 00d2 FFF7FEFF 		bl	USBD_CtlError
+ 767              	.LVL90:
+ 788:application-library/usb-cdc-device.c ****           }
+ 768              		.loc 1 788 0
+ 769 00d6 0320     		movs	r0, #3
+ 770 00d8 18E0     		b	.L46
+ 771              	.LVL91:
+ 772              	.L68:
+ 783:application-library/usb-cdc-device.c ****           }
+ 773              		.loc 1 783 0
+ 774 00da 0122     		movs	r2, #1
+ 775 00dc 0DF10701 		add	r1, sp, #7
+ 776              	.LVL92:
+ 777 00e0 FFF7FEFF 		bl	USBD_CtlSendData
+ 778              	.LVL93:
+ 729:application-library/usb-cdc-device.c **** 
+ 779              		.loc 1 729 0
+ 780 00e4 0020     		movs	r0, #0
+ 781 00e6 11E0     		b	.L46
+ 782              	.LVL94:
+ 783              	.L57:
+ 793:application-library/usb-cdc-device.c ****           {
+ 784              		.loc 1 793 0
+ 785 00e8 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 786 00ec DBB2     		uxtb	r3, r3
+ 787 00ee 032B     		cmp	r3, #3
+ 788 00f0 10D0     		beq	.L63
+ 795:application-library/usb-cdc-device.c ****             ret = USBD_FAIL;
+ 789              		.loc 1 795 0
+ARM GAS  /tmp/cc51CT0k.s 			page 34
+
+
+ 790 00f2 FFF7FEFF 		bl	USBD_CtlError
+ 791              	.LVL95:
+ 796:application-library/usb-cdc-device.c ****           }
+ 792              		.loc 1 796 0
+ 793 00f6 0320     		movs	r0, #3
+ 794 00f8 08E0     		b	.L46
+ 795              	.LVL96:
+ 796              	.L53:
+ 804:application-library/usb-cdc-device.c ****           ret = USBD_FAIL;
+ 797              		.loc 1 804 0
+ 798 00fa FFF7FEFF 		bl	USBD_CtlError
+ 799              	.LVL97:
+ 805:application-library/usb-cdc-device.c ****           break;
+ 800              		.loc 1 805 0
+ 801 00fe 0320     		movs	r0, #3
+ 806:application-library/usb-cdc-device.c ****       }
+ 802              		.loc 1 806 0
+ 803 0100 04E0     		b	.L46
+ 804              	.LVL98:
+ 805              	.L64:
+ 811:application-library/usb-cdc-device.c ****       ret = USBD_FAIL;
+ 806              		.loc 1 811 0
+ 807 0102 FFF7FEFF 		bl	USBD_CtlError
+ 808              	.LVL99:
+ 812:application-library/usb-cdc-device.c ****       break;
+ 809              		.loc 1 812 0
+ 810 0106 0320     		movs	r0, #3
+ 813:application-library/usb-cdc-device.c ****   }
+ 811              		.loc 1 813 0
+ 812 0108 00E0     		b	.L46
+ 813              	.LVL100:
+ 814              	.L60:
+ 733:application-library/usb-cdc-device.c ****   }
+ 815              		.loc 1 733 0
+ 816 010a 0320     		movs	r0, #3
+ 817              	.LVL101:
+ 818              	.L46:
+ 817:application-library/usb-cdc-device.c **** 
+ 819              		.loc 1 817 0
+ 820 010c 03B0     		add	sp, sp, #12
+ 821              	.LCFI8:
+ 822              		.cfi_remember_state
+ 823              		.cfi_def_cfa_offset 20
+ 824              		@ sp needed
+ 825 010e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 826              	.LVL102:
+ 827              	.L62:
+ 828              	.LCFI9:
+ 829              		.cfi_restore_state
+ 729:application-library/usb-cdc-device.c **** 
+ 830              		.loc 1 729 0
+ 831 0110 0020     		movs	r0, #0
+ 832              	.LVL103:
+ 833 0112 FBE7     		b	.L46
+ 834              	.LVL104:
+ 835              	.L63:
+ 836 0114 0020     		movs	r0, #0
+ARM GAS  /tmp/cc51CT0k.s 			page 35
+
+
+ 837              	.LVL105:
+ 838 0116 F9E7     		b	.L46
+ 839              		.cfi_endproc
+ 840              	.LFE141:
+ 842              		.section	.text.USBD_CDC_DeInit,"ax",%progbits
+ 843              		.align	1
+ 844              		.syntax unified
+ 845              		.thumb
+ 846              		.thumb_func
+ 847              		.fpu fpv4-sp-d16
+ 849              	USBD_CDC_DeInit:
+ 850              	.LFB140:
+ 679:application-library/usb-cdc-device.c ****   UNUSED(cfgidx);
+ 851              		.loc 1 679 0
+ 852              		.cfi_startproc
+ 853              		@ args = 0, pretend = 0, frame = 0
+ 854              		@ frame_needed = 0, uses_anonymous_args = 0
+ 855              	.LVL106:
+ 856 0000 38B5     		push	{r3, r4, r5, lr}
+ 857              	.LCFI10:
+ 858              		.cfi_def_cfa_offset 16
+ 859              		.cfi_offset 3, -16
+ 860              		.cfi_offset 4, -12
+ 861              		.cfi_offset 5, -8
+ 862              		.cfi_offset 14, -4
+ 863 0002 0446     		mov	r4, r0
+ 691:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCInEpAdd & 0xFU].is_used = 0U;
+ 864              		.loc 1 691 0
+ 865 0004 8121     		movs	r1, #129
+ 866              	.LVL107:
+ 867 0006 FFF7FEFF 		bl	USBD_LL_CloseEP
+ 868              	.LVL108:
+ 692:application-library/usb-cdc-device.c **** 
+ 869              		.loc 1 692 0
+ 870 000a 0025     		movs	r5, #0
+ 871 000c 2587     		strh	r5, [r4, #56]	@ movhi
+ 695:application-library/usb-cdc-device.c ****   pdev->ep_out[CDCOutEpAdd & 0xFU].is_used = 0U;
+ 872              		.loc 1 695 0
+ 873 000e 0121     		movs	r1, #1
+ 874 0010 2046     		mov	r0, r4
+ 875 0012 FFF7FEFF 		bl	USBD_LL_CloseEP
+ 876              	.LVL109:
+ 696:application-library/usb-cdc-device.c **** 
+ 877              		.loc 1 696 0
+ 878 0016 A4F87851 		strh	r5, [r4, #376]	@ movhi
+ 699:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCCmdEpAdd & 0xFU].is_used = 0U;
+ 879              		.loc 1 699 0
+ 880 001a 8221     		movs	r1, #130
+ 881 001c 2046     		mov	r0, r4
+ 882 001e FFF7FEFF 		bl	USBD_LL_CloseEP
+ 883              	.LVL110:
+ 700:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCCmdEpAdd & 0xFU].bInterval = 0U;
+ 884              		.loc 1 700 0
+ 885 0022 A4F84C50 		strh	r5, [r4, #76]	@ movhi
+ 701:application-library/usb-cdc-device.c **** 
+ 886              		.loc 1 701 0
+ 887 0026 A4F84E50 		strh	r5, [r4, #78]	@ movhi
+ARM GAS  /tmp/cc51CT0k.s 			page 36
+
+
+ 704:application-library/usb-cdc-device.c ****   {
+ 888              		.loc 1 704 0
+ 889 002a D4F8D432 		ldr	r3, [r4, #724]
+ 890 002e 03F1B002 		add	r2, r3, #176
+ 891 0032 54F82220 		ldr	r2, [r4, r2, lsl #2]
+ 892 0036 9AB1     		cbz	r2, .L70
+ 706:application-library/usb-cdc-device.c ****     (void)USBD_free(pdev->pClassDataCmsit[pdev->classId]);
+ 893              		.loc 1 706 0
+ 894 0038 B033     		adds	r3, r3, #176
+ 895 003a 04EB8303 		add	r3, r4, r3, lsl #2
+ 896 003e 5B68     		ldr	r3, [r3, #4]
+ 897 0040 5B68     		ldr	r3, [r3, #4]
+ 898 0042 9847     		blx	r3
+ 899              	.LVL111:
+ 707:application-library/usb-cdc-device.c ****     pdev->pClassDataCmsit[pdev->classId] = NULL;
+ 900              		.loc 1 707 0
+ 901 0044 D4F8D432 		ldr	r3, [r4, #724]
+ 902 0048 B033     		adds	r3, r3, #176
+ 903 004a 54F82300 		ldr	r0, [r4, r3, lsl #2]
+ 904 004e FFF7FEFF 		bl	USBD_static_free
+ 905              	.LVL112:
+ 708:application-library/usb-cdc-device.c ****     pdev->pClassData = NULL;
+ 906              		.loc 1 708 0
+ 907 0052 D4F8D432 		ldr	r3, [r4, #724]
+ 908 0056 B033     		adds	r3, r3, #176
+ 909 0058 44F82350 		str	r5, [r4, r3, lsl #2]
+ 709:application-library/usb-cdc-device.c ****   }
+ 910              		.loc 1 709 0
+ 911 005c C4F8BC52 		str	r5, [r4, #700]
+ 912              	.L70:
+ 713:application-library/usb-cdc-device.c **** 
+ 913              		.loc 1 713 0
+ 914 0060 0020     		movs	r0, #0
+ 915 0062 38BD     		pop	{r3, r4, r5, pc}
+ 916              		.cfi_endproc
+ 917              	.LFE140:
+ 919              		.section	.text.USBD_CDC_Init,"ax",%progbits
+ 920              		.align	1
+ 921              		.syntax unified
+ 922              		.thumb
+ 923              		.thumb_func
+ 924              		.fpu fpv4-sp-d16
+ 926              	USBD_CDC_Init:
+ 927              	.LFB139:
+ 578:application-library/usb-cdc-device.c ****   UNUSED(cfgidx);
+ 928              		.loc 1 578 0
+ 929              		.cfi_startproc
+ 930              		@ args = 0, pretend = 0, frame = 0
+ 931              		@ frame_needed = 0, uses_anonymous_args = 0
+ 932              	.LVL113:
+ 933 0000 70B5     		push	{r4, r5, r6, lr}
+ 934              	.LCFI11:
+ 935              		.cfi_def_cfa_offset 16
+ 936              		.cfi_offset 4, -16
+ 937              		.cfi_offset 5, -12
+ 938              		.cfi_offset 6, -8
+ 939              		.cfi_offset 14, -4
+ARM GAS  /tmp/cc51CT0k.s 			page 37
+
+
+ 940 0002 0446     		mov	r4, r0
+ 582:application-library/usb-cdc-device.c **** 
+ 941              		.loc 1 582 0
+ 942 0004 4FF40770 		mov	r0, #540
+ 943              	.LVL114:
+ 944 0008 FFF7FEFF 		bl	USBD_static_malloc
+ 945              	.LVL115:
+ 584:application-library/usb-cdc-device.c ****   {
+ 946              		.loc 1 584 0
+ 947 000c 0028     		cmp	r0, #0
+ 948 000e 48D0     		beq	.L80
+ 949 0010 0546     		mov	r5, r0
+ 590:application-library/usb-cdc-device.c **** 
+ 950              		.loc 1 590 0
+ 951 0012 4FF40772 		mov	r2, #540
+ 952 0016 0021     		movs	r1, #0
+ 953 0018 FFF7FEFF 		bl	memset
+ 954              	.LVL116:
+ 592:application-library/usb-cdc-device.c ****   pdev->pClassData = pdev->pClassDataCmsit[pdev->classId];
+ 955              		.loc 1 592 0
+ 956 001c D4F8D432 		ldr	r3, [r4, #724]
+ 957 0020 B033     		adds	r3, r3, #176
+ 958 0022 44F82350 		str	r5, [r4, r3, lsl #2]
+ 593:application-library/usb-cdc-device.c **** 
+ 959              		.loc 1 593 0
+ 960 0026 C4F8BC52 		str	r5, [r4, #700]
+ 602:application-library/usb-cdc-device.c ****   {
+ 961              		.loc 1 602 0
+ 962 002a 237C     		ldrb	r3, [r4, #16]	@ zero_extendqisi2
+ 963 002c 002B     		cmp	r3, #0
+ 964 002e 40D1     		bne	.L75
+ 605:application-library/usb-cdc-device.c ****                          CDC_DATA_HS_IN_PACKET_SIZE);
+ 965              		.loc 1 605 0
+ 966 0030 4FF40073 		mov	r3, #512
+ 967 0034 0222     		movs	r2, #2
+ 968 0036 8121     		movs	r1, #129
+ 969 0038 2046     		mov	r0, r4
+ 970 003a FFF7FEFF 		bl	USBD_LL_OpenEP
+ 971              	.LVL117:
+ 608:application-library/usb-cdc-device.c **** 
+ 972              		.loc 1 608 0
+ 973 003e 0126     		movs	r6, #1
+ 974 0040 2687     		strh	r6, [r4, #56]	@ movhi
+ 611:application-library/usb-cdc-device.c ****                          CDC_DATA_HS_OUT_PACKET_SIZE);
+ 975              		.loc 1 611 0
+ 976 0042 4FF40073 		mov	r3, #512
+ 977 0046 0222     		movs	r2, #2
+ 978 0048 3146     		mov	r1, r6
+ 979 004a 2046     		mov	r0, r4
+ 980 004c FFF7FEFF 		bl	USBD_LL_OpenEP
+ 981              	.LVL118:
+ 614:application-library/usb-cdc-device.c **** 
+ 982              		.loc 1 614 0
+ 983 0050 A4F87861 		strh	r6, [r4, #376]	@ movhi
+ 617:application-library/usb-cdc-device.c ****   }
+ 984              		.loc 1 617 0
+ 985 0054 1023     		movs	r3, #16
+ARM GAS  /tmp/cc51CT0k.s 			page 38
+
+
+ 986 0056 A4F84E30 		strh	r3, [r4, #78]	@ movhi
+ 987              	.L76:
+ 638:application-library/usb-cdc-device.c ****   pdev->ep_in[CDCCmdEpAdd & 0xFU].is_used = 1U;
+ 988              		.loc 1 638 0
+ 989 005a 0823     		movs	r3, #8
+ 990 005c 0322     		movs	r2, #3
+ 991 005e 8221     		movs	r1, #130
+ 992 0060 2046     		mov	r0, r4
+ 993 0062 FFF7FEFF 		bl	USBD_LL_OpenEP
+ 994              	.LVL119:
+ 639:application-library/usb-cdc-device.c **** 
+ 995              		.loc 1 639 0
+ 996 0066 0123     		movs	r3, #1
+ 997 0068 A4F84C30 		strh	r3, [r4, #76]	@ movhi
+ 641:application-library/usb-cdc-device.c **** 
+ 998              		.loc 1 641 0
+ 999 006c 0026     		movs	r6, #0
+ 1000 006e C5F80462 		str	r6, [r5, #516]
+ 644:application-library/usb-cdc-device.c **** 
+ 1001              		.loc 1 644 0
+ 1002 0072 D4F8D432 		ldr	r3, [r4, #724]
+ 1003 0076 B033     		adds	r3, r3, #176
+ 1004 0078 04EB8303 		add	r3, r4, r3, lsl #2
+ 1005 007c 5B68     		ldr	r3, [r3, #4]
+ 1006 007e 1B68     		ldr	r3, [r3]
+ 1007 0080 9847     		blx	r3
+ 1008              	.LVL120:
+ 647:application-library/usb-cdc-device.c ****   hcdc->RxState = 0U;
+ 1009              		.loc 1 647 0
+ 1010 0082 C5F81462 		str	r6, [r5, #532]
+ 648:application-library/usb-cdc-device.c **** 
+ 1011              		.loc 1 648 0
+ 1012 0086 C5F81862 		str	r6, [r5, #536]
+ 650:application-library/usb-cdc-device.c ****   {
+ 1013              		.loc 1 650 0
+ 1014 008a D5F80422 		ldr	r2, [r5, #516]
+ 1015 008e 62B3     		cbz	r2, .L78
+ 655:application-library/usb-cdc-device.c ****   {
+ 1016              		.loc 1 655 0
+ 1017 0090 237C     		ldrb	r3, [r4, #16]	@ zero_extendqisi2
+ 1018 0092 13B3     		cbz	r3, .L81
+ 664:application-library/usb-cdc-device.c ****                                  CDC_DATA_FS_OUT_PACKET_SIZE);
+ 1019              		.loc 1 664 0
+ 1020 0094 4023     		movs	r3, #64
+ 1021 0096 0121     		movs	r1, #1
+ 1022 0098 2046     		mov	r0, r4
+ 1023 009a FFF7FEFF 		bl	USBD_LL_PrepareReceive
+ 1024              	.LVL121:
+ 668:application-library/usb-cdc-device.c **** }
+ 1025              		.loc 1 668 0
+ 1026 009e 0020     		movs	r0, #0
+ 1027 00a0 70BD     		pop	{r4, r5, r6, pc}
+ 1028              	.LVL122:
+ 1029              	.L80:
+ 586:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_EMEM;
+ 1030              		.loc 1 586 0
+ 1031 00a2 D4F8D432 		ldr	r3, [r4, #724]
+ARM GAS  /tmp/cc51CT0k.s 			page 39
+
+
+ 1032 00a6 B033     		adds	r3, r3, #176
+ 1033 00a8 0022     		movs	r2, #0
+ 1034 00aa 44F82320 		str	r2, [r4, r3, lsl #2]
+ 587:application-library/usb-cdc-device.c ****   }
+ 1035              		.loc 1 587 0
+ 1036 00ae 0220     		movs	r0, #2
+ 1037              	.LVL123:
+ 1038 00b0 70BD     		pop	{r4, r5, r6, pc}
+ 1039              	.LVL124:
+ 1040              	.L75:
+ 622:application-library/usb-cdc-device.c ****                          CDC_DATA_FS_IN_PACKET_SIZE);
+ 1041              		.loc 1 622 0
+ 1042 00b2 4023     		movs	r3, #64
+ 1043 00b4 0222     		movs	r2, #2
+ 1044 00b6 8121     		movs	r1, #129
+ 1045 00b8 2046     		mov	r0, r4
+ 1046 00ba FFF7FEFF 		bl	USBD_LL_OpenEP
+ 1047              	.LVL125:
+ 625:application-library/usb-cdc-device.c **** 
+ 1048              		.loc 1 625 0
+ 1049 00be 0126     		movs	r6, #1
+ 1050 00c0 2687     		strh	r6, [r4, #56]	@ movhi
+ 628:application-library/usb-cdc-device.c ****                          CDC_DATA_FS_OUT_PACKET_SIZE);
+ 1051              		.loc 1 628 0
+ 1052 00c2 4023     		movs	r3, #64
+ 1053 00c4 0222     		movs	r2, #2
+ 1054 00c6 3146     		mov	r1, r6
+ 1055 00c8 2046     		mov	r0, r4
+ 1056 00ca FFF7FEFF 		bl	USBD_LL_OpenEP
+ 1057              	.LVL126:
+ 631:application-library/usb-cdc-device.c **** 
+ 1058              		.loc 1 631 0
+ 1059 00ce A4F87861 		strh	r6, [r4, #376]	@ movhi
+ 634:application-library/usb-cdc-device.c ****   }
+ 1060              		.loc 1 634 0
+ 1061 00d2 1023     		movs	r3, #16
+ 1062 00d4 A4F84E30 		strh	r3, [r4, #78]	@ movhi
+ 1063 00d8 BFE7     		b	.L76
+ 1064              	.L81:
+ 658:application-library/usb-cdc-device.c ****                                  CDC_DATA_HS_OUT_PACKET_SIZE);
+ 1065              		.loc 1 658 0
+ 1066 00da 4FF40073 		mov	r3, #512
+ 1067 00de 0121     		movs	r1, #1
+ 1068 00e0 2046     		mov	r0, r4
+ 1069 00e2 FFF7FEFF 		bl	USBD_LL_PrepareReceive
+ 1070              	.LVL127:
+ 668:application-library/usb-cdc-device.c **** }
+ 1071              		.loc 1 668 0
+ 1072 00e6 3046     		mov	r0, r6
+ 1073 00e8 70BD     		pop	{r4, r5, r6, pc}
+ 1074              	.LVL128:
+ 1075              	.L78:
+ 652:application-library/usb-cdc-device.c ****   }
+ 1076              		.loc 1 652 0
+ 1077 00ea 0220     		movs	r0, #2
+ 669:application-library/usb-cdc-device.c **** 
+ 1078              		.loc 1 669 0
+ARM GAS  /tmp/cc51CT0k.s 			page 40
+
+
+ 1079 00ec 70BD     		pop	{r4, r5, r6, pc}
+ 1080              		.cfi_endproc
+ 1081              	.LFE139:
+ 1083              		.section	.text.usb_device_init,"ax",%progbits
+ 1084              		.align	1
+ 1085              		.global	usb_device_init
+ 1086              		.syntax unified
+ 1087              		.thumb
+ 1088              		.thumb_func
+ 1089              		.fpu fpv4-sp-d16
+ 1091              	usb_device_init:
+ 1092              	.LFB138:
+ 228:application-library/usb-cdc-device.c **** 
+ 1093              		.loc 1 228 0
+ 1094              		.cfi_startproc
+ 1095              		@ args = 0, pretend = 0, frame = 0
+ 1096              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1097 0000 38B5     		push	{r3, r4, r5, lr}
+ 1098              	.LCFI12:
+ 1099              		.cfi_def_cfa_offset 16
+ 1100              		.cfi_offset 3, -16
+ 1101              		.cfi_offset 4, -12
+ 1102              		.cfi_offset 5, -8
+ 1103              		.cfi_offset 14, -4
+ 239:application-library/usb-cdc-device.c ****   p_usbd_handle->pUserData[0] = NULL;
+ 1104              		.loc 1 239 0
+ 1105 0002 2749     		ldr	r1, .L86
+ 1106 0004 0B68     		ldr	r3, [r1]
+ 1107 0006 0022     		movs	r2, #0
+ 1108 0008 C3F8B822 		str	r2, [r3, #696]
+ 240:application-library/usb-cdc-device.c ****   p_usbd_handle->pConfDesc = NULL;
+ 1109              		.loc 1 240 0
+ 1110 000c C3F8C422 		str	r2, [r3, #708]
+ 241:application-library/usb-cdc-device.c **** 
+ 1111              		.loc 1 241 0
+ 1112 0010 C3F8D022 		str	r2, [r3, #720]
+ 244:application-library/usb-cdc-device.c **** 
+ 1113              		.loc 1 244 0
+ 1114 0014 2348     		ldr	r0, .L86+4
+ 1115 0016 C3F8B402 		str	r0, [r3, #692]
+ 247:application-library/usb-cdc-device.c ****   p_usbd_handle->id = DEVICE_FS; // DEVICE_FS (0)
+ 1116              		.loc 1 247 0
+ 1117 001a 0120     		movs	r0, #1
+ 1118 001c 83F89C02 		strb	r0, [r3, #668]
+ 248:application-library/usb-cdc-device.c **** 
+ 1119              		.loc 1 248 0
+ 1120 0020 1A70     		strb	r2, [r3]
+ 256:application-library/usb-cdc-device.c ****   /* Link the driver to the stack. */
+ 1121              		.loc 1 256 0
+ 1122 0022 0B68     		ldr	r3, [r1]
+ 1123 0024 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1124 0026 AAB1     		cbz	r2, .L85
+ 1125              	.L83:
+ 289:application-library/usb-cdc-device.c **** 
+ 1126              		.loc 1 289 0
+ 1127 0028 1D4C     		ldr	r4, .L86
+ 1128 002a 2568     		ldr	r5, [r4]
+ARM GAS  /tmp/cc51CT0k.s 			page 41
+
+
+ 1129 002c 1E4B     		ldr	r3, .L86+8
+ 1130 002e C5F8B832 		str	r3, [r5, #696]
+ 305:application-library/usb-cdc-device.c **** 
+ 1131              		.loc 1 305 0
+ 1132 0032 DB6A     		ldr	r3, [r3, #44]
+ 1133 0034 0020     		movs	r0, #0
+ 1134 0036 9847     		blx	r3
+ 1135              	.LVL129:
+ 1136 0038 C5F8D002 		str	r0, [r5, #720]
+ 315:application-library/usb-cdc-device.c **** 
+ 1137              		.loc 1 315 0
+ 1138 003c 2368     		ldr	r3, [r4]
+ 1139 003e D3F8D422 		ldr	r2, [r3, #724]
+ 1140 0042 B032     		adds	r2, r2, #176
+ 1141 0044 03EB8203 		add	r3, r3, r2, lsl #2
+ 1142 0048 184A     		ldr	r2, .L86+12
+ 1143 004a 5A60     		str	r2, [r3, #4]
+ 322:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
+ 1144              		.loc 1 322 0
+ 1145 004c 1848     		ldr	r0, .L86+16
+ 1146 004e FFF7FEFF 		bl	HAL_PCD_Start
+ 1147              	.LVL130:
+ 1148 0052 38BD     		pop	{r3, r4, r5, pc}
+ 1149              	.L85:
+ 258:application-library/usb-cdc-device.c ****                                            /* pData is the pointer to upper stack handler. */
+ 1150              		.loc 1 258 0
+ 1151 0054 164C     		ldr	r4, .L86+16
+ 1152 0056 C4F80835 		str	r3, [r4, #1288]
+ 260:application-library/usb-cdc-device.c **** 
+ 1153              		.loc 1 260 0
+ 1154 005a C3F8C842 		str	r4, [r3, #712]
+ 262:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.dev_endpoints = 4;
+ 1155              		.loc 1 262 0
+ 1156 005e 4FF0A043 		mov	r3, #1342177280
+ 1157 0062 2360     		str	r3, [r4]
+ 263:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
+ 1158              		.loc 1 263 0
+ 1159 0064 0423     		movs	r3, #4
+ 1160 0066 6360     		str	r3, [r4, #4]
+ 264:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
+ 1161              		.loc 1 264 0
+ 1162 0068 0223     		movs	r3, #2
+ 1163 006a E360     		str	r3, [r4, #12]
+ 265:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
+ 1164              		.loc 1 265 0
+ 1165 006c 0025     		movs	r5, #0
+ 1166 006e 2561     		str	r5, [r4, #16]
+ 266:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
+ 1167              		.loc 1 266 0
+ 1168 0070 A361     		str	r3, [r4, #24]
+ 267:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
+ 1169              		.loc 1 267 0
+ 1170 0072 E561     		str	r5, [r4, #28]
+ 268:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
+ 1171              		.loc 1 268 0
+ 1172 0074 2562     		str	r5, [r4, #32]
+ 269:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.vbus_sensing_enable = DISABLE;
+ARM GAS  /tmp/cc51CT0k.s 			page 42
+
+
+ 1173              		.loc 1 269 0
+ 1174 0076 6562     		str	r5, [r4, #36]
+ 270:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
+ 1175              		.loc 1 270 0
+ 1176 0078 E562     		str	r5, [r4, #44]
+ 271:application-library/usb-cdc-device.c **** 
+ 1177              		.loc 1 271 0
+ 1178 007a 2563     		str	r5, [r4, #48]
+ 274:application-library/usb-cdc-device.c **** 
+ 1179              		.loc 1 274 0
+ 1180 007c 2046     		mov	r0, r4
+ 1181 007e FFF7FEFF 		bl	HAL_PCD_Init
+ 1182              	.LVL131:
+ 277:application-library/usb-cdc-device.c ****   HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_FS, 0, 0x40); /* set TX FIFO 0 with size 0x40 */ 
+ 1183              		.loc 1 277 0
+ 1184 0082 8021     		movs	r1, #128
+ 1185 0084 2046     		mov	r0, r4
+ 1186 0086 FFF7FEFF 		bl	HAL_PCDEx_SetRxFiFo
+ 1187              	.LVL132:
+ 278:application-library/usb-cdc-device.c ****   HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_FS, 1, 0x80); /* set TX FIFO 1 with size 0x80 */
+ 1188              		.loc 1 278 0
+ 1189 008a 4022     		movs	r2, #64
+ 1190 008c 2946     		mov	r1, r5
+ 1191 008e 2046     		mov	r0, r4
+ 1192 0090 FFF7FEFF 		bl	HAL_PCDEx_SetTxFiFo
+ 1193              	.LVL133:
+ 279:application-library/usb-cdc-device.c ****   }
+ 1194              		.loc 1 279 0
+ 1195 0094 8022     		movs	r2, #128
+ 1196 0096 0121     		movs	r1, #1
+ 1197 0098 2046     		mov	r0, r4
+ 1198 009a FFF7FEFF 		bl	HAL_PCDEx_SetTxFiFo
+ 1199              	.LVL134:
+ 1200 009e C3E7     		b	.L83
+ 1201              	.L87:
+ 1202              		.align	2
+ 1203              	.L86:
+ 1204 00a0 00000000 		.word	.LANCHOR2
+ 1205 00a4 00000000 		.word	FS_Desc
+ 1206 00a8 00000000 		.word	.LANCHOR3
+ 1207 00ac 00000000 		.word	.LANCHOR4
+ 1208 00b0 00000000 		.word	hpcd_USB_OTG_FS
+ 1209              		.cfi_endproc
+ 1210              	.LFE138:
+ 1212              		.section	.text.USBD_CDC_RegisterInterface,"ax",%progbits
+ 1213              		.align	1
+ 1214              		.global	USBD_CDC_RegisterInterface
+ 1215              		.syntax unified
+ 1216              		.thumb
+ 1217              		.thumb_func
+ 1218              		.fpu fpv4-sp-d16
+ 1220              	USBD_CDC_RegisterInterface:
+ 1221              	.LFB149:
+1018:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE  */
+1019:application-library/usb-cdc-device.c **** /**
+1020:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_RegisterInterface
+1021:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+ARM GAS  /tmp/cc51CT0k.s 			page 43
+
+
+1022:application-library/usb-cdc-device.c ****   * @param  fops: CD  Interface callback
+1023:application-library/usb-cdc-device.c ****   * @retval status
+1024:application-library/usb-cdc-device.c ****   */
+1025:application-library/usb-cdc-device.c **** uint8_t USBD_CDC_RegisterInterface(USBD_HandleTypeDef *pdev,
+1026:application-library/usb-cdc-device.c ****                                    USBD_CDC_ItfTypeDef *fops)
+1027:application-library/usb-cdc-device.c **** {
+ 1222              		.loc 1 1027 0
+ 1223              		.cfi_startproc
+ 1224              		@ args = 0, pretend = 0, frame = 0
+ 1225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1226              		@ link register save eliminated.
+ 1227              	.LVL135:
+1028:application-library/usb-cdc-device.c ****   if (fops == NULL)
+ 1228              		.loc 1 1028 0
+ 1229 0000 39B1     		cbz	r1, .L90
+1029:application-library/usb-cdc-device.c ****   {
+1030:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+1031:application-library/usb-cdc-device.c ****   }
+1032:application-library/usb-cdc-device.c **** 
+1033:application-library/usb-cdc-device.c ****   pdev->pUserData[pdev->classId] = fops;
+ 1230              		.loc 1 1033 0
+ 1231 0002 D0F8D432 		ldr	r3, [r0, #724]
+ 1232 0006 B033     		adds	r3, r3, #176
+ 1233 0008 00EB8300 		add	r0, r0, r3, lsl #2
+ 1234              	.LVL136:
+ 1235 000c 4160     		str	r1, [r0, #4]
+1034:application-library/usb-cdc-device.c **** 
+1035:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 1236              		.loc 1 1035 0
+ 1237 000e 0020     		movs	r0, #0
+ 1238 0010 7047     		bx	lr
+ 1239              	.LVL137:
+ 1240              	.L90:
+1030:application-library/usb-cdc-device.c ****   }
+ 1241              		.loc 1 1030 0
+ 1242 0012 0320     		movs	r0, #3
+ 1243              	.LVL138:
+1036:application-library/usb-cdc-device.c **** }
+ 1244              		.loc 1 1036 0
+ 1245 0014 7047     		bx	lr
+ 1246              		.cfi_endproc
+ 1247              	.LFE149:
+ 1249              		.section	.text.USBD_CDC_SetTxBuffer,"ax",%progbits
+ 1250              		.align	1
+ 1251              		.global	USBD_CDC_SetTxBuffer
+ 1252              		.syntax unified
+ 1253              		.thumb
+ 1254              		.thumb_func
+ 1255              		.fpu fpv4-sp-d16
+ 1257              	USBD_CDC_SetTxBuffer:
+ 1258              	.LFB150:
+1037:application-library/usb-cdc-device.c **** 
+1038:application-library/usb-cdc-device.c **** /**
+1039:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_SetTxBuffer
+1040:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+1041:application-library/usb-cdc-device.c ****   * @param  pbuff: Tx Buffer
+1042:application-library/usb-cdc-device.c ****   * @param  length: Tx Buffer length
+ARM GAS  /tmp/cc51CT0k.s 			page 44
+
+
+1043:application-library/usb-cdc-device.c ****   * @retval status
+1044:application-library/usb-cdc-device.c ****   */
+1045:application-library/usb-cdc-device.c **** uint8_t USBD_CDC_SetTxBuffer(USBD_HandleTypeDef *pdev,
+1046:application-library/usb-cdc-device.c ****                              uint8_t *pbuff, uint32_t length)
+1047:application-library/usb-cdc-device.c **** {
+ 1259              		.loc 1 1047 0
+ 1260              		.cfi_startproc
+ 1261              		@ args = 0, pretend = 0, frame = 0
+ 1262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1263              		@ link register save eliminated.
+ 1264              	.LVL139:
+1048:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 1265              		.loc 1 1048 0
+ 1266 0000 D0F8D432 		ldr	r3, [r0, #724]
+ 1267 0004 B033     		adds	r3, r3, #176
+ 1268 0006 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 1269              	.LVL140:
+1049:application-library/usb-cdc-device.c **** 
+1050:application-library/usb-cdc-device.c ****   if (hcdc == NULL)
+ 1270              		.loc 1 1050 0
+ 1271 000a 2BB1     		cbz	r3, .L93
+1051:application-library/usb-cdc-device.c ****   {
+1052:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+1053:application-library/usb-cdc-device.c ****   }
+1054:application-library/usb-cdc-device.c **** 
+1055:application-library/usb-cdc-device.c ****   hcdc->TxBuffer = pbuff;
+ 1272              		.loc 1 1055 0
+ 1273 000c C3F80812 		str	r1, [r3, #520]
+1056:application-library/usb-cdc-device.c ****   hcdc->TxLength = length;
+ 1274              		.loc 1 1056 0
+ 1275 0010 C3F81022 		str	r2, [r3, #528]
+1057:application-library/usb-cdc-device.c **** 
+1058:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 1276              		.loc 1 1058 0
+ 1277 0014 0020     		movs	r0, #0
+ 1278              	.LVL141:
+ 1279 0016 7047     		bx	lr
+ 1280              	.LVL142:
+ 1281              	.L93:
+1052:application-library/usb-cdc-device.c ****   }
+ 1282              		.loc 1 1052 0
+ 1283 0018 0320     		movs	r0, #3
+ 1284              	.LVL143:
+1059:application-library/usb-cdc-device.c **** }
+ 1285              		.loc 1 1059 0
+ 1286 001a 7047     		bx	lr
+ 1287              		.cfi_endproc
+ 1288              	.LFE150:
+ 1290              		.section	.text.USBD_CDC_SetRxBuffer,"ax",%progbits
+ 1291              		.align	1
+ 1292              		.global	USBD_CDC_SetRxBuffer
+ 1293              		.syntax unified
+ 1294              		.thumb
+ 1295              		.thumb_func
+ 1296              		.fpu fpv4-sp-d16
+ 1298              	USBD_CDC_SetRxBuffer:
+ 1299              	.LFB151:
+ARM GAS  /tmp/cc51CT0k.s 			page 45
+
+
+1060:application-library/usb-cdc-device.c **** 
+1061:application-library/usb-cdc-device.c **** /**
+1062:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_SetRxBuffer
+1063:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+1064:application-library/usb-cdc-device.c ****   * @param  pbuff: Rx Buffer
+1065:application-library/usb-cdc-device.c ****   * @retval status
+1066:application-library/usb-cdc-device.c ****   */
+1067:application-library/usb-cdc-device.c **** uint8_t USBD_CDC_SetRxBuffer(USBD_HandleTypeDef *pdev, uint8_t *pbuff)
+1068:application-library/usb-cdc-device.c **** {
+ 1300              		.loc 1 1068 0
+ 1301              		.cfi_startproc
+ 1302              		@ args = 0, pretend = 0, frame = 0
+ 1303              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1304              		@ link register save eliminated.
+ 1305              	.LVL144:
+1069:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 1306              		.loc 1 1069 0
+ 1307 0000 D0F8D432 		ldr	r3, [r0, #724]
+ 1308 0004 B033     		adds	r3, r3, #176
+ 1309 0006 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 1310              	.LVL145:
+1070:application-library/usb-cdc-device.c **** 
+1071:application-library/usb-cdc-device.c ****   if (hcdc == NULL)
+ 1311              		.loc 1 1071 0
+ 1312 000a 1BB1     		cbz	r3, .L96
+1072:application-library/usb-cdc-device.c ****   {
+1073:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+1074:application-library/usb-cdc-device.c ****   }
+1075:application-library/usb-cdc-device.c **** 
+1076:application-library/usb-cdc-device.c ****   hcdc->RxBuffer = pbuff;
+ 1313              		.loc 1 1076 0
+ 1314 000c C3F80412 		str	r1, [r3, #516]
+1077:application-library/usb-cdc-device.c **** 
+1078:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 1315              		.loc 1 1078 0
+ 1316 0010 0020     		movs	r0, #0
+ 1317              	.LVL146:
+ 1318 0012 7047     		bx	lr
+ 1319              	.LVL147:
+ 1320              	.L96:
+1073:application-library/usb-cdc-device.c ****   }
+ 1321              		.loc 1 1073 0
+ 1322 0014 0320     		movs	r0, #3
+ 1323              	.LVL148:
+1079:application-library/usb-cdc-device.c **** }
+ 1324              		.loc 1 1079 0
+ 1325 0016 7047     		bx	lr
+ 1326              		.cfi_endproc
+ 1327              	.LFE151:
+ 1329              		.section	.text.CDC_Init_FS,"ax",%progbits
+ 1330              		.align	1
+ 1331              		.syntax unified
+ 1332              		.thumb
+ 1333              		.thumb_func
+ 1334              		.fpu fpv4-sp-d16
+ 1336              	CDC_Init_FS:
+ 1337              	.LFB132:
+ARM GAS  /tmp/cc51CT0k.s 			page 46
+
+
+  49:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 3 */
+ 1338              		.loc 1 49 0
+ 1339              		.cfi_startproc
+ 1340              		@ args = 0, pretend = 0, frame = 0
+ 1341              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1342 0000 10B5     		push	{r4, lr}
+ 1343              	.LCFI13:
+ 1344              		.cfi_def_cfa_offset 8
+ 1345              		.cfi_offset 4, -8
+ 1346              		.cfi_offset 14, -4
+  52:application-library/usb-cdc-device.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, UserRxBufferFS);
+ 1347              		.loc 1 52 0
+ 1348 0002 064C     		ldr	r4, .L99
+ 1349 0004 0022     		movs	r2, #0
+ 1350 0006 0649     		ldr	r1, .L99+4
+ 1351 0008 2046     		mov	r0, r4
+ 1352 000a FFF7FEFF 		bl	USBD_CDC_SetTxBuffer
+ 1353              	.LVL149:
+  53:application-library/usb-cdc-device.c ****   return (USBD_OK);
+ 1354              		.loc 1 53 0
+ 1355 000e 0549     		ldr	r1, .L99+8
+ 1356 0010 2046     		mov	r0, r4
+ 1357 0012 FFF7FEFF 		bl	USBD_CDC_SetRxBuffer
+ 1358              	.LVL150:
+  56:application-library/usb-cdc-device.c **** 
+ 1359              		.loc 1 56 0
+ 1360 0016 0020     		movs	r0, #0
+ 1361 0018 10BD     		pop	{r4, pc}
+ 1362              	.L100:
+ 1363 001a 00BF     		.align	2
+ 1364              	.L99:
+ 1365 001c 00000000 		.word	hUsbDeviceFS
+ 1366 0020 00000000 		.word	UserTxBufferFS
+ 1367 0024 00000000 		.word	UserRxBufferFS
+ 1368              		.cfi_endproc
+ 1369              	.LFE132:
+ 1371              		.section	.text.USBD_CDC_TransmitPacket,"ax",%progbits
+ 1372              		.align	1
+ 1373              		.global	USBD_CDC_TransmitPacket
+ 1374              		.syntax unified
+ 1375              		.thumb
+ 1376              		.thumb_func
+ 1377              		.fpu fpv4-sp-d16
+ 1379              	USBD_CDC_TransmitPacket:
+ 1380              	.LFB152:
+1080:application-library/usb-cdc-device.c **** 
+1081:application-library/usb-cdc-device.c **** /**
+1082:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_TransmitPacket
+1083:application-library/usb-cdc-device.c ****   *         Transmit packet on IN endpoint
+1084:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+1085:application-library/usb-cdc-device.c ****   * @retval status
+1086:application-library/usb-cdc-device.c ****   */
+1087:application-library/usb-cdc-device.c **** uint8_t USBD_CDC_TransmitPacket(USBD_HandleTypeDef *pdev)
+1088:application-library/usb-cdc-device.c **** {
+ 1381              		.loc 1 1088 0
+ 1382              		.cfi_startproc
+ 1383              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cc51CT0k.s 			page 47
+
+
+ 1384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1385              	.LVL151:
+ 1386 0000 08B5     		push	{r3, lr}
+ 1387              	.LCFI14:
+ 1388              		.cfi_def_cfa_offset 8
+ 1389              		.cfi_offset 3, -8
+ 1390              		.cfi_offset 14, -4
+1089:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 1391              		.loc 1 1089 0
+ 1392 0002 D0F8D432 		ldr	r3, [r0, #724]
+ 1393 0006 B033     		adds	r3, r3, #176
+ 1394 0008 50F82320 		ldr	r2, [r0, r3, lsl #2]
+ 1395              	.LVL152:
+1090:application-library/usb-cdc-device.c ****   USBD_StatusTypeDef ret = USBD_BUSY;
+1091:application-library/usb-cdc-device.c **** 
+1092:application-library/usb-cdc-device.c **** #ifdef USE_USBD_COMPOSITE
+1093:application-library/usb-cdc-device.c ****   /* Get the Endpoints addresses allocated for this class instance */
+1094:application-library/usb-cdc-device.c ****   CDCInEpAdd  = USBD_CoreGetEPAdd(pdev, USBD_EP_IN, USBD_EP_TYPE_BULK);
+1095:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE */
+1096:application-library/usb-cdc-device.c ****   if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+ 1396              		.loc 1 1096 0
+ 1397 000c 9AB1     		cbz	r2, .L103
+1097:application-library/usb-cdc-device.c ****   {
+1098:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+1099:application-library/usb-cdc-device.c ****   }
+1100:application-library/usb-cdc-device.c **** 
+1101:application-library/usb-cdc-device.c ****   if (hcdc->TxState == 0U)
+ 1398              		.loc 1 1101 0
+ 1399 000e D2F81432 		ldr	r3, [r2, #532]
+ 1400 0012 0BB1     		cbz	r3, .L106
+1090:application-library/usb-cdc-device.c ****   USBD_StatusTypeDef ret = USBD_BUSY;
+ 1401              		.loc 1 1090 0
+ 1402 0014 0120     		movs	r0, #1
+ 1403              	.LVL153:
+1102:application-library/usb-cdc-device.c ****   {
+1103:application-library/usb-cdc-device.c ****     /* Tx Transfer in progress */
+1104:application-library/usb-cdc-device.c ****     hcdc->TxState = 1U;
+1105:application-library/usb-cdc-device.c **** 
+1106:application-library/usb-cdc-device.c ****     /* Update the packet total length */
+1107:application-library/usb-cdc-device.c ****     pdev->ep_in[CDCInEpAdd & 0xFU].total_length = hcdc->TxLength;
+1108:application-library/usb-cdc-device.c **** 
+1109:application-library/usb-cdc-device.c ****     /* Transmit next packet */
+1110:application-library/usb-cdc-device.c ****     (void)USBD_LL_Transmit(pdev, CDCInEpAdd, hcdc->TxBuffer, hcdc->TxLength);
+1111:application-library/usb-cdc-device.c **** 
+1112:application-library/usb-cdc-device.c ****     ret = USBD_OK;
+1113:application-library/usb-cdc-device.c ****   }
+1114:application-library/usb-cdc-device.c **** 
+1115:application-library/usb-cdc-device.c ****   return (uint8_t)ret;
+1116:application-library/usb-cdc-device.c **** }
+ 1404              		.loc 1 1116 0
+ 1405 0016 08BD     		pop	{r3, pc}
+ 1406              	.LVL154:
+ 1407              	.L106:
+1104:application-library/usb-cdc-device.c **** 
+ 1408              		.loc 1 1104 0
+ 1409 0018 0123     		movs	r3, #1
+ 1410 001a C2F81432 		str	r3, [r2, #532]
+ARM GAS  /tmp/cc51CT0k.s 			page 48
+
+
+1107:application-library/usb-cdc-device.c **** 
+ 1411              		.loc 1 1107 0
+ 1412 001e D2F81032 		ldr	r3, [r2, #528]
+ 1413 0022 C362     		str	r3, [r0, #44]
+1110:application-library/usb-cdc-device.c **** 
+ 1414              		.loc 1 1110 0
+ 1415 0024 D2F81032 		ldr	r3, [r2, #528]
+ 1416 0028 D2F80822 		ldr	r2, [r2, #520]
+ 1417              	.LVL155:
+ 1418 002c 8121     		movs	r1, #129
+ 1419 002e FFF7FEFF 		bl	USBD_LL_Transmit
+ 1420              	.LVL156:
+1112:application-library/usb-cdc-device.c ****   }
+ 1421              		.loc 1 1112 0
+ 1422 0032 0020     		movs	r0, #0
+ 1423 0034 08BD     		pop	{r3, pc}
+ 1424              	.LVL157:
+ 1425              	.L103:
+1098:application-library/usb-cdc-device.c ****   }
+ 1426              		.loc 1 1098 0
+ 1427 0036 0320     		movs	r0, #3
+ 1428              	.LVL158:
+ 1429 0038 08BD     		pop	{r3, pc}
+ 1430              		.cfi_endproc
+ 1431              	.LFE152:
+ 1433              		.section	.text.CDC_Transmit_FS,"ax",%progbits
+ 1434              		.align	1
+ 1435              		.global	CDC_Transmit_FS
+ 1436              		.syntax unified
+ 1437              		.thumb
+ 1438              		.thumb_func
+ 1439              		.fpu fpv4-sp-d16
+ 1441              	CDC_Transmit_FS:
+ 1442              	.LFB136:
+ 168:application-library/usb-cdc-device.c ****   uint8_t result = USBD_OK;
+ 1443              		.loc 1 168 0
+ 1444              		.cfi_startproc
+ 1445              		@ args = 0, pretend = 0, frame = 0
+ 1446              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1447              	.LVL159:
+ 171:application-library/usb-cdc-device.c ****   if (hcdc->TxState != 0){
+ 1448              		.loc 1 171 0
+ 1449 0000 094B     		ldr	r3, .L115
+ 1450 0002 D3F8BC32 		ldr	r3, [r3, #700]
+ 1451              	.LVL160:
+ 172:application-library/usb-cdc-device.c ****     return USBD_BUSY;
+ 1452              		.loc 1 172 0
+ 1453 0006 D3F81432 		ldr	r3, [r3, #532]
+ 1454              	.LVL161:
+ 1455 000a 0BB1     		cbz	r3, .L114
+ 173:application-library/usb-cdc-device.c ****   }
+ 1456              		.loc 1 173 0
+ 1457 000c 0120     		movs	r0, #1
+ 1458              	.LVL162:
+ 1459 000e 7047     		bx	lr
+ 1460              	.LVL163:
+ 1461              	.L114:
+ARM GAS  /tmp/cc51CT0k.s 			page 49
+
+
+ 168:application-library/usb-cdc-device.c ****   uint8_t result = USBD_OK;
+ 1462              		.loc 1 168 0
+ 1463 0010 10B5     		push	{r4, lr}
+ 1464              	.LCFI15:
+ 1465              		.cfi_def_cfa_offset 8
+ 1466              		.cfi_offset 4, -8
+ 1467              		.cfi_offset 14, -4
+ 1468 0012 0A46     		mov	r2, r1
+ 1469 0014 0146     		mov	r1, r0
+ 1470              	.LVL164:
+ 175:application-library/usb-cdc-device.c ****   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+ 1471              		.loc 1 175 0
+ 1472 0016 044C     		ldr	r4, .L115
+ 1473 0018 2046     		mov	r0, r4
+ 1474              	.LVL165:
+ 1475 001a FFF7FEFF 		bl	USBD_CDC_SetTxBuffer
+ 1476              	.LVL166:
+ 176:application-library/usb-cdc-device.c ****   /* USER CODE END 7 */
+ 1477              		.loc 1 176 0
+ 1478 001e 2046     		mov	r0, r4
+ 1479 0020 FFF7FEFF 		bl	USBD_CDC_TransmitPacket
+ 1480              	.LVL167:
+ 178:application-library/usb-cdc-device.c **** }
+ 1481              		.loc 1 178 0
+ 1482 0024 10BD     		pop	{r4, pc}
+ 1483              	.L116:
+ 1484 0026 00BF     		.align	2
+ 1485              	.L115:
+ 1486 0028 00000000 		.word	hUsbDeviceFS
+ 1487              		.cfi_endproc
+ 1488              	.LFE136:
+ 1490              		.section	.text.USBD_CDC_ReceivePacket,"ax",%progbits
+ 1491              		.align	1
+ 1492              		.global	USBD_CDC_ReceivePacket
+ 1493              		.syntax unified
+ 1494              		.thumb
+ 1495              		.thumb_func
+ 1496              		.fpu fpv4-sp-d16
+ 1498              	USBD_CDC_ReceivePacket:
+ 1499              	.LFB153:
+1117:application-library/usb-cdc-device.c **** 
+1118:application-library/usb-cdc-device.c **** /**
+1119:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_ReceivePacket
+1120:application-library/usb-cdc-device.c ****   *         prepare OUT Endpoint for reception
+1121:application-library/usb-cdc-device.c ****   * @param  pdev: device instance
+1122:application-library/usb-cdc-device.c ****   * @retval status
+1123:application-library/usb-cdc-device.c ****   */
+1124:application-library/usb-cdc-device.c **** uint8_t USBD_CDC_ReceivePacket(USBD_HandleTypeDef *pdev)
+1125:application-library/usb-cdc-device.c **** {
+ 1500              		.loc 1 1125 0
+ 1501              		.cfi_startproc
+ 1502              		@ args = 0, pretend = 0, frame = 0
+ 1503              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1504              	.LVL168:
+ 1505 0000 08B5     		push	{r3, lr}
+ 1506              	.LCFI16:
+ 1507              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/cc51CT0k.s 			page 50
+
+
+ 1508              		.cfi_offset 3, -8
+ 1509              		.cfi_offset 14, -4
+1126:application-library/usb-cdc-device.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+ 1510              		.loc 1 1126 0
+ 1511 0002 D0F8D432 		ldr	r3, [r0, #724]
+ 1512 0006 B033     		adds	r3, r3, #176
+ 1513 0008 50F82320 		ldr	r2, [r0, r3, lsl #2]
+ 1514              	.LVL169:
+1127:application-library/usb-cdc-device.c **** 
+1128:application-library/usb-cdc-device.c **** #ifdef USE_USBD_COMPOSITE
+1129:application-library/usb-cdc-device.c ****   /* Get the Endpoints addresses allocated for this class instance */
+1130:application-library/usb-cdc-device.c ****   CDCOutEpAdd = USBD_CoreGetEPAdd(pdev, USBD_EP_OUT, USBD_EP_TYPE_BULK);
+1131:application-library/usb-cdc-device.c **** #endif /* USE_USBD_COMPOSITE */
+1132:application-library/usb-cdc-device.c **** 
+1133:application-library/usb-cdc-device.c ****   if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+ 1515              		.loc 1 1133 0
+ 1516 000c 92B1     		cbz	r2, .L120
+1134:application-library/usb-cdc-device.c ****   {
+1135:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_FAIL;
+1136:application-library/usb-cdc-device.c ****   }
+1137:application-library/usb-cdc-device.c **** 
+1138:application-library/usb-cdc-device.c ****   if (pdev->dev_speed == USBD_SPEED_HIGH)
+ 1517              		.loc 1 1138 0
+ 1518 000e 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 1519 0010 3BB1     		cbz	r3, .L122
+1139:application-library/usb-cdc-device.c ****   {
+1140:application-library/usb-cdc-device.c ****     /* Prepare Out endpoint to receive next packet */
+1141:application-library/usb-cdc-device.c ****     (void)USBD_LL_PrepareReceive(pdev, CDCOutEpAdd, hcdc->RxBuffer,
+1142:application-library/usb-cdc-device.c ****                                  CDC_DATA_HS_OUT_PACKET_SIZE);
+1143:application-library/usb-cdc-device.c ****   }
+1144:application-library/usb-cdc-device.c ****   else
+1145:application-library/usb-cdc-device.c ****   {
+1146:application-library/usb-cdc-device.c ****     /* Prepare Out endpoint to receive next packet */
+1147:application-library/usb-cdc-device.c ****     (void)USBD_LL_PrepareReceive(pdev, CDCOutEpAdd, hcdc->RxBuffer,
+ 1520              		.loc 1 1147 0
+ 1521 0012 4023     		movs	r3, #64
+ 1522 0014 D2F80422 		ldr	r2, [r2, #516]
+ 1523              	.LVL170:
+ 1524 0018 0121     		movs	r1, #1
+ 1525 001a FFF7FEFF 		bl	USBD_LL_PrepareReceive
+ 1526              	.LVL171:
+1148:application-library/usb-cdc-device.c ****                                  CDC_DATA_FS_OUT_PACKET_SIZE);
+1149:application-library/usb-cdc-device.c ****   }
+1150:application-library/usb-cdc-device.c **** 
+1151:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
+ 1527              		.loc 1 1151 0
+ 1528 001e 0020     		movs	r0, #0
+ 1529 0020 08BD     		pop	{r3, pc}
+ 1530              	.LVL172:
+ 1531              	.L122:
+1141:application-library/usb-cdc-device.c ****                                  CDC_DATA_HS_OUT_PACKET_SIZE);
+ 1532              		.loc 1 1141 0
+ 1533 0022 4FF40073 		mov	r3, #512
+ 1534 0026 D2F80422 		ldr	r2, [r2, #516]
+ 1535              	.LVL173:
+ 1536 002a 0121     		movs	r1, #1
+ 1537 002c FFF7FEFF 		bl	USBD_LL_PrepareReceive
+ARM GAS  /tmp/cc51CT0k.s 			page 51
+
+
+ 1538              	.LVL174:
+ 1539              		.loc 1 1151 0
+ 1540 0030 0020     		movs	r0, #0
+ 1541 0032 08BD     		pop	{r3, pc}
+ 1542              	.LVL175:
+ 1543              	.L120:
+1135:application-library/usb-cdc-device.c ****   }
+ 1544              		.loc 1 1135 0
+ 1545 0034 0320     		movs	r0, #3
+ 1546              	.LVL176:
+1152:application-library/usb-cdc-device.c **** }
+ 1547              		.loc 1 1152 0
+ 1548 0036 08BD     		pop	{r3, pc}
+ 1549              		.cfi_endproc
+ 1550              	.LFE153:
+ 1552              		.section	.text.CDC_Receive_FS,"ax",%progbits
+ 1553              		.align	1
+ 1554              		.syntax unified
+ 1555              		.thumb
+ 1556              		.thumb_func
+ 1557              		.fpu fpv4-sp-d16
+ 1559              	CDC_Receive_FS:
+ 1560              	.LFB135:
+ 148:application-library/usb-cdc-device.c ****   /* USER CODE BEGIN 6 */
+ 1561              		.loc 1 148 0
+ 1562              		.cfi_startproc
+ 1563              		@ args = 0, pretend = 0, frame = 0
+ 1564              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1565              	.LVL177:
+ 1566 0000 10B5     		push	{r4, lr}
+ 1567              	.LCFI17:
+ 1568              		.cfi_def_cfa_offset 8
+ 1569              		.cfi_offset 4, -8
+ 1570              		.cfi_offset 14, -4
+ 150:application-library/usb-cdc-device.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 1571              		.loc 1 150 0
+ 1572 0002 054C     		ldr	r4, .L125
+ 1573 0004 0146     		mov	r1, r0
+ 1574              	.LVL178:
+ 1575 0006 2046     		mov	r0, r4
+ 1576              	.LVL179:
+ 1577 0008 FFF7FEFF 		bl	USBD_CDC_SetRxBuffer
+ 1578              	.LVL180:
+ 151:application-library/usb-cdc-device.c ****   return (USBD_OK);
+ 1579              		.loc 1 151 0
+ 1580 000c 2046     		mov	r0, r4
+ 1581 000e FFF7FEFF 		bl	USBD_CDC_ReceivePacket
+ 1582              	.LVL181:
+ 154:application-library/usb-cdc-device.c **** 
+ 1583              		.loc 1 154 0
+ 1584 0012 0020     		movs	r0, #0
+ 1585 0014 10BD     		pop	{r4, pc}
+ 1586              	.L126:
+ 1587 0016 00BF     		.align	2
+ 1588              	.L125:
+ 1589 0018 00000000 		.word	hUsbDeviceFS
+ 1590              		.cfi_endproc
+ARM GAS  /tmp/cc51CT0k.s 			page 52
+
+
+ 1591              	.LFE135:
+ 1593              		.global	USBD_CDC
+ 1594              		.global	p_usbd_handle
+ 1595              		.comm	hUsbDeviceFS,732,4
+ 1596              		.global	USBD_Interface_fops_FS
+ 1597              		.comm	UserTxBufferFS,2048,4
+ 1598              		.comm	UserRxBufferFS,2048,4
+ 1599              		.section	.data.USBD_CDC,"aw",%progbits
+ 1600              		.align	2
+ 1601              		.set	.LANCHOR3,. + 0
+ 1604              	USBD_CDC:
+ 1605 0000 00000000 		.word	USBD_CDC_Init
+ 1606 0004 00000000 		.word	USBD_CDC_DeInit
+ 1607 0008 00000000 		.word	USBD_CDC_Setup
+ 1608 000c 00000000 		.word	0
+ 1609 0010 00000000 		.word	USBD_CDC_EP0_RxReady
+ 1610 0014 00000000 		.word	USBD_CDC_DataIn
+ 1611 0018 00000000 		.word	USBD_CDC_DataOut
+ 1612 001c 00000000 		.word	0
+ 1613 0020 00000000 		.word	0
+ 1614 0024 00000000 		.word	0
+ 1615 0028 00000000 		.word	USBD_CDC_GetHSCfgDesc
+ 1616 002c 00000000 		.word	USBD_CDC_GetFSCfgDesc
+ 1617 0030 00000000 		.word	USBD_CDC_GetOtherSpeedCfgDesc
+ 1618 0034 00000000 		.word	USBD_CDC_GetDeviceQualifierDescriptor
+ 1619              		.section	.data.USBD_CDC_CfgDesc,"aw",%progbits
+ 1620              		.align	2
+ 1621              		.set	.LANCHOR1,. + 0
+ 1624              	USBD_CDC_CfgDesc:
+ 1625 0000 09       		.byte	9
+ 1626 0001 02       		.byte	2
+ 1627 0002 43       		.byte	67
+ 1628 0003 00       		.byte	0
+ 1629 0004 02       		.byte	2
+ 1630 0005 01       		.byte	1
+ 1631 0006 00       		.byte	0
+ 1632 0007 C0       		.byte	-64
+ 1633 0008 32       		.byte	50
+ 1634 0009 09       		.byte	9
+ 1635 000a 04       		.byte	4
+ 1636 000b 00       		.byte	0
+ 1637 000c 00       		.byte	0
+ 1638 000d 01       		.byte	1
+ 1639 000e 02       		.byte	2
+ 1640 000f 02       		.byte	2
+ 1641 0010 01       		.byte	1
+ 1642 0011 00       		.byte	0
+ 1643 0012 05       		.byte	5
+ 1644 0013 24       		.byte	36
+ 1645 0014 00       		.byte	0
+ 1646 0015 10       		.byte	16
+ 1647 0016 01       		.byte	1
+ 1648 0017 05       		.byte	5
+ 1649 0018 24       		.byte	36
+ 1650 0019 01       		.byte	1
+ 1651 001a 00       		.byte	0
+ 1652 001b 01       		.byte	1
+ARM GAS  /tmp/cc51CT0k.s 			page 53
+
+
+ 1653 001c 04       		.byte	4
+ 1654 001d 24       		.byte	36
+ 1655 001e 02       		.byte	2
+ 1656 001f 02       		.byte	2
+ 1657 0020 05       		.byte	5
+ 1658 0021 24       		.byte	36
+ 1659 0022 06       		.byte	6
+ 1660 0023 00       		.byte	0
+ 1661 0024 01       		.byte	1
+ 1662 0025 07       		.byte	7
+ 1663 0026 05       		.byte	5
+ 1664 0027 82       		.byte	-126
+ 1665 0028 03       		.byte	3
+ 1666 0029 08       		.byte	8
+ 1667 002a 00       		.byte	0
+ 1668 002b 10       		.byte	16
+ 1669 002c 09       		.byte	9
+ 1670 002d 04       		.byte	4
+ 1671 002e 01       		.byte	1
+ 1672 002f 00       		.byte	0
+ 1673 0030 02       		.byte	2
+ 1674 0031 0A       		.byte	10
+ 1675 0032 00       		.byte	0
+ 1676 0033 00       		.byte	0
+ 1677 0034 00       		.byte	0
+ 1678 0035 07       		.byte	7
+ 1679 0036 05       		.byte	5
+ 1680 0037 01       		.byte	1
+ 1681 0038 02       		.byte	2
+ 1682 0039 40       		.byte	64
+ 1683 003a 00       		.byte	0
+ 1684 003b 00       		.byte	0
+ 1685 003c 07       		.byte	7
+ 1686 003d 05       		.byte	5
+ 1687 003e 81       		.byte	-127
+ 1688 003f 02       		.byte	2
+ 1689 0040 40       		.byte	64
+ 1690 0041 00       		.byte	0
+ 1691 0042 00       		.byte	0
+ 1692              		.section	.data.USBD_CDC_DeviceQualifierDesc,"aw",%progbits
+ 1693              		.align	2
+ 1694              		.set	.LANCHOR0,. + 0
+ 1697              	USBD_CDC_DeviceQualifierDesc:
+ 1698 0000 0A       		.byte	10
+ 1699 0001 06       		.byte	6
+ 1700 0002 00       		.byte	0
+ 1701 0003 02       		.byte	2
+ 1702 0004 00       		.byte	0
+ 1703 0005 00       		.byte	0
+ 1704 0006 00       		.byte	0
+ 1705 0007 40       		.byte	64
+ 1706 0008 01       		.byte	1
+ 1707 0009 00       		.byte	0
+ 1708              		.section	.data.USBD_Interface_fops_FS,"aw",%progbits
+ 1709              		.align	2
+ 1710              		.set	.LANCHOR4,. + 0
+ 1713              	USBD_Interface_fops_FS:
+ARM GAS  /tmp/cc51CT0k.s 			page 54
+
+
+ 1714 0000 00000000 		.word	CDC_Init_FS
+ 1715 0004 00000000 		.word	CDC_DeInit_FS
+ 1716 0008 00000000 		.word	CDC_Control_FS
+ 1717 000c 00000000 		.word	CDC_Receive_FS
+ 1718 0010 00000000 		.word	CDC_TransmitCplt_FS
+ 1719              		.section	.data.p_usbd_handle,"aw",%progbits
+ 1720              		.align	2
+ 1721              		.set	.LANCHOR2,. + 0
+ 1724              	p_usbd_handle:
+ 1725 0000 00000000 		.word	hUsbDeviceFS
+ 1726              		.text
+ 1727              	.Letext0:
+ 1728              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 1729              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 1730              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 1731              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 1732              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h"
+ 1733              		.file 7 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 1734              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1735              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h"
+ 1736              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h"
+ 1737              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 1738              		.file 12 "/usr/include/newlib/sys/lock.h"
+ 1739              		.file 13 "/usr/include/newlib/sys/_types.h"
+ 1740              		.file 14 "/usr/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h"
+ 1741              		.file 15 "/usr/include/newlib/sys/reent.h"
+ 1742              		.file 16 "/usr/include/newlib/stdlib.h"
+ 1743              		.file 17 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 1744              		.file 18 "USB_DEVICE/App/usbd_desc.h"
+ 1745              		.file 19 "application-library/usb-cdc-device.h"
+ 1746              		.file 20 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h"
+ 1747              		.file 21 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h"
+ 1748              		.file 22 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h"
+ 1749              		.file 23 "USB_DEVICE/Target/usbd_conf.h"
+ 1750              		.file 24 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h"
+ARM GAS  /tmp/cc51CT0k.s 			page 55
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb-cdc-device.c
+     /tmp/cc51CT0k.s:18     .text.CDC_DeInit_FS:0000000000000000 $t
+     /tmp/cc51CT0k.s:24     .text.CDC_DeInit_FS:0000000000000000 CDC_DeInit_FS
+     /tmp/cc51CT0k.s:39     .text.CDC_Control_FS:0000000000000000 $t
+     /tmp/cc51CT0k.s:45     .text.CDC_Control_FS:0000000000000000 CDC_Control_FS
+     /tmp/cc51CT0k.s:61     .text.CDC_TransmitCplt_FS:0000000000000000 $t
+     /tmp/cc51CT0k.s:67     .text.CDC_TransmitCplt_FS:0000000000000000 CDC_TransmitCplt_FS
+     /tmp/cc51CT0k.s:83     .text.USBD_CDC_EP0_RxReady:0000000000000000 $t
+     /tmp/cc51CT0k.s:89     .text.USBD_CDC_EP0_RxReady:0000000000000000 USBD_CDC_EP0_RxReady
+     /tmp/cc51CT0k.s:149    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000000 $t
+     /tmp/cc51CT0k.s:156    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000000 USBD_CDC_GetDeviceQualifierDescriptor
+     /tmp/cc51CT0k.s:174    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000008 $d
+     /tmp/cc51CT0k.s:179    .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000000 $t
+     /tmp/cc51CT0k.s:185    .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000000 USBD_CDC_GetOtherSpeedCfgDesc
+     /tmp/cc51CT0k.s:258    .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000044 $d
+     /tmp/cc51CT0k.s:263    .text.USBD_CDC_GetFSCfgDesc:0000000000000000 $t
+     /tmp/cc51CT0k.s:269    .text.USBD_CDC_GetFSCfgDesc:0000000000000000 USBD_CDC_GetFSCfgDesc
+     /tmp/cc51CT0k.s:342    .text.USBD_CDC_GetFSCfgDesc:0000000000000044 $d
+     /tmp/cc51CT0k.s:347    .text.USBD_CDC_GetHSCfgDesc:0000000000000000 $t
+     /tmp/cc51CT0k.s:353    .text.USBD_CDC_GetHSCfgDesc:0000000000000000 USBD_CDC_GetHSCfgDesc
+     /tmp/cc51CT0k.s:426    .text.USBD_CDC_GetHSCfgDesc:0000000000000044 $d
+     /tmp/cc51CT0k.s:431    .text.USBD_CDC_DataOut:0000000000000000 $t
+     /tmp/cc51CT0k.s:437    .text.USBD_CDC_DataOut:0000000000000000 USBD_CDC_DataOut
+     /tmp/cc51CT0k.s:487    .text.USBD_CDC_DataIn:0000000000000000 $t
+     /tmp/cc51CT0k.s:493    .text.USBD_CDC_DataIn:0000000000000000 USBD_CDC_DataIn
+     /tmp/cc51CT0k.s:593    .text.USBD_CDC_Setup:0000000000000000 $t
+     /tmp/cc51CT0k.s:599    .text.USBD_CDC_Setup:0000000000000000 USBD_CDC_Setup
+     /tmp/cc51CT0k.s:722    .text.USBD_CDC_Setup:000000000000009e $d
+     /tmp/cc51CT0k.s:734    .text.USBD_CDC_Setup:00000000000000aa $t
+     /tmp/cc51CT0k.s:843    .text.USBD_CDC_DeInit:0000000000000000 $t
+     /tmp/cc51CT0k.s:849    .text.USBD_CDC_DeInit:0000000000000000 USBD_CDC_DeInit
+     /tmp/cc51CT0k.s:920    .text.USBD_CDC_Init:0000000000000000 $t
+     /tmp/cc51CT0k.s:926    .text.USBD_CDC_Init:0000000000000000 USBD_CDC_Init
+     /tmp/cc51CT0k.s:1084   .text.usb_device_init:0000000000000000 $t
+     /tmp/cc51CT0k.s:1091   .text.usb_device_init:0000000000000000 usb_device_init
+     /tmp/cc51CT0k.s:1204   .text.usb_device_init:00000000000000a0 $d
+     /tmp/cc51CT0k.s:1213   .text.USBD_CDC_RegisterInterface:0000000000000000 $t
+     /tmp/cc51CT0k.s:1220   .text.USBD_CDC_RegisterInterface:0000000000000000 USBD_CDC_RegisterInterface
+     /tmp/cc51CT0k.s:1250   .text.USBD_CDC_SetTxBuffer:0000000000000000 $t
+     /tmp/cc51CT0k.s:1257   .text.USBD_CDC_SetTxBuffer:0000000000000000 USBD_CDC_SetTxBuffer
+     /tmp/cc51CT0k.s:1291   .text.USBD_CDC_SetRxBuffer:0000000000000000 $t
+     /tmp/cc51CT0k.s:1298   .text.USBD_CDC_SetRxBuffer:0000000000000000 USBD_CDC_SetRxBuffer
+     /tmp/cc51CT0k.s:1330   .text.CDC_Init_FS:0000000000000000 $t
+     /tmp/cc51CT0k.s:1336   .text.CDC_Init_FS:0000000000000000 CDC_Init_FS
+     /tmp/cc51CT0k.s:1365   .text.CDC_Init_FS:000000000000001c $d
+                            *COM*:00000000000002dc hUsbDeviceFS
+                            *COM*:0000000000000800 UserTxBufferFS
+                            *COM*:0000000000000800 UserRxBufferFS
+     /tmp/cc51CT0k.s:1372   .text.USBD_CDC_TransmitPacket:0000000000000000 $t
+     /tmp/cc51CT0k.s:1379   .text.USBD_CDC_TransmitPacket:0000000000000000 USBD_CDC_TransmitPacket
+     /tmp/cc51CT0k.s:1434   .text.CDC_Transmit_FS:0000000000000000 $t
+     /tmp/cc51CT0k.s:1441   .text.CDC_Transmit_FS:0000000000000000 CDC_Transmit_FS
+     /tmp/cc51CT0k.s:1486   .text.CDC_Transmit_FS:0000000000000028 $d
+     /tmp/cc51CT0k.s:1491   .text.USBD_CDC_ReceivePacket:0000000000000000 $t
+     /tmp/cc51CT0k.s:1498   .text.USBD_CDC_ReceivePacket:0000000000000000 USBD_CDC_ReceivePacket
+     /tmp/cc51CT0k.s:1553   .text.CDC_Receive_FS:0000000000000000 $t
+ARM GAS  /tmp/cc51CT0k.s 			page 56
+
+
+     /tmp/cc51CT0k.s:1559   .text.CDC_Receive_FS:0000000000000000 CDC_Receive_FS
+     /tmp/cc51CT0k.s:1589   .text.CDC_Receive_FS:0000000000000018 $d
+     /tmp/cc51CT0k.s:1604   .data.USBD_CDC:0000000000000000 USBD_CDC
+     /tmp/cc51CT0k.s:1724   .data.p_usbd_handle:0000000000000000 p_usbd_handle
+     /tmp/cc51CT0k.s:1713   .data.USBD_Interface_fops_FS:0000000000000000 USBD_Interface_fops_FS
+     /tmp/cc51CT0k.s:1600   .data.USBD_CDC:0000000000000000 $d
+     /tmp/cc51CT0k.s:1620   .data.USBD_CDC_CfgDesc:0000000000000000 $d
+     /tmp/cc51CT0k.s:1624   .data.USBD_CDC_CfgDesc:0000000000000000 USBD_CDC_CfgDesc
+     /tmp/cc51CT0k.s:1693   .data.USBD_CDC_DeviceQualifierDesc:0000000000000000 $d
+     /tmp/cc51CT0k.s:1697   .data.USBD_CDC_DeviceQualifierDesc:0000000000000000 USBD_CDC_DeviceQualifierDesc
+     /tmp/cc51CT0k.s:1709   .data.USBD_Interface_fops_FS:0000000000000000 $d
+     /tmp/cc51CT0k.s:1720   .data.p_usbd_handle:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+USBD_GetEpDesc
+USBD_LL_GetRxDataSize
+USBD_LL_Transmit
+USBD_CtlPrepareRx
+USBD_CtlSendData
+USBD_CtlError
+USBD_LL_CloseEP
+USBD_static_free
+USBD_static_malloc
+memset
+USBD_LL_OpenEP
+USBD_LL_PrepareReceive
+HAL_PCD_Start
+HAL_PCD_Init
+HAL_PCDEx_SetRxFiFo
+HAL_PCDEx_SetTxFiFo
+FS_Desc
+hpcd_USB_OTG_FS
