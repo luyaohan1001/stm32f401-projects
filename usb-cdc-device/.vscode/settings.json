@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
-        "usbd_conf.h": "c"
+        "usbd_conf.h": "c",
+        "usbd_desc.h": "c"
     }
 }

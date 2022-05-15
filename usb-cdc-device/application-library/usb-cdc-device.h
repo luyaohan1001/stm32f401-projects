@@ -7,51 +7,17 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 
-/* usb_cdc.h ---- ---- ---- ---- */
-#include "usbd_conf.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-/**
-  ******************************************************************************
-  * @file    usbd_def.h
-  * @author  MCD Application Team
-  * @brief   General defines for the usb device library
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2015 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+// #include "usbd_conf.h"
 
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_DEF_H
 #define __USBD_DEF_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "usbd_conf.h"
-
-/** @addtogroup STM32_USBD_DEVICE_LIBRARY
-  * @{
-  */
-
-/** @defgroup USB_DEF
-  * @brief general defines for the usb device library file
-  * @{
-  */
-
-/** @defgroup USB_DEF_Exported_Defines
-  * @{
-  */
-
+/* usbd_def.h BEGIN ---- ---- ---- ---- */
 #ifndef NULL
 #define NULL                                            0U
 #endif /* NULL */
@@ -490,40 +456,7 @@ __STATIC_INLINE uint16_t SWAPBYTE(uint8_t *addr)
 #endif /* __GNUC__ */
 
 
-/**
-  * @}
-  */
-
-/** @defgroup USBD_DEF_Exported_Variables
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-/** @defgroup USBD_DEF_Exported_FunctionsPrototype
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* __USBD_DEF_H */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
 
 
 /* Macro define ------------------------------------------------------------------*/
@@ -702,13 +635,11 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev, uint8_t epnum,
 USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev, uint8_t epnum, uint8_t *pdata);
 
 USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev);
-USBD_StatusTypeDef USBD_LL_SetSpeed(USBD_HandleTypeDef *pdev, USBD_SpeedTypeDef speed);
 USBD_StatusTypeDef USBD_LL_Suspend(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_LL_Resume(USBD_HandleTypeDef *pdev);
 
 USBD_StatusTypeDef USBD_LL_SOF(USBD_HandleTypeDef  *pdev);
 USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_HandleTypeDef *pdev, uint8_t epnum);
-USBD_StatusTypeDef USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef *pdev, uint8_t epnum);
 
 USBD_StatusTypeDef USBD_LL_DevConnected(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef *pdev);
@@ -1032,9 +963,9 @@ USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev);
   * @brief  USBD_LL_SetSpeed
   *         Handle Reset event
   * @param  pdev: device instance
-  * @retval status
+  * @retval None.
   */
-USBD_StatusTypeDef USBD_LL_SetSpeed(USBD_HandleTypeDef *pdev,
+void USBD_LL_SetSpeed(USBD_HandleTypeDef *pdev,
                                     USBD_SpeedTypeDef speed);
 
 /**
@@ -1075,9 +1006,9 @@ USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_HandleTypeDef *pdev,
 /**
   * @brief  Handle iso out incomplete event.
   * @param  pdev: device instance
-  * @retval status
+  * @retval None.
   */
-USBD_StatusTypeDef USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef *pdev,
+void USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef *pdev,
                                             uint8_t epnum);
 
 /**
@@ -1173,6 +1104,144 @@ USBD_StatusTypeDef USBD_CtlSendStatus(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_HandleTypeDef *pdev);
 
 uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
+/* usbd_ioreq.h END ---- ---- ---- ---- ---- ---- ---- ---- */
+
+/* usbd_conf.h */
+
+
+/* USER CODE BEGIN INCLUDE */
+
+/* USER CODE END INCLUDE */
+
+/** @addtogroup USBD_OTG_DRIVER
+  * @brief Driver for Usb device.
+  * @{
+  */
+
+/** @defgroup USBD_CONF USBD_CONF
+  * @brief Configuration file for Usb otg low level driver.
+  * @{
+  */
+
+/** @defgroup USBD_CONF_Exported_Variables USBD_CONF_Exported_Variables
+  * @brief Public variables.
+  * @{
+  */
+
+/**
+  * @}
+  */
+
+/** @defgroup USBD_CONF_Exported_Defines USBD_CONF_Exported_Defines
+  * @brief Defines for configuration of the Usb device.
+  * @{
+  */
+
+/*---------- -----------*/
+#define USBD_MAX_NUM_INTERFACES     1U
+/*---------- -----------*/
+#define USBD_MAX_NUM_CONFIGURATION     1U
+/*---------- -----------*/
+#define USBD_MAX_STR_DESC_SIZ     512U
+/*---------- -----------*/
+#define USBD_DEBUG_LEVEL     0U
+/*---------- -----------*/
+#define USBD_LPM_ENABLED     0U
+/*---------- -----------*/
+#define USBD_SELF_POWERED     1U
+
+/****************************************/
+/* #define for FS and HS identification */
+#define DEVICE_FS 		0
+#define DEVICE_HS 		1
+
+/**
+  * @}
+  */
+
+/** @defgroup USBD_CONF_Exported_Macros USBD_CONF_Exported_Macros
+  * @brief Aliases.
+  * @{
+  */
+/* Memory management macros make sure to use static memory allocation */
+/** Alias for memory allocation. */
+
+#define USBD_malloc         (void *)USBD_static_malloc
+
+/** Alias for memory release. */
+#define USBD_free           USBD_static_free
+
+/** Alias for memory set. */
+#define USBD_memset         memset
+
+/** Alias for memory copy. */
+#define USBD_memcpy         memcpy
+
+/** Alias for delay. */
+#define USBD_Delay          HAL_Delay
+
+/* DEBUG macros */
+
+#if (USBD_DEBUG_LEVEL > 0)
+#define USBD_UsrLog(...)    printf(__VA_ARGS__);\
+                            printf("\n");
+#else
+#define USBD_UsrLog(...)
+#endif /* (USBD_DEBUG_LEVEL > 0U) */
+
+#if (USBD_DEBUG_LEVEL > 1)
+
+#define USBD_ErrLog(...)    printf("ERROR: ") ;\
+                            printf(__VA_ARGS__);\
+                            printf("\n");
+#else
+#define USBD_ErrLog(...)
+#endif /* (USBD_DEBUG_LEVEL > 1U) */
+
+#if (USBD_DEBUG_LEVEL > 2)
+#define USBD_DbgLog(...)    printf("DEBUG : ") ;\
+                            printf(__VA_ARGS__);\
+                            printf("\n");
+#else
+#define USBD_DbgLog(...)
+#endif /* (USBD_DEBUG_LEVEL > 2U) */
+
+/**
+  * @}
+  */
+
+/** @defgroup USBD_CONF_Exported_Types USBD_CONF_Exported_Types
+  * @brief Types.
+  * @{
+  */
+
+/**
+  * @}
+  */
+
+/** @defgroup USBD_CONF_Exported_FunctionsPrototype USBD_CONF_Exported_FunctionsPrototype
+  * @brief Declaration of public functions for Usb device.
+  * @{
+  */
+
+/* Exported functions -------------------------------------------------------*/
+void *USBD_static_malloc(uint32_t size);
+void USBD_static_free(void *p);
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
+/**
+  * @}
+  */
+
+
+/* usbd_conf.h */
 
 
 #endif /* __USB_CDC_DEVICE_H */
