@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc8BsKHo.s 			page 1
+ARM GAS  /tmp/cc38VpmL.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
   29:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   in several modes:
   30:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   (+) Input mode 
   31:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   (+) Analog mode
-ARM GAS  /tmp/cc8BsKHo.s 			page 2
+ARM GAS  /tmp/cc38VpmL.s 			page 2
 
 
   32:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   (+) Output mode
@@ -118,7 +118,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
   86:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****         HAL_GPIO_WritePin()/HAL_GPIO_TogglePin().
   87:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****     
   88:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****     (#) To lock pin configuration until next reset use HAL_GPIO_LockPin().
-ARM GAS  /tmp/cc8BsKHo.s 			page 3
+ARM GAS  /tmp/cc38VpmL.s 			page 3
 
 
   89:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
@@ -178,7 +178,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  143:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** @verbatim    
  144:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****  ===============================================================================
  145:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****               ##### Initialization and de-initialization functions #####
-ARM GAS  /tmp/cc8BsKHo.s 			page 4
+ARM GAS  /tmp/cc38VpmL.s 			page 4
 
 
  146:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****  ===============================================================================
@@ -238,7 +238,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
   49              		.cfi_def_cfa_offset 32
   50 000c 62E0     		b	.L12
   51              	.LVL2:
-ARM GAS  /tmp/cc8BsKHo.s 			page 5
+ARM GAS  /tmp/cc38VpmL.s 			page 5
 
 
   52              	.L23:
@@ -298,7 +298,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  203:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****         GPIOx->OTYPER = temp;
   81              		.loc 1 203 0
   82 0038 4260     		str	r2, [r0, #4]
-ARM GAS  /tmp/cc8BsKHo.s 			page 6
+ARM GAS  /tmp/cc38VpmL.s 			page 6
 
 
   83 003a 57E0     		b	.L4
@@ -358,7 +358,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  234:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****       GPIOx->MODER = temp;
  235:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
  236:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****       /*--------------------- EXTI Mode Configuration ------------------------*/
-ARM GAS  /tmp/cc8BsKHo.s 			page 7
+ARM GAS  /tmp/cc38VpmL.s 			page 7
 
 
  237:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****       /* Configure the External Interrupt or event for the current IO */
@@ -418,7 +418,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  257:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****         temp = EXTI->FTSR;
  141              		.loc 1 257 0
  142 008e ED68     		ldr	r5, [r5, #12]
-ARM GAS  /tmp/cc8BsKHo.s 			page 8
+ARM GAS  /tmp/cc38VpmL.s 			page 8
 
 
  143              	.LVL18:
@@ -478,7 +478,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  179 00bc 2A40     		ands	r2, r2, r5
  180              	.LVL25:
  276:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****         if((GPIO_Init->Mode & EXTI_IT) != 0x00U)
-ARM GAS  /tmp/cc8BsKHo.s 			page 9
+ARM GAS  /tmp/cc38VpmL.s 			page 9
 
 
  181              		.loc 1 276 0
@@ -538,7 +538,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  225 00f4 09D0     		beq	.L5
  212:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****         temp &= ~(GPIO_PUPDR_PUPDR0 << (position * 2U));
  226              		.loc 1 212 0
-ARM GAS  /tmp/cc8BsKHo.s 			page 10
+ARM GAS  /tmp/cc38VpmL.s 			page 10
 
 
  227 00f6 C268     		ldr	r2, [r0, #12]
@@ -598,7 +598,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  272              	.LBB2:
  241:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
  273              		.loc 1 241 0
-ARM GAS  /tmp/cc8BsKHo.s 			page 11
+ARM GAS  /tmp/cc38VpmL.s 			page 11
 
 
  274 0134 0022     		movs	r2, #0
@@ -658,7 +658,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  320 018e 0727     		movs	r7, #7
  321 0190 69E7     		b	.L7
  322              	.L14:
-ARM GAS  /tmp/cc8BsKHo.s 			page 12
+ARM GAS  /tmp/cc38VpmL.s 			page 12
 
 
  323 0192 0127     		movs	r7, #1
@@ -718,7 +718,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  289:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   *                      x can be (A..I) to select the GPIO peripheral for STM32F40XX and STM32F427
  290:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   * @param  GPIO_Pin specifies the port bit to be written.
  291:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   *          This parameter can be one of GPIO_PIN_x where x can be (0..15).
-ARM GAS  /tmp/cc8BsKHo.s 			page 13
+ARM GAS  /tmp/cc38VpmL.s 			page 13
 
 
  292:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   * @retval None
@@ -778,7 +778,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  398              	.L31:
  399              		.loc 1 317 0 is_stmt 0 discriminator 20
  400 0014 0EFA05F5 		lsl	r5, lr, r5
-ARM GAS  /tmp/cc8BsKHo.s 			page 14
+ARM GAS  /tmp/cc38VpmL.s 			page 14
 
 
  401 0018 AF42     		cmp	r7, r5
@@ -838,7 +838,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  429 0050 25EA0202 		bic	r2, r5, r2
  430              	.LVL53:
  431 0054 4260     		str	r2, [r0, #4]
-ARM GAS  /tmp/cc8BsKHo.s 			page 15
+ARM GAS  /tmp/cc38VpmL.s 			page 15
 
 
  344:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
@@ -898,7 +898,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  317:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****       {
  475              		.loc 1 317 0 discriminator 3
  476 0098 0EF5806E 		add	lr, lr, #1024
-ARM GAS  /tmp/cc8BsKHo.s 			page 16
+ARM GAS  /tmp/cc38VpmL.s 			page 16
 
 
  477 009c 7045     		cmp	r0, lr
@@ -958,7 +958,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  523 00e4 054F     		ldr	r7, .L46
  524 00e6 0CF10204 		add	r4, ip, #2
  525 00ea 57F82450 		ldr	r5, [r7, r4, lsl #2]
-ARM GAS  /tmp/cc8BsKHo.s 			page 17
+ARM GAS  /tmp/cc38VpmL.s 			page 17
 
 
  526 00ee 25EA0606 		bic	r6, r5, r6
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  366:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
  367:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** /**
  368:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   * @brief  Reads the specified input port pin.
-ARM GAS  /tmp/cc8BsKHo.s 			page 18
+ARM GAS  /tmp/cc38VpmL.s 			page 18
 
 
  369:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   * @param  GPIOx where x can be (A..K) to select the GPIO peripheral for STM32F429X device or
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  595              	HAL_GPIO_WritePin:
  596              	.LFB133:
  392:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
-ARM GAS  /tmp/cc8BsKHo.s 			page 19
+ARM GAS  /tmp/cc38VpmL.s 			page 19
 
 
  393:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** /**
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  621              		.syntax unified
  622              		.thumb
  623              		.thumb_func
-ARM GAS  /tmp/cc8BsKHo.s 			page 20
+ARM GAS  /tmp/cc38VpmL.s 			page 20
 
 
  624              		.fpu fpv4-sp-d16
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  447:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** /**
  448:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   * @brief  Locks GPIO Pins configuration registers.
  449:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   * @note   The locked registers are GPIOx_MODER, GPIOx_OTYPER, GPIOx_OSPEEDR,
-ARM GAS  /tmp/cc8BsKHo.s 			page 21
+ARM GAS  /tmp/cc38VpmL.s 			page 21
 
 
  450:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   *         GPIOx_PUPDR, GPIOx_AFRL and GPIOx_AFRH.
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  477:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****  if((GPIOx->LCKR & GPIO_LCKR_LCKK) != RESET)
  684              		.loc 1 477 0
  685 001c C369     		ldr	r3, [r0, #28]
-ARM GAS  /tmp/cc8BsKHo.s 			page 22
+ARM GAS  /tmp/cc38VpmL.s 			page 22
 
 
  686 001e 13F4803F 		tst	r3, #65536
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  499:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c ****   }
  500:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** }
  501:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
-ARM GAS  /tmp/cc8BsKHo.s 			page 23
+ARM GAS  /tmp/cc38VpmL.s 			page 23
 
 
  502:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** /**
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  764              		.loc 1 498 0
  765 0010 FFF7FEFF 		bl	HAL_GPIO_EXTI_Callback
  766              	.LVL85:
-ARM GAS  /tmp/cc8BsKHo.s 			page 24
+ARM GAS  /tmp/cc38VpmL.s 			page 24
 
 
  500:Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c **** 
@@ -1401,30 +1401,30 @@ ARM GAS  /tmp/cc8BsKHo.s 			page 1
  784              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
  785              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
  786              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
-ARM GAS  /tmp/cc8BsKHo.s 			page 25
+ARM GAS  /tmp/cc38VpmL.s 			page 25
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 stm32f4xx_hal_gpio.c
-     /tmp/cc8BsKHo.s:18     .text.HAL_GPIO_Init:0000000000000000 $t
-     /tmp/cc8BsKHo.s:25     .text.HAL_GPIO_Init:0000000000000000 HAL_GPIO_Init
-     /tmp/cc8BsKHo.s:354    .text.HAL_GPIO_Init:00000000000001a4 $d
-     /tmp/cc8BsKHo.s:362    .text.HAL_GPIO_DeInit:0000000000000000 $t
-     /tmp/cc8BsKHo.s:369    .text.HAL_GPIO_DeInit:0000000000000000 HAL_GPIO_DeInit
-     /tmp/cc8BsKHo.s:547    .text.HAL_GPIO_DeInit:00000000000000fc $d
-     /tmp/cc8BsKHo.s:554    .text.HAL_GPIO_ReadPin:0000000000000000 $t
-     /tmp/cc8BsKHo.s:561    .text.HAL_GPIO_ReadPin:0000000000000000 HAL_GPIO_ReadPin
-     /tmp/cc8BsKHo.s:588    .text.HAL_GPIO_WritePin:0000000000000000 $t
-     /tmp/cc8BsKHo.s:595    .text.HAL_GPIO_WritePin:0000000000000000 HAL_GPIO_WritePin
-     /tmp/cc8BsKHo.s:619    .text.HAL_GPIO_TogglePin:0000000000000000 $t
-     /tmp/cc8BsKHo.s:626    .text.HAL_GPIO_TogglePin:0000000000000000 HAL_GPIO_TogglePin
-     /tmp/cc8BsKHo.s:648    .text.HAL_GPIO_LockPin:0000000000000000 $t
-     /tmp/cc8BsKHo.s:655    .text.HAL_GPIO_LockPin:0000000000000000 HAL_GPIO_LockPin
-     /tmp/cc8BsKHo.s:711    .text.HAL_GPIO_EXTI_Callback:0000000000000000 $t
-     /tmp/cc8BsKHo.s:718    .text.HAL_GPIO_EXTI_Callback:0000000000000000 HAL_GPIO_EXTI_Callback
-     /tmp/cc8BsKHo.s:731    .text.HAL_GPIO_EXTI_IRQHandler:0000000000000000 $t
-     /tmp/cc8BsKHo.s:738    .text.HAL_GPIO_EXTI_IRQHandler:0000000000000000 HAL_GPIO_EXTI_IRQHandler
-     /tmp/cc8BsKHo.s:772    .text.HAL_GPIO_EXTI_IRQHandler:0000000000000018 $d
+     /tmp/cc38VpmL.s:18     .text.HAL_GPIO_Init:0000000000000000 $t
+     /tmp/cc38VpmL.s:25     .text.HAL_GPIO_Init:0000000000000000 HAL_GPIO_Init
+     /tmp/cc38VpmL.s:354    .text.HAL_GPIO_Init:00000000000001a4 $d
+     /tmp/cc38VpmL.s:362    .text.HAL_GPIO_DeInit:0000000000000000 $t
+     /tmp/cc38VpmL.s:369    .text.HAL_GPIO_DeInit:0000000000000000 HAL_GPIO_DeInit
+     /tmp/cc38VpmL.s:547    .text.HAL_GPIO_DeInit:00000000000000fc $d
+     /tmp/cc38VpmL.s:554    .text.HAL_GPIO_ReadPin:0000000000000000 $t
+     /tmp/cc38VpmL.s:561    .text.HAL_GPIO_ReadPin:0000000000000000 HAL_GPIO_ReadPin
+     /tmp/cc38VpmL.s:588    .text.HAL_GPIO_WritePin:0000000000000000 $t
+     /tmp/cc38VpmL.s:595    .text.HAL_GPIO_WritePin:0000000000000000 HAL_GPIO_WritePin
+     /tmp/cc38VpmL.s:619    .text.HAL_GPIO_TogglePin:0000000000000000 $t
+     /tmp/cc38VpmL.s:626    .text.HAL_GPIO_TogglePin:0000000000000000 HAL_GPIO_TogglePin
+     /tmp/cc38VpmL.s:648    .text.HAL_GPIO_LockPin:0000000000000000 $t
+     /tmp/cc38VpmL.s:655    .text.HAL_GPIO_LockPin:0000000000000000 HAL_GPIO_LockPin
+     /tmp/cc38VpmL.s:711    .text.HAL_GPIO_EXTI_Callback:0000000000000000 $t
+     /tmp/cc38VpmL.s:718    .text.HAL_GPIO_EXTI_Callback:0000000000000000 HAL_GPIO_EXTI_Callback
+     /tmp/cc38VpmL.s:731    .text.HAL_GPIO_EXTI_IRQHandler:0000000000000000 $t
+     /tmp/cc38VpmL.s:738    .text.HAL_GPIO_EXTI_IRQHandler:0000000000000000 HAL_GPIO_EXTI_IRQHandler
+     /tmp/cc38VpmL.s:772    .text.HAL_GPIO_EXTI_IRQHandler:0000000000000018 $d
                      .debug_frame:0000000000000010 $d
 
 NO UNDEFINED SYMBOLS

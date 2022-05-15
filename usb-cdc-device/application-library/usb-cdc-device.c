@@ -5,13 +5,14 @@
  *          3. usbd_cdc
  *          4. usbd_core
  *          5. usbd_ctlreq
+ *          6. usbd_ioreq
  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "usb-cdc-device.h"
 #include "usbd_desc.h"
-#include "usbd_def.h"   
-#include "usbd_ctlreq.h"
+// #include "usbd_def.h"   
+#include "usbd_ioreq.h"
 
 /* usbd_cdc_if.c BEGIN---- ---- ---- ---- */
 /** Received data over USB are stored in this buffer      */
@@ -161,29 +162,6 @@ __ALIGN_BEGIN uint8_t USBD_CDC_CfgDesc[USB_CDC_CONFIG_DESC_SIZ] __ALIGN_END =
   HIBYTE(CDC_DATA_FS_MAX_PACKET_SIZE),
   0x00                                        /* bInterval */
 };
-
-
-
-
-
-/* Function Declaration ------------------------------------------------------------------*/
-int8_t CDC_Init_FS(void);
-int8_t CDC_DeInit_FS(void);
-int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
-int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
-int8_t CDC_TransmitCplt_FS(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
-
-uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
-uint8_t USBD_CDC_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
-uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
-uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
-uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev);
-uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length);
-uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length);
-uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
-uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);
-uint8_t *USBD_CDC_GetDeviceQualifierDescriptor(uint16_t *length);
 
 
 USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
@@ -1715,18 +1693,9 @@ USBD_DescHeaderTypeDef *USBD_GetNextDesc(uint8_t *pbuf, uint16_t *ptr)
 
 
 /* usbd_ctlreq.c BEGIN ---- ---- ---- ---- */
-/* Includes ------------------------------------------------------------------*/
-#include "usbd_ctlreq.h"
-#include "usbd_ioreq.h"
 
-static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static void USBD_SetAddress(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static void USBD_GetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static void USBD_GetStatus(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
-static uint8_t USBD_GetLen(uint8_t *buf);
+
+
 
 
 
@@ -2055,13 +2024,12 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
 
 
 /**
-  * @brief  USBD_GetDescriptor
-  *         Handle Get Descriptor requests
+  * @brief  Handle Get Descriptor requests
   * @param  pdev: device instance
   * @param  req: usb request
   * @retval status
   */
-static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   uint16_t len = 0U;
   uint8_t *pbuf = NULL;
@@ -2069,19 +2037,6 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
 
   switch (req->wValue >> 8)
   {
-#if ((USBD_LPM_ENABLED == 1U) || (USBD_CLASS_BOS_ENABLED == 1U))
-    case USB_DESC_TYPE_BOS:
-      if (pdev->pDesc->GetBOSDescriptor != NULL)
-      {
-        pbuf = pdev->pDesc->GetBOSDescriptor(pdev->dev_speed, &len);
-      }
-      else
-      {
-        USBD_CtlError(pdev, req);
-        err++;
-      }
-      break;
-#endif /* (USBD_LPM_ENABLED == 1U) || (USBD_CLASS_BOS_ENABLED == 1U) */
     case USB_DESC_TYPE_DEVICE:
       pbuf = pdev->pDesc->GetDeviceDescriptor(pdev->dev_speed, &len);
       break;
@@ -2089,30 +2044,12 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
     case USB_DESC_TYPE_CONFIGURATION:
       if (pdev->dev_speed == USBD_SPEED_HIGH)
       {
-#ifdef USE_USBD_COMPOSITE
-        if ((uint8_t)(pdev->NumClasses) > 0U)
-        {
-          pbuf   = (uint8_t *)USBD_CMPSIT.GetHSConfigDescriptor(&len);
-        }
-        else
-#endif /* USE_USBD_COMPOSITE */
-        {
-          pbuf = (uint8_t *)pdev->pClass[0]->GetHSConfigDescriptor(&len);
-        }
+        pbuf = (uint8_t *)pdev->pClass[0]->GetHSConfigDescriptor(&len);
         pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
       }
       else
       {
-#ifdef USE_USBD_COMPOSITE
-        if ((uint8_t)(pdev->NumClasses) > 0U)
-        {
-          pbuf   = (uint8_t *)USBD_CMPSIT.GetFSConfigDescriptor(&len);
-        }
-        else
-#endif /* USE_USBD_COMPOSITE */
-        {
-          pbuf   = (uint8_t *)pdev->pClass[0]->GetFSConfigDescriptor(&len);
-        }
+        pbuf   = (uint8_t *)pdev->pClass[0]->GetFSConfigDescriptor(&len);
         pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
       }
       break;
@@ -2193,41 +2130,6 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
           break;
 
         default:
-#if (USBD_SUPPORT_USER_STRING_DESC == 1U)
-          pbuf = NULL;
-
-
-          for (uint32_t idx = 0U; (idx < pdev->NumClasses); idx++)
-          {
-            if (pdev->pClass[idx]->GetUsrStrDescriptor != NULL)
-            {
-              pdev->classId = idx;
-              pbuf = pdev->pClass[idx]->GetUsrStrDescriptor(pdev, LOBYTE(req->wValue), &len);
-
-              if (pbuf == NULL) /* This means that no class recognized the string index */
-              {
-                continue;
-              }
-              else
-              {
-                break;
-              }
-            }
-          }
-
-#endif /* USBD_SUPPORT_USER_STRING_DESC  */
-
-#if (USBD_CLASS_USER_STRING_DESC == 1U)
-          if (pdev->pDesc->GetUserStrDescriptor != NULL)
-          {
-            pbuf = pdev->pDesc->GetUserStrDescriptor(pdev->dev_speed, (req->wValue), &len);
-          }
-          else
-          {
-            USBD_CtlError(pdev, req);
-            err++;
-          }
-#endif /* USBD_SUPPORT_USER_STRING_DESC  */
 
 #if ((USBD_CLASS_USER_STRING_DESC == 0U) && (USBD_SUPPORT_USER_STRING_DESC == 0U))
           USBD_CtlError(pdev, req);
@@ -2240,16 +2142,7 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
     case USB_DESC_TYPE_DEVICE_QUALIFIER:
       if (pdev->dev_speed == USBD_SPEED_HIGH)
       {
-#ifdef USE_USBD_COMPOSITE
-        if ((uint8_t)(pdev->NumClasses) > 0U)
-        {
-          pbuf = (uint8_t *)USBD_CMPSIT.GetDeviceQualifierDescriptor(&len);
-        }
-        else
-#endif /* USE_USBD_COMPOSITE */
-        {
-          pbuf = (uint8_t *)pdev->pClass[0]->GetDeviceQualifierDescriptor(&len);
-        }
+        pbuf = (uint8_t *)pdev->pClass[0]->GetDeviceQualifierDescriptor(&len);
       }
       else
       {
@@ -2261,16 +2154,7 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
     case USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION:
       if (pdev->dev_speed == USBD_SPEED_HIGH)
       {
-#ifdef USE_USBD_COMPOSITE
-        if ((uint8_t)(pdev->NumClasses) > 0U)
-        {
-          pbuf = (uint8_t *)USBD_CMPSIT.GetOtherSpeedConfigDescriptor(&len);
-        }
-        else
-#endif /* USE_USBD_COMPOSITE */
-        {
-          pbuf = (uint8_t *)pdev->pClass[0]->GetOtherSpeedConfigDescriptor(&len);
-        }
+        pbuf = (uint8_t *)pdev->pClass[0]->GetOtherSpeedConfigDescriptor(&len);
         pbuf[1] = USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION;
       }
       else
@@ -2311,13 +2195,12 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
 
 
 /**
-  * @brief  USBD_SetAddress
-  *         Set device address
+  * @brief  Set device address
   * @param  pdev: device instance
   * @param  req: usb request
   * @retval status
   */
-static void USBD_SetAddress(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_SetAddress(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   uint8_t  dev_addr;
 
@@ -2352,16 +2235,15 @@ static void USBD_SetAddress(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 }
 
 /**
-  * @brief  USBD_SetConfig
-  *         Handle Set device configuration request
+  * @brief  Handle Set device configuration request
   * @param  pdev: device instance
   * @param  req: usb request
   * @retval status
   */
-static USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   USBD_StatusTypeDef ret = USBD_OK;
-  static uint8_t cfgidx;
+  uint8_t cfgidx;
 
   cfgidx = (uint8_t)(req->wValue);
 
@@ -2443,13 +2325,12 @@ static USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReq
 }
 
 /**
-  * @brief  USBD_GetConfig
-  *         Handle Get device configuration request
+  * @brief  Handle Get device configuration request
   * @param  pdev: device instance
   * @param  req: usb request
   * @retval status
   */
-static void USBD_GetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_GetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   if (req->wLength != 1U)
   {
@@ -2483,7 +2364,7 @@ static void USBD_GetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
   * @param  req: usb request
   * @retval status
   */
-static void USBD_GetStatus(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_GetStatus(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   switch (pdev->dev_state)
   {
@@ -2524,7 +2405,7 @@ static void USBD_GetStatus(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
   * @param  req: usb request
   * @retval status
   */
-static void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   if (req->wValue == USB_FEATURE_REMOTE_WAKEUP)
   {
@@ -2550,7 +2431,7 @@ static void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
   * @param  req: usb request
   * @retval status
   */
-static void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
   switch (pdev->dev_state)
   {
@@ -2601,8 +2482,7 @@ void USBD_ParseSetupRequest(USBD_SetupReqTypedef *req, uint8_t *pdata)
 
 
 /**
-  * @brief  USBD_CtlError
-  *         Handle USB low level Error
+  * @brief  Handle USB low level Error
   * @param  pdev: device instance
   * @param  req: usb request
   * @retval None
@@ -2655,12 +2535,11 @@ void USBD_GetString(uint8_t *desc, uint8_t *unicode, uint16_t *len)
 
 
 /**
-  * @brief  USBD_GetLen
-  *         return the string length
+  * @brief  Return the string length
    * @param  buf : pointer to the ascii string buffer
   * @retval string length
   */
-static uint8_t USBD_GetLen(uint8_t *buf)
+uint8_t USBD_GetLen(uint8_t *buf)
 {
   uint8_t  len = 0U;
   uint8_t *pbuff = buf;
@@ -2675,3 +2554,140 @@ static uint8_t USBD_GetLen(uint8_t *buf)
 }
 
 /* usbd_ctlreq.c END ---- ---- ---- ---- */
+
+
+/* usbd_ioreq.c BEGIN ---- ---- ---- ---- */
+/**
+  * @brief  USBD_CtlSendData
+  *         send data on the ctl pipe
+  * @param  pdev: device instance
+  * @param  buff: pointer to data buffer
+  * @param  len: length of data to be sent
+  * @retval status
+  */
+USBD_StatusTypeDef USBD_CtlSendData(USBD_HandleTypeDef *pdev,
+                                    uint8_t *pbuf, uint32_t len)
+{
+  /* Set EP0 State */
+  pdev->ep0_state = USBD_EP0_DATA_IN;
+  pdev->ep_in[0].total_length = len;
+
+#ifdef USBD_AVOID_PACKET_SPLIT_MPS
+  pdev->ep_in[0].rem_length = 0U;
+#else
+  pdev->ep_in[0].rem_length = len;
+#endif /* USBD_AVOID_PACKET_SPLIT_MPS */
+
+  /* Start the transfer */
+  (void)USBD_LL_Transmit(pdev, 0x00U, pbuf, len);
+
+  return USBD_OK;
+}
+
+/**
+  * @brief  USBD_CtlContinueSendData
+  *         continue sending data on the ctl pipe
+  * @param  pdev: device instance
+  * @param  buff: pointer to data buffer
+  * @param  len: length of data to be sent
+  * @retval status
+  */
+USBD_StatusTypeDef USBD_CtlContinueSendData(USBD_HandleTypeDef *pdev,
+                                            uint8_t *pbuf, uint32_t len)
+{
+  /* Start the next transfer */
+  (void)USBD_LL_Transmit(pdev, 0x00U, pbuf, len);
+
+  return USBD_OK;
+}
+
+/**
+  * @brief  USBD_CtlPrepareRx
+  *         receive data on the ctl pipe
+  * @param  pdev: device instance
+  * @param  buff: pointer to data buffer
+  * @param  len: length of data to be received
+  * @retval status
+  */
+USBD_StatusTypeDef USBD_CtlPrepareRx(USBD_HandleTypeDef *pdev,
+                                     uint8_t *pbuf, uint32_t len)
+{
+  /* Set EP0 State */
+  pdev->ep0_state = USBD_EP0_DATA_OUT;
+  pdev->ep_out[0].total_length = len;
+
+#ifdef USBD_AVOID_PACKET_SPLIT_MPS
+  pdev->ep_out[0].rem_length = 0U;
+#else
+  pdev->ep_out[0].rem_length = len;
+#endif /* USBD_AVOID_PACKET_SPLIT_MPS */
+
+  /* Start the transfer */
+  (void)USBD_LL_PrepareReceive(pdev, 0U, pbuf, len);
+
+  return USBD_OK;
+}
+
+/**
+  * @brief  USBD_CtlContinueRx
+  *         continue receive data on the ctl pipe
+  * @param  pdev: device instance
+  * @param  buff: pointer to data buffer
+  * @param  len: length of data to be received
+  * @retval status
+  */
+USBD_StatusTypeDef USBD_CtlContinueRx(USBD_HandleTypeDef *pdev,
+                                      uint8_t *pbuf, uint32_t len)
+{
+  (void)USBD_LL_PrepareReceive(pdev, 0U, pbuf, len);
+
+  return USBD_OK;
+}
+
+/**
+  * @brief  USBD_CtlSendStatus
+  *         send zero lzngth packet on the ctl pipe
+  * @param  pdev: device instance
+  * @retval status
+  */
+USBD_StatusTypeDef USBD_CtlSendStatus(USBD_HandleTypeDef *pdev)
+{
+  /* Set EP0 State */
+  pdev->ep0_state = USBD_EP0_STATUS_IN;
+
+  /* Start the transfer */
+  (void)USBD_LL_Transmit(pdev, 0x00U, NULL, 0U);
+
+  return USBD_OK;
+}
+
+/**
+  * @brief  USBD_CtlReceiveStatus
+  *         receive zero lzngth packet on the ctl pipe
+  * @param  pdev: device instance
+  * @retval status
+  */
+USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_HandleTypeDef *pdev)
+{
+  /* Set EP0 State */
+  pdev->ep0_state = USBD_EP0_STATUS_OUT;
+
+  /* Start the transfer */
+  (void)USBD_LL_PrepareReceive(pdev, 0U, NULL, 0U);
+
+  return USBD_OK;
+}
+
+/**
+  * @brief  USBD_GetRxCount
+  *         returns the received data length
+  * @param  pdev: device instance
+  * @param  ep_addr: endpoint address
+  * @retval Rx Data blength
+  */
+uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+{
+  return USBD_LL_GetRxDataSize(pdev, ep_addr);
+}
+
+/* usbd_ioreq.c END ---- ---- ---- ---- */
