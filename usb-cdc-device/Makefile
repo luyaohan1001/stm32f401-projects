@@ -61,14 +61,14 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 Core/Src/system_stm32f4xx.c \
-Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c \
-Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c \
 application-library/usb-cdc-device.c 
 
 # USB_DEVICE/App/usb_device.c \  # merged into usbd_cdc_device.c on the MX_USB_DEVICE_Init function. 
 # USB_DEVICE/App/usbd_cdc_if.c \ # merged into usbd_cdc_device.c on the Transmit/Receive APIs
 # Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c  \
+# Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c \
+# Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c \
 
 # ASM sources
 ASM_SOURCES =  \
