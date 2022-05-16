@@ -6,12 +6,10 @@
 /* usb_device.h ---- ---- ---- ---- */
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// #include "usbd_conf.h"
 
 #ifndef __USBD_DEF_H
 #define __USBD_DEF_H
@@ -163,14 +161,6 @@
 #define USBD_DESC_ECM_BCD_LOW                           0x00U
 #define USBD_DESC_ECM_BCD_HIGH                          0x10U
 #endif /* USE_USBD_COMPOSITE */
-/**
-  * @}
-  */
-
-
-/** @defgroup USBD_DEF_Exported_TypesDefinitions
-  * @{
-  */
 
 typedef  struct  usb_setup_req
 {
@@ -245,7 +235,7 @@ typedef struct _Device_cb
 
 } USBD_ClassTypeDef;
 
-/* Following USB Device Speed */
+/* USB Device Speed */
 typedef enum
 {
   USBD_SPEED_HIGH  = 0U,
@@ -253,7 +243,7 @@ typedef enum
   USBD_SPEED_LOW   = 2U,
 } USBD_SpeedTypeDef;
 
-/* Following USB Device status */
+/* USB Device status */
 typedef enum
 {
   USBD_OK = 0U,
@@ -334,10 +324,12 @@ typedef struct
 } USBD_CompositeElementTypeDef;
 #endif /* USE_USBD_COMPOSITE */
 
+
+
 /* USB Device handle structure */
 typedef struct _USBD_HandleTypeDef
 {
-  uint8_t                 id;
+  uint8_t                 id;                /* DEVICE_FS or DEVICE_HS */
   uint32_t                dev_config;
   uint32_t                dev_default_config;
   uint32_t                dev_config_status;
@@ -383,15 +375,8 @@ typedef enum
   RESPONSE_AVAILABLE = 0x01,
   CONNECTION_SPEED_CHANGE = 0x2A
 } USBD_CDC_NotifCodeTypeDef;
-/**
-  * @}
-  */
 
 
-
-/** @defgroup USBD_DEF_Exported_Macros
-  * @{
-  */
 __STATIC_INLINE uint16_t SWAPBYTE(uint8_t *addr)
 {
   uint16_t _SwapVal, _Byte1, _Byte2;
@@ -405,6 +390,7 @@ __STATIC_INLINE uint16_t SWAPBYTE(uint8_t *addr)
 
   return _SwapVal;
 }
+
 
 #ifndef LOBYTE
 #define LOBYTE(x)  ((uint8_t)((x) & 0x00FFU))
@@ -547,25 +533,17 @@ struct USB_Device_Handle
 };
 
 /** USB Device initialization function. */
-void usb_device_init(void); // equvilent to  void MX_USB_DEVICE_Init(void)
+void usb_device_init(void);   // equvilent to  void MX_USB_DEVICE_Init(void)
 /* usb_device.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
 /* usbd_cdc_if.h BEGIN---- ---- ---- ---- ---- ---- ---- ---- */
-
-
 /** CDC Interface callback. */
 // extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
-
 uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 /* usbd_cdc_if.h END---- ---- ---- ---- ---- ---- ---- ---- */
 
 
 /* usbd_cdc.h END ---- ---- ---- ---- ---- ---- ---- ---- */
-/* Includes ------------------------------------------------------------------*/
-
-
-
-
 typedef struct
 {
   uint32_t bitrate;
@@ -610,13 +588,11 @@ uint8_t USBD_CDC_SetTxBuffer(USBD_HandleTypeDef *pdev, uint8_t *pbuff,
 uint8_t USBD_CDC_SetRxBuffer(USBD_HandleTypeDef *pdev, uint8_t *pbuff);
 uint8_t USBD_CDC_ReceivePacket(USBD_HandleTypeDef *pdev);
 uint8_t USBD_CDC_TransmitPacket(USBD_HandleTypeDef *pdev);
-
-
 /* usbd_cdc.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
+
+
 /* usbd_core.h BEGIN ---- ---- ---- ---- ---- ---- ---- ---- */
-
-
 USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev, USBD_DescriptorsTypeDef *pdesc, uint8_t id);
 USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_Start(USBD_HandleTypeDef *pdev);
@@ -687,13 +663,6 @@ USBD_DescHeaderTypeDef *USBD_GetNextDesc(uint8_t *pbuf, uint16_t *ptr);
 /* ---------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------*/
-
-int8_t CDC_Init_FS(void);
-int8_t CDC_DeInit_FS(void);
-int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
-int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
-int8_t CDC_TransmitCplt_FS(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
-
 /* Initializes the CDC media low layer over the FS USB IP */
 int8_t CDC_Init_FS(void);
 
@@ -788,8 +757,7 @@ uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
 uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev);
 
 /**
-  * @brief  USBD_CDC_GetFSCfgDesc
-  *         Return configuration descriptor
+  * @brief  Get configuration descriptor
   * @param  length : pointer data length
   * @retval pointer to descriptor buffer
   */
