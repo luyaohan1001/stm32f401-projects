@@ -13,7 +13,7 @@ The study can begin by merging:
 
 # USB Classes
 | Base | Class      | Descriptor Usage Description                       |
-|------------------------------------------------------------------------|
+|------|------------|----------------------------------------------------|
 | 00h  | Device     | Use class information in the Interface Descriptors |
 | 01h  | Interface  | Audio                                              |
 | 02h  | Both       | Communications and CDC Control                     |
