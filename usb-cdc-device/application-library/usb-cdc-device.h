@@ -28,16 +28,6 @@
 #define USBD_MAX_NUM_CONFIGURATION                      1U
 #endif /* USBD_MAX_NUM_CONFIGURATION */
 
-#ifdef USE_USBD_COMPOSITE
-#ifndef USBD_MAX_SUPPORTED_CLASS
-#define USBD_MAX_SUPPORTED_CLASS                       4U
-#endif /* USBD_MAX_SUPPORTED_CLASS */
-#else
-#ifndef USBD_MAX_SUPPORTED_CLASS
-#define USBD_MAX_SUPPORTED_CLASS                       1U
-#endif /* USBD_MAX_SUPPORTED_CLASS */
-#endif /* USE_USBD_COMPOSITE */
-
 #ifndef USBD_MAX_CLASS_ENDPOINTS
 #define USBD_MAX_CLASS_ENDPOINTS                       5U
 #endif /* USBD_MAX_CLASS_ENDPOINTS */
@@ -329,7 +319,7 @@ typedef struct
 /* USB Device handle structure */
 typedef struct _USBD_HandleTypeDef
 {
-  uint8_t                 id;                /* DEVICE_FS or DEVICE_HS */
+  uint8_t                 id;                   /* DEVICE_FS or DEVICE_HS */
   uint32_t                dev_config;
   uint32_t                dev_default_config;
   uint32_t                dev_config_status;
@@ -348,17 +338,17 @@ typedef struct _USBD_HandleTypeDef
 
   USBD_SetupReqTypedef    request;
   USBD_DescriptorsTypeDef *pDesc;
-  USBD_ClassTypeDef       *pClass[USBD_MAX_SUPPORTED_CLASS];
+  USBD_ClassTypeDef       *pClass;          /* &USBD_CDC */
   void                    *pClassData;
-  void                    *pClassDataCmsit[USBD_MAX_SUPPORTED_CLASS];
-  void                    *pUserData[USBD_MAX_SUPPORTED_CLASS];
+  void                    *pClassDataCmsit[1];
+  void                    *pUserData[1];
   void                    *pData;
   void                    *pBosDesc;
   void                    *pConfDesc;
   uint32_t                classId;
   uint32_t                NumClasses;
 #ifdef USE_USBD_COMPOSITE
-  USBD_CompositeElementTypeDef tclasslist[USBD_MAX_SUPPORTED_CLASS];
+  USBD_CompositeElementTypeDef tclasslist[1];
 #endif /* USE_USBD_COMPOSITE */
 } USBD_HandleTypeDef;
 
@@ -521,10 +511,10 @@ struct USB_Device_Handle
 
   USBD_SetupReqTypedef    request;
   USBD_DescriptorsTypeDef *pDesc;
-  USBD_ClassTypeDef       *pClass[USBD_MAX_SUPPORTED_CLASS];
+  USBD_ClassTypeDef       *pClass[1];
   void                    *pClassData;
-  void                    *pClassDataCmsit[USBD_MAX_SUPPORTED_CLASS];
-  void                    *pUserData[USBD_MAX_SUPPORTED_CLASS];
+  void                    *pClassDataCmsit[1];
+  void                    *pUserData[1];
   void                    *pData;
   void                    *pBosDesc;
   void                    *pConfDesc;
@@ -537,11 +527,8 @@ void usb_device_init(void);   // equvilent to  void MX_USB_DEVICE_Init(void)
 /* usb_device.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
 /* usbd_cdc_if.h BEGIN---- ---- ---- ---- ---- ---- ---- ---- */
-/** CDC Interface callback. */
-// extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 /* usbd_cdc_if.h END---- ---- ---- ---- ---- ---- ---- ---- */
-
 
 /* usbd_cdc.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 typedef struct
@@ -624,21 +611,21 @@ USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_LL_DeInit(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev);
-USBD_StatusTypeDef USBD_LL_Stop(USBD_HandleTypeDef *pdev);
+void USBD_LL_Stop(USBD_HandleTypeDef *pdev);
 
-USBD_StatusTypeDef USBD_LL_OpenEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr,
+void USBD_LL_OpenEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr,
                                   uint8_t ep_type, uint16_t ep_mps);
 
-USBD_StatusTypeDef USBD_LL_CloseEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
+void USBD_LL_CloseEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 USBD_StatusTypeDef USBD_LL_FlushEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 USBD_StatusTypeDef USBD_LL_StallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
-USBD_StatusTypeDef USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
+void USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 USBD_StatusTypeDef USBD_LL_SetUSBAddress(USBD_HandleTypeDef *pdev, uint8_t dev_addr);
 
-USBD_StatusTypeDef USBD_LL_Transmit(USBD_HandleTypeDef *pdev, uint8_t ep_addr,
+void USBD_LL_Transmit(USBD_HandleTypeDef *pdev, uint8_t ep_addr,
                                     uint8_t *pbuf, uint32_t size);
 
-USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_addr,
+void USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_addr,
                                           uint8_t *pbuf, uint32_t size);
 
 #ifdef USBD_HS_TESTMODE_ENABLE
@@ -655,13 +642,6 @@ USBD_DescHeaderTypeDef *USBD_GetNextDesc(uint8_t *pbuf, uint16_t *ptr);
 
 /* usbd_core.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
-
-
-/* ---------------------------------------------------------------------------------------*/
-/* ---------------------------------------------------------------------------------------*/
-/* ---------------------------------------------------------------------------------------*/
-/* ---------------------------------------------------------------------------------------*/
-/* ---------------------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------------*/
 /* Initializes the CDC media low layer over the FS USB IP */
 int8_t CDC_Init_FS(void);
@@ -1056,76 +1036,38 @@ uint8_t USBD_GetLen(uint8_t *buf);
 
 
 /* usbd_ioreq.h BEGIN ---- ---- ---- ---- ---- ---- ---- ---- */
-USBD_StatusTypeDef USBD_CtlSendData(USBD_HandleTypeDef *pdev,
+void USBD_CtlSendData(USBD_HandleTypeDef *pdev,
                                     uint8_t *pbuf, uint32_t len);
 
-USBD_StatusTypeDef USBD_CtlContinueSendData(USBD_HandleTypeDef *pdev,
+void USBD_CtlContinueSendData(USBD_HandleTypeDef *pdev,
                                             uint8_t *pbuf, uint32_t len);
 
-USBD_StatusTypeDef USBD_CtlPrepareRx(USBD_HandleTypeDef *pdev,
+void USBD_CtlPrepareRx(USBD_HandleTypeDef *pdev,
                                      uint8_t *pbuf, uint32_t len);
 
 USBD_StatusTypeDef USBD_CtlContinueRx(USBD_HandleTypeDef *pdev,
                                       uint8_t *pbuf, uint32_t len);
 
-USBD_StatusTypeDef USBD_CtlSendStatus(USBD_HandleTypeDef *pdev);
+void USBD_CtlSendStatus(USBD_HandleTypeDef *pdev);
 USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_HandleTypeDef *pdev);
 
 uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 /* usbd_ioreq.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
-/* usbd_conf.h */
 
 
-/* USER CODE BEGIN INCLUDE */
-
-/* USER CODE END INCLUDE */
-
-/** @addtogroup USBD_OTG_DRIVER
-  * @brief Driver for Usb device.
-  * @{
-  */
-
-/** @defgroup USBD_CONF USBD_CONF
-  * @brief Configuration file for Usb otg low level driver.
-  * @{
-  */
-
-/** @defgroup USBD_CONF_Exported_Variables USBD_CONF_Exported_Variables
-  * @brief Public variables.
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-/** @defgroup USBD_CONF_Exported_Defines USBD_CONF_Exported_Defines
-  * @brief Defines for configuration of the Usb device.
-  * @{
-  */
-
-/*---------- -----------*/
+/* usbd_conf.h BEGIN ---- ---- ---- ---- ---- ---- ---- ---- */
 #define USBD_MAX_NUM_INTERFACES     1U
-/*---------- -----------*/
 #define USBD_MAX_NUM_CONFIGURATION     1U
-/*---------- -----------*/
 #define USBD_MAX_STR_DESC_SIZ     512U
-/*---------- -----------*/
 #define USBD_DEBUG_LEVEL     0U
-/*---------- -----------*/
 #define USBD_LPM_ENABLED     0U
-/*---------- -----------*/
 #define USBD_SELF_POWERED     1U
 
 /****************************************/
 /* #define for FS and HS identification */
 #define DEVICE_FS 		0
 #define DEVICE_HS 		1
-
-/**
-  * @}
-  */
 
 /** @defgroup USBD_CONF_Exported_Macros USBD_CONF_Exported_Macros
   * @brief Aliases.
@@ -1135,12 +1077,6 @@ uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 /** Alias for memory allocation. */
 
 #define USBD_malloc         (void *)USBD_static_malloc
-
-/** Alias for memory release. */
-#define USBD_free           USBD_static_free
-
-/** Alias for memory set. */
-#define USBD_memset         memset
 
 /** Alias for memory copy. */
 #define USBD_memcpy         memcpy
@@ -1174,42 +1110,26 @@ uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 #define USBD_DbgLog(...)
 #endif /* (USBD_DEBUG_LEVEL > 2U) */
 
-/**
-  * @}
-  */
 
-/** @defgroup USBD_CONF_Exported_Types USBD_CONF_Exported_Types
-  * @brief Types.
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-/** @defgroup USBD_CONF_Exported_FunctionsPrototype USBD_CONF_Exported_FunctionsPrototype
-  * @brief Declaration of public functions for Usb device.
-  * @{
-  */
-
-/* Exported functions -------------------------------------------------------*/
 void *USBD_static_malloc(uint32_t size);
 void USBD_static_free(void *p);
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
+/* usbd_conf.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
 
-/* usbd_conf.h */
+
+/* usbd_desc.h BEGIN ---- ---- ---- ---- ---- ---- ---- ---- */
+#define         DEVICE_ID1          (UID_BASE)
+#define         DEVICE_ID2          (UID_BASE + 0x4)
+#define         DEVICE_ID3          (UID_BASE + 0x8)
+
+#define  USB_SIZ_STRING_SERIAL       0x1A
+
+/** Descriptor for the Usb device. */
+extern USBD_DescriptorsTypeDef FS_Desc;
+
+
+/* usbd_desc.h END ---- ---- ---- ---- ---- ---- ---- ---- */
 
 
 #endif /* __USB_CDC_DEVICE_H */

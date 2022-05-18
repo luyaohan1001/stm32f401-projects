@@ -40,5 +40,3 @@ The study can begin by merging:
 
 
 
-
-

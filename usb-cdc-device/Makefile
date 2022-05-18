@@ -39,7 +39,6 @@ C_SOURCES =  \
 Core/Src/main.c \
 Core/Src/stm32f4xx_it.c \
 Core/Src/stm32f4xx_hal_msp.c \
-USB_DEVICE/App/usbd_desc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
@@ -69,6 +68,7 @@ application-library/usb-cdc-device.c
 # Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c \
 # Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c \
 # USB_DEVICE/Target/usbd_conf.c \
+# USB_DEVICE/App/usbd_desc.c \
 
 # ASM sources
 ASM_SOURCES =  \
