@@ -33,8 +33,7 @@ uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
 uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
 /* USB Device Core handle declaration. */
-USBD_HandleTypeDef hUsbDeviceFS;
-USBD_HandleTypeDef* p_usbd_handle = &hUsbDeviceFS;
+USBD_Handle_t hUsbDeviceFS;
 
 /**
   * @brief Device qualifier
@@ -288,7 +287,7 @@ int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
   strcat((char*) received_msg, (char *)" echoed.\n");
   memset(Buf, '\0', len);   // clear the Buf also
-  CDC_Transmit_FS(received_msg, sizeof(received_msg));
+  usbd_transmit(received_msg, sizeof(received_msg));
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -297,21 +296,25 @@ int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   * @brief  Trasmit Data to send over USB IN endpoint are sent over CDC interface
   * @param  Buf: Buffer of data to be sent
   * @param  Len: Number of data to be sent (in bytes)
-  * @retval USBD_OK if all operations are OK else USBD_FAIL or USBD_BUSY
+  * @retval void
   */
-uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
+void usbd_transmit(uint8_t* Buf, uint16_t Len)
 {
-  uint8_t result = USBD_OK;
-  /* USER CODE BEGIN 7 */
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
-
-  if (hcdc->TxState != 0){
-    return USBD_BUSY;
-  }
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
-  result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
-  /* USER CODE END 7 */
-  return result;
+
+  // start transmission.
+  USBD_Handle_t* p_usbd_instance = &hUsbDeviceFS;
+  
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
+  if (hcdc->TxState == 0U)
+  {
+    /* Tx Transfer in progress */
+    hcdc->TxState = 1U;
+    /* Update the packet total length */
+    p_usbd_instance->ep_in[CDC_IN_EP & 0xFU].total_length = hcdc->TxLength;
+    /* Transmit next packet */
+    USBD_LL_Transmit(p_usbd_instance, CDC_IN_EP, hcdc->TxBuffer, hcdc->TxLength);
+  }
 }
 
 /**
@@ -333,167 +336,87 @@ int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
   return result;
 }
 
-/* usbd_cdc_if.c END ---- ---- ---- ---- */
-
-
-
-/* usb_device.c BEGIN ---- ---- ---- ---- */
 
 /**
   * @brief Init USB device Library, add supported class and start the library
   */
 void usb_device_init(void)
 {
-  /* Init Device Library, add supported class and start the library. */
-  // 1. USBD_Init(&p_usbd_handle, &FS_Desc, DEVICE_FS);
-  /* Unlink previous class*/
-  p_usbd_handle->pClass = NULL;
-  p_usbd_handle->pUserData[0] = NULL;
-  p_usbd_handle->pConfDesc = NULL;
-
-  /* Assign USBD Descriptors */
-  p_usbd_handle->pDesc = &FS_Desc;
-
-  /* Set Device initial State */
-  p_usbd_handle->dev_state = USBD_STATE_DEFAULT;  // DEFAULT - ADDRESSED - CONFIGURED - SUSPEND
-  p_usbd_handle->id = DEVICE_FS; // DEVICE_FS (0)
-
-  /* Initialize low level driver */
-  // USBD_LL_Init(p_usbd_handle); // configure the TX or the RX FIFO of the new defined endport
-                                  // From usbd_conf.c expanded below. 
-
-  /* Init USB Ip. */
-  extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
-  if (p_usbd_handle->id == DEVICE_FS) {
-  /* Link the driver to the stack. */
-  hpcd_USB_OTG_FS.pData = p_usbd_handle;
-                                           /* pData is the pointer to upper stack handler. */
-  p_usbd_handle->pData = &hpcd_USB_OTG_FS; /* connect usbd_handle with the lower-level pcd_handle*/
-
-  hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
-  hpcd_USB_OTG_FS.Init.dev_endpoints = 4;
-  hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
-  hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
-  hpcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.vbus_sensing_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
-
-  HAL_PCD_Init(&hpcd_USB_OTG_FS);
-  /* in stm32f4xx_hal_pcd_ex.h */ 
-  HAL_PCDEx_SetRxFiFo(&hpcd_USB_OTG_FS, 0x80);    /* set RX FIFO size 0x80*/
-  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_FS, 0, 0x40); /* set TX FIFO 0 with size 0x40 */ 
-  HAL_PCDEx_SetTxFiFo(&hpcd_USB_OTG_FS, 1, 0x80); /* set TX FIFO 1 with size 0x80 */
-  }
-  /*---------------------------------------------------------------------------*/
-  // 2. USBD_RegisterClass(&p_usbd_handle, &USBD_CDC); // usbd_core.c
-  
-  /* link the class to the USB Device handle */
-  p_usbd_handle->pClass = &USBD_CDC;
-
-  /* Get Device Configuration Descriptor */
-  /*
-  uint16_t len = 0U;
-  if (p_usbd_handle->pClass[p_usbd_handle->classId]->GetFSConfigDescriptor != NULL)
-  {
-    // pClass is of type USBD_ClassTypeDef.
-    // p_usbd_handle is of type USBD_HandleTypeDef
-    // The actual GetFSConfigDescriptor is implemented as  USBD_CDC_GetFSCfgDesc(uint16_t *length) in usbd_cdc.c
-    p_usbd_handle->pConfDesc = (void *)p_usbd_handle->pClass[p_usbd_handle->classId]->GetFSConfigDescriptor(&len);
-  }
-  */
-  // p_usbd_handle->pConfDesc = (void *)p_usbd_handle->pClass[p_usbd_handle->classId]->GetFSConfigDescriptor(0);
-  // p_usbd_handle->pConfDesc = (void *)p_usbd_handle->pClass->GetFSConfigDescriptor(0); 
-  /* p_usbd_handle->pClass = (USBD_CDC)*/
-  p_usbd_handle->pConfDesc = (&USBD_CDC)->GetFSConfigDescriptor(0) ;
-
-  /* Increment the NumClasses */
-  // p_usbd_handle->NumClasses ++;
-
-  // 3. USBD_CDC_RegisterInterface(&p_usbd_handle, &USBD_Interface_fops_FS);
-  p_usbd_handle->pUserData[p_usbd_handle->classId] = &USBD_Interface_fops_FS;
-
-  // 4. USBD_Startp_usbd_handle;
-  // HAL_PCD_Start(p_usbd_handle->pData);  /* p_usbd_handle->pData has type void */
-                                           /* pData = hpcd_USB_OTG_FS was assigned in step 1. USBD_LL_Init */
-  HAL_PCD_Start(&hpcd_USB_OTG_FS);
+  USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS);
+  USBD_RegisterClass(&hUsbDeviceFS, &USBD_CDC); // usbd_core.c
+  USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
+  USBD_Start(&hUsbDeviceFS);  /* p_usbd_handle->pData has type void */
 }
-/* usb_device.c END ---- ---- ---- ---- */
 
-
-
-/* usbd_cdc.c START ---- ---- ---- ---- */
 /**
   * @brief  Initialize the CDC interface
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  cfgidx: Configuration index
   * @retval status
   */
-uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+uint8_t USBD_CDC_Init(USBD_Handle_t *p_usbd_instance, uint8_t cfgidx)
 {
   UNUSED(cfgidx);
-  USBD_CDC_HandleTypeDef *hcdc;
+  USBD_CDC_Buffer_t *hcdc;
 
-  hcdc = (USBD_CDC_HandleTypeDef *)USBD_malloc(sizeof(USBD_CDC_HandleTypeDef));
+  hcdc = (USBD_CDC_Buffer_t *)USBD_malloc(sizeof(USBD_CDC_Buffer_t));
 
   if (hcdc == NULL)
   {
-    pdev->pClassDataCmsit[pdev->classId] = NULL;
+    p_usbd_instance->pClassDataCmsit = NULL;
     return (uint8_t)USBD_EMEM;
   }
 
-  memset(hcdc, 0, sizeof(USBD_CDC_HandleTypeDef));
+  memset(hcdc, 0, sizeof(USBD_CDC_Buffer_t));
 
-  pdev->pClassDataCmsit[pdev->classId] = (void *)hcdc;
-  pdev->pClassData = pdev->pClassDataCmsit[pdev->classId];
+  p_usbd_instance->pClassDataCmsit = (void *)hcdc;
+  p_usbd_instance->pClassData = p_usbd_instance->pClassDataCmsit;
 
   /* High Speed */
-  if (pdev->dev_speed == USBD_SPEED_HIGH)
+  if (p_usbd_instance->dev_speed == USBD_SPEED_HIGH)
   {
     /* Open EP IN */
-    USBD_LL_OpenEP(pdev, CDC_IN_EP, USBD_EP_TYPE_BULK,
+    USBD_LL_OpenEP(p_usbd_instance, CDC_IN_EP, USBD_EP_TYPE_BULK,
                          CDC_DATA_HS_IN_PACKET_SIZE);
 
-    pdev->ep_in[CDC_IN_EP & 0xFU].is_used = 1U;
+    p_usbd_instance->ep_in[CDC_IN_EP & 0xFU].is_used = 1U;
 
     /* Open EP OUT */
-    USBD_LL_OpenEP(pdev, CDC_OUT_EP, USBD_EP_TYPE_BULK,
+    USBD_LL_OpenEP(p_usbd_instance, CDC_OUT_EP, USBD_EP_TYPE_BULK,
                          CDC_DATA_HS_OUT_PACKET_SIZE);
 
-    pdev->ep_out[CDC_OUT_EP & 0xFU].is_used = 1U;
+    p_usbd_instance->ep_out[CDC_OUT_EP & 0xFU].is_used = 1U;
 
     /* Set bInterval for CDC CMD Endpoint */
-    pdev->ep_in[CDC_CMD_EP & 0xFU].bInterval = CDC_HS_BINTERVAL;
+    p_usbd_instance->ep_in[CDC_CMD_EP & 0xFU].bInterval = CDC_HS_BINTERVAL;
   }
   /* Low/Full Speed */
   else
   {
     /* Open EP IN */
-    USBD_LL_OpenEP(pdev, CDC_IN_EP, USBD_EP_TYPE_BULK,
+    USBD_LL_OpenEP(p_usbd_instance, CDC_IN_EP, USBD_EP_TYPE_BULK,
                          CDC_DATA_FS_IN_PACKET_SIZE);
 
-    pdev->ep_in[CDC_IN_EP & 0xFU].is_used = 1U;
+    p_usbd_instance->ep_in[CDC_IN_EP & 0xFU].is_used = 1U;
 
     /* Open EP OUT */
-    USBD_LL_OpenEP(pdev, CDC_OUT_EP, USBD_EP_TYPE_BULK,
+    USBD_LL_OpenEP(p_usbd_instance, CDC_OUT_EP, USBD_EP_TYPE_BULK,
                          CDC_DATA_FS_OUT_PACKET_SIZE);
 
-    pdev->ep_out[CDC_OUT_EP & 0xFU].is_used = 1U;
+    p_usbd_instance->ep_out[CDC_OUT_EP & 0xFU].is_used = 1U;
 
     /* Set bInterval for CMD Endpoint */
-    pdev->ep_in[CDC_CMD_EP & 0xFU].bInterval = CDC_FS_BINTERVAL;
+    p_usbd_instance->ep_in[CDC_CMD_EP & 0xFU].bInterval = CDC_FS_BINTERVAL;
   }
 
   /* Open Command IN EP */
-  USBD_LL_OpenEP(pdev, CDC_CMD_EP, USBD_EP_TYPE_INTR, CDC_CMD_PACKET_SIZE);
-  pdev->ep_in[CDC_CMD_EP & 0xFU].is_used = 1U;
+  USBD_LL_OpenEP(p_usbd_instance, CDC_CMD_EP, USBD_EP_TYPE_INTR, CDC_CMD_PACKET_SIZE);
+  p_usbd_instance->ep_in[CDC_CMD_EP & 0xFU].is_used = 1U;
 
   hcdc->RxBuffer = NULL;
 
   /* Init  physical Interface components */
-  ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Init();
+  ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->Init();
 
   /* Init Xfer states */
   hcdc->TxState = 0U;
@@ -504,16 +427,16 @@ uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
     return (uint8_t)USBD_EMEM;
   }
 
-  if (pdev->dev_speed == USBD_SPEED_HIGH)
+  if (p_usbd_instance->dev_speed == USBD_SPEED_HIGH)
   {
     /* Prepare Out endpoint to receive next packet */
-    USBD_LL_PrepareReceive(pdev, CDC_OUT_EP, hcdc->RxBuffer,
+    USBD_LL_PrepareReceive(p_usbd_instance, CDC_OUT_EP, hcdc->RxBuffer,
                                  CDC_DATA_HS_OUT_PACKET_SIZE);
   }
   else
   {
     /* Prepare Out endpoint to receive next packet */
-    USBD_LL_PrepareReceive(pdev, CDC_OUT_EP, hcdc->RxBuffer,
+    USBD_LL_PrepareReceive(p_usbd_instance, CDC_OUT_EP, hcdc->RxBuffer,
                                  CDC_DATA_FS_OUT_PACKET_SIZE);
   }
 
@@ -523,34 +446,34 @@ uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 /**
   * @brief  USBD_CDC_Init
   *         DeInitialize the CDC layer
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  cfgidx: Configuration index
   * @retval status
   */
-uint8_t USBD_CDC_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+uint8_t USBD_CDC_DeInit(USBD_Handle_t *p_usbd_instance, uint8_t cfgidx)
 {
   UNUSED(cfgidx);
 
   /* Close EP IN */
-  USBD_LL_CloseEP(pdev, CDC_IN_EP);
-  pdev->ep_in[CDC_IN_EP & 0xFU].is_used = 0U;
+  USBD_LL_CloseEP(p_usbd_instance, CDC_IN_EP);
+  p_usbd_instance->ep_in[CDC_IN_EP & 0xFU].is_used = 0U;
 
   /* Close EP OUT */
-  USBD_LL_CloseEP(pdev, CDC_OUT_EP);
-  pdev->ep_out[CDC_OUT_EP & 0xFU].is_used = 0U;
+  USBD_LL_CloseEP(p_usbd_instance, CDC_OUT_EP);
+  p_usbd_instance->ep_out[CDC_OUT_EP & 0xFU].is_used = 0U;
 
   /* Close Command IN EP */
-  USBD_LL_CloseEP(pdev, CDC_CMD_EP);
-  pdev->ep_in[CDC_CMD_EP & 0xFU].is_used = 0U;
-  pdev->ep_in[CDC_CMD_EP & 0xFU].bInterval = 0U;
+  USBD_LL_CloseEP(p_usbd_instance, CDC_CMD_EP);
+  p_usbd_instance->ep_in[CDC_CMD_EP & 0xFU].is_used = 0U;
+  p_usbd_instance->ep_in[CDC_CMD_EP & 0xFU].bInterval = 0U;
 
   /* DeInit  physical Interface components */
-  if (pdev->pClassDataCmsit[pdev->classId] != NULL)
+  if (p_usbd_instance->pClassDataCmsit != NULL)
   {
-    ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->DeInit();
-    USBD_static_free(pdev->pClassDataCmsit[pdev->classId]);
-    pdev->pClassDataCmsit[pdev->classId] = NULL;
-    pdev->pClassData = NULL;
+    ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->DeInit();
+    USBD_static_free(p_usbd_instance->pClassDataCmsit);
+    p_usbd_instance->pClassDataCmsit = NULL;
+    p_usbd_instance->pClassData = NULL;
   }
 
   return (uint8_t)USBD_OK;
@@ -559,14 +482,14 @@ uint8_t USBD_CDC_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 /**
   * @brief  USBD_CDC_Setup
   *         Handle the CDC specific requests
-  * @param  pdev: instance
+  * @param  p_usbd_instance: instance
   * @param  req: usb requests
   * @retval status
   */
-uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev,
+uint8_t USBD_CDC_Setup(USBD_Handle_t *p_usbd_instance,
                               USBD_SetupReqTypedef *req)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
   uint16_t len;
   uint8_t ifalt = 0U;
   uint16_t status_info = 0U;
@@ -584,24 +507,24 @@ uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev,
       {
         if ((req->bmRequest & 0x80U) != 0U)
         {
-          ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Control(req->bRequest,
+          ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->Control(req->bRequest,
                                                                            (uint8_t *)hcdc->data,
                                                                            req->wLength);
 
           len = MIN(CDC_REQ_MAX_DATA_SIZE, req->wLength);
-          USBD_CtlSendData(pdev, (uint8_t *)hcdc->data, len);
+          USBD_CtlSendData(p_usbd_instance, (uint8_t *)hcdc->data, len);
         }
         else
         {
           hcdc->CmdOpCode = req->bRequest;
           hcdc->CmdLength = (uint8_t)MIN(req->wLength, USB_MAX_EP0_SIZE);
 
-          USBD_CtlPrepareRx(pdev, (uint8_t *)hcdc->data, hcdc->CmdLength);
+          USBD_CtlPrepareRx(p_usbd_instance, (uint8_t *)hcdc->data, hcdc->CmdLength);
         }
       }
       else
       {
-        ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Control(req->bRequest,
+        ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->Control(req->bRequest,
                                                                          (uint8_t *)req, 0U);
       }
       break;
@@ -610,33 +533,33 @@ uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev,
       switch (req->bRequest)
       {
         case USB_REQ_GET_STATUS:
-          if (pdev->dev_state == USBD_STATE_CONFIGURED)
+          if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
           {
-            USBD_CtlSendData(pdev, (uint8_t *)&status_info, 2U);
+            USBD_CtlSendData(p_usbd_instance, (uint8_t *)&status_info, 2U);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             ret = USBD_FAIL;
           }
           break;
 
         case USB_REQ_GET_INTERFACE:
-          if (pdev->dev_state == USBD_STATE_CONFIGURED)
+          if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
           {
-            USBD_CtlSendData(pdev, &ifalt, 1U);
+            USBD_CtlSendData(p_usbd_instance, &ifalt, 1U);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             ret = USBD_FAIL;
           }
           break;
 
         case USB_REQ_SET_INTERFACE:
-          if (pdev->dev_state != USBD_STATE_CONFIGURED)
+          if (p_usbd_instance->dev_state != USBD_STATE_CONFIGURED)
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             ret = USBD_FAIL;
           }
           break;
@@ -645,14 +568,14 @@ uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev,
           break;
 
         default:
-          USBD_CtlError(pdev, req);
+          USBD_CtlError(p_usbd_instance, req);
           ret = USBD_FAIL;
           break;
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       ret = USBD_FAIL;
       break;
   }
@@ -664,38 +587,38 @@ uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev,
 /**
   * @brief  USBD_CDC_DataIn
   *         Data sent on non-control IN endpoint
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  epnum: endpoint number
   * @retval status
   */
-uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
+uint8_t USBD_CDC_DataIn(USBD_Handle_t *p_usbd_instance, uint8_t epnum)
 {
-  USBD_CDC_HandleTypeDef *hcdc;
-  PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef *)pdev->pData;
+  USBD_CDC_Buffer_t *hcdc;
+  PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef *)p_usbd_instance->pData;
 
-  if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+  if (p_usbd_instance->pClassDataCmsit == NULL)
   {
     return (uint8_t)USBD_FAIL;
   }
 
-  hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
 
-  if ((pdev->ep_in[epnum & 0xFU].total_length > 0U) &&
-      ((pdev->ep_in[epnum & 0xFU].total_length % hpcd->IN_ep[epnum & 0xFU].maxpacket) == 0U))
+  if ((p_usbd_instance->ep_in[epnum & 0xFU].total_length > 0U) &&
+      ((p_usbd_instance->ep_in[epnum & 0xFU].total_length % hpcd->IN_ep[epnum & 0xFU].maxpacket) == 0U))
   {
     /* Update the packet total length */
-    pdev->ep_in[epnum & 0xFU].total_length = 0U;
+    p_usbd_instance->ep_in[epnum & 0xFU].total_length = 0U;
 
     /* Send ZLP */
-    USBD_LL_Transmit(pdev, epnum, NULL, 0U);
+    USBD_LL_Transmit(p_usbd_instance, epnum, NULL, 0U);
   }
   else
   {
     hcdc->TxState = 0U;
 
-    if (((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->TransmitCplt != NULL)
+    if (((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->TransmitCplt != NULL)
     {
-      ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->TransmitCplt(hcdc->TxBuffer, &hcdc->TxLength, epnum);
+      ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->TransmitCplt(hcdc->TxBuffer, &hcdc->TxLength, epnum);
     }
   }
 
@@ -707,26 +630,26 @@ uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
 /**
   * @brief  USBD_CDC_DataOut
   *         Data received on non-control Out endpoint
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  epnum: endpoint number
   * @retval status
   */
-uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
+uint8_t USBD_CDC_DataOut(USBD_Handle_t *p_usbd_instance, uint8_t epnum)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
 
-  if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+  if (p_usbd_instance->pClassDataCmsit == NULL)
   {
     return (uint8_t)USBD_FAIL;
   }
 
   /* Get the received data length */
-  hcdc->RxLength = USBD_LL_GetRxDataSize(pdev, epnum);
+  hcdc->RxLength = USBD_LL_GetRxDataSize(p_usbd_instance, epnum);
 
   /* USB data will be immediately processed, this allow next USB traffic being
   NAKed till the end of the application Xfer */
 
-  ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Receive(hcdc->RxBuffer, &hcdc->RxLength);
+  ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->Receive(hcdc->RxBuffer, &hcdc->RxLength);
 
   return (uint8_t)USBD_OK;
 }
@@ -734,21 +657,21 @@ uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 /**
   * @brief  USBD_CDC_EP0_RxReady
   *         Handle EP0 Rx Ready event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev)
+uint8_t USBD_CDC_EP0_RxReady(USBD_Handle_t *p_usbd_instance)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
 
   if (hcdc == NULL)
   {
     return (uint8_t)USBD_FAIL;
   }
 
-  if ((pdev->pUserData[pdev->classId] != NULL) && (hcdc->CmdOpCode != 0xFFU))
+  if ((p_usbd_instance->pUserData != NULL) && (hcdc->CmdOpCode != 0xFFU))
   {
-    ((USBD_CDC_ItfTypeDef *)pdev->pUserData[pdev->classId])->Control(hcdc->CmdOpCode,
+    ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->Control(hcdc->CmdOpCode,
                                                                      (uint8_t *)hcdc->data,
                                                                      (uint16_t)hcdc->CmdLength);
     hcdc->CmdOpCode = 0xFFU;
@@ -861,11 +784,11 @@ uint8_t *USBD_CDC_GetDeviceQualifierDescriptor(uint16_t *length)
 
 /**
   * @brief  USBD_CDC_RegisterInterface
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  fops: CD  Interface callback
   * @retval status
   */
-uint8_t USBD_CDC_RegisterInterface(USBD_HandleTypeDef *pdev,
+uint8_t USBD_CDC_RegisterInterface(USBD_Handle_t *p_usbd_instance,
                                    USBD_CDC_ItfTypeDef *fops)
 {
   if (fops == NULL)
@@ -873,22 +796,22 @@ uint8_t USBD_CDC_RegisterInterface(USBD_HandleTypeDef *pdev,
     return (uint8_t)USBD_FAIL;
   }
 
-  pdev->pUserData[pdev->classId] = fops;
+  p_usbd_instance->pUserData = fops;
 
   return (uint8_t)USBD_OK;
 }
 
 /**
   * @brief  USBD_CDC_SetTxBuffer
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  pbuff: Tx Buffer
   * @param  length: Tx Buffer length
   * @retval status
   */
-uint8_t USBD_CDC_SetTxBuffer(USBD_HandleTypeDef *pdev,
+uint8_t USBD_CDC_SetTxBuffer(USBD_Handle_t *p_usbd_instance,
                              uint8_t *pbuff, uint32_t length)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
 
   if (hcdc == NULL)
   {
@@ -903,13 +826,13 @@ uint8_t USBD_CDC_SetTxBuffer(USBD_HandleTypeDef *pdev,
 
 /**
   * @brief  USBD_CDC_SetRxBuffer
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  pbuff: Rx Buffer
   * @retval status
   */
-uint8_t USBD_CDC_SetRxBuffer(USBD_HandleTypeDef *pdev, uint8_t *pbuff)
+uint8_t USBD_CDC_SetRxBuffer(USBD_Handle_t *p_usbd_instance, uint8_t *pbuff)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
 
   if (hcdc == NULL)
   {
@@ -921,105 +844,69 @@ uint8_t USBD_CDC_SetRxBuffer(USBD_HandleTypeDef *pdev, uint8_t *pbuff)
   return (uint8_t)USBD_OK;
 }
 
-/**
-  * @brief  USBD_CDC_TransmitPacket
-  *         Transmit packet on IN endpoint
-  * @param  pdev: device instance
-  * @retval status
-  */
-uint8_t USBD_CDC_TransmitPacket(USBD_HandleTypeDef *pdev)
-{
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
-  USBD_StatusTypeDef ret = USBD_BUSY;
-
-  if (pdev->pClassDataCmsit[pdev->classId] == NULL)
-  {
-    return (uint8_t)USBD_FAIL;
-  }
-
-  if (hcdc->TxState == 0U)
-  {
-    /* Tx Transfer in progress */
-    hcdc->TxState = 1U;
-
-    /* Update the packet total length */
-    pdev->ep_in[CDC_IN_EP & 0xFU].total_length = hcdc->TxLength;
-
-    /* Transmit next packet */
-    USBD_LL_Transmit(pdev, CDC_IN_EP, hcdc->TxBuffer, hcdc->TxLength);
-
-    ret = USBD_OK;
-  }
-
-  return (uint8_t)ret;
-}
 
 /**
   * @brief  USBD_CDC_ReceivePacket
   *         prepare OUT Endpoint for reception
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-uint8_t USBD_CDC_ReceivePacket(USBD_HandleTypeDef *pdev)
+uint8_t USBD_CDC_ReceivePacket(USBD_Handle_t *p_usbd_instance)
 {
-  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
+  USBD_CDC_Buffer_t *hcdc = (USBD_CDC_Buffer_t *)p_usbd_instance->pClassDataCmsit;
 
-  if (pdev->pClassDataCmsit[pdev->classId] == NULL)
+  if (p_usbd_instance->pClassDataCmsit == NULL)
   {
     return (uint8_t)USBD_FAIL;
   }
 
-  if (pdev->dev_speed == USBD_SPEED_HIGH)
+  if (p_usbd_instance->dev_speed == USBD_SPEED_HIGH)
   {
     /* Prepare Out endpoint to receive next packet */
-    USBD_LL_PrepareReceive(pdev, CDC_OUT_EP, hcdc->RxBuffer,
+    USBD_LL_PrepareReceive(p_usbd_instance, CDC_OUT_EP, hcdc->RxBuffer,
                                  CDC_DATA_HS_OUT_PACKET_SIZE);
   }
   else
   {
     /* Prepare Out endpoint to receive next packet */
-    USBD_LL_PrepareReceive(pdev, CDC_OUT_EP, hcdc->RxBuffer,
+    USBD_LL_PrepareReceive(p_usbd_instance, CDC_OUT_EP, hcdc->RxBuffer,
                                  CDC_DATA_FS_OUT_PACKET_SIZE);
   }
 
   return (uint8_t)USBD_OK;
 }
 
-/* usbd_cdc.c END ---- ---- ---- ---- */
-
-/* usbd_core.c BEGIN ---- ---- ---- ---- */
-
 /**
   * @brief  Initializes the device stack and load the class driver
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  pdesc: Descriptor structure address
   * @param  id: Low level core index
   * @retval None
   */
-USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev,
+USBD_StatusTypeDef USBD_Init(USBD_Handle_t *p_usbd_instance,
                              USBD_DescriptorsTypeDef *pdesc, uint8_t id)
 {
   USBD_StatusTypeDef ret;
   /* Check whether the USB Host handle is valid */
-  if (pdev == NULL)
+  if (p_usbd_instance == NULL)
   {
     return USBD_FAIL;
   }
   /* Unlink previous class*/
-  pdev->pClass = NULL;
-  pdev->pUserData[0] = NULL;
-  pdev->pConfDesc = NULL;
+  p_usbd_instance->pClass = NULL;
+  p_usbd_instance->pUserData = NULL;
+  p_usbd_instance->pConfDesc = NULL;
 
   /* Assign USBD Descriptors */
   if (pdesc != NULL)
   {
-    pdev->pDesc = pdesc;
+    p_usbd_instance->pDesc = pdesc;
   }
   /* Set Device initial State */
-  pdev->dev_state = USBD_STATE_DEFAULT;  // DEFAULT - ADDRESSED - CONFIGURED - SUSPEND
-  pdev->id = id; // DEVICE_FS (0)
+  p_usbd_instance->dev_state = USBD_STATE_DEFAULT;  // DEFAULT - ADDRESSED - CONFIGURED - SUSPEND
+  p_usbd_instance->id = id; // DEVICE_FS (0)
   /* Initialize low level driver */
-  ret = USBD_LL_Init(pdev); // configure the TX or the RX FIFO of the new defined endport
+  ret = USBD_LL_Init(p_usbd_instance); // configure the TX or the RX FIFO of the new defined endport
 
   return ret;
 }
@@ -1027,33 +914,33 @@ USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev,
 /**
   * @brief  USBD_DeInit
   *         Re-Initialize the device library
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status: status
   */
-USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_DeInit(USBD_Handle_t *p_usbd_instance)
 {
   USBD_StatusTypeDef ret;
 
   /* Disconnect the USB Device */
-  USBD_LL_Stop(pdev);
+  USBD_LL_Stop(p_usbd_instance);
 
   /* Set Default State */
-  pdev->dev_state = USBD_STATE_DEFAULT;
+  p_usbd_instance->dev_state = USBD_STATE_DEFAULT;
 
   /* Free Class Resources */
-  if (pdev->pClass != NULL)
+  if (p_usbd_instance->pClass != NULL)
   {
-    pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config);
+    p_usbd_instance->pClass->DeInit(p_usbd_instance, (uint8_t)p_usbd_instance->dev_config);
   }
 
-  pdev->pUserData[0] = NULL;
+  p_usbd_instance->pUserData = NULL;
 
   /* Free Device descriptors resources */
-  pdev->pDesc = NULL;
-  pdev->pConfDesc = NULL;
+  p_usbd_instance->pDesc = NULL;
+  p_usbd_instance->pConfDesc = NULL;
 
   /* DeInitialize low level driver */
-  ret = USBD_LL_DeInit(pdev);
+  ret = USBD_LL_DeInit(p_usbd_instance);
 
   return ret;
 }
@@ -1061,11 +948,11 @@ USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_RegisterClass
   *         Link class driver to Device Core.
-  * @param  pDevice : Device Handle
+  * @param  p_usbd_instanceice : Device Handle
   * @param  pclass: Class handle
   * @retval USBD Status
   */
-USBD_StatusTypeDef USBD_RegisterClass(USBD_HandleTypeDef *pdev, USBD_ClassTypeDef *pclass)
+USBD_StatusTypeDef USBD_RegisterClass(USBD_Handle_t *p_usbd_instance, USBD_ClassTypeDef *pclass)
 {
   uint16_t len = 0U;
 
@@ -1074,15 +961,15 @@ USBD_StatusTypeDef USBD_RegisterClass(USBD_HandleTypeDef *pdev, USBD_ClassTypeDe
     return USBD_FAIL;
   }
   /* link the class to the USB Device handle */
-  pdev->pClass = pclass;
+  p_usbd_instance->pClass = pclass;
 
   /* Get Device Configuration Descriptor */
-  if (pdev->pClass->GetFSConfigDescriptor != NULL)
+  if (p_usbd_instance->pClass->GetFSConfigDescriptor != NULL)
   {
-    pdev->pConfDesc = (void *)pdev->pClass->GetFSConfigDescriptor(&len);
+    p_usbd_instance->pConfDesc = (void *)p_usbd_instance->pClass->GetFSConfigDescriptor(&len);
   }
   /* Increment the NumClasses */
-  pdev->NumClasses ++;
+  p_usbd_instance->NumClasses ++;
   return USBD_OK;
 }
 
@@ -1090,18 +977,18 @@ USBD_StatusTypeDef USBD_RegisterClass(USBD_HandleTypeDef *pdev, USBD_ClassTypeDe
 /**
   * @brief  USBD_Start
   *         Start the USB Device Core.
-  * @param  pdev: Device Handle
+  * @param  p_usbd_instance: Device Handle
   * @retval USBD Status
   */
-USBD_StatusTypeDef USBD_Start(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_Start(USBD_Handle_t *p_usbd_instance)
 {
   /* Start the low level driver  */
-  // return USBD_LL_Start(pdev);
+  // return USBD_LL_Start(p_usbd_instance);
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
 
   /* Enable USB Transciver */
-  hal_status = HAL_PCD_Start(pdev->pData);
+  hal_status = HAL_PCD_Start(p_usbd_instance->pData);
 
   // usb_status =  USBD_Get_USB_Status(hal_status); /* defined in usbd_conf.c */
   switch (hal_status)
@@ -1130,33 +1017,19 @@ USBD_StatusTypeDef USBD_Start(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_Stop
   *         Stop the USB Device Core.
-  * @param  pdev: Device Handle
+  * @param  p_usbd_instance: Device Handle
   * @retval USBD Status
   */
-USBD_StatusTypeDef USBD_Stop(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_Stop(USBD_Handle_t *p_usbd_instance)
 {
   /* Disconnect USB Device */
-  USBD_LL_Stop(pdev);
+  USBD_LL_Stop(p_usbd_instance);
 
   /* Free Class Resources */
-  if (pdev->pClass != NULL)
+  if (p_usbd_instance->pClass != NULL)
   {
-    (void)pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config);
+    (void)p_usbd_instance->pClass->DeInit(p_usbd_instance, (uint8_t)p_usbd_instance->dev_config);
   }
-
-  return USBD_OK;
-}
-
-/**
-  * @brief  USBD_RunTestMode
-  *         Launch test mode process
-  * @param  pdev: device instance
-  * @retval status
-  */
-USBD_StatusTypeDef USBD_RunTestMode(USBD_HandleTypeDef *pdev)
-{
-  /* Prevent unused argument compilation warning */
-  UNUSED(pdev);
 
   return USBD_OK;
 }
@@ -1164,37 +1037,33 @@ USBD_StatusTypeDef USBD_RunTestMode(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_SetClassConfig
   *        Configure device and start the interface
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  cfgidx: configuration index
-  * @retval status
+  * @retval None.
   */
 
-USBD_StatusTypeDef USBD_SetClassConfig(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+void USBD_SetClassConfig(USBD_Handle_t *p_usbd_instance, uint8_t cfgidx)
 {
-  USBD_StatusTypeDef ret = USBD_OK;
-
-  if (pdev->pClass != NULL)
+  if (p_usbd_instance->pClass != NULL)
   {
     /* Set configuration and Start the Class */
-    ret = (USBD_StatusTypeDef)pdev->pClass->Init(pdev, cfgidx);
+    p_usbd_instance->pClass->Init(p_usbd_instance, cfgidx);
   }
-
-  return ret;
 }
 
 /**
   * @brief  USBD_ClrClassConfig
   *         Clear current configuration
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  cfgidx: configuration index
   * @retval status: USBD_StatusTypeDef
   */
-USBD_StatusTypeDef USBD_ClrClassConfig(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+USBD_StatusTypeDef USBD_ClrClassConfig(USBD_Handle_t *p_usbd_instance, uint8_t cfgidx)
 {
   USBD_StatusTypeDef ret = USBD_OK;
 
   /* Clear configuration  and De-initialize the Class process */
-  if (pdev->pClass->DeInit(pdev, cfgidx) != 0U)
+  if (p_usbd_instance->pClass->DeInit(p_usbd_instance, cfgidx) != 0U)
   {
     ret = USBD_FAIL;
   }
@@ -1205,50 +1074,47 @@ USBD_StatusTypeDef USBD_ClrClassConfig(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 
 /**
   * @brief  Handle the setup stage
-  * @param  pdev: device instance
-  * @retval status
+  * @param  p_usbd_instance: device instance
+  * @retval None.
   */
-USBD_StatusTypeDef USBD_LL_SetupStage(USBD_HandleTypeDef *pdev, uint8_t *psetup)
+void USBD_LL_SetupStage(USBD_Handle_t *p_usbd_instance, uint8_t *psetup)
 {
-  USBD_StatusTypeDef ret;
 
-  USBD_ParseSetupRequest(&pdev->request, psetup);
+  USBD_ParseSetupRequest(&p_usbd_instance->request, psetup);
 
-  pdev->ep0_state = USBD_EP0_SETUP;
+  p_usbd_instance->ep0_state = USBD_EP0_SETUP;
 
-  pdev->ep0_data_len = pdev->request.wLength;
+  p_usbd_instance->ep0_data_len = p_usbd_instance->request.wLength;
 
-  switch (pdev->request.bmRequest & 0x1FU)
+  switch (p_usbd_instance->request.bmRequest & 0x1FU)
   {
     case USB_REQ_RECIPIENT_DEVICE:
-      ret = USBD_StdDevReq(pdev, &pdev->request);
+      USBD_StdDevReq(p_usbd_instance, &p_usbd_instance->request);
       break;
 
     case USB_REQ_RECIPIENT_INTERFACE:
-      ret = USBD_StdItfReq(pdev, &pdev->request);
+      USBD_StdItfReq(p_usbd_instance, &p_usbd_instance->request);
       break;
 
     case USB_REQ_RECIPIENT_ENDPOINT:
-      ret = USBD_StdEPReq(pdev, &pdev->request);
+      USBD_StdEPReq(p_usbd_instance, &p_usbd_instance->request);
       break;
 
     default:
-      ret = USBD_LL_StallEP(pdev, (pdev->request.bmRequest & 0x80U));
+      USBD_LL_StallEP(p_usbd_instance, (p_usbd_instance->request.bmRequest & 0x80U));
       break;
   }
-
-  return ret;
 }
 
 /**
   * @brief  USBD_LL_DataOutStage
   *         Handle data OUT stage
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  epnum: endpoint index
   * @param  pdata: data pointer
   * @retval status
   */
-USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
+USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_Handle_t *p_usbd_instance,
                                         uint8_t epnum, uint8_t *pdata)
 {
   USBD_EndpointTypeDef *pep;
@@ -1257,20 +1123,20 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
 
   if (epnum == 0U)
   {
-    pep = &pdev->ep_out[0];
+    pep = &p_usbd_instance->ep_out[0];
 
-    if (pdev->ep0_state == USBD_EP0_DATA_OUT)
+    if (p_usbd_instance->ep0_state == USBD_EP0_DATA_OUT)
     {
       if (pep->rem_length > pep->maxpacket)
       {
         pep->rem_length -= pep->maxpacket;
 
-        (void)USBD_CtlContinueRx(pdev, pdata, MIN(pep->rem_length, pep->maxpacket));
+        (void)USBD_CtlContinueRx(p_usbd_instance, pdata, MIN(pep->rem_length, pep->maxpacket));
       }
       else
       {
         /* Find the class ID relative to the current request */
-        switch (pdev->request.bmRequest & 0x1FU)
+        switch (p_usbd_instance->request.bmRequest & 0x1FU)
         {
           case USB_REQ_RECIPIENT_DEVICE:
             /* Device requests must be managed by the first instantiated class
@@ -1283,7 +1149,7 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
             break;
 
           case USB_REQ_RECIPIENT_ENDPOINT:
-            idx = USBD_CoreFindEP(pdev, LOBYTE(pdev->request.wIndex));
+            idx = USBD_CoreFindEP(p_usbd_instance, LOBYTE(p_usbd_instance->request.wIndex));
             break;
 
           default:
@@ -1293,16 +1159,16 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
         }
 
         /* Setup the class ID and route the request to the relative class function */
-        if (pdev->dev_state == USBD_STATE_CONFIGURED)
+        if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
         {
-          if (pdev->pClass->EP0_RxReady != NULL)
+          if (p_usbd_instance->pClass->EP0_RxReady != NULL)
           {
-            pdev->classId = idx;
-            pdev->pClass->EP0_RxReady(pdev);
+            // p_usbd_instance->classId = idx;
+            p_usbd_instance->pClass->EP0_RxReady(p_usbd_instance);
           }
         }
 
-        USBD_CtlSendStatus(pdev);
+        USBD_CtlSendStatus(p_usbd_instance);
       }
     }
     else
@@ -1312,17 +1178,17 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
   else
   {
     /* Get the class index relative to this interface */
-    idx = USBD_CoreFindEP(pdev, (epnum & 0x7FU));
+    idx = USBD_CoreFindEP(p_usbd_instance, (epnum & 0x7FU));
 
     if ((uint16_t)idx != 0xFFU)
     {
       /* Call the class data out function to manage the request */
-      if (pdev->dev_state == USBD_STATE_CONFIGURED)
+      if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
       {
-        if (pdev->pClass->DataOut != NULL)
+        if (p_usbd_instance->pClass->DataOut != NULL)
         {
-          pdev->classId = idx;
-          ret = (USBD_StatusTypeDef)pdev->pClass->DataOut(pdev, epnum);
+          // p_usbd_instance->classId = idx;
+          ret = (USBD_StatusTypeDef)p_usbd_instance->pClass->DataOut(p_usbd_instance, epnum);
         }
       }
       if (ret != USBD_OK)
@@ -1338,118 +1204,102 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
 /**
   * @brief  USBD_LL_DataInStage
   *         Handle data in stage
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  epnum: endpoint index
-  * @retval status
+  * @retval void.
   */
-USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev,
+void USBD_LL_DataInStage(USBD_Handle_t *p_usbd_instance,
                                        uint8_t epnum, uint8_t *pdata)
 {
   USBD_EndpointTypeDef *pep;
-  USBD_StatusTypeDef ret;
   uint8_t idx;
 
   if (epnum == 0U)
   {
-    pep = &pdev->ep_in[0];
+    pep = &p_usbd_instance->ep_in[0];
 
-    if (pdev->ep0_state == USBD_EP0_DATA_IN)
+    if (p_usbd_instance->ep0_state == USBD_EP0_DATA_IN)
     {
       if (pep->rem_length > pep->maxpacket)
       {
         pep->rem_length -= pep->maxpacket;
 
-        USBD_CtlContinueSendData(pdev, pdata, pep->rem_length);
+        USBD_CtlContinueSendData(p_usbd_instance, pdata, pep->rem_length);
 
         /* Prepare endpoint for premature end of transfer */
-        USBD_LL_PrepareReceive(pdev, 0U, NULL, 0U);
+        USBD_LL_PrepareReceive(p_usbd_instance, 0U, NULL, 0U);
       }
       else
       {
         /* last packet is MPS multiple, so send ZLP packet */
         if ((pep->maxpacket == pep->rem_length) &&
             (pep->total_length >= pep->maxpacket) &&
-            (pep->total_length < pdev->ep0_data_len))
+            (pep->total_length < p_usbd_instance->ep0_data_len))
         {
-          USBD_CtlContinueSendData(pdev, NULL, 0U);
-          pdev->ep0_data_len = 0U;
+          USBD_CtlContinueSendData(p_usbd_instance, NULL, 0U);
+          p_usbd_instance->ep0_data_len = 0U;
 
           /* Prepare endpoint for premature end of transfer */
-          USBD_LL_PrepareReceive(pdev, 0U, NULL, 0U);
+          USBD_LL_PrepareReceive(p_usbd_instance, 0U, NULL, 0U);
         }
         else
         {
-          if (pdev->dev_state == USBD_STATE_CONFIGURED)
+          if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
           {
-            if (pdev->pClass->EP0_TxSent != NULL)
+            if (p_usbd_instance->pClass->EP0_TxSent != NULL)
             {
-              pdev->classId = 0U;
-              pdev->pClass->EP0_TxSent(pdev);
+              // p_usbd_instance->classId = 0U;
+              p_usbd_instance->pClass->EP0_TxSent(p_usbd_instance);
             }
           }
-          (void)USBD_LL_StallEP(pdev, 0x80U);
-          (void)USBD_CtlReceiveStatus(pdev);
+          (void)USBD_LL_StallEP(p_usbd_instance, 0x80U);
+          (void)USBD_CtlReceiveStatus(p_usbd_instance);
         }
       }
-    }
-
-    if (pdev->dev_test_mode != 0U)
-    {
-      (void)USBD_RunTestMode(pdev);
-      pdev->dev_test_mode = 0U;
     }
   }
   else
   {
     /* Get the class index relative to this interface */
-    idx = USBD_CoreFindEP(pdev, ((uint8_t)epnum | 0x80U));
+    idx = USBD_CoreFindEP(p_usbd_instance, ((uint8_t)epnum | 0x80U));
 
     if ((uint16_t)idx != 0xFFU)
     {
       /* Call the class data out function to manage the request */
-      if (pdev->dev_state == USBD_STATE_CONFIGURED)
+      if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
       {
-        if (pdev->pClass->DataIn != NULL)
+        if (p_usbd_instance->pClass->DataIn != NULL)
         {
-          pdev->classId = idx;
-          ret = (USBD_StatusTypeDef)pdev->pClass->DataIn(pdev, epnum);
-
-          if (ret != USBD_OK)
-          {
-            return ret;
-          }
+          // p_usbd_instance->classId = idx;
+          p_usbd_instance->pClass->DataIn(p_usbd_instance, epnum);
         }
       }
     }
   }
-
-  return USBD_OK;
 }
 
 /**
   * @brief  USBD_LL_Reset
   *         Handle Reset event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
 
-USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_Reset(USBD_Handle_t *p_usbd_instance)
 {
   USBD_StatusTypeDef ret = USBD_OK;
 
   /* Upon Reset call user call back */
-  pdev->dev_state = USBD_STATE_DEFAULT;
-  pdev->ep0_state = USBD_EP0_IDLE;
-  pdev->dev_config = 0U;
-  pdev->dev_remote_wakeup = 0U;
-  pdev->dev_test_mode = 0U;
+  p_usbd_instance->dev_state = USBD_STATE_DEFAULT;
+  p_usbd_instance->ep0_state = USBD_EP0_IDLE;
+  p_usbd_instance->dev_config = 0U;
+  p_usbd_instance->dev_remote_wakeup = 0U;
 
-
-  if (pdev->pClass != NULL)
+  if (p_usbd_instance->pClass != NULL)
   {
-    if (pdev->pClass->DeInit != NULL)
+    if (p_usbd_instance->pClass->DeInit != NULL)
     {
-      if (pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config) != USBD_OK)
+      if (p_usbd_instance->pClass->DeInit(p_usbd_instance, (uint8_t)p_usbd_instance->dev_config) != USBD_OK)
       {
         ret = USBD_FAIL;
       }
@@ -1457,16 +1307,16 @@ USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev)
   }
 
   /* Open EP0 OUT */
-  USBD_LL_OpenEP(pdev, 0x00U, USBD_EP_TYPE_CTRL, USB_MAX_EP0_SIZE);
-  pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+  USBD_LL_OpenEP(p_usbd_instance, 0x00U, USBD_EP_TYPE_CTRL, USB_MAX_EP0_SIZE);
+  p_usbd_instance->ep_out[0x00U & 0xFU].is_used = 1U;
 
-  pdev->ep_out[0].maxpacket = USB_MAX_EP0_SIZE;
+  p_usbd_instance->ep_out[0].maxpacket = USB_MAX_EP0_SIZE;
 
   /* Open EP0 IN */
-  USBD_LL_OpenEP(pdev, 0x80U, USBD_EP_TYPE_CTRL, USB_MAX_EP0_SIZE);
-  pdev->ep_in[0x80U & 0xFU].is_used = 1U;
+  USBD_LL_OpenEP(p_usbd_instance, 0x80U, USBD_EP_TYPE_CTRL, USB_MAX_EP0_SIZE);
+  p_usbd_instance->ep_in[0x80U & 0xFU].is_used = 1U;
 
-  pdev->ep_in[0].maxpacket = USB_MAX_EP0_SIZE;
+  p_usbd_instance->ep_in[0].maxpacket = USB_MAX_EP0_SIZE;
 
   return ret;
 }
@@ -1474,40 +1324,40 @@ USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_LL_SetSpeed
   *         Handle Reset event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval None.
   */
-void USBD_LL_SetSpeed(USBD_HandleTypeDef *pdev,
+void USBD_LL_SetSpeed(USBD_Handle_t *p_usbd_instance,
                                     USBD_SpeedTypeDef speed)
 {
-  pdev->dev_speed = speed;
+  p_usbd_instance->dev_speed = speed;
 }
 
 /**
   * @brief  USBD_LL_Suspend
   *         Handle Suspend event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
 
-USBD_StatusTypeDef USBD_LL_Suspend(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_Suspend(USBD_Handle_t *p_usbd_instance)
 {
-  pdev->dev_old_state = pdev->dev_state;
-  pdev->dev_state = USBD_STATE_SUSPENDED;
+  p_usbd_instance->dev_old_state = p_usbd_instance->dev_state;
+  p_usbd_instance->dev_state = USBD_STATE_SUSPENDED;
   return USBD_OK;
 }
 
 /**
   * @brief  USBD_LL_Resume
   *         Handle Resume event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-USBD_StatusTypeDef USBD_LL_Resume(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_Resume(USBD_Handle_t *p_usbd_instance)
 {
-  if (pdev->dev_state == USBD_STATE_SUSPENDED)
+  if (p_usbd_instance->dev_state == USBD_STATE_SUSPENDED)
   {
-    pdev->dev_state = pdev->dev_old_state;
+    p_usbd_instance->dev_state = p_usbd_instance->dev_old_state;
   }
 
   return USBD_OK;
@@ -1516,20 +1366,20 @@ USBD_StatusTypeDef USBD_LL_Resume(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_LL_SOF
   *         Handle SOF event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
 
-USBD_StatusTypeDef USBD_LL_SOF(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_SOF(USBD_Handle_t *p_usbd_instance)
 {
   /* The SOF event can be distributed for all classes that support it */
-  if (pdev->dev_state == USBD_STATE_CONFIGURED)
+  if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
   {
-    if (pdev->pClass != NULL)
+    if (p_usbd_instance->pClass != NULL)
     {
-      if (pdev->pClass->SOF != NULL)
+      if (p_usbd_instance->pClass->SOF != NULL)
       {
-        (void)pdev->pClass->SOF(pdev);
+        (void)p_usbd_instance->pClass->SOF(p_usbd_instance);
       }
     }
   }
@@ -1540,22 +1390,22 @@ USBD_StatusTypeDef USBD_LL_SOF(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_LL_IsoINIncomplete
   *         Handle iso in incomplete event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_HandleTypeDef *pdev,
+USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_Handle_t *p_usbd_instance,
                                            uint8_t epnum)
 {
-  if (pdev->pClass == NULL)
+  if (p_usbd_instance->pClass == NULL)
   {
     return USBD_FAIL;
   }
 
-  if (pdev->dev_state == USBD_STATE_CONFIGURED)
+  if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
   {
-    if (pdev->pClass->IsoINIncomplete != NULL)
+    if (p_usbd_instance->pClass->IsoINIncomplete != NULL)
     {
-      (void)pdev->pClass->IsoINIncomplete(pdev, epnum);
+      (void)p_usbd_instance->pClass->IsoINIncomplete(p_usbd_instance, epnum);
     }
   }
 
@@ -1564,22 +1414,22 @@ USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_HandleTypeDef *pdev,
 
 /**
   * @brief  Handle iso out incomplete event.
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval None.
   */
-void USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef *pdev,
+void USBD_LL_IsoOUTIncomplete(USBD_Handle_t *p_usbd_instance,
                                             uint8_t epnum)
 {
-  if (pdev->pClass == NULL)
+  if (p_usbd_instance->pClass == NULL)
   {
     return;
   }
 
-  if (pdev->dev_state == USBD_STATE_CONFIGURED)
+  if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
   {
-    if (pdev->pClass->IsoOUTIncomplete != NULL)
+    if (p_usbd_instance->pClass->IsoOUTIncomplete != NULL)
     {
-      (void)pdev->pClass->IsoOUTIncomplete(pdev, epnum);
+      (void)p_usbd_instance->pClass->IsoOUTIncomplete(p_usbd_instance, epnum);
     }
   }
 }
@@ -1587,33 +1437,32 @@ void USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef *pdev,
 /**
   * @brief  USBD_LL_DevConnected
   *         Handle device connection event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-USBD_StatusTypeDef USBD_LL_DevConnected(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_DevConnected(USBD_Handle_t *p_usbd_instance)
 {
   /* Prevent unused argument compilation warning */
-  UNUSED(pdev);
-
+  UNUSED(p_usbd_instance);
   return USBD_OK;
 }
 
 /**
   * @brief  USBD_LL_DevDisconnected
   *         Handle device disconnection event
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_Handle_t *p_usbd_instance)
 {
   USBD_StatusTypeDef   ret = USBD_OK;
 
   /* Free Class Resources */
-  pdev->dev_state = USBD_STATE_DEFAULT;
+  p_usbd_instance->dev_state = USBD_STATE_DEFAULT;
 
-  if (pdev->pClass != NULL)
+  if (p_usbd_instance->pClass != NULL)
   {
-    if (pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config) != 0U)
+    if (p_usbd_instance->pClass->DeInit(p_usbd_instance, (uint8_t)p_usbd_instance->dev_config) != 0U)
     {
       ret = USBD_FAIL;
     }
@@ -1624,20 +1473,20 @@ USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef *pdev)
 
 /**
   * @brief  Returns the class index relative to the selected endpoint
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  index : selected endpoint number
   * @retval index of the class using the selected endpoint number. 0xFF if no class found.
   */
-uint8_t USBD_CoreFindEP(USBD_HandleTypeDef *pdev, uint8_t index)
+uint8_t USBD_CoreFindEP(USBD_Handle_t *p_usbd_instance, uint8_t index)
 {
-  UNUSED(pdev);
+  UNUSED(p_usbd_instance);
   UNUSED(index);
   return 0x00U;
 }
 
 /**
   * @brief  Returns the Endpoint descriptor
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  pConfDesc:  pointer to Bos descriptor
   * @param  EpAddr:  endpoint address
   * @retval pointer to video endpoint descriptor
@@ -1689,24 +1538,14 @@ USBD_DescHeaderTypeDef *USBD_GetNextDesc(uint8_t *pbuf, uint16_t *ptr)
   return (pnext);
 }
 
-/* usbd_core.c END ---- ---- ---- ---- */
-
-
-/* usbd_ctlreq.c BEGIN ---- ---- ---- ---- */
-
-
-
-
-
-
 /**
   * @brief  USBD_StdDevReq
   *         Handle standard usb device requests
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+USBD_StatusTypeDef USBD_StdDevReq(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   USBD_StatusTypeDef ret = USBD_OK;
 
@@ -1714,48 +1553,48 @@ USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
   {
     case USB_REQ_TYPE_CLASS:
     case USB_REQ_TYPE_VENDOR:
-      ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
+      ret = (USBD_StatusTypeDef)p_usbd_instance->pClass->Setup(p_usbd_instance, req);
       break;
 
     case USB_REQ_TYPE_STANDARD:
       switch (req->bRequest)
       {
         case USB_REQ_GET_DESCRIPTOR:
-          USBD_GetDescriptor(pdev, req);
+          USBD_GetDescriptor(p_usbd_instance, req);
           break;
 
         case USB_REQ_SET_ADDRESS:
-          USBD_SetAddress(pdev, req);
+          USBD_SetAddress(p_usbd_instance, req);
           break;
 
         case USB_REQ_SET_CONFIGURATION:
-          ret = USBD_SetConfig(pdev, req);
+          ret = USBD_SetConfig(p_usbd_instance, req);
           break;
 
         case USB_REQ_GET_CONFIGURATION:
-          USBD_GetConfig(pdev, req);
+          USBD_GetConfig(p_usbd_instance, req);
           break;
 
         case USB_REQ_GET_STATUS:
-          USBD_GetStatus(pdev, req);
+          USBD_GetStatus(p_usbd_instance, req);
           break;
 
         case USB_REQ_SET_FEATURE:
-          USBD_SetFeature(pdev, req);
+          USBD_SetFeature(p_usbd_instance, req);
           break;
 
         case USB_REQ_CLEAR_FEATURE:
-          USBD_ClrFeature(pdev, req);
+          USBD_ClrFeature(p_usbd_instance, req);
           break;
 
         default:
-          USBD_CtlError(pdev, req);
+          USBD_CtlError(p_usbd_instance, req);
           break;
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       break;
   }
 
@@ -1765,11 +1604,11 @@ USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 /**
   * @brief  USBD_StdItfReq
   *         Handle standard usb interface requests
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-USBD_StatusTypeDef USBD_StdItfReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+USBD_StatusTypeDef USBD_StdItfReq(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   USBD_StatusTypeDef ret = USBD_OK;
   uint8_t idx;
@@ -1779,7 +1618,7 @@ USBD_StatusTypeDef USBD_StdItfReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
     case USB_REQ_TYPE_CLASS:
     case USB_REQ_TYPE_VENDOR:
     case USB_REQ_TYPE_STANDARD:
-      switch (pdev->dev_state)
+      switch (p_usbd_instance->dev_state)
       {
         case USBD_STATE_DEFAULT:
         case USBD_STATE_ADDRESSED:
@@ -1792,10 +1631,10 @@ USBD_StatusTypeDef USBD_StdItfReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
             if ((uint8_t)idx != 0xFFU)
             {
               /* Call the class data out function to manage the request */
-              if (pdev->pClass->Setup != NULL)
+              if (p_usbd_instance->pClass->Setup != NULL)
               {
-                pdev->classId = idx;
-                ret = (USBD_StatusTypeDef)(pdev->pClass->Setup(pdev, req));
+                // p_usbd_instance->classId = idx;
+                ret = (USBD_StatusTypeDef)(p_usbd_instance->pClass->Setup(p_usbd_instance, req));
               }
               else
               {
@@ -1811,23 +1650,23 @@ USBD_StatusTypeDef USBD_StdItfReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 
             if ((req->wLength == 0U) && (ret == USBD_OK))
             {
-              USBD_CtlSendStatus(pdev);
+              USBD_CtlSendStatus(p_usbd_instance);
             }
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
           }
           break;
 
         default:
-          USBD_CtlError(pdev, req);
+          USBD_CtlError(p_usbd_instance, req);
           break;
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       break;
   }
 
@@ -1836,11 +1675,11 @@ USBD_StatusTypeDef USBD_StdItfReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 
 /**
   * @brief  Handle standard usb endpoint requests
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+USBD_StatusTypeDef USBD_StdEPReq(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   USBD_EndpointTypeDef *pep;
   uint8_t ep_addr;
@@ -1854,14 +1693,14 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
     case USB_REQ_TYPE_CLASS:
     case USB_REQ_TYPE_VENDOR:
       /* Get the class index relative to this endpoint */
-      idx = USBD_CoreFindEP(pdev, ep_addr);
+      idx = USBD_CoreFindEP(p_usbd_instance, ep_addr);
       if ((uint8_t)idx != 0xFFU)
       {
-        pdev->classId = idx;
+        // p_usbd_instance->classId = idx;
         /* Call the class data out function to manage the request */
-        if (pdev->pClass->Setup != NULL)
+        if (p_usbd_instance->pClass->Setup != NULL)
         {
-          ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
+          ret = (USBD_StatusTypeDef)p_usbd_instance->pClass->Setup(p_usbd_instance, req);
         }
       }
       break;
@@ -1870,17 +1709,17 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
       switch (req->bRequest)
       {
         case USB_REQ_SET_FEATURE:
-          switch (pdev->dev_state)
+          switch (p_usbd_instance->dev_state)
           {
             case USBD_STATE_ADDRESSED:
               if ((ep_addr != 0x00U) && (ep_addr != 0x80U))
               {
-                (void)USBD_LL_StallEP(pdev, ep_addr);
-                (void)USBD_LL_StallEP(pdev, 0x80U);
+                (void)USBD_LL_StallEP(p_usbd_instance, ep_addr);
+                (void)USBD_LL_StallEP(p_usbd_instance, 0x80U);
               }
               else
               {
-                USBD_CtlError(pdev, req);
+                USBD_CtlError(p_usbd_instance, req);
               }
               break;
 
@@ -1889,32 +1728,32 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
               {
                 if ((ep_addr != 0x00U) && (ep_addr != 0x80U) && (req->wLength == 0x00U))
                 {
-                  (void)USBD_LL_StallEP(pdev, ep_addr);
+                  (void)USBD_LL_StallEP(p_usbd_instance, ep_addr);
                 }
               }
-              USBD_CtlSendStatus(pdev);
+              USBD_CtlSendStatus(p_usbd_instance);
 
               break;
 
             default:
-              USBD_CtlError(pdev, req);
+              USBD_CtlError(p_usbd_instance, req);
               break;
           }
           break;
 
         case USB_REQ_CLEAR_FEATURE:
 
-          switch (pdev->dev_state)
+          switch (p_usbd_instance->dev_state)
           {
             case USBD_STATE_ADDRESSED:
               if ((ep_addr != 0x00U) && (ep_addr != 0x80U))
               {
-                (void)USBD_LL_StallEP(pdev, ep_addr);
-                (void)USBD_LL_StallEP(pdev, 0x80U);
+                (void)USBD_LL_StallEP(p_usbd_instance, ep_addr);
+                (void)USBD_LL_StallEP(p_usbd_instance, 0x80U);
               }
               else
               {
-                USBD_CtlError(pdev, req);
+                USBD_CtlError(p_usbd_instance, req);
               }
               break;
 
@@ -1923,73 +1762,73 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
               {
                 if ((ep_addr & 0x7FU) != 0x00U)
                 {
-                  USBD_LL_ClearStallEP(pdev, ep_addr);
+                  USBD_LL_ClearStallEP(p_usbd_instance, ep_addr);
                 }
-                USBD_CtlSendStatus(pdev);
+                USBD_CtlSendStatus(p_usbd_instance);
 
                 /* Get the class index relative to this interface */
-                idx = USBD_CoreFindEP(pdev, ep_addr);
+                idx = USBD_CoreFindEP(p_usbd_instance, ep_addr);
                 if ((uint8_t)idx != 0xFFU)
                 {
-                  pdev->classId = idx;
+                  // p_usbd_instance->classId = idx;
                   /* Call the class data out function to manage the request */
-                  if (pdev->pClass->Setup != NULL)
+                  if (p_usbd_instance->pClass->Setup != NULL)
                   {
-                    ret = (USBD_StatusTypeDef)(pdev->pClass->Setup(pdev, req));
+                    ret = (USBD_StatusTypeDef)(p_usbd_instance->pClass->Setup(p_usbd_instance, req));
                   }
                 }
               }
               break;
 
             default:
-              USBD_CtlError(pdev, req);
+              USBD_CtlError(p_usbd_instance, req);
               break;
           }
           break;
 
         case USB_REQ_GET_STATUS:
-          switch (pdev->dev_state)
+          switch (p_usbd_instance->dev_state)
           {
             case USBD_STATE_ADDRESSED:
               if ((ep_addr != 0x00U) && (ep_addr != 0x80U))
               {
-                USBD_CtlError(pdev, req);
+                USBD_CtlError(p_usbd_instance, req);
                 break;
               }
-              pep = ((ep_addr & 0x80U) == 0x80U) ? &pdev->ep_in[ep_addr & 0x7FU] : \
-                    &pdev->ep_out[ep_addr & 0x7FU];
+              pep = ((ep_addr & 0x80U) == 0x80U) ? &p_usbd_instance->ep_in[ep_addr & 0x7FU] : \
+                    &p_usbd_instance->ep_out[ep_addr & 0x7FU];
 
               pep->status = 0x0000U;
 
-              USBD_CtlSendData(pdev, (uint8_t *)&pep->status, 2U);
+              USBD_CtlSendData(p_usbd_instance, (uint8_t *)&pep->status, 2U);
               break;
 
             case USBD_STATE_CONFIGURED:
               if ((ep_addr & 0x80U) == 0x80U)
               {
-                if (pdev->ep_in[ep_addr & 0xFU].is_used == 0U)
+                if (p_usbd_instance->ep_in[ep_addr & 0xFU].is_used == 0U)
                 {
-                  USBD_CtlError(pdev, req);
+                  USBD_CtlError(p_usbd_instance, req);
                   break;
                 }
               }
               else
               {
-                if (pdev->ep_out[ep_addr & 0xFU].is_used == 0U)
+                if (p_usbd_instance->ep_out[ep_addr & 0xFU].is_used == 0U)
                 {
-                  USBD_CtlError(pdev, req);
+                  USBD_CtlError(p_usbd_instance, req);
                   break;
                 }
               }
 
-              pep = ((ep_addr & 0x80U) == 0x80U) ? &pdev->ep_in[ep_addr & 0x7FU] : \
-                    &pdev->ep_out[ep_addr & 0x7FU];
+              pep = ((ep_addr & 0x80U) == 0x80U) ? &p_usbd_instance->ep_in[ep_addr & 0x7FU] : \
+                    &p_usbd_instance->ep_out[ep_addr & 0x7FU];
 
               if ((ep_addr == 0x00U) || (ep_addr == 0x80U))
               {
                 pep->status = 0x0000U;
               }
-              else if (USBD_LL_IsStallEP(pdev, ep_addr) != 0U)
+              else if (USBD_LL_IsStallEP(p_usbd_instance, ep_addr) != 0U)
               {
                 pep->status = 0x0001U;
               }
@@ -1998,23 +1837,23 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
                 pep->status = 0x0000U;
               }
 
-              USBD_CtlSendData(pdev, (uint8_t *)&pep->status, 2U);
+              USBD_CtlSendData(p_usbd_instance, (uint8_t *)&pep->status, 2U);
               break;
 
             default:
-              USBD_CtlError(pdev, req);
+              USBD_CtlError(p_usbd_instance, req);
               break;
           }
           break;
 
         default:
-          USBD_CtlError(pdev, req);
+          USBD_CtlError(p_usbd_instance, req);
           break;
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       break;
   }
 
@@ -2024,11 +1863,11 @@ USBD_StatusTypeDef USBD_StdEPReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef 
 
 /**
   * @brief  Handle Get Descriptor requests
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_GetDescriptor(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   uint16_t len = 0U;
   uint8_t *pbuf = NULL;
@@ -2037,18 +1876,18 @@ void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
   switch (req->wValue >> 8)
   {
     case USB_DESC_TYPE_DEVICE:
-      pbuf = pdev->pDesc->GetDeviceDescriptor(pdev->dev_speed, &len);
+      pbuf = p_usbd_instance->pDesc->GetDeviceDescriptor(p_usbd_instance->dev_speed, &len);
       break;
 
     case USB_DESC_TYPE_CONFIGURATION:
-      if (pdev->dev_speed == USBD_SPEED_HIGH)
+      if (p_usbd_instance->dev_speed == USBD_SPEED_HIGH)
       {
-        pbuf = (uint8_t *)pdev->pClass->GetHSConfigDescriptor(&len);
+        pbuf = (uint8_t *)p_usbd_instance->pClass->GetHSConfigDescriptor(&len);
         pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
       }
       else
       {
-        pbuf   = (uint8_t *)pdev->pClass->GetFSConfigDescriptor(&len);
+        pbuf   = (uint8_t *)p_usbd_instance->pClass->GetFSConfigDescriptor(&len);
         pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
       }
       break;
@@ -2057,73 +1896,73 @@ void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
       switch ((uint8_t)(req->wValue))
       {
         case USBD_IDX_LANGID_STR:
-          if (pdev->pDesc->GetLangIDStrDescriptor != NULL)
+          if (p_usbd_instance->pDesc->GetLangIDStrDescriptor != NULL)
           {
-            pbuf = pdev->pDesc->GetLangIDStrDescriptor(pdev->dev_speed, &len);
+            pbuf = p_usbd_instance->pDesc->GetLangIDStrDescriptor(p_usbd_instance->dev_speed, &len);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             err++;
           }
           break;
 
         case USBD_IDX_MFC_STR:
-          if (pdev->pDesc->GetManufacturerStrDescriptor != NULL)
+          if (p_usbd_instance->pDesc->GetManufacturerStrDescriptor != NULL)
           {
-            pbuf = pdev->pDesc->GetManufacturerStrDescriptor(pdev->dev_speed, &len);
+            pbuf = p_usbd_instance->pDesc->GetManufacturerStrDescriptor(p_usbd_instance->dev_speed, &len);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             err++;
           }
           break;
 
         case USBD_IDX_PRODUCT_STR:
-          if (pdev->pDesc->GetProductStrDescriptor != NULL)
+          if (p_usbd_instance->pDesc->GetProductStrDescriptor != NULL)
           {
-            pbuf = pdev->pDesc->GetProductStrDescriptor(pdev->dev_speed, &len);
+            pbuf = p_usbd_instance->pDesc->GetProductStrDescriptor(p_usbd_instance->dev_speed, &len);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             err++;
           }
           break;
 
         case USBD_IDX_SERIAL_STR:
-          if (pdev->pDesc->GetSerialStrDescriptor != NULL)
+          if (p_usbd_instance->pDesc->GetSerialStrDescriptor != NULL)
           {
-            pbuf = pdev->pDesc->GetSerialStrDescriptor(pdev->dev_speed, &len);
+            pbuf = p_usbd_instance->pDesc->GetSerialStrDescriptor(p_usbd_instance->dev_speed, &len);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             err++;
           }
           break;
 
         case USBD_IDX_CONFIG_STR:
-          if (pdev->pDesc->GetConfigurationStrDescriptor != NULL)
+          if (p_usbd_instance->pDesc->GetConfigurationStrDescriptor != NULL)
           {
-            pbuf = pdev->pDesc->GetConfigurationStrDescriptor(pdev->dev_speed, &len);
+            pbuf = p_usbd_instance->pDesc->GetConfigurationStrDescriptor(p_usbd_instance->dev_speed, &len);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             err++;
           }
           break;
 
         case USBD_IDX_INTERFACE_STR:
-          if (pdev->pDesc->GetInterfaceStrDescriptor != NULL)
+          if (p_usbd_instance->pDesc->GetInterfaceStrDescriptor != NULL)
           {
-            pbuf = pdev->pDesc->GetInterfaceStrDescriptor(pdev->dev_speed, &len);
+            pbuf = p_usbd_instance->pDesc->GetInterfaceStrDescriptor(p_usbd_instance->dev_speed, &len);
           }
           else
           {
-            USBD_CtlError(pdev, req);
+            USBD_CtlError(p_usbd_instance, req);
             err++;
           }
           break;
@@ -2131,7 +1970,7 @@ void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
         default:
 
 #if ((USBD_CLASS_USER_STRING_DESC == 0U) && (USBD_SUPPORT_USER_STRING_DESC == 0U))
-          USBD_CtlError(pdev, req);
+          USBD_CtlError(p_usbd_instance, req);
           err++;
 #endif /* (USBD_CLASS_USER_STRING_DESC == 0U) && (USBD_SUPPORT_USER_STRING_DESC == 0U) */
           break;
@@ -2139,32 +1978,32 @@ void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
       break;
 
     case USB_DESC_TYPE_DEVICE_QUALIFIER:
-      if (pdev->dev_speed == USBD_SPEED_HIGH)
+      if (p_usbd_instance->dev_speed == USBD_SPEED_HIGH)
       {
-        pbuf = (uint8_t *)pdev->pClass->GetDeviceQualifierDescriptor(&len);
+        pbuf = (uint8_t *)p_usbd_instance->pClass->GetDeviceQualifierDescriptor(&len);
       }
       else
       {
-        USBD_CtlError(pdev, req);
+        USBD_CtlError(p_usbd_instance, req);
         err++;
       }
       break;
 
     case USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION:
-      if (pdev->dev_speed == USBD_SPEED_HIGH)
+      if (p_usbd_instance->dev_speed == USBD_SPEED_HIGH)
       {
-        pbuf = (uint8_t *)pdev->pClass->GetOtherSpeedConfigDescriptor(&len);
+        pbuf = (uint8_t *)p_usbd_instance->pClass->GetOtherSpeedConfigDescriptor(&len);
         pbuf[1] = USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION;
       }
       else
       {
-        USBD_CtlError(pdev, req);
+        USBD_CtlError(p_usbd_instance, req);
         err++;
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       err++;
       break;
   }
@@ -2179,27 +2018,27 @@ void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
     if (len != 0U)
     {
       len = MIN(len, req->wLength);
-      USBD_CtlSendData(pdev, pbuf, len);
+      USBD_CtlSendData(p_usbd_instance, pbuf, len);
     }
     else
     {
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
     }
   }
   else
   {
-    USBD_CtlSendStatus(pdev);
+    USBD_CtlSendStatus(p_usbd_instance);
   }
 }
 
 
 /**
   * @brief  Set device address
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-void USBD_SetAddress(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_SetAddress(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   uint8_t  dev_addr;
 
@@ -2207,39 +2046,39 @@ void USBD_SetAddress(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
   {
     dev_addr = (uint8_t)(req->wValue) & 0x7FU;
 
-    if (pdev->dev_state == USBD_STATE_CONFIGURED)
+    if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
     {
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
     }
     else
     {
-      pdev->dev_address = dev_addr;
-      (void)USBD_LL_SetUSBAddress(pdev, dev_addr);
-      USBD_CtlSendStatus(pdev);
+      p_usbd_instance->dev_address = dev_addr;
+      (void)USBD_LL_SetUSBAddress(p_usbd_instance, dev_addr);
+      USBD_CtlSendStatus(p_usbd_instance);
 
       if (dev_addr != 0U)
       {
-        pdev->dev_state = USBD_STATE_ADDRESSED;
+        p_usbd_instance->dev_state = USBD_STATE_ADDRESSED;
       }
       else
       {
-        pdev->dev_state = USBD_STATE_DEFAULT;
+        p_usbd_instance->dev_state = USBD_STATE_DEFAULT;
       }
     }
   }
   else
   {
-    USBD_CtlError(pdev, req);
+    USBD_CtlError(p_usbd_instance, req);
   }
 }
 
 /**
   * @brief  Handle Set device configuration request
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+USBD_StatusTypeDef USBD_SetConfig(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   USBD_StatusTypeDef ret = USBD_OK;
   uint8_t cfgidx;
@@ -2248,74 +2087,55 @@ USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 
   if (cfgidx > USBD_MAX_NUM_CONFIGURATION)
   {
-    USBD_CtlError(pdev, req);
+    USBD_CtlError(p_usbd_instance, req);
     return USBD_FAIL;
   }
 
-  switch (pdev->dev_state)
+  switch (p_usbd_instance->dev_state)
   {
     case USBD_STATE_ADDRESSED:
       if (cfgidx != 0U)
       {
-        pdev->dev_config = cfgidx;
+        p_usbd_instance->dev_config = cfgidx;
 
-        ret = USBD_SetClassConfig(pdev, cfgidx);
-
-        if (ret != USBD_OK)
-        {
-          USBD_CtlError(pdev, req);
-          pdev->dev_state = USBD_STATE_ADDRESSED;
-        }
-        else
-        {
-          USBD_CtlSendStatus(pdev);
-          pdev->dev_state = USBD_STATE_CONFIGURED;
-        }
+        USBD_SetClassConfig(p_usbd_instance, cfgidx);
+        USBD_CtlSendStatus(p_usbd_instance);
+        p_usbd_instance->dev_state = USBD_STATE_CONFIGURED;
       }
       else
       {
-        USBD_CtlSendStatus(pdev);
+        USBD_CtlSendStatus(p_usbd_instance);
       }
       break;
 
     case USBD_STATE_CONFIGURED:
       if (cfgidx == 0U)
       {
-        pdev->dev_state = USBD_STATE_ADDRESSED;
-        pdev->dev_config = cfgidx;
-        (void)USBD_ClrClassConfig(pdev, cfgidx);
-        USBD_CtlSendStatus(pdev);
+        p_usbd_instance->dev_state = USBD_STATE_ADDRESSED;
+        p_usbd_instance->dev_config = cfgidx;
+        (void)USBD_ClrClassConfig(p_usbd_instance, cfgidx);
+        USBD_CtlSendStatus(p_usbd_instance);
       }
-      else if (cfgidx != pdev->dev_config)
+      else if (cfgidx != p_usbd_instance->dev_config)
       {
         /* Clear old configuration */
-        (void)USBD_ClrClassConfig(pdev, (uint8_t)pdev->dev_config);
+        (void)USBD_ClrClassConfig(p_usbd_instance, (uint8_t)p_usbd_instance->dev_config);
 
         /* set new configuration */
-        pdev->dev_config = cfgidx;
+        p_usbd_instance->dev_config = cfgidx;
 
-        ret = USBD_SetClassConfig(pdev, cfgidx);
-
-        if (ret != USBD_OK)
-        {
-          USBD_CtlError(pdev, req);
-          (void)USBD_ClrClassConfig(pdev, (uint8_t)pdev->dev_config);
-          pdev->dev_state = USBD_STATE_ADDRESSED;
-        }
-        else
-        {
-          USBD_CtlSendStatus(pdev);
-        }
+        USBD_SetClassConfig(p_usbd_instance, cfgidx);
+        USBD_CtlSendStatus(p_usbd_instance);
       }
       else
       {
-        USBD_CtlSendStatus(pdev);
+        USBD_CtlSendStatus(p_usbd_instance);
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
-      (void)USBD_ClrClassConfig(pdev, cfgidx);
+      USBD_CtlError(p_usbd_instance, req);
+      (void)USBD_ClrClassConfig(p_usbd_instance, cfgidx);
       ret = USBD_FAIL;
       break;
   }
@@ -2325,32 +2145,32 @@ USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 
 /**
   * @brief  Handle Get device configuration request
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-void USBD_GetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_GetConfig(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   if (req->wLength != 1U)
   {
-    USBD_CtlError(pdev, req);
+    USBD_CtlError(p_usbd_instance, req);
   }
   else
   {
-    switch (pdev->dev_state)
+    switch (p_usbd_instance->dev_state)
     {
       case USBD_STATE_DEFAULT:
       case USBD_STATE_ADDRESSED:
-        pdev->dev_default_config = 0U;
-        USBD_CtlSendData(pdev, (uint8_t *)&pdev->dev_default_config, 1U);
+        p_usbd_instance->dev_default_config = 0U;
+        USBD_CtlSendData(p_usbd_instance, (uint8_t *)&p_usbd_instance->dev_default_config, 1U);
         break;
 
       case USBD_STATE_CONFIGURED:
-        USBD_CtlSendData(pdev, (uint8_t *)&pdev->dev_config, 1U);
+        USBD_CtlSendData(p_usbd_instance, (uint8_t *)&p_usbd_instance->dev_config, 1U);
         break;
 
       default:
-        USBD_CtlError(pdev, req);
+        USBD_CtlError(p_usbd_instance, req);
         break;
     }
   }
@@ -2359,39 +2179,39 @@ void USBD_GetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 /**
   * @brief  USBD_GetStatus
   *         Handle Get Status request
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-void USBD_GetStatus(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_GetStatus(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
-  switch (pdev->dev_state)
+  switch (p_usbd_instance->dev_state)
   {
     case USBD_STATE_DEFAULT:
     case USBD_STATE_ADDRESSED:
     case USBD_STATE_CONFIGURED:
       if (req->wLength != 0x2U)
       {
-        USBD_CtlError(pdev, req);
+        USBD_CtlError(p_usbd_instance, req);
         break;
       }
 
 #if (USBD_SELF_POWERED == 1U)
-      pdev->dev_config_status = USB_CONFIG_SELF_POWERED;
+      p_usbd_instance->dev_config_status = USB_CONFIG_SELF_POWERED;
 #else
-      pdev->dev_config_status = 0U;
+      p_usbd_instance->dev_config_status = 0U;
 #endif /* USBD_SELF_POWERED */
 
-      if (pdev->dev_remote_wakeup != 0U)
+      if (p_usbd_instance->dev_remote_wakeup != 0U)
       {
-        pdev->dev_config_status |= USB_CONFIG_REMOTE_WAKEUP;
+        p_usbd_instance->dev_config_status |= USB_CONFIG_REMOTE_WAKEUP;
       }
 
-      USBD_CtlSendData(pdev, (uint8_t *)&pdev->dev_config_status, 2U);
+      USBD_CtlSendData(p_usbd_instance, (uint8_t *)&p_usbd_instance->dev_config_status, 2U);
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       break;
   }
 }
@@ -2400,25 +2220,20 @@ void USBD_GetStatus(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 /**
   * @brief  USBD_SetFeature
   *         Handle Set device feature request
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_SetFeature(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   if (req->wValue == USB_FEATURE_REMOTE_WAKEUP)
   {
-    pdev->dev_remote_wakeup = 1U;
-    USBD_CtlSendStatus(pdev);
-  }
-  else if (req->wValue == USB_FEATURE_TEST_MODE)
-  {
-    pdev->dev_test_mode = req->wIndex >> 8;
-    USBD_CtlSendStatus(pdev);
+    p_usbd_instance->dev_remote_wakeup = 1U;
+    USBD_CtlSendStatus(p_usbd_instance);
   }
   else
   {
-    USBD_CtlError(pdev, req);
+    USBD_CtlError(p_usbd_instance, req);
   }
 }
 
@@ -2426,26 +2241,26 @@ void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 /**
   * @brief  USBD_ClrFeature
   *         Handle clear device feature request
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval status
   */
-void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_ClrFeature(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
-  switch (pdev->dev_state)
+  switch (p_usbd_instance->dev_state)
   {
     case USBD_STATE_DEFAULT:
     case USBD_STATE_ADDRESSED:
     case USBD_STATE_CONFIGURED:
       if (req->wValue == USB_FEATURE_REMOTE_WAKEUP)
       {
-        pdev->dev_remote_wakeup = 0U;
-        USBD_CtlSendStatus(pdev);
+        p_usbd_instance->dev_remote_wakeup = 0U;
+        USBD_CtlSendStatus(p_usbd_instance);
       }
       break;
 
     default:
-      USBD_CtlError(pdev, req);
+      USBD_CtlError(p_usbd_instance, req);
       break;
   }
 }
@@ -2454,7 +2269,7 @@ void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 /**
   * @brief  USBD_ParseSetupRequest
   *         Copy buffer into setup structure
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval None
   */
@@ -2482,16 +2297,16 @@ void USBD_ParseSetupRequest(USBD_SetupReqTypedef *req, uint8_t *pdata)
 
 /**
   * @brief  Handle USB low level Error
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  req: usb request
   * @retval None
   */
-void USBD_CtlError(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
+void USBD_CtlError(USBD_Handle_t *p_usbd_instance, USBD_SetupReqTypedef *req)
 {
   UNUSED(req);
 
-  (void)USBD_LL_StallEP(pdev, 0x80U);
-  (void)USBD_LL_StallEP(pdev, 0U);
+  (void)USBD_LL_StallEP(p_usbd_instance, 0x80U);
+  (void)USBD_LL_StallEP(p_usbd_instance, 0U);
 }
 
 
@@ -2552,82 +2367,72 @@ uint8_t USBD_GetLen(uint8_t *buf)
   return len;
 }
 
-/* usbd_ctlreq.c END ---- ---- ---- ---- */
-
-
-/* usbd_ioreq.c BEGIN ---- ---- ---- ---- */
 /**
   * @brief  USBD_CtlSendData
   *         send data on the ctl pipe
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  buff: pointer to data buffer
   * @param  len: length of data to be sent
   * @retval void
   */
-void USBD_CtlSendData(USBD_HandleTypeDef *pdev,
+void USBD_CtlSendData(USBD_Handle_t *p_usbd_instance,
                                     uint8_t *pbuf, uint32_t len)
 {
   /* Set EP0 State */
-  pdev->ep0_state = USBD_EP0_DATA_IN;
-  pdev->ep_in[0].total_length = len;
-
-#ifdef USBD_AVOID_PACKET_SPLIT_MPS
-  pdev->ep_in[0].rem_length = 0U;
-#else
-  pdev->ep_in[0].rem_length = len;
-#endif /* USBD_AVOID_PACKET_SPLIT_MPS */
-
+  p_usbd_instance->ep0_state = USBD_EP0_DATA_IN;
+  p_usbd_instance->ep_in[0].total_length = len;
+  p_usbd_instance->ep_in[0].rem_length = len;
   /* Start the transfer */
-  USBD_LL_Transmit(pdev, 0x00U, pbuf, len);
+  USBD_LL_Transmit(p_usbd_instance, 0x00U, pbuf, len);
 }
 
 /**
   * @brief  USBD_CtlContinueSendData
   *         continue sending data on the ctl pipe
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  buff: pointer to data buffer
   * @param  len: length of data to be sent
   * @retval None.
   */
-void USBD_CtlContinueSendData(USBD_HandleTypeDef *pdev,
+void USBD_CtlContinueSendData(USBD_Handle_t *p_usbd_instance,
                                             uint8_t *pbuf, uint32_t len)
 {
   /* Start the next transfer */
-  USBD_LL_Transmit(pdev, 0x00U, pbuf, len);
+  USBD_LL_Transmit(p_usbd_instance, 0x00U, pbuf, len);
 }
 
 /**
   * @brief  USBD_CtlPrepareRx
   *         receive data on the ctl pipe
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  buff: pointer to data buffer
   * @param  len: length of data to be received
   * @retval None.
   */
-void USBD_CtlPrepareRx(USBD_HandleTypeDef *pdev,
+void USBD_CtlPrepareRx(USBD_Handle_t *p_usbd_instance,
                                      uint8_t *pbuf, uint32_t len)
 {
   /* Set EP0 State */
-  pdev->ep0_state = USBD_EP0_DATA_OUT;
-  pdev->ep_out[0].total_length = len;
-  pdev->ep_out[0].rem_length = len;
+  p_usbd_instance->ep0_state = USBD_EP0_DATA_OUT;
+  p_usbd_instance->ep_out[0].total_length = len;
+  p_usbd_instance->ep_out[0].rem_length = len;
 
   /* Start the transfer */
-  USBD_LL_PrepareReceive(pdev, 0U, pbuf, len);
+  USBD_LL_PrepareReceive(p_usbd_instance, 0U, pbuf, len);
 }
 
 /**
   * @brief  USBD_CtlContinueRx
   *         continue receive data on the ctl pipe
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  buff: pointer to data buffer
   * @param  len: length of data to be received
   * @retval status
   */
-USBD_StatusTypeDef USBD_CtlContinueRx(USBD_HandleTypeDef *pdev,
+USBD_StatusTypeDef USBD_CtlContinueRx(USBD_Handle_t *p_usbd_instance,
                                       uint8_t *pbuf, uint32_t len)
 {
-  USBD_LL_PrepareReceive(pdev, 0U, pbuf, len);
+  USBD_LL_PrepareReceive(p_usbd_instance, 0U, pbuf, len);
 
   return USBD_OK;
 }
@@ -2635,31 +2440,31 @@ USBD_StatusTypeDef USBD_CtlContinueRx(USBD_HandleTypeDef *pdev,
 /**
   * @brief  USBD_CtlSendStatus
   *         send zero lzngth packet on the ctl pipe
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-void USBD_CtlSendStatus(USBD_HandleTypeDef *pdev)
+void USBD_CtlSendStatus(USBD_Handle_t *p_usbd_instance)
 {
   /* Set EP0 State */
-  pdev->ep0_state = USBD_EP0_STATUS_IN;
+  p_usbd_instance->ep0_state = USBD_EP0_STATUS_IN;
 
   /* Start the transfer */
-  USBD_LL_Transmit(pdev, 0x00U, NULL, 0U);
+  USBD_LL_Transmit(p_usbd_instance, 0x00U, NULL, 0U);
 }
 
 /**
   * @brief  USBD_CtlReceiveStatus
   *         receive zero lzngth packet on the ctl pipe
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @retval status
   */
-USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_Handle_t *p_usbd_instance)
 {
   /* Set EP0 State */
-  pdev->ep0_state = USBD_EP0_STATUS_OUT;
+  p_usbd_instance->ep0_state = USBD_EP0_STATUS_OUT;
 
   /* Start the transfer */
-  USBD_LL_PrepareReceive(pdev, 0U, NULL, 0U);
+  USBD_LL_PrepareReceive(p_usbd_instance, 0U, NULL, 0U);
 
   return USBD_OK;
 }
@@ -2667,13 +2472,13 @@ USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_HandleTypeDef *pdev)
 /**
   * @brief  USBD_GetRxCount
   *         returns the received data length
-  * @param  pdev: device instance
+  * @param  p_usbd_instance: device instance
   * @param  ep_addr: endpoint address
   * @retval Rx Data blength
   */
-uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+uint32_t USBD_GetRxCount(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  return USBD_LL_GetRxDataSize(pdev, ep_addr);
+  return USBD_LL_GetRxDataSize(p_usbd_instance, ep_addr);
 }
 
 /* usbd_ioreq.c END ---- ---- ---- ---- */
@@ -2742,10 +2547,6 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* pcdHandle)
 
     /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(OTG_FS_IRQn);
-
-  /* USER CODE BEGIN USB_OTG_FS_MspDeInit 1 */
-
-  /* USER CODE END USB_OTG_FS_MspDeInit 1 */
   }
 }
 
@@ -2754,13 +2555,9 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* pcdHandle)
   * @param  hpcd: PCD handle
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
-#else
 void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  USBD_LL_SetupStage((USBD_HandleTypeDef*)hpcd->pData, (uint8_t *)hpcd->Setup);
+  USBD_LL_SetupStage((USBD_Handle_t*)hpcd->pData, (uint8_t *)hpcd->Setup);
 }
 
 /**
@@ -2769,13 +2566,9 @@ void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
   * @param  epnum: Endpoint number
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
 void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  USBD_LL_DataOutStage((USBD_HandleTypeDef*)hpcd->pData, epnum, hpcd->OUT_ep[epnum].xfer_buff);
+  USBD_LL_DataOutStage((USBD_Handle_t*)hpcd->pData, epnum, hpcd->OUT_ep[epnum].xfer_buff);
 }
 
 /**
@@ -2784,13 +2577,9 @@ void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
   * @param  epnum: Endpoint number
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
 void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  USBD_LL_DataInStage((USBD_HandleTypeDef*)hpcd->pData, epnum, hpcd->IN_ep[epnum].xfer_buff);
+  USBD_LL_DataInStage((USBD_Handle_t*)hpcd->pData, epnum, hpcd->IN_ep[epnum].xfer_buff);
 }
 
 /**
@@ -2798,13 +2587,9 @@ void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
   * @param  hpcd: PCD handle
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
-#else
 void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  USBD_LL_SOF((USBD_HandleTypeDef*)hpcd->pData);
+  USBD_LL_SOF((USBD_Handle_t*)hpcd->pData);
 }
 
 /**
@@ -2812,11 +2597,7 @@ void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
-#else
 void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
   USBD_SpeedTypeDef speed = USBD_SPEED_FULL;
 
@@ -2833,10 +2614,10 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
     Error_Handler();
   }
     /* Set Speed. */
-  USBD_LL_SetSpeed((USBD_HandleTypeDef*)hpcd->pData, speed);
+  USBD_LL_SetSpeed((USBD_Handle_t*)hpcd->pData, speed);
 
   /* Reset Device. */
-  USBD_LL_Reset((USBD_HandleTypeDef*)hpcd->pData);
+  USBD_LL_Reset((USBD_Handle_t*)hpcd->pData);
 }
 
 /**
@@ -2845,14 +2626,10 @@ void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
-#else
 void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
   /* Inform USB library that core enters in suspend Mode. */
-  USBD_LL_Suspend((USBD_HandleTypeDef*)hpcd->pData);
+  USBD_LL_Suspend((USBD_Handle_t*)hpcd->pData);
   __HAL_PCD_GATE_PHYCLOCK(hpcd);
   /* Enter in STOP mode. */
   /* USER CODE BEGIN 2 */
@@ -2861,69 +2638,17 @@ void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
     /* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register. */
     SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
   }
-  /* USER CODE END 2 */
 }
 
-/**
-  * @brief  Resume callback.
-  * When Low power mode is enabled the debug cannot be used (IAR, Keil doesn't support it)
-  * @param  hpcd: PCD handle
-  * @retval None
-  */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ResumeCallback(PCD_HandleTypeDef *hpcd)
-#else
-void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-{
-  /* USER CODE BEGIN 3 */
-
-  /* USER CODE END 3 */
-  USBD_LL_Resume((USBD_HandleTypeDef*)hpcd->pData);
-}
-
-/**
-  * @brief  ISOOUTIncomplete callback.
-  * @param  hpcd: PCD handle
-  * @param  epnum: Endpoint number
-  * @retval None
-  */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
-void HAL_PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-{
-  USBD_LL_IsoOUTIncomplete((USBD_HandleTypeDef*)hpcd->pData, epnum);
-}
-
-/**
-  * @brief  ISOINIncomplete callback.
-  * @param  hpcd: PCD handle
-  * @param  epnum: Endpoint number
-  * @retval None
-  */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
-void HAL_PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-{
-  USBD_LL_IsoINIncomplete((USBD_HandleTypeDef*)hpcd->pData, epnum);
-}
 
 /**
   * @brief  Connect callback.
   * @param  hpcd: PCD handle
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
-#else
 void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  USBD_LL_DevConnected((USBD_HandleTypeDef*)hpcd->pData);
+  USBD_LL_DevConnected((USBD_Handle_t*)hpcd->pData);
 }
 
 /**
@@ -2931,13 +2656,9 @@ void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
-#else
 void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
-  USBD_LL_DevDisconnected((USBD_HandleTypeDef*)hpcd->pData);
+  USBD_LL_DevDisconnected((USBD_Handle_t*)hpcd->pData);
 }
 
 /*******************************************************************************
@@ -2946,16 +2667,16 @@ void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
 
 /**
   * @brief  Initializes the low level portion of the device driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @retval USBD status
   */
-USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_Init(USBD_Handle_t *p_usbd_instance)
 {
   /* Init USB Ip. */
-  if (pdev->id == DEVICE_FS) {
+  if (p_usbd_instance->id == DEVICE_FS) {
   /* Link the driver to the stack. */
-  hpcd_USB_OTG_FS.pData = pdev;
-  pdev->pData = &hpcd_USB_OTG_FS;
+  hpcd_USB_OTG_FS.pData = p_usbd_instance;
+  p_usbd_instance->pData = &hpcd_USB_OTG_FS;
 
   hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
   hpcd_USB_OTG_FS.Init.dev_endpoints = 4;
@@ -2984,15 +2705,15 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 /**
   * @brief  De-Initializes the low level portion of the device driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @retval USBD status
   */
-USBD_StatusTypeDef USBD_LL_DeInit(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_DeInit(USBD_Handle_t *p_usbd_instance)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
 
-  hal_status = HAL_PCD_DeInit(pdev->pData);
+  hal_status = HAL_PCD_DeInit(p_usbd_instance->pData);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
 
@@ -3001,15 +2722,15 @@ USBD_StatusTypeDef USBD_LL_DeInit(USBD_HandleTypeDef *pdev)
 
 /**
   * @brief  Starts the low level portion of the device driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @retval USBD status
   */
-USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev)
+USBD_StatusTypeDef USBD_LL_Start(USBD_Handle_t *p_usbd_instance)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
 
-  hal_status = HAL_PCD_Start(pdev->pData);
+  hal_status = HAL_PCD_Start(p_usbd_instance->pData);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
 
@@ -3018,110 +2739,82 @@ USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev)
 
 /**
   * @brief  Stops the low level portion of the device driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @retval None.
   */
-void USBD_LL_Stop(USBD_HandleTypeDef *pdev)
+void USBD_LL_Stop(USBD_Handle_t *p_usbd_instance)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
-
-  hal_status = HAL_PCD_Stop(pdev->pData);
-
+  hal_status = HAL_PCD_Stop(p_usbd_instance->pData);
   USBD_Get_USB_Status(hal_status);
 }
 
 /**
   * @brief  Opens an endpoint of the low level driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @param  ep_type: Endpoint type
   * @param  ep_mps: Endpoint max packet size
   * @retval None.
   */
-void USBD_LL_OpenEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr, uint8_t ep_type, uint16_t ep_mps)
+void USBD_LL_OpenEP(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr, uint8_t ep_type, uint16_t ep_mps)
 {
-  HAL_StatusTypeDef hal_status = HAL_OK;
-
-  hal_status = HAL_PCD_EP_Open(pdev->pData, ep_addr, ep_mps, ep_type);
-
-  USBD_Get_USB_Status(hal_status);
+  HAL_PCD_EP_Open(p_usbd_instance->pData, ep_addr, ep_mps, ep_type);
 }
 
 /**
   * @brief  Closes an endpoint of the low level driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @retval None.
   */
-void USBD_LL_CloseEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+void USBD_LL_CloseEP(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  HAL_StatusTypeDef hal_status = HAL_OK;
-
-  hal_status = HAL_PCD_EP_Close(pdev->pData, ep_addr);
-
-  USBD_Get_USB_Status(hal_status);
+  HAL_PCD_EP_Close(p_usbd_instance->pData, ep_addr);
 }
 
 /**
   * @brief  Flushes an endpoint of the Low Level Driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
-  * @retval USBD status
+  * @retval None.
   */
-USBD_StatusTypeDef USBD_LL_FlushEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+void USBD_LL_FlushEP(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  HAL_StatusTypeDef hal_status = HAL_OK;
-  USBD_StatusTypeDef usb_status = USBD_OK;
-
-  hal_status = HAL_PCD_EP_Flush(pdev->pData, ep_addr);
-
-  usb_status =  USBD_Get_USB_Status(hal_status);
-
-  return usb_status;
+  HAL_PCD_EP_Flush(p_usbd_instance->pData, ep_addr);
 }
 
 /**
   * @brief  Sets a Stall condition on an endpoint of the Low Level Driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
-  * @retval USBD status
+  * @retval None
   */
-USBD_StatusTypeDef USBD_LL_StallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+void USBD_LL_StallEP(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  HAL_StatusTypeDef hal_status = HAL_OK;
-  USBD_StatusTypeDef usb_status = USBD_OK;
-
-  hal_status = HAL_PCD_EP_SetStall(pdev->pData, ep_addr);
-
-  usb_status =  USBD_Get_USB_Status(hal_status);
-
-  return usb_status;
+  HAL_PCD_EP_SetStall(p_usbd_instance->pData, ep_addr);
 }
 
 /**
   * @brief  Clears a Stall condition on an endpoint of the Low Level Driver.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @retval None.
   */
-void USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+void USBD_LL_ClearStallEP(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  HAL_StatusTypeDef hal_status = HAL_OK;
-
-  hal_status = HAL_PCD_EP_ClrStall(pdev->pData, ep_addr);
-
-  USBD_Get_USB_Status(hal_status);
+  HAL_PCD_EP_ClrStall(p_usbd_instance->pData, ep_addr);
 }
 
 /**
   * @brief  Returns Stall condition.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @retval Stall (1: Yes, 0: No)
   */
-uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+uint8_t USBD_LL_IsStallEP(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef*) pdev->pData;
+  PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef*) p_usbd_instance->pData;
 
   if((ep_addr & 0x80) == 0x80)
   {
@@ -3135,71 +2828,64 @@ uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 
 /**
   * @brief  Assigns a USB address to the device.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  dev_addr: Device address
-  * @retval USBD status
+  * @retval void
   */
-USBD_StatusTypeDef USBD_LL_SetUSBAddress(USBD_HandleTypeDef *pdev, uint8_t dev_addr)
+void USBD_LL_SetUSBAddress(USBD_Handle_t *p_usbd_instance, uint8_t dev_addr)
 {
-  HAL_StatusTypeDef hal_status = HAL_OK;
-  USBD_StatusTypeDef usb_status = USBD_OK;
-
-  hal_status = HAL_PCD_SetAddress(pdev->pData, dev_addr);
-
-  usb_status =  USBD_Get_USB_Status(hal_status);
-
-  return usb_status;
+  HAL_PCD_SetAddress(p_usbd_instance->pData, dev_addr);
 }
 
 /**
   * @brief  Transmits data over an endpoint.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @param  pbuf: Pointer to data to be sent
   * @param  size: Data size
   * @retval None.
   */
-void USBD_LL_Transmit(USBD_HandleTypeDef *pdev, uint8_t ep_addr, uint8_t *pbuf, uint32_t size)
+void USBD_LL_Transmit(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr, uint8_t *pbuf, uint32_t size)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
-  hal_status = HAL_PCD_EP_Transmit(pdev->pData, ep_addr, pbuf, size);
+  hal_status = HAL_PCD_EP_Transmit(p_usbd_instance->pData, ep_addr, pbuf, size);
   USBD_Get_USB_Status(hal_status);
 }
 
 /**
   * @brief  Prepares an endpoint for reception.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @param  pbuf: Pointer to data to be received
   * @param  size: Data size
   * @retval void
   */
-void USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_addr, uint8_t *pbuf, uint32_t size)
+void USBD_LL_PrepareReceive(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr, uint8_t *pbuf, uint32_t size)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
-  hal_status = HAL_PCD_EP_Receive(pdev->pData, ep_addr, pbuf, size);
+  hal_status = HAL_PCD_EP_Receive(p_usbd_instance->pData, ep_addr, pbuf, size);
   USBD_Get_USB_Status(hal_status);
 }
 
 /**
   * @brief  Returns the last transferred packet size.
-  * @param  pdev: Device handle
+  * @param  p_usbd_instance: Device handle
   * @param  ep_addr: Endpoint number
   * @retval Received Data Size
   */
-uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
+uint32_t USBD_LL_GetRxDataSize(USBD_Handle_t *p_usbd_instance, uint8_t ep_addr)
 {
-  return HAL_PCD_EP_GetRxCount((PCD_HandleTypeDef*) pdev->pData, ep_addr);
+  return HAL_PCD_EP_GetRxCount((PCD_HandleTypeDef*) p_usbd_instance->pData, ep_addr);
 }
 
 /**
-  * @brief  Static single allocation.
+  * @brief  single allocation.
   * @param  size: Size of allocated memory
   * @retval None
   */
 void *USBD_static_malloc(uint32_t size)
 {
-  static uint32_t mem[(sizeof(USBD_CDC_HandleTypeDef)/4)+1];/* On 32-bit boundary */
+  static uint32_t mem[(sizeof(USBD_CDC_Buffer_t)/4)+1];/* On 32-bit boundary */
   return mem;
 }
 
@@ -3252,44 +2938,6 @@ USBD_StatusTypeDef USBD_Get_USB_Status(HAL_StatusTypeDef hal_status)
   return usb_status;
 }
 
-
-/* usbd_desc.c BEGIN ---- ---- ---- ---- ---- ---- ---- ---- */
-
-
-/* USER CODE BEGIN PRIVATE_DEFINES */
-
-/* USER CODE END PRIVATE_DEFINES */
-
-
-/** @defgroup USBD_DESC_Private_FunctionPrototypes USBD_DESC_Private_FunctionPrototypes
-  * @brief Private functions declaration.
-  * @{
-  */
-
-static void Get_SerialNum(void);
-static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len);
-
-
-
-/** @defgroup USBD_DESC_Private_FunctionPrototypes USBD_DESC_Private_FunctionPrototypes
-  * @brief Private functions declaration for FS.
-  * @{
-  */
-
-uint8_t * USBD_FS_DeviceDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t * USBD_FS_LangIDStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t * USBD_FS_ManufacturerStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t * USBD_FS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t * USBD_FS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t * USBD_FS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t * USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-
-
-/** @defgroup USBD_DESC_Private_Variables USBD_DESC_Private_Variables
-  * @brief Private variables.
-  * @{
-  */
-
 USBD_DescriptorsTypeDef FS_Desc =
 {
   USBD_FS_DeviceDescriptor
@@ -3299,9 +2947,6 @@ USBD_DescriptorsTypeDef FS_Desc =
 , USBD_FS_SerialStrDescriptor
 , USBD_FS_ConfigStrDescriptor
 , USBD_FS_InterfaceStrDescriptor
-#if (USBD_LPM_ENABLED == 1)
-, USBD_FS_USR_BOSDescriptor
-#endif /* (USBD_LPM_ENABLED == 1) */
 };
 
 /** USB standard device descriptor. */
@@ -3466,7 +3111,7 @@ uint8_t * USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *leng
   * @param  None
   * @retval None
   */
-static void Get_SerialNum(void)
+void Get_SerialNum(void)
 {
   uint32_t deviceserial0, deviceserial1, deviceserial2;
 
@@ -3490,7 +3135,7 @@ static void Get_SerialNum(void)
   * @param  len: buffer length
   * @retval None
   */
-static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len)
+void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len)
 {
   uint8_t idx = 0;
 
@@ -3510,5 +3155,3 @@ static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len)
     pbuf[2 * idx + 1] = 0;
   }
 }
-
-/* usbd_desc.h BEGIN ---- ---- ---- ---- ---- ---- ---- ---- */

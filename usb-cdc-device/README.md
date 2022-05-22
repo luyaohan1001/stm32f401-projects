@@ -1,4 +1,7 @@
-Originally usbd_cdc_if.c (HAL middle ware) was merged into usb-cdc-device.c
+# CDC uses bulk for the payload data and interrupt for line notifications. 
+![wireshark-packet-sniffed](/media/wireshark-packet-sniffing.png)
+
+# Originally usbd_cdc_if.c (HAL middle ware) was merged into usb-cdc-device.c
 
 usb_device.c/.h carries only 
     the MX_USB_DEVICE_Init(void) 
@@ -37,6 +40,8 @@ The study can begin by merging:
 | EFh  | Both       | Miscellaneous                                      |
 | FEh  | Interface  | Application Specific                               |
 | FFh  | Both       | Vendor Specific                                    |
+
+
 
 
 
