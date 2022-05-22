@@ -1,5 +1,5 @@
 # CDC uses bulk for the payload data and interrupt for line notifications. 
-![wireshark-packet-sniffed](/media/wireshark-packet-sniffing.png)
+![wireshark-packet-sniffed](./media/wireshark-packet-sniffing.png)
 
 # Originally usbd_cdc_if.c (HAL middle ware) was merged into usb-cdc-device.c
 
