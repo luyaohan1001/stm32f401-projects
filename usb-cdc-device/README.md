@@ -13,18 +13,18 @@
 # The USB Host-Device Model
 
 	Host ---.
-					|
-					|                       .---- EP0 IN
-					|         Device 1      |---- EP0 OUT
-					|________ Addr = 29 ----|
-					|                       |---- EP1 IN
-					|                       |---- EP1 OUT
-					|
-					|
-					|
-					|                       .---- EP0 IN   
-					|         Device 2      |---- EP0 OUT
-					|________ Addr = 41 ----|
+          |
+ 					|                       .---- EP0 IN
+     			|         Device 1      |---- EP0 OUT
+     			|________ Addr = 29 ----|
+     			|                       |---- EP1 IN
+     			|                       |---- EP1 OUT
+     			|
+     			|
+     			|
+     			|                       .---- EP0 IN   
+     			|         Device 2      |---- EP0 OUT
+     			|________ Addr = 41 ----|
                                   |---- EP1 IN
                                   |---- EP1 OUT
 
