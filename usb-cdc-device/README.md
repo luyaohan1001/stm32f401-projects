@@ -1,6 +1,149 @@
 # CDC uses bulk for the payload data and interrupt for line notifications. 
 ![wireshark-packet-sniffed](./media/wireshark-packet-sniffing.png)
 
+# Composition of USB Packet
+	SYNC - PID 
+	- Each USB packet starts with a SYNC field.
+	    SS/FS --> KJKJKJ KK 
+			HS    --> KJKJKJKJKJKJKJKJKJKJKJKJKJKJKJ KK
+
+	- Right after SYNC is the packet identifier field -- PID.
+	    PID = four bit encoded data + four bit 1's complement. 
+
+      | Base | Class      | Descriptor Usage Description                       |
+      |------|------------|----------------------------------------------------|
+      | 00h  | Device     | Use class information in the Interface Descriptors |
+      | 01h  | Interface  | Audio                                              |
+      | 02h  | Both       | Communications and CDC Control                     |
+      | 03h  | Interface  | HID (Human Interface Device)                       |
+      | 05h  | Interface  | Physical                                           |
+      | 06h  | Interface  | Image                                              |
+      | 07h  | Interface  | Printer                                            |
+      | 08h  | Interface  | Mass Storage                                       |
+      | 09h  | Device     | Hub                                                |
+      | 0Ah  | Interface  | CDC-Data                                           |
+      | 0Bh  | Interface  | Smart Card                                         |
+      | 0Dh  | Interface  | Content Security                                   |
+      | 0Eh  | Interface  | Video                                              |
+      | 0Fh  | Interface  | Personal Healthcare                                |
+      | 10h  | Interface  | Audio/Video Devices                                |
+      | 11h  | Device     | Billboard Device Class                             |
+      | 12h  | Interface  | USB Type-C Bridge Class                            |
+      | 3Ch	 | Interface	| I3C Device Class                                   |
+      | DCh  | Both       | Diagnostic Device                                  |
+      | E0h  | Interface  | Wireless Controller                                |
+      | EFh  | Both       | Miscellaneous                                      |
+      | FEh  | Interface  | Application Specific                               |
+      | FFh  | Both       | Vendor Specific                                    |
+
+
+
+
+
+
+	
+	
+
+
+# Following output was obtained through lsusb:
+
+	$ lsusb
+
+	>
+	Bus 001 Device 039: ID 0483:5740 STMicroelectronics STM32F407
+	Couldn't open device, some information will be missing
+	Device Descriptor:
+		bLength                18
+		bDescriptorType         1
+		bcdUSB               2.00
+		bDeviceClass            2 Communications
+		bDeviceSubClass         2 Abstract (modem)
+		bDeviceProtocol         0 None
+		bMaxPacketSize0        64
+		idVendor           0x0483 STMicroelectronics
+		idProduct          0x5740 STM32F407
+		bcdDevice            2.00
+		iManufacturer           1 
+		iProduct                2 
+		iSerial                 3 
+		bNumConfigurations      1
+		Configuration Descriptor:
+			bLength                 9
+			bDescriptorType         2
+			wTotalLength           67
+			bNumInterfaces          2
+			bConfigurationValue     1
+			iConfiguration          0 
+			bmAttributes         0xc0
+				Self Powered
+			MaxPower              100mA
+			Interface Descriptor:
+				bLength                 9
+				bDescriptorType         4
+				bInterfaceNumber        0
+				bAlternateSetting       0
+				bNumEndpoints           1
+				bInterfaceClass         2 Communications
+				bInterfaceSubClass      2 Abstract (modem)
+				bInterfaceProtocol      1 AT-commands (v.25ter)
+				iInterface              0 
+				CDC Header:
+					bcdCDC               1.10
+				CDC Call Management:
+					bmCapabilities       0x00
+					bDataInterface          1
+				CDC ACM:
+					bmCapabilities       0x02
+						line coding and serial state
+				CDC Union:
+					bMasterInterface        0
+					bSlaveInterface         1 
+				Endpoint Descriptor:
+					bLength                 7
+					bDescriptorType         5
+					bEndpointAddress     0x82  EP 2 IN
+					bmAttributes            3
+						Transfer Type            Interrupt
+						Synch Type               None
+						Usage Type               Data
+					wMaxPacketSize     0x0008  1x 8 bytes
+					bInterval              16
+			Interface Descriptor:
+				bLength                 9
+				bDescriptorType         4
+				bInterfaceNumber        1
+				bAlternateSetting       0
+				bNumEndpoints           2
+				bInterfaceClass        10 CDC Data
+				bInterfaceSubClass      0 Unused
+				bInterfaceProtocol      0 
+				iInterface              0 
+				Endpoint Descriptor:
+					bLength                 7
+					bDescriptorType         5
+					bEndpointAddress     0x01  EP 1 OUT
+					bmAttributes            2
+						Transfer Type            Bulk
+						Synch Type               None
+						Usage Type               Data
+					wMaxPacketSize     0x0040  1x 64 bytes
+					bInterval               0
+				Endpoint Descriptor:
+					bLength                 7
+					bDescriptorType         5
+					bEndpointAddress     0x81  EP 1 IN
+					bmAttributes            2
+						Transfer Type            Bulk
+						Synch Type               None
+						Usage Type               Data
+					wMaxPacketSize     0x0040  1x 64 bytes
+					bInterval               0
+
+# USB Bulk IN transction:
+
+
+
+
 # Originally usbd_cdc_if.c (HAL middle ware) was merged into usb-cdc-device.c
 
 usb_device.c/.h carries only 
