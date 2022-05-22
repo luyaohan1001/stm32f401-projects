@@ -11,7 +11,7 @@
 | End of Packet (EOP)                 | SE0 for 2 bit times followed by J for 1 bit time. |
 
 # The USB Host-Device Model
-
+```
 	Host ---.
 					|
 					|                       .---- EP0 IN
@@ -27,6 +27,7 @@
 					|________ Addr = 41 ----|
 																  |---- EP1 IN
 																	|---- EP1 OUT
+```
 
 # Endpoints
 Endpoints can be = sources or sinks of data. 
