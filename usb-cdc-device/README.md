@@ -1,3 +1,75 @@
+# 10 Big Concepts in USB learning
+  1. Transfer
+	2. Transaction
+	3. Packet
+	4. Host
+	5. Device
+	6. Configuration
+	7. Interface
+	8. Endpoint
+	9. Pipe
+	10. Descriptors. 
+
+
+# Four types of transfers
+  - Control
+	- Bulk
+	- Interrupt
+	- Isochronous
+
+	Bulk and Isochronous transaction requires one or more transactions. 
+
+
+# USB - total addresses
+	- Each hosts can talk to 127 devices. 
+
+# Configuration
+	- The configuration for devices.
+	- There can be multiple but only one for each device will be selected by the host.
+
+# Endpoint
+	- Each endpoint has one function.
+	- Each interface can have multiple endpoints. 
+	- Endpoint is the buffer for data receival on device side.
+
+# Pipe
+	- Software concept, the connnection between the only host and other devices. 
+
+# Descriptors:
+	- Different types of descriptors for different type of devices. 
+	  Device descriptor
+		Configuration descriptor
+		Interface descriptor 
+		Endpoint descriptor
+		String descriptor
+
+	- Descriptors for HID devices
+	  HID descriptors
+		Report descriptors
+		Physical descriptors
+
+
+# Device descriptor
+| Offset | Name                | Size  | Description                         |
+|--------|---------------------|-------|-------------------------------------|
+| 0      | bLength             |   1   | descriptor length                   | 
+| 1      | bDescriptorType     |   1   | descriptor type                     |
+| 2      | bcdUSB              |   2   | USB version                         |
+| 4      | bDeviceClass        |   1   | class                               |
+| 5      | bDeviceSubClass     |   1   | subclass                            |
+| 6      | bDeviceProtocol     |   1   | protocal that the device uses       |
+| 7      | bMaxPacketSize0     |   1   | largest packet size endpoint 0 uses |
+| 8      | idVendor            |   2   | vendor ID                           |
+| 10     | idProduct           |   2   | product ID                          |
+| 12     | bcdDevice           |   2   | device version                      |
+| 14     | iManufacturer       |   1   | manufacturer index                  |
+| 15     | iProduct            |   1   | product index                       |
+| 16     | iSerialNumber       |   1   | serial number index                 |
+| 17     | bNumConfigurations  |   1   | possible number of configurations.  |
+
+
+
+
 # CDC uses bulk for the payload data and interrupt for line notifications. 
 ![wireshark-packet-sniffed](./media/wireshark-packet-sniffing.png)
 
@@ -9,6 +81,17 @@
 | Data K state                        | LS: Differential "1"    FS: Differential "0"      |
 | Start of Packet (SOP)               | Data lines IDLE -> K state                        |
 | End of Packet (EOP)                 | SE0 for 2 bit times followed by J for 1 bit time. |
+
+# What is J state?
+  The polarity when bus is idle.
+
+	LS: DP --> L DM --> H
+	FS/HS: DP --> H DM --> L
+
+# What is K state?
+	The reverse of J state. 
+
+
 
 # The USB Host-Device Model
 ```
@@ -198,11 +281,6 @@ All devices must support endpoint zero --> for device control and status request
           wMaxPacketSize     0x0040  1x 64 bytes
           bInterval               0
 
-# USB Bulk IN transction:
-
-
-
-
 # Originally usbd_cdc_if.c (HAL middle ware) was merged into usb-cdc-device.c
 
 usb_device.c/.h carries only 
@@ -236,7 +314,7 @@ The study can begin by merging:
 | 10h  | Interface  | Audio/Video Devices                                |
 | 11h  | Device     | Billboard Device Class                             |
 | 12h  | Interface  | USB Type-C Bridge Class                            |
-| 3Ch   | Interface  | I3C Device Class                                   |
+| 3Ch  | Interface  | I3C Device Class                                   |
 | DCh  | Both       | Diagnostic Device                                  |
 | E0h  | Interface  | Wireless Controller                                |
 | EFh  | Both       | Miscellaneous                                      |
