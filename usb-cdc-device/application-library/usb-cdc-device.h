@@ -1108,4 +1108,24 @@ uint8_t * USBD_FS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length
 uint8_t * USBD_FS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 uint8_t * USBD_FS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 uint8_t * USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+
+
+/* Start of usbd_desc.h */
+#define         DEVICE_ID1          (UID_BASE)
+#define         DEVICE_ID2          (UID_BASE + 0x4)
+#define         DEVICE_ID3          (UID_BASE + 0x8)
+
+#define  USB_SIZ_STRING_SERIAL       0x1A
+
+extern USBD_DescriptorsTypeDef FS_Desc;
+
+/* End of usbd_desc.h */
 #endif /* __USB_CDC_DEVICE_H */
+
+
+
+
+
+
+
+

@@ -26,9 +26,7 @@ build/usb-cdc-device.o: application-library/usb-cdc-device.c \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- USB_DEVICE/App/usbd_desc.h \
- Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 
 application-library/usb-cdc-device.h:
 
@@ -89,7 +87,3 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h:
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
-
-USB_DEVICE/App/usbd_desc.h:
-
-Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:

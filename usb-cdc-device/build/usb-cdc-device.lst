@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccZiPR2y.s 			page 1
+ARM GAS  /tmp/ccf4hwpD.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -40,7 +40,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
   11:application-library/usb-cdc-device.c **** 
   12:application-library/usb-cdc-device.c **** /* Includes ------------------------------------------------------------------*/
   13:application-library/usb-cdc-device.c **** #include "usb-cdc-device.h"
-  14:application-library/usb-cdc-device.c **** #include "usbd_desc.h"
+  14:application-library/usb-cdc-device.c **** // #include "usbd_desc.h"
   15:application-library/usb-cdc-device.c **** #include "stm32f4xx.h"
   16:application-library/usb-cdc-device.c **** #include "stm32f4xx_hal.h"
   17:application-library/usb-cdc-device.c **** 
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
   29:application-library/usb-cdc-device.c **** /* usbd_cdc_if.c BEGIN---- ---- ---- ---- */
   30:application-library/usb-cdc-device.c **** /** Received data over USB are stored in this buffer      */
   31:application-library/usb-cdc-device.c **** uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
-ARM GAS  /tmp/ccZiPR2y.s 			page 2
+ARM GAS  /tmp/ccf4hwpD.s 			page 2
 
 
   32:application-library/usb-cdc-device.c **** /** Data to send over USB CDC are stored in this buffer   */
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
   86:application-library/usb-cdc-device.c ****   0x09,                                       /* bLength: Configuration Descriptor size */
   87:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_CONFIGURATION,                /* bDescriptorType: Configuration */
   88:application-library/usb-cdc-device.c ****   USB_CDC_CONFIG_DESC_SIZ,                    /* wTotalLength */
-ARM GAS  /tmp/ccZiPR2y.s 			page 3
+ARM GAS  /tmp/ccf4hwpD.s 			page 3
 
 
   89:application-library/usb-cdc-device.c ****   0x00,
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  143:application-library/usb-cdc-device.c ****   /*---------------------------------------------------------------------------*/
  144:application-library/usb-cdc-device.c **** 
  145:application-library/usb-cdc-device.c ****   /* Data class interface descriptor */
-ARM GAS  /tmp/ccZiPR2y.s 			page 4
+ARM GAS  /tmp/ccf4hwpD.s 			page 4
 
 
  146:application-library/usb-cdc-device.c ****   0x09,                                       /* bLength: Endpoint Descriptor size */
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  200:application-library/usb-cdc-device.c ****   * @brief  DeInitializes the CDC media low layer
  201:application-library/usb-cdc-device.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL
  202:application-library/usb-cdc-device.c ****   */
-ARM GAS  /tmp/ccZiPR2y.s 			page 5
+ARM GAS  /tmp/ccf4hwpD.s 			page 5
 
 
  203:application-library/usb-cdc-device.c **** int8_t CDC_DeInit_FS(void)
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  232:application-library/usb-cdc-device.c ****   /* Line Coding Structure                                                       */
  233:application-library/usb-cdc-device.c ****   /*-----------------------------------------------------------------------------*/
  234:application-library/usb-cdc-device.c ****   /* Offset | Field       | Size | Value  | Description                          */
-ARM GAS  /tmp/ccZiPR2y.s 			page 6
+ARM GAS  /tmp/ccf4hwpD.s 			page 6
 
 
  235:application-library/usb-cdc-device.c ****   /* 0      | dwDTERate   |   4  | Number |Data terminal rate, in bits per second*/
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  274:application-library/usb-cdc-device.c ****   * @param  Len: Number of data received (in bytes)
  275:application-library/usb-cdc-device.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
  276:application-library/usb-cdc-device.c ****   */
-ARM GAS  /tmp/ccZiPR2y.s 			page 7
+ARM GAS  /tmp/ccf4hwpD.s 			page 7
 
 
  277:application-library/usb-cdc-device.c **** int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
   73              		.cfi_startproc
   74              		@ args = 0, pretend = 0, frame = 0
   75              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 8
+ARM GAS  /tmp/ccf4hwpD.s 			page 8
 
 
   76              		@ link register save eliminated.
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  367:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_EMEM;
  368:application-library/usb-cdc-device.c ****   }
  369:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 9
+ARM GAS  /tmp/ccf4hwpD.s 			page 9
 
 
  370:application-library/usb-cdc-device.c ****   memset(hcdc, 0, sizeof(USBD_CDC_Buffer_t));
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  424:application-library/usb-cdc-device.c **** 
  425:application-library/usb-cdc-device.c ****   if (hcdc->RxBuffer == NULL)
  426:application-library/usb-cdc-device.c ****   {
-ARM GAS  /tmp/ccZiPR2y.s 			page 10
+ARM GAS  /tmp/ccf4hwpD.s 			page 10
 
 
  427:application-library/usb-cdc-device.c ****     return (uint8_t)USBD_EMEM;
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  481:application-library/usb-cdc-device.c **** 
  482:application-library/usb-cdc-device.c **** /**
  483:application-library/usb-cdc-device.c ****   * @brief  USBD_CDC_Setup
-ARM GAS  /tmp/ccZiPR2y.s 			page 11
+ARM GAS  /tmp/ccf4hwpD.s 			page 11
 
 
  484:application-library/usb-cdc-device.c ****   *         Handle the CDC specific requests
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  538:application-library/usb-cdc-device.c ****             USBD_CtlSendData(p_usbd_instance, (uint8_t *)&status_info, 2U);
  539:application-library/usb-cdc-device.c ****           }
  540:application-library/usb-cdc-device.c ****           else
-ARM GAS  /tmp/ccZiPR2y.s 			page 12
+ARM GAS  /tmp/ccf4hwpD.s 			page 12
 
 
  541:application-library/usb-cdc-device.c ****           {
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  595:application-library/usb-cdc-device.c **** {
  596:application-library/usb-cdc-device.c ****   USBD_CDC_Buffer_t *hcdc;
  597:application-library/usb-cdc-device.c ****   PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef *)p_usbd_instance->pData;
-ARM GAS  /tmp/ccZiPR2y.s 			page 13
+ARM GAS  /tmp/ccf4hwpD.s 			page 13
 
 
  598:application-library/usb-cdc-device.c **** 
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  652:application-library/usb-cdc-device.c ****   ((USBD_CDC_ItfTypeDef *)p_usbd_instance->pUserData)->Receive(hcdc->RxBuffer, &hcdc->RxLength);
  653:application-library/usb-cdc-device.c **** 
  654:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
-ARM GAS  /tmp/ccZiPR2y.s 			page 14
+ARM GAS  /tmp/ccf4hwpD.s 			page 14
 
 
  655:application-library/usb-cdc-device.c **** }
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  126 0022 84F80032 		strb	r3, [r4, #512]
  678:application-library/usb-cdc-device.c ****   }
  679:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 15
+ARM GAS  /tmp/ccf4hwpD.s 			page 15
 
 
  680:application-library/usb-cdc-device.c ****   return (uint8_t)USBD_OK;
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  702:application-library/usb-cdc-device.c **** 
  703:application-library/usb-cdc-device.c ****   if (pEpInDesc != NULL)
  704:application-library/usb-cdc-device.c ****   {
-ARM GAS  /tmp/ccZiPR2y.s 			page 16
+ARM GAS  /tmp/ccf4hwpD.s 			page 16
 
 
  705:application-library/usb-cdc-device.c ****     pEpInDesc->wMaxPacketSize = CDC_DATA_FS_MAX_PACKET_SIZE;
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  759:application-library/usb-cdc-device.c ****   if (pEpOutDesc != NULL)
  760:application-library/usb-cdc-device.c ****   {
  761:application-library/usb-cdc-device.c ****     pEpOutDesc->wMaxPacketSize = CDC_DATA_FS_MAX_PACKET_SIZE;
-ARM GAS  /tmp/ccZiPR2y.s 			page 17
+ARM GAS  /tmp/ccf4hwpD.s 			page 17
 
 
  762:application-library/usb-cdc-device.c ****   }
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  788:application-library/usb-cdc-device.c ****   * @param  fops: CD  Interface callback
  789:application-library/usb-cdc-device.c ****   * @retval status
  790:application-library/usb-cdc-device.c ****   */
-ARM GAS  /tmp/ccZiPR2y.s 			page 18
+ARM GAS  /tmp/ccf4hwpD.s 			page 18
 
 
  791:application-library/usb-cdc-device.c **** uint8_t USBD_CDC_RegisterInterface(USBD_Handle_t *p_usbd_instance,
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  845:application-library/usb-cdc-device.c **** }
  846:application-library/usb-cdc-device.c **** 
  847:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 19
+ARM GAS  /tmp/ccf4hwpD.s 			page 19
 
 
  848:application-library/usb-cdc-device.c **** /**
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  902:application-library/usb-cdc-device.c ****   {
  903:application-library/usb-cdc-device.c ****     p_usbd_instance->pDesc = pdesc;
  904:application-library/usb-cdc-device.c ****   }
-ARM GAS  /tmp/ccZiPR2y.s 			page 20
+ARM GAS  /tmp/ccf4hwpD.s 			page 20
 
 
  905:application-library/usb-cdc-device.c ****   /* Set Device initial State */
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  959:application-library/usb-cdc-device.c ****   if (pclass == NULL)
  960:application-library/usb-cdc-device.c ****   {
  961:application-library/usb-cdc-device.c ****     return USBD_FAIL;
-ARM GAS  /tmp/ccZiPR2y.s 			page 21
+ARM GAS  /tmp/ccf4hwpD.s 			page 21
 
 
  962:application-library/usb-cdc-device.c ****   }
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1016:application-library/usb-cdc-device.c **** 
 1017:application-library/usb-cdc-device.c **** /**
 1018:application-library/usb-cdc-device.c ****   * @brief  USBD_Stop
-ARM GAS  /tmp/ccZiPR2y.s 			page 22
+ARM GAS  /tmp/ccf4hwpD.s 			page 22
 
 
 1019:application-library/usb-cdc-device.c ****   *         Stop the USB Device Core.
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1073:application-library/usb-cdc-device.c **** 
 1074:application-library/usb-cdc-device.c **** 
 1075:application-library/usb-cdc-device.c **** /**
-ARM GAS  /tmp/ccZiPR2y.s 			page 23
+ARM GAS  /tmp/ccf4hwpD.s 			page 23
 
 
 1076:application-library/usb-cdc-device.c ****   * @brief  Handle the setup stage
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1130:application-library/usb-cdc-device.c ****       if (pep->rem_length > pep->maxpacket)
 1131:application-library/usb-cdc-device.c ****       {
 1132:application-library/usb-cdc-device.c ****         pep->rem_length -= pep->maxpacket;
-ARM GAS  /tmp/ccZiPR2y.s 			page 24
+ARM GAS  /tmp/ccf4hwpD.s 			page 24
 
 
 1133:application-library/usb-cdc-device.c **** 
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1187:application-library/usb-cdc-device.c ****       {
 1188:application-library/usb-cdc-device.c ****         if (p_usbd_instance->pClass->DataOut != NULL)
 1189:application-library/usb-cdc-device.c ****         {
-ARM GAS  /tmp/ccZiPR2y.s 			page 25
+ARM GAS  /tmp/ccf4hwpD.s 			page 25
 
 
 1190:application-library/usb-cdc-device.c ****           // p_usbd_instance->classId = idx;
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1244:application-library/usb-cdc-device.c ****         }
 1245:application-library/usb-cdc-device.c ****         else
 1246:application-library/usb-cdc-device.c ****         {
-ARM GAS  /tmp/ccZiPR2y.s 			page 26
+ARM GAS  /tmp/ccf4hwpD.s 			page 26
 
 
 1247:application-library/usb-cdc-device.c ****           if (p_usbd_instance->dev_state == USBD_STATE_CONFIGURED)
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1301:application-library/usb-cdc-device.c ****     {
 1302:application-library/usb-cdc-device.c ****       if (p_usbd_instance->pClass->DeInit(p_usbd_instance, (uint8_t)p_usbd_instance->dev_config) !=
 1303:application-library/usb-cdc-device.c ****       {
-ARM GAS  /tmp/ccZiPR2y.s 			page 27
+ARM GAS  /tmp/ccf4hwpD.s 			page 27
 
 
 1304:application-library/usb-cdc-device.c ****         ret = USBD_FAIL;
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1358:application-library/usb-cdc-device.c ****   if (p_usbd_instance->dev_state == USBD_STATE_SUSPENDED)
 1359:application-library/usb-cdc-device.c ****   {
 1360:application-library/usb-cdc-device.c ****     p_usbd_instance->dev_state = p_usbd_instance->dev_old_state;
-ARM GAS  /tmp/ccZiPR2y.s 			page 28
+ARM GAS  /tmp/ccf4hwpD.s 			page 28
 
 
 1361:application-library/usb-cdc-device.c ****   }
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1415:application-library/usb-cdc-device.c **** /**
 1416:application-library/usb-cdc-device.c ****   * @brief  Handle iso out incomplete event.
 1417:application-library/usb-cdc-device.c ****   * @param  p_usbd_instance: device instance
-ARM GAS  /tmp/ccZiPR2y.s 			page 29
+ARM GAS  /tmp/ccf4hwpD.s 			page 29
 
 
 1418:application-library/usb-cdc-device.c ****   * @retval None.
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1472:application-library/usb-cdc-device.c **** }
 1473:application-library/usb-cdc-device.c **** 
 1474:application-library/usb-cdc-device.c **** /**
-ARM GAS  /tmp/ccZiPR2y.s 			page 30
+ARM GAS  /tmp/ccf4hwpD.s 			page 30
 
 
 1475:application-library/usb-cdc-device.c ****   * @brief  Returns the class index relative to the selected endpoint
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1529:application-library/usb-cdc-device.c ****   * @param  ptr: data pointer inside the descriptor
 1530:application-library/usb-cdc-device.c ****   * @retval next header
 1531:application-library/usb-cdc-device.c ****   */
-ARM GAS  /tmp/ccZiPR2y.s 			page 31
+ARM GAS  /tmp/ccf4hwpD.s 			page 31
 
 
 1532:application-library/usb-cdc-device.c **** USBD_DescHeaderTypeDef *USBD_GetNextDesc(uint8_t *pbuf, uint16_t *ptr)
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1586:application-library/usb-cdc-device.c ****         case USB_REQ_CLEAR_FEATURE:
 1587:application-library/usb-cdc-device.c ****           USBD_ClrFeature(p_usbd_instance, req);
 1588:application-library/usb-cdc-device.c ****           break;
-ARM GAS  /tmp/ccZiPR2y.s 			page 32
+ARM GAS  /tmp/ccf4hwpD.s 			page 32
 
 
 1589:application-library/usb-cdc-device.c **** 
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1643:application-library/usb-cdc-device.c ****               }
 1644:application-library/usb-cdc-device.c ****             }
 1645:application-library/usb-cdc-device.c ****             else
-ARM GAS  /tmp/ccZiPR2y.s 			page 33
+ARM GAS  /tmp/ccf4hwpD.s 			page 33
 
 
 1646:application-library/usb-cdc-device.c ****             {
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1700:application-library/usb-cdc-device.c ****         /* Call the class data out function to manage the request */
 1701:application-library/usb-cdc-device.c ****         if (p_usbd_instance->pClass->Setup != NULL)
 1702:application-library/usb-cdc-device.c ****         {
-ARM GAS  /tmp/ccZiPR2y.s 			page 34
+ARM GAS  /tmp/ccf4hwpD.s 			page 34
 
 
 1703:application-library/usb-cdc-device.c ****           ret = (USBD_StatusTypeDef)p_usbd_instance->pClass->Setup(p_usbd_instance, req);
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1757:application-library/usb-cdc-device.c ****               }
 1758:application-library/usb-cdc-device.c ****               break;
 1759:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 35
+ARM GAS  /tmp/ccf4hwpD.s 			page 35
 
 
 1760:application-library/usb-cdc-device.c ****             case USBD_STATE_CONFIGURED:
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1814:application-library/usb-cdc-device.c ****               }
 1815:application-library/usb-cdc-device.c ****               else
 1816:application-library/usb-cdc-device.c ****               {
-ARM GAS  /tmp/ccZiPR2y.s 			page 36
+ARM GAS  /tmp/ccf4hwpD.s 			page 36
 
 
 1817:application-library/usb-cdc-device.c ****                 if (p_usbd_instance->ep_out[ep_addr & 0xFU].is_used == 0U)
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1871:application-library/usb-cdc-device.c **** {
 1872:application-library/usb-cdc-device.c ****   uint16_t len = 0U;
 1873:application-library/usb-cdc-device.c ****   uint8_t *pbuf = NULL;
-ARM GAS  /tmp/ccZiPR2y.s 			page 37
+ARM GAS  /tmp/ccf4hwpD.s 			page 37
 
 
 1874:application-library/usb-cdc-device.c ****   uint8_t err = 0U;
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1928:application-library/usb-cdc-device.c ****           {
 1929:application-library/usb-cdc-device.c ****             USBD_CtlError(p_usbd_instance, req);
 1930:application-library/usb-cdc-device.c ****             err++;
-ARM GAS  /tmp/ccZiPR2y.s 			page 38
+ARM GAS  /tmp/ccf4hwpD.s 			page 38
 
 
 1931:application-library/usb-cdc-device.c ****           }
@@ -2278,7 +2278,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1985:application-library/usb-cdc-device.c ****       else
 1986:application-library/usb-cdc-device.c ****       {
 1987:application-library/usb-cdc-device.c ****         USBD_CtlError(p_usbd_instance, req);
-ARM GAS  /tmp/ccZiPR2y.s 			page 39
+ARM GAS  /tmp/ccf4hwpD.s 			page 39
 
 
 1988:application-library/usb-cdc-device.c ****         err++;
@@ -2338,7 +2338,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2042:application-library/usb-cdc-device.c **** {
 2043:application-library/usb-cdc-device.c ****   uint8_t  dev_addr;
 2044:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 40
+ARM GAS  /tmp/ccf4hwpD.s 			page 40
 
 
 2045:application-library/usb-cdc-device.c ****   if ((req->wIndex == 0U) && (req->wLength == 0U) && (req->wValue < 128U))
@@ -2398,7 +2398,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2099:application-library/usb-cdc-device.c ****         p_usbd_instance->dev_config = cfgidx;
 2100:application-library/usb-cdc-device.c **** 
 2101:application-library/usb-cdc-device.c ****         USBD_SetClassConfig(p_usbd_instance, cfgidx);
-ARM GAS  /tmp/ccZiPR2y.s 			page 41
+ARM GAS  /tmp/ccf4hwpD.s 			page 41
 
 
 2102:application-library/usb-cdc-device.c ****         USBD_CtlSendStatus(p_usbd_instance);
@@ -2458,7 +2458,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2156:application-library/usb-cdc-device.c ****     USBD_CtlError(p_usbd_instance, req);
 2157:application-library/usb-cdc-device.c ****   }
 2158:application-library/usb-cdc-device.c ****   else
-ARM GAS  /tmp/ccZiPR2y.s 			page 42
+ARM GAS  /tmp/ccf4hwpD.s 			page 42
 
 
 2159:application-library/usb-cdc-device.c ****   {
@@ -2518,7 +2518,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2213:application-library/usb-cdc-device.c ****     default:
 2214:application-library/usb-cdc-device.c ****       USBD_CtlError(p_usbd_instance, req);
 2215:application-library/usb-cdc-device.c ****       break;
-ARM GAS  /tmp/ccZiPR2y.s 			page 43
+ARM GAS  /tmp/ccf4hwpD.s 			page 43
 
 
 2216:application-library/usb-cdc-device.c ****   }
@@ -2578,7 +2578,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2270:application-library/usb-cdc-device.c ****   * @brief  USBD_ParseSetupRequest
 2271:application-library/usb-cdc-device.c ****   *         Copy buffer into setup structure
 2272:application-library/usb-cdc-device.c ****   * @param  p_usbd_instance: device instance
-ARM GAS  /tmp/ccZiPR2y.s 			page 44
+ARM GAS  /tmp/ccf4hwpD.s 			page 44
 
 
 2273:application-library/usb-cdc-device.c ****   * @param  req: usb request
@@ -2638,7 +2638,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2327:application-library/usb-cdc-device.c ****   {
 2328:application-library/usb-cdc-device.c ****     return;
 2329:application-library/usb-cdc-device.c ****   }
-ARM GAS  /tmp/ccZiPR2y.s 			page 45
+ARM GAS  /tmp/ccf4hwpD.s 			page 45
 
 
 2330:application-library/usb-cdc-device.c **** 
@@ -2698,7 +2698,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2384:application-library/usb-cdc-device.c ****   p_usbd_instance->ep_in[0].rem_length = len;
 2385:application-library/usb-cdc-device.c ****   /* Start the transfer */
 2386:application-library/usb-cdc-device.c ****   USBD_LL_Transmit(p_usbd_instance, 0x00U, pbuf, len);
-ARM GAS  /tmp/ccZiPR2y.s 			page 46
+ARM GAS  /tmp/ccf4hwpD.s 			page 46
 
 
 2387:application-library/usb-cdc-device.c **** }
@@ -2758,7 +2758,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2441:application-library/usb-cdc-device.c ****   * @brief  USBD_CtlSendStatus
 2442:application-library/usb-cdc-device.c ****   *         send zero lzngth packet on the ctl pipe
 2443:application-library/usb-cdc-device.c ****   * @param  p_usbd_instance: device instance
-ARM GAS  /tmp/ccZiPR2y.s 			page 47
+ARM GAS  /tmp/ccf4hwpD.s 			page 47
 
 
 2444:application-library/usb-cdc-device.c ****   * @retval status
@@ -2818,7 +2818,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2498:application-library/usb-cdc-device.c **** 
 2499:application-library/usb-cdc-device.c **** void HAL_PCD_MspInit(PCD_HandleTypeDef* pcdHandle)
 2500:application-library/usb-cdc-device.c **** {
-ARM GAS  /tmp/ccZiPR2y.s 			page 48
+ARM GAS  /tmp/ccf4hwpD.s 			page 48
 
 
 2501:application-library/usb-cdc-device.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -2878,7 +2878,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2555:application-library/usb-cdc-device.c ****   * @param  hpcd: PCD handle
 2556:application-library/usb-cdc-device.c ****   * @retval None
 2557:application-library/usb-cdc-device.c ****   */
-ARM GAS  /tmp/ccZiPR2y.s 			page 49
+ARM GAS  /tmp/ccf4hwpD.s 			page 49
 
 
 2558:application-library/usb-cdc-device.c **** void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
@@ -2938,7 +2938,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2612:application-library/usb-cdc-device.c ****   else
 2613:application-library/usb-cdc-device.c ****   {
 2614:application-library/usb-cdc-device.c ****     Error_Handler();
-ARM GAS  /tmp/ccZiPR2y.s 			page 50
+ARM GAS  /tmp/ccf4hwpD.s 			page 50
 
 
 2615:application-library/usb-cdc-device.c ****   }
@@ -2998,7 +2998,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2669:application-library/usb-cdc-device.c ****   * @brief  Initializes the low level portion of the device driver.
 2670:application-library/usb-cdc-device.c ****   * @param  p_usbd_instance: Device handle
 2671:application-library/usb-cdc-device.c ****   * @retval USBD status
-ARM GAS  /tmp/ccZiPR2y.s 			page 51
+ARM GAS  /tmp/ccf4hwpD.s 			page 51
 
 
 2672:application-library/usb-cdc-device.c ****   */
@@ -3058,7 +3058,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2726:application-library/usb-cdc-device.c ****   * @retval USBD status
 2727:application-library/usb-cdc-device.c ****   */
 2728:application-library/usb-cdc-device.c **** USBD_StatusTypeDef USBD_LL_Start(USBD_Handle_t *p_usbd_instance)
-ARM GAS  /tmp/ccZiPR2y.s 			page 52
+ARM GAS  /tmp/ccf4hwpD.s 			page 52
 
 
 2729:application-library/usb-cdc-device.c **** {
@@ -3118,7 +3118,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2783:application-library/usb-cdc-device.c **** {
 2784:application-library/usb-cdc-device.c ****   HAL_PCD_EP_Flush(p_usbd_instance->pData, ep_addr);
 2785:application-library/usb-cdc-device.c **** }
-ARM GAS  /tmp/ccZiPR2y.s 			page 53
+ARM GAS  /tmp/ccf4hwpD.s 			page 53
 
 
 2786:application-library/usb-cdc-device.c **** 
@@ -3178,7 +3178,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2840:application-library/usb-cdc-device.c **** /**
 2841:application-library/usb-cdc-device.c ****   * @brief  Transmits data over an endpoint.
 2842:application-library/usb-cdc-device.c ****   * @param  p_usbd_instance: Device handle
-ARM GAS  /tmp/ccZiPR2y.s 			page 54
+ARM GAS  /tmp/ccf4hwpD.s 			page 54
 
 
 2843:application-library/usb-cdc-device.c ****   * @param  ep_addr: Endpoint number
@@ -3238,7 +3238,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2897:application-library/usb-cdc-device.c **** void USBD_static_free(void *p)
 2898:application-library/usb-cdc-device.c **** {
 2899:application-library/usb-cdc-device.c **** }
-ARM GAS  /tmp/ccZiPR2y.s 			page 55
+ARM GAS  /tmp/ccf4hwpD.s 			page 55
 
 
 2900:application-library/usb-cdc-device.c **** 
@@ -3298,7 +3298,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2954:application-library/usb-cdc-device.c **** {
 2955:application-library/usb-cdc-device.c ****   0x12,                       /*bLength */
 2956:application-library/usb-cdc-device.c ****   USB_DESC_TYPE_DEVICE,       /*bDescriptorType*/
-ARM GAS  /tmp/ccZiPR2y.s 			page 56
+ARM GAS  /tmp/ccf4hwpD.s 			page 56
 
 
 2957:application-library/usb-cdc-device.c ****   0x00,                       /*bcdUSB */
@@ -3358,7 +3358,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  198 0002 0B80     		strh	r3, [r1]	@ movhi
 3003:application-library/usb-cdc-device.c ****   return USBD_FS_DeviceDesc;
 3004:application-library/usb-cdc-device.c **** }
-ARM GAS  /tmp/ccZiPR2y.s 			page 57
+ARM GAS  /tmp/ccf4hwpD.s 			page 57
 
 
  199              		.loc 1 3004 0
@@ -3418,7 +3418,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  243              		.syntax unified
  244              		.thumb
  245              		.thumb_func
-ARM GAS  /tmp/ccZiPR2y.s 			page 58
+ARM GAS  /tmp/ccf4hwpD.s 			page 58
 
 
  246              		.fpu fpv4-sp-d16
@@ -3478,7 +3478,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  294 0004 2BB1     		cbz	r3, .L24
  821:application-library/usb-cdc-device.c ****   hcdc->TxLength = length;
  295              		.loc 1 821 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 59
+ARM GAS  /tmp/ccf4hwpD.s 			page 59
 
 
  296 0006 C3F80812 		str	r1, [r3, #520]
@@ -3538,7 +3538,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  342              		.loc 1 839 0
  343 000e 0320     		movs	r0, #3
  344              	.LVL32:
-ARM GAS  /tmp/ccZiPR2y.s 			page 60
+ARM GAS  /tmp/ccf4hwpD.s 			page 60
 
 
  845:application-library/usb-cdc-device.c **** 
@@ -3598,7 +3598,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  397              		.thumb
  398              		.thumb_func
  399              		.fpu fpv4-sp-d16
-ARM GAS  /tmp/ccZiPR2y.s 			page 61
+ARM GAS  /tmp/ccf4hwpD.s 			page 61
 
 
  401              	USBD_RegisterClass:
@@ -3658,7 +3658,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  446              		.cfi_def_cfa_offset 8
  447              		@ sp needed
  448 002e 10BD     		pop	{r4, pc}
-ARM GAS  /tmp/ccZiPR2y.s 			page 62
+ARM GAS  /tmp/ccf4hwpD.s 			page 62
 
 
  449              	.LVL39:
@@ -3718,7 +3718,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  498 0014 0020     		movs	r0, #0
  499              	.LVL47:
  500 0016 08BD     		pop	{r3, pc}
-ARM GAS  /tmp/ccZiPR2y.s 			page 63
+ARM GAS  /tmp/ccf4hwpD.s 			page 63
 
 
  501              	.LVL48:
@@ -3778,7 +3778,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  553              		.loc 1 1062 0
  554              		.cfi_startproc
  555              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 64
+ARM GAS  /tmp/ccf4hwpD.s 			page 64
 
 
  556              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -3838,7 +3838,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  609              	USBD_LL_Suspend:
  610              	.LFB165:
 1344:application-library/usb-cdc-device.c ****   p_usbd_instance->dev_old_state = p_usbd_instance->dev_state;
-ARM GAS  /tmp/ccZiPR2y.s 			page 65
+ARM GAS  /tmp/ccf4hwpD.s 			page 65
 
 
  611              		.loc 1 1344 0
@@ -3898,7 +3898,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  660 000e 90F89D32 		ldrb	r3, [r0, #669]	@ zero_extendqisi2
  661 0012 DBB2     		uxtb	r3, r3
  662 0014 80F89C32 		strb	r3, [r0, #668]
-ARM GAS  /tmp/ccZiPR2y.s 			page 66
+ARM GAS  /tmp/ccf4hwpD.s 			page 66
 
 
  663 0018 F7E7     		b	.L54
@@ -3958,7 +3958,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  714              		.section	.text.USBD_LL_IsoINIncomplete,"ax",%progbits
  715              		.align	1
  716              		.global	USBD_LL_IsoINIncomplete
-ARM GAS  /tmp/ccZiPR2y.s 			page 67
+ARM GAS  /tmp/ccf4hwpD.s 			page 67
 
 
  717              		.syntax unified
@@ -4018,7 +4018,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1401:application-library/usb-cdc-device.c ****   }
  764              		.loc 1 1401 0
  765 0020 0320     		movs	r0, #3
-ARM GAS  /tmp/ccZiPR2y.s 			page 68
+ARM GAS  /tmp/ccf4hwpD.s 			page 68
 
 
  766              	.LVL71:
@@ -4078,7 +4078,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1430:application-library/usb-cdc-device.c ****     {
  816              		.loc 1 1430 0
  817 0014 536A     		ldr	r3, [r2, #36]
-ARM GAS  /tmp/ccZiPR2y.s 			page 69
+ARM GAS  /tmp/ccf4hwpD.s 			page 69
 
 
  818 0016 002B     		cmp	r3, #0
@@ -4138,7 +4138,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  872 0000 08B5     		push	{r3, lr}
  873              	.LCFI15:
  874              		.cfi_def_cfa_offset 8
-ARM GAS  /tmp/ccZiPR2y.s 			page 70
+ARM GAS  /tmp/ccf4hwpD.s 			page 70
 
 
  875              		.cfi_offset 3, -8
@@ -4198,7 +4198,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  923              		.loc 1 1485 0
  924 0000 0020     		movs	r0, #0
  925              	.LVL89:
-ARM GAS  /tmp/ccZiPR2y.s 			page 71
+ARM GAS  /tmp/ccf4hwpD.s 			page 71
 
 
  926 0002 7047     		bx	lr
@@ -4258,7 +4258,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  978 0002 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
  979 0004 9A42     		cmp	r2, r3
  980 0006 18D9     		bls	.L90
-ARM GAS  /tmp/ccZiPR2y.s 			page 72
+ARM GAS  /tmp/ccf4hwpD.s 			page 72
 
 
 1495:application-library/usb-cdc-device.c ****   USBD_DescHeaderTypeDef *pdesc = (USBD_DescHeaderTypeDef *)(void *)pConfDesc;
@@ -4318,7 +4318,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1028              	.L90:
  1029              	.LCFI19:
  1030              		.cfi_def_cfa_offset 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 73
+ARM GAS  /tmp/ccf4hwpD.s 			page 73
 
 
  1031              		.cfi_restore 4
@@ -4378,7 +4378,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  691:application-library/usb-cdc-device.c **** 
  1083              		.loc 1 691 0
  1084 001a 8121     		movs	r1, #129
-ARM GAS  /tmp/ccZiPR2y.s 			page 74
+ARM GAS  /tmp/ccf4hwpD.s 			page 74
 
 
  1085 001c 2046     		mov	r0, r4
@@ -4438,7 +4438,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1132              		.fpu fpv4-sp-d16
  1134              	USBD_CDC_GetHSCfgDesc:
  1135              	.LFB146:
-ARM GAS  /tmp/ccZiPR2y.s 			page 75
+ARM GAS  /tmp/ccf4hwpD.s 			page 75
 
 
  718:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpCmdDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_CMD_EP);
@@ -4498,7 +4498,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1182              		.loc 1 730 0
  1183 002a 0023     		movs	r3, #0
  1184 002c 2B71     		strb	r3, [r5, #4]
-ARM GAS  /tmp/ccZiPR2y.s 			page 76
+ARM GAS  /tmp/ccf4hwpD.s 			page 76
 
 
  1185 002e 0223     		movs	r3, #2
@@ -4558,7 +4558,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  750:application-library/usb-cdc-device.c ****   USBD_EpDescTypeDef *pEpOutDesc = USBD_GetEpDesc(USBD_CDC_CfgDesc, CDC_OUT_EP);
  1236              		.loc 1 750 0
  1237 0004 0F4C     		ldr	r4, .L116
-ARM GAS  /tmp/ccZiPR2y.s 			page 77
+ARM GAS  /tmp/ccf4hwpD.s 			page 77
 
 
  1238 0006 8221     		movs	r1, #130
@@ -4618,7 +4618,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1283 003e 3B80     		strh	r3, [r7]	@ movhi
  771:application-library/usb-cdc-device.c **** 
  1284              		.loc 1 771 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 78
+ARM GAS  /tmp/ccf4hwpD.s 			page 78
 
 
  1285 0040 0048     		ldr	r0, .L116
@@ -4678,7 +4678,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
   16:application-library/usb-cdc-device.h **** 
   17:application-library/usb-cdc-device.h **** 
   18:application-library/usb-cdc-device.h **** /* usbd_def.h BEGIN ---- ---- ---- ---- */
-ARM GAS  /tmp/ccZiPR2y.s 			page 79
+ARM GAS  /tmp/ccf4hwpD.s 			page 79
 
 
   19:application-library/usb-cdc-device.h **** #ifndef NULL
@@ -4738,7 +4738,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
   73:application-library/usb-cdc-device.h **** #define  USBD_IDX_INTERFACE_STR                         0x05U
   74:application-library/usb-cdc-device.h **** 
   75:application-library/usb-cdc-device.h **** #define  USB_REQ_TYPE_STANDARD                          0x00U
-ARM GAS  /tmp/ccZiPR2y.s 			page 80
+ARM GAS  /tmp/ccf4hwpD.s 			page 80
 
 
   76:application-library/usb-cdc-device.h **** #define  USB_REQ_TYPE_CLASS                             0x20U
@@ -4798,7 +4798,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  130:application-library/usb-cdc-device.h **** 
  131:application-library/usb-cdc-device.h **** 
  132:application-library/usb-cdc-device.h **** /*  EP0 State */
-ARM GAS  /tmp/ccZiPR2y.s 			page 81
+ARM GAS  /tmp/ccf4hwpD.s 			page 81
 
 
  133:application-library/usb-cdc-device.h **** #define USBD_EP0_IDLE                                   0x00U
@@ -4858,7 +4858,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  187:application-library/usb-cdc-device.h ****   uint8_t   bDescriptorType;
  188:application-library/usb-cdc-device.h ****   uint8_t   bEndpointAddress;
  189:application-library/usb-cdc-device.h ****   uint8_t   bmAttributes;
-ARM GAS  /tmp/ccZiPR2y.s 			page 82
+ARM GAS  /tmp/ccf4hwpD.s 			page 82
 
 
  190:application-library/usb-cdc-device.h ****   uint16_t  wMaxPacketSize;
@@ -4918,7 +4918,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  244:application-library/usb-cdc-device.h **** 
  245:application-library/usb-cdc-device.h **** /* USB Device descriptors structure */
  246:application-library/usb-cdc-device.h **** typedef struct
-ARM GAS  /tmp/ccZiPR2y.s 			page 83
+ARM GAS  /tmp/ccf4hwpD.s 			page 83
 
 
  247:application-library/usb-cdc-device.h **** {
@@ -4978,7 +4978,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  301:application-library/usb-cdc-device.h **** 
  302:application-library/usb-cdc-device.h **** /* USB Device handle structure */
  303:application-library/usb-cdc-device.h **** typedef struct
-ARM GAS  /tmp/ccZiPR2y.s 			page 84
+ARM GAS  /tmp/ccf4hwpD.s 			page 84
 
 
  304:application-library/usb-cdc-device.h **** {
@@ -5038,7 +5038,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  358:application-library/usb-cdc-device.h **** {
  359:application-library/usb-cdc-device.h ****   NETWORK_CONNECTION = 0x00,
  360:application-library/usb-cdc-device.h ****   RESPONSE_AVAILABLE = 0x01,
-ARM GAS  /tmp/ccZiPR2y.s 			page 85
+ARM GAS  /tmp/ccf4hwpD.s 			page 85
 
 
  361:application-library/usb-cdc-device.h ****   CONNECTION_SPEED_CHANGE = 0x2A
@@ -5098,7 +5098,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  372:application-library/usb-cdc-device.h **** 
  1358              		.loc 2 372 0
  1359 001e CA79     		ldrb	r2, [r1, #7]	@ zero_extendqisi2
-ARM GAS  /tmp/ccZiPR2y.s 			page 86
+ARM GAS  /tmp/ccf4hwpD.s 			page 86
 
 
  1360              	.LVL146:
@@ -5158,7 +5158,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1408              		.loc 1 2368 0
  1409 0010 1846     		mov	r0, r3
  1410              	.LVL154:
-ARM GAS  /tmp/ccZiPR2y.s 			page 87
+ARM GAS  /tmp/ccf4hwpD.s 			page 87
 
 
  1411 0012 7047     		bx	lr
@@ -5218,7 +5218,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1459              		.loc 1 2339 0
  1460 001c 07E0     		b	.L124
  1461              	.LVL160:
-ARM GAS  /tmp/ccZiPR2y.s 			page 88
+ARM GAS  /tmp/ccf4hwpD.s 			page 88
 
 
  1462              	.L125:
@@ -5278,7 +5278,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 3023:application-library/usb-cdc-device.c ****   * @retval Pointer to descriptor buffer
 3024:application-library/usb-cdc-device.c ****   */
 3025:application-library/usb-cdc-device.c **** uint8_t * USBD_FS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
-ARM GAS  /tmp/ccZiPR2y.s 			page 89
+ARM GAS  /tmp/ccf4hwpD.s 			page 89
 
 
 3026:application-library/usb-cdc-device.c **** {
@@ -5338,7 +5338,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1550              		.align	1
  1551              		.global	USBD_FS_ManufacturerStrDescriptor
  1552              		.syntax unified
-ARM GAS  /tmp/ccZiPR2y.s 			page 90
+ARM GAS  /tmp/ccf4hwpD.s 			page 90
 
 
  1553              		.thumb
@@ -5398,7 +5398,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1597              	USBD_FS_ConfigStrDescriptor:
  1598              	.LFB229:
 3050:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 91
+ARM GAS  /tmp/ccf4hwpD.s 			page 91
 
 
 3051:application-library/usb-cdc-device.c **** /**
@@ -5458,7 +5458,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1618              	.LVL180:
  1619              	.L143:
 3086:application-library/usb-cdc-device.c ****   }
-ARM GAS  /tmp/ccZiPR2y.s 			page 92
+ARM GAS  /tmp/ccf4hwpD.s 			page 92
 
 
 3087:application-library/usb-cdc-device.c ****   return USBD_StrDesc;
@@ -5518,7 +5518,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1663 0004 28B1     		cbz	r0, .L152
 3099:application-library/usb-cdc-device.c ****   {
 3100:application-library/usb-cdc-device.c ****     USBD_GetString((uint8_t *)USBD_INTERFACE_STRING_FS, USBD_StrDesc, length);
-ARM GAS  /tmp/ccZiPR2y.s 			page 93
+ARM GAS  /tmp/ccf4hwpD.s 			page 93
 
 
 3101:application-library/usb-cdc-device.c ****   }
@@ -5578,7 +5578,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1711              		.cfi_offset 4, -12
  1712              		.cfi_offset 5, -8
  1713              		.cfi_offset 14, -4
-ARM GAS  /tmp/ccZiPR2y.s 			page 94
+ARM GAS  /tmp/ccf4hwpD.s 			page 94
 
 
  1714 0002 89B0     		sub	sp, sp, #36
@@ -5638,7 +5638,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1761 003e 0323     		movs	r3, #3
  1762 0040 0693     		str	r3, [sp, #24]
 2517:application-library/usb-cdc-device.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-ARM GAS  /tmp/ccZiPR2y.s 			page 95
+ARM GAS  /tmp/ccf4hwpD.s 			page 95
 
 
  1763              		.loc 1 2517 0
@@ -5698,7 +5698,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1814              	HAL_PCD_MspDeInit:
  1815              	.LFB197:
 2533:application-library/usb-cdc-device.c ****   if(pcdHandle->Instance==USB_OTG_FS)
-ARM GAS  /tmp/ccZiPR2y.s 			page 96
+ARM GAS  /tmp/ccf4hwpD.s 			page 96
 
 
  1816              		.loc 1 2533 0
@@ -5758,7 +5758,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1866              		.fpu fpv4-sp-d16
  1868              	HAL_PCD_SOFCallback:
  1869              	.LFB201:
-ARM GAS  /tmp/ccZiPR2y.s 			page 97
+ARM GAS  /tmp/ccf4hwpD.s 			page 97
 
 
 2591:application-library/usb-cdc-device.c ****   USBD_LL_SOF((USBD_Handle_t*)hpcd->pData);
@@ -5818,7 +5818,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1920              		.loc 1 2636 0
  1921 001a 236A     		ldr	r3, [r4, #32]
  1922 001c 23B1     		cbz	r3, .L169
-ARM GAS  /tmp/ccZiPR2y.s 			page 98
+ARM GAS  /tmp/ccf4hwpD.s 			page 98
 
 
 2639:application-library/usb-cdc-device.c ****   }
@@ -5878,7 +5878,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  1977              		.cfi_offset 3, -8
  1978              		.cfi_offset 14, -4
 2661:application-library/usb-cdc-device.c **** }
-ARM GAS  /tmp/ccZiPR2y.s 			page 99
+ARM GAS  /tmp/ccf4hwpD.s 			page 99
 
 
  1979              		.loc 1 2661 0
@@ -5938,7 +5938,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2028 001a 0360     		str	r3, [r0]
 2682:application-library/usb-cdc-device.c ****   hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
  2029              		.loc 1 2682 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 100
+ARM GAS  /tmp/ccf4hwpD.s 			page 100
 
 
  2030 001c 0423     		movs	r3, #4
@@ -5998,7 +5998,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2072              	.LVL225:
 2704:application-library/usb-cdc-device.c **** 
  2073              		.loc 1 2704 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 101
+ARM GAS  /tmp/ccf4hwpD.s 			page 101
 
 
  2074 0058 0020     		movs	r0, #0
@@ -6058,7 +6058,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  903:application-library/usb-cdc-device.c ****   }
  2122              		.loc 1 903 0
  2123 0016 C3F8B012 		str	r1, [r3, #688]
-ARM GAS  /tmp/ccZiPR2y.s 			page 102
+ARM GAS  /tmp/ccf4hwpD.s 			page 102
 
 
  2124              	.L190:
@@ -6118,7 +6118,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2173 0008 2046     		mov	r0, r4
  2174 000a FFF7FEFF 		bl	USBD_Init
  2175              	.LVL233:
-ARM GAS  /tmp/ccZiPR2y.s 			page 103
+ARM GAS  /tmp/ccf4hwpD.s 			page 103
 
 
  346:application-library/usb-cdc-device.c ****   USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
@@ -6178,7 +6178,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2227 000a 08BD     		pop	{r3, pc}
  2228              		.cfi_endproc
  2229              	.LFE209:
-ARM GAS  /tmp/ccZiPR2y.s 			page 104
+ARM GAS  /tmp/ccf4hwpD.s 			page 104
 
 
  2231              		.section	.text.USBD_Stop,"ax",%progbits
@@ -6238,7 +6238,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2282              		.cfi_startproc
  2283              		@ args = 0, pretend = 0, frame = 0
  2284              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 105
+ARM GAS  /tmp/ccf4hwpD.s 			page 105
 
 
  2285              	.LVL244:
@@ -6298,7 +6298,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1295:application-library/usb-cdc-device.c ****   p_usbd_instance->dev_remote_wakeup = 0U;
  2337              		.loc 1 1295 0
  2338 0010 4360     		str	r3, [r0, #4]
-ARM GAS  /tmp/ccZiPR2y.s 			page 106
+ARM GAS  /tmp/ccf4hwpD.s 			page 106
 
 
 1296:application-library/usb-cdc-device.c **** 
@@ -6358,7 +6358,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2381 0050 3846     		mov	r0, r7
  2382 0052 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
  2383              	.LVL255:
-ARM GAS  /tmp/ccZiPR2y.s 			page 107
+ARM GAS  /tmp/ccf4hwpD.s 			page 107
 
 
  2384              	.L213:
@@ -6418,7 +6418,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2606:application-library/usb-cdc-device.c ****   }
  2434              		.loc 1 2606 0
  2435 0014 0021     		movs	r1, #0
-ARM GAS  /tmp/ccZiPR2y.s 			page 108
+ARM GAS  /tmp/ccf4hwpD.s 			page 108
 
 
  2436              	.LVL261:
@@ -6478,7 +6478,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2488              		.thumb
  2489              		.thumb_func
  2490              		.fpu fpv4-sp-d16
-ARM GAS  /tmp/ccZiPR2y.s 			page 109
+ARM GAS  /tmp/ccf4hwpD.s 			page 109
 
 
  2492              	USBD_CDC_DeInit:
@@ -6538,7 +6538,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2536 0034 5B68     		ldr	r3, [r3, #4]
  2537 0036 9847     		blx	r3
  2538              	.LVL273:
-ARM GAS  /tmp/ccZiPR2y.s 			page 110
+ARM GAS  /tmp/ccf4hwpD.s 			page 110
 
 
  475:application-library/usb-cdc-device.c ****     p_usbd_instance->pClassData = NULL;
@@ -6598,7 +6598,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2591              		@ args = 0, pretend = 0, frame = 0
  2592              		@ frame_needed = 0, uses_anonymous_args = 0
  2593              	.LVL277:
-ARM GAS  /tmp/ccZiPR2y.s 			page 111
+ARM GAS  /tmp/ccf4hwpD.s 			page 111
 
 
  2594 0000 08B5     		push	{r3, lr}
@@ -6658,7 +6658,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2647              		.thumb
  2648              		.thumb_func
  2649              		.fpu fpv4-sp-d16
-ARM GAS  /tmp/ccZiPR2y.s 			page 112
+ARM GAS  /tmp/ccf4hwpD.s 			page 112
 
 
  2651              	USBD_LL_ClearStallEP:
@@ -6718,7 +6718,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2701 0016 93F87E02 		ldrb	r0, [r3, #638]	@ zero_extendqisi2
  2702              	.LVL291:
 2827:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 113
+ARM GAS  /tmp/ccf4hwpD.s 			page 113
 
 
  2703              		.loc 1 2827 0
@@ -6778,7 +6778,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2758              	.LFB217:
 2849:application-library/usb-cdc-device.c ****   HAL_StatusTypeDef hal_status = HAL_OK;
  2759              		.loc 1 2849 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 114
+ARM GAS  /tmp/ccf4hwpD.s 			page 114
 
 
  2760              		.cfi_startproc
@@ -6838,7 +6838,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2811              		.loc 1 309 0
  2812 0012 D2F81432 		ldr	r3, [r2, #532]
  2813 0016 03B1     		cbz	r3, .L243
-ARM GAS  /tmp/ccZiPR2y.s 			page 115
+ARM GAS  /tmp/ccf4hwpD.s 			page 115
 
 
  2814              	.LVL308:
@@ -6898,7 +6898,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  597:application-library/usb-cdc-device.c **** 
  2865              		.loc 1 597 0
  2866 0002 D0F8C462 		ldr	r6, [r0, #708]
-ARM GAS  /tmp/ccZiPR2y.s 			page 116
+ARM GAS  /tmp/ccf4hwpD.s 			page 116
 
 
  2867              	.LVL313:
@@ -6958,7 +6958,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2912 004e 04EB8404 		add	r4, r4, r4, lsl #2
  2913 0052 A300     		lsls	r3, r4, #2
  2914              	.LVL321:
-ARM GAS  /tmp/ccZiPR2y.s 			page 117
+ARM GAS  /tmp/ccf4hwpD.s 			page 117
 
 
  2915 0054 0344     		add	r3, r3, r0
@@ -7018,7 +7018,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  2964 0002 1346     		mov	r3, r2
 2382:application-library/usb-cdc-device.c ****   p_usbd_instance->ep_in[0].total_length = len;
  2965              		.loc 1 2382 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 118
+ARM GAS  /tmp/ccf4hwpD.s 			page 118
 
 
  2966 0004 0222     		movs	r2, #2
@@ -7078,7 +7078,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3015              		.loc 1 2169 0
  3016 001a 0122     		movs	r2, #1
  3017 001c 011D     		adds	r1, r0, #4
-ARM GAS  /tmp/ccZiPR2y.s 			page 119
+ARM GAS  /tmp/ccf4hwpD.s 			page 119
 
 
  3018              	.LVL333:
@@ -7138,7 +7138,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3067              	.LCFI58:
  3068              		.cfi_def_cfa_offset 8
  3069              		.cfi_offset 3, -8
-ARM GAS  /tmp/ccZiPR2y.s 			page 120
+ARM GAS  /tmp/ccf4hwpD.s 			page 120
 
 
  3070              		.cfi_offset 14, -4
@@ -7198,7 +7198,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3115              		.align	1
  3116              		.global	USBD_CtlContinueSendData
  3117              		.syntax unified
-ARM GAS  /tmp/ccZiPR2y.s 			page 121
+ARM GAS  /tmp/ccf4hwpD.s 			page 121
 
 
  3118              		.thumb
@@ -7258,7 +7258,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3170 0008 0023     		movs	r3, #0
  3171 000a 1A46     		mov	r2, r3
  3172 000c 1946     		mov	r1, r3
-ARM GAS  /tmp/ccZiPR2y.s 			page 122
+ARM GAS  /tmp/ccf4hwpD.s 			page 122
 
 
  3173 000e FFF7FEFF 		bl	USBD_LL_Transmit
@@ -7318,7 +7318,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1621:application-library/usb-cdc-device.c ****       {
  3224              		.loc 1 1621 0
  3225 0020 95F89C32 		ldrb	r3, [r5, #668]	@ zero_extendqisi2
-ARM GAS  /tmp/ccZiPR2y.s 			page 123
+ARM GAS  /tmp/ccf4hwpD.s 			page 123
 
 
  3226 0024 013B     		subs	r3, r3, #1
@@ -7378,7 +7378,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3272 005a FFF7FEFF 		bl	USBD_CtlError
  3273              	.LVL370:
 1613:application-library/usb-cdc-device.c ****   uint8_t idx;
-ARM GAS  /tmp/ccZiPR2y.s 			page 124
+ARM GAS  /tmp/ccf4hwpD.s 			page 124
 
 
  3274              		.loc 1 1613 0
@@ -7438,7 +7438,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3324 000c 03F06003 		and	r3, r3, #96
  3325 0010 202B     		cmp	r3, #32
  3326 0012 06D0     		beq	.L288
-ARM GAS  /tmp/ccZiPR2y.s 			page 125
+ARM GAS  /tmp/ccf4hwpD.s 			page 125
 
 
  3327 0014 402B     		cmp	r3, #64
@@ -7498,7 +7498,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3372 0054 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
  3373 0058 DBB2     		uxtb	r3, r3
  3374 005a 022B     		cmp	r3, #2
-ARM GAS  /tmp/ccZiPR2y.s 			page 126
+ARM GAS  /tmp/ccf4hwpD.s 			page 126
 
 
  3375 005c 05D0     		beq	.L296
@@ -7558,7 +7558,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3418              	.LVL395:
  3419              	.L297:
 1727:application-library/usb-cdc-device.c ****               {
-ARM GAS  /tmp/ccZiPR2y.s 			page 127
+ARM GAS  /tmp/ccf4hwpD.s 			page 127
 
 
  3420              		.loc 1 1727 0
@@ -7618,7 +7618,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3463              		.loc 1 1785 0
  3464 00c2 70BD     		pop	{r4, r5, r6, pc}
  3465              	.LVL403:
-ARM GAS  /tmp/ccZiPR2y.s 			page 128
+ARM GAS  /tmp/ccf4hwpD.s 			page 128
 
 
  3466              	.L301:
@@ -7678,7 +7678,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3509              		.loc 1 1767 0
  3510 00f6 2846     		mov	r0, r5
  3511 00f8 FFF7FEFF 		bl	USBD_CtlSendStatus
-ARM GAS  /tmp/ccZiPR2y.s 			page 129
+ARM GAS  /tmp/ccf4hwpD.s 			page 129
 
 
  3512              	.LVL413:
@@ -7738,7 +7738,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3557              	.LVL422:
  3558              	.L306:
 1793:application-library/usb-cdc-device.c ****               {
-ARM GAS  /tmp/ccZiPR2y.s 			page 130
+ARM GAS  /tmp/ccf4hwpD.s 			page 130
 
 
  3559              		.loc 1 1793 0
@@ -7798,7 +7798,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3602              		.loc 1 1796 0
  3603 0170 70BD     		pop	{r4, r5, r6, pc}
  3604              	.LVL432:
-ARM GAS  /tmp/ccZiPR2y.s 			page 131
+ARM GAS  /tmp/ccf4hwpD.s 			page 131
 
 
  3605              	.L334:
@@ -7858,7 +7858,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3650              		.loc 1 1831 0 is_stmt 1
  3651 01ba 3146     		mov	r1, r6
  3652 01bc 2846     		mov	r0, r5
-ARM GAS  /tmp/ccZiPR2y.s 			page 132
+ARM GAS  /tmp/ccf4hwpD.s 			page 132
 
 
  3653              	.LVL439:
@@ -7918,7 +7918,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3698 01fe 2C44     		add	r4, r4, r5
  3699 0200 0434     		adds	r4, r4, #4
  3700 0202 D7E7     		b	.L314
-ARM GAS  /tmp/ccZiPR2y.s 			page 133
+ARM GAS  /tmp/ccf4hwpD.s 			page 133
 
 
  3701              	.LVL448:
@@ -7978,7 +7978,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3746 022c 0020     		movs	r0, #0
  3747              	.LVL459:
  3748 022e 70BD     		pop	{r4, r5, r6, pc}
-ARM GAS  /tmp/ccZiPR2y.s 			page 134
+ARM GAS  /tmp/ccf4hwpD.s 			page 134
 
 
  3749              	.LVL460:
@@ -8038,7 +8038,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3801              	.L341:
  3802 001e 04       		.byte	(.L340-.L341)/2
  3803 001f 21       		.byte	(.L342-.L341)/2
-ARM GAS  /tmp/ccZiPR2y.s 			page 135
+ARM GAS  /tmp/ccf4hwpD.s 			page 135
 
 
  3804 0020 37       		.byte	(.L343-.L341)/2
@@ -8098,7 +8098,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3850              		.cfi_def_cfa_offset 12
  3851              		@ sp needed
  3852 005e 30BD     		pop	{r4, r5, pc}
-ARM GAS  /tmp/ccZiPR2y.s 			page 136
+ARM GAS  /tmp/ccf4hwpD.s 			page 136
 
 
  3853              	.LVL473:
@@ -8158,7 +8158,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3899 0099 33       		.byte	(.L353-.L350)/2
  3900 009a 43       		.byte	(.L354-.L350)/2
  3901 009b 53       		.byte	(.L355-.L350)/2
-ARM GAS  /tmp/ccZiPR2y.s 			page 137
+ARM GAS  /tmp/ccf4hwpD.s 			page 137
 
 
  3902              		.p2align 1
@@ -8218,7 +8218,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3946 00d0 2946     		mov	r1, r5
  3947 00d2 FFF7FEFF 		bl	USBD_CtlError
  3948              	.LVL488:
-ARM GAS  /tmp/ccZiPR2y.s 			page 138
+ARM GAS  /tmp/ccf4hwpD.s 			page 138
 
 
 1918:application-library/usb-cdc-device.c ****           }
@@ -8278,7 +8278,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  3992              		.loc 1 1874 0
  3993 010c 0023     		movs	r3, #0
  3994 010e 92E7     		b	.L346
-ARM GAS  /tmp/ccZiPR2y.s 			page 139
+ARM GAS  /tmp/ccf4hwpD.s 			page 139
 
 
  3995              	.LVL497:
@@ -8338,7 +8338,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4038              		.loc 1 1961 0
  4039 0144 0DF10601 		add	r1, sp, #6
  4040 0148 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
-ARM GAS  /tmp/ccZiPR2y.s 			page 140
+ARM GAS  /tmp/ccf4hwpD.s 			page 140
 
 
  4041              	.LVL505:
@@ -8398,7 +8398,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4084 017a 5CE7     		b	.L346
  4085              	.LVL514:
  4086              	.L362:
-ARM GAS  /tmp/ccZiPR2y.s 			page 141
+ARM GAS  /tmp/ccf4hwpD.s 			page 141
 
 
 1987:application-library/usb-cdc-device.c ****         err++;
@@ -8458,7 +8458,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4130              	.LVL522:
 2007:application-library/usb-cdc-device.c ****       break;
  4131              		.loc 1 2007 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 142
+ARM GAS  /tmp/ccf4hwpD.s 			page 142
 
 
  4132 01b2 0123     		movs	r3, #1
@@ -8518,7 +8518,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4182 0006 FBB9     		cbnz	r3, .L371
 2045:application-library/usb-cdc-device.c ****   {
  4183              		.loc 1 2045 0 is_stmt 0 discriminator 1
-ARM GAS  /tmp/ccZiPR2y.s 			page 143
+ARM GAS  /tmp/ccf4hwpD.s 			page 143
 
 
  4184 0008 CB88     		ldrh	r3, [r1, #6]
@@ -8578,7 +8578,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4228              	.L371:
 2071:application-library/usb-cdc-device.c ****   }
  4229              		.loc 1 2071 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 144
+ARM GAS  /tmp/ccf4hwpD.s 			page 144
 
 
  4230 0048 2046     		mov	r0, r4
@@ -8638,7 +8638,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4280 001a 09D0     		beq	.L381
  4281 001c 032B     		cmp	r3, #3
  4282 001e 18D0     		beq	.L382
-ARM GAS  /tmp/ccZiPR2y.s 			page 145
+ARM GAS  /tmp/ccf4hwpD.s 			page 145
 
 
 2137:application-library/usb-cdc-device.c ****       (void)USBD_ClrClassConfig(p_usbd_instance, cfgidx);
@@ -8698,7 +8698,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4325              	.L382:
 2112:application-library/usb-cdc-device.c ****       {
  4326              		.loc 1 2112 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 146
+ARM GAS  /tmp/ccf4hwpD.s 			page 146
 
 
  4327 0052 7DB1     		cbz	r5, .L388
@@ -8758,7 +8758,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4370              	.LVL562:
  4371              	.L385:
 2132:application-library/usb-cdc-device.c ****       }
-ARM GAS  /tmp/ccZiPR2y.s 			page 147
+ARM GAS  /tmp/ccf4hwpD.s 			page 147
 
 
  4372              		.loc 1 2132 0
@@ -8818,7 +8818,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4423              		.syntax unified
  4424              		.thumb
  4425              		.thumb_func
-ARM GAS  /tmp/ccZiPR2y.s 			page 148
+ARM GAS  /tmp/ccf4hwpD.s 			page 148
 
 
  4426              		.fpu fpv4-sp-d16
@@ -8878,7 +8878,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4475              		.thumb
  4476              		.thumb_func
  4477              		.fpu fpv4-sp-d16
-ARM GAS  /tmp/ccZiPR2y.s 			page 149
+ARM GAS  /tmp/ccf4hwpD.s 			page 149
 
 
  4479              	USBD_StdDevReq:
@@ -8938,7 +8938,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4525 002e 14       		.byte	(.L406-.L407)/2
  4526 002f 1C       		.byte	(.L408-.L407)/2
  4527 0030 20       		.byte	(.L405-.L407)/2
-ARM GAS  /tmp/ccZiPR2y.s 			page 150
+ARM GAS  /tmp/ccf4hwpD.s 			page 150
 
 
  4528 0031 18       		.byte	(.L409-.L407)/2
@@ -8998,7 +8998,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1579:application-library/usb-cdc-device.c ****           break;
  4571              		.loc 1 1579 0
  4572 0056 FFF7FEFF 		bl	USBD_GetStatus
-ARM GAS  /tmp/ccZiPR2y.s 			page 151
+ARM GAS  /tmp/ccf4hwpD.s 			page 151
 
 
  4573              	.LVL589:
@@ -9058,7 +9058,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 1081:application-library/usb-cdc-device.c **** 
  4618              		.loc 1 1081 0
  4619              		.cfi_startproc
-ARM GAS  /tmp/ccZiPR2y.s 			page 152
+ARM GAS  /tmp/ccf4hwpD.s 			page 152
 
 
  4620              		@ args = 0, pretend = 0, frame = 0
@@ -9118,7 +9118,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4667              	.L419:
 1096:application-library/usb-cdc-device.c ****       break;
  4668              		.loc 1 1096 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 153
+ARM GAS  /tmp/ccf4hwpD.s 			page 153
 
 
  4669 0044 2946     		mov	r1, r5
@@ -9178,7 +9178,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4721              		.thumb
  4722              		.thumb_func
  4723              		.fpu fpv4-sp-d16
-ARM GAS  /tmp/ccZiPR2y.s 			page 154
+ARM GAS  /tmp/ccf4hwpD.s 			page 154
 
 
  4725              	USBD_LL_PrepareReceive:
@@ -9238,7 +9238,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4774 0008 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
  4775 000a 3BB1     		cbz	r3, .L437
  872:application-library/usb-cdc-device.c ****                                  CDC_DATA_FS_OUT_PACKET_SIZE);
-ARM GAS  /tmp/ccZiPR2y.s 			page 155
+ARM GAS  /tmp/ccf4hwpD.s 			page 155
 
 
  4776              		.loc 1 872 0
@@ -9298,7 +9298,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4827              	.LCFI77:
  4828              		.cfi_def_cfa_offset 20
  4829              		.cfi_offset 4, -20
-ARM GAS  /tmp/ccZiPR2y.s 			page 156
+ARM GAS  /tmp/ccf4hwpD.s 			page 156
 
 
  4830              		.cfi_offset 5, -16
@@ -9358,7 +9358,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4878              		.loc 1 289 0
  4879 004a 3246     		mov	r2, r6
  4880 004c 0021     		movs	r1, #0
-ARM GAS  /tmp/ccZiPR2y.s 			page 157
+ARM GAS  /tmp/ccf4hwpD.s 			page 157
 
 
  4881 004e 2046     		mov	r0, r4
@@ -9418,7 +9418,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2418:application-library/usb-cdc-device.c **** 
  4932              		.loc 1 2418 0
  4933 000e C0F85C31 		str	r3, [r0, #348]
-ARM GAS  /tmp/ccZiPR2y.s 			page 158
+ARM GAS  /tmp/ccf4hwpD.s 			page 158
 
 
 2421:application-library/usb-cdc-device.c **** }
@@ -9478,7 +9478,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  4983              		.loc 1 503 0
  4984 001a 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
  4985 001c 13F06002 		ands	r2, r3, #96
-ARM GAS  /tmp/ccZiPR2y.s 			page 159
+ARM GAS  /tmp/ccf4hwpD.s 			page 159
 
 
  4986 0020 2FD0     		beq	.L447
@@ -9538,7 +9538,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5030              	.LVL648:
  515:application-library/usb-cdc-device.c ****         }
  5031              		.loc 1 515 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 160
+ARM GAS  /tmp/ccf4hwpD.s 			page 160
 
 
  5032 005c 072A     		cmp	r2, #7
@@ -9598,7 +9598,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5081              	.L453:
  536:application-library/usb-cdc-device.c ****           {
  5082              		.loc 1 536 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 161
+ARM GAS  /tmp/ccf4hwpD.s 			page 161
 
 
  5083 0098 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
@@ -9658,7 +9658,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5128              	.LVL664:
  5129              	.L456:
  560:application-library/usb-cdc-device.c ****           {
-ARM GAS  /tmp/ccZiPR2y.s 			page 162
+ARM GAS  /tmp/ccf4hwpD.s 			page 162
 
 
  5130              		.loc 1 560 0
@@ -9718,7 +9718,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5174              	.LCFI84:
  5175              		.cfi_restore_state
  496:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 163
+ARM GAS  /tmp/ccf4hwpD.s 			page 163
 
 
  5176              		.loc 1 496 0
@@ -9778,7 +9778,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5231              	.LFB161:
 1119:application-library/usb-cdc-device.c ****   USBD_EndpointTypeDef *pep;
  5232              		.loc 1 1119 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 164
+ARM GAS  /tmp/ccf4hwpD.s 			page 164
 
 
  5233              		.cfi_startproc
@@ -9838,7 +9838,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5280 0030 0020     		movs	r0, #0
  5281 0032 38BD     		pop	{r3, r4, r5, pc}
  5282              	.LVL690:
-ARM GAS  /tmp/ccZiPR2y.s 			page 165
+ARM GAS  /tmp/ccf4hwpD.s 			page 165
 
 
  5283              	.L482:
@@ -9898,7 +9898,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5328              	.LVL698:
  5329              	.L484:
 1188:application-library/usb-cdc-device.c ****         {
-ARM GAS  /tmp/ccZiPR2y.s 			page 166
+ARM GAS  /tmp/ccf4hwpD.s 			page 166
 
 
  5330              		.loc 1 1188 0
@@ -9958,7 +9958,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5380 0008 0344     		add	r3, r3, r0
  5381 000a D3F88C22 		ldr	r2, [r3, #652]
  5382 000e D0F80805 		ldr	r0, [r0, #1288]
-ARM GAS  /tmp/ccZiPR2y.s 			page 167
+ARM GAS  /tmp/ccf4hwpD.s 			page 167
 
 
  5383              	.LVL706:
@@ -10018,7 +10018,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5436              		.cfi_startproc
  5437              		@ args = 0, pretend = 0, frame = 0
  5438              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 168
+ARM GAS  /tmp/ccf4hwpD.s 			page 168
 
 
  5439              	.LVL710:
@@ -10078,7 +10078,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5486              		.loc 1 1256 0
  5487 0032 2046     		mov	r0, r4
  5488 0034 FFF7FEFF 		bl	USBD_CtlReceiveStatus
-ARM GAS  /tmp/ccZiPR2y.s 			page 169
+ARM GAS  /tmp/ccf4hwpD.s 			page 169
 
 
  5489              	.LVL719:
@@ -10138,7 +10138,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5533 0074 FFF7FEFF 		bl	USBD_LL_PrepareReceive
  5534              	.LVL726:
  5535 0078 38BD     		pop	{r3, r4, r5, pc}
-ARM GAS  /tmp/ccZiPR2y.s 			page 170
+ARM GAS  /tmp/ccf4hwpD.s 			page 170
 
 
  5536              	.LVL727:
@@ -10198,7 +10198,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5583              		.global	HAL_PCD_DataInStageCallback
  5584              		.syntax unified
  5585              		.thumb
-ARM GAS  /tmp/ccZiPR2y.s 			page 171
+ARM GAS  /tmp/ccf4hwpD.s 			page 171
 
 
  5586              		.thumb_func
@@ -10258,7 +10258,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 2879:application-library/usb-cdc-device.c **** 
  5639              		.loc 1 2879 0
  5640 000a 08BD     		pop	{r3, pc}
-ARM GAS  /tmp/ccZiPR2y.s 			page 172
+ARM GAS  /tmp/ccf4hwpD.s 			page 172
 
 
  5641              		.cfi_endproc
@@ -10318,7 +10318,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5690              	.LVL746:
  655:application-library/usb-cdc-device.c **** 
  5691              		.loc 1 655 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 173
+ARM GAS  /tmp/ccf4hwpD.s 			page 173
 
 
  5692 0028 38BD     		pop	{r3, r4, r5, pc}
@@ -10378,7 +10378,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5745              		.align	2
  5746              	.L511:
  5747 0004 00000000 		.word	.LANCHOR7
-ARM GAS  /tmp/ccZiPR2y.s 			page 174
+ARM GAS  /tmp/ccf4hwpD.s 			page 174
 
 
  5748              		.cfi_endproc
@@ -10438,7 +10438,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5796 0028 4FF40073 		mov	r3, #512
  5797 002c 0222     		movs	r2, #2
  5798 002e 8121     		movs	r1, #129
-ARM GAS  /tmp/ccZiPR2y.s 			page 175
+ARM GAS  /tmp/ccf4hwpD.s 			page 175
 
 
  5799 0030 2046     		mov	r0, r4
@@ -10498,7 +10498,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5842 007e 4AB3     		cbz	r2, .L519
  430:application-library/usb-cdc-device.c ****   {
  5843              		.loc 1 430 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 176
+ARM GAS  /tmp/ccf4hwpD.s 			page 176
 
 
  5844 0080 237C     		ldrb	r3, [r4, #16]	@ zero_extendqisi2
@@ -10558,7 +10558,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5889              	.L522:
  433:application-library/usb-cdc-device.c ****                                  CDC_DATA_HS_OUT_PACKET_SIZE);
  5890              		.loc 1 433 0
-ARM GAS  /tmp/ccZiPR2y.s 			page 177
+ARM GAS  /tmp/ccf4hwpD.s 			page 177
 
 
  5891 00c4 4FF40073 		mov	r3, #512
@@ -10618,7 +10618,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5943              		.loc 1 2907 0
  5944 0000 08B5     		push	{r3, lr}
  5945              	.LCFI95:
-ARM GAS  /tmp/ccZiPR2y.s 			page 178
+ARM GAS  /tmp/ccf4hwpD.s 			page 178
 
 
  5946              		.cfi_def_cfa_offset 8
@@ -10678,7 +10678,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  5994              		.cfi_endproc
  5995              	.LFE223:
  5997              		.section	.text.USBD_LL_DeInit,"ax",%progbits
-ARM GAS  /tmp/ccZiPR2y.s 			page 179
+ARM GAS  /tmp/ccf4hwpD.s 			page 179
 
 
  5998              		.align	1
@@ -10738,7 +10738,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6050              		.cfi_offset 14, -4
  6051 0002 0446     		mov	r4, r0
  925:application-library/usb-cdc-device.c **** 
-ARM GAS  /tmp/ccZiPR2y.s 			page 180
+ARM GAS  /tmp/ccf4hwpD.s 			page 180
 
 
  6052              		.loc 1 925 0
@@ -10798,7 +10798,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6099 0000 08B5     		push	{r3, lr}
  6100              	.LCFI98:
  6101              		.cfi_def_cfa_offset 8
-ARM GAS  /tmp/ccZiPR2y.s 			page 181
+ARM GAS  /tmp/ccf4hwpD.s 			page 181
 
 
  6102              		.cfi_offset 3, -8
@@ -10858,7 +10858,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
 3135:application-library/usb-cdc-device.c ****   * @param  len: buffer length
 3136:application-library/usb-cdc-device.c ****   * @retval None
 3137:application-library/usb-cdc-device.c ****   */
-ARM GAS  /tmp/ccZiPR2y.s 			page 182
+ARM GAS  /tmp/ccf4hwpD.s 			page 182
 
 
 3138:application-library/usb-cdc-device.c **** void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len)
@@ -10918,7 +10918,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6162 001c DBB2     		uxtb	r3, r3
  6163              	.LVL794:
  6164 001e 9342     		cmp	r3, r2
-ARM GAS  /tmp/ccZiPR2y.s 			page 183
+ARM GAS  /tmp/ccf4hwpD.s 			page 183
 
 
  6165 0020 06D2     		bcs	.L548
@@ -10978,7 +10978,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6214 0006 0433     		adds	r3, r3, #4
  6215 0008 1C68     		ldr	r4, [r3]
  6216              	.LVL796:
-ARM GAS  /tmp/ccZiPR2y.s 			page 184
+ARM GAS  /tmp/ccf4hwpD.s 			page 184
 
 
 3120:application-library/usb-cdc-device.c ****   deviceserial2 = *(uint32_t *) DEVICE_ID3;
@@ -11038,7 +11038,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6267 0000 08B5     		push	{r3, lr}
  6268              	.LCFI102:
  6269              		.cfi_def_cfa_offset 8
-ARM GAS  /tmp/ccZiPR2y.s 			page 185
+ARM GAS  /tmp/ccf4hwpD.s 			page 185
 
 
  6270              		.cfi_offset 3, -8
@@ -11098,7 +11098,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6322              		.align	2
  6323              		.set	.LANCHOR5,. + 0
  6326              	USBD_CDC:
-ARM GAS  /tmp/ccZiPR2y.s 			page 186
+ARM GAS  /tmp/ccf4hwpD.s 			page 186
 
 
  6327 0000 00000000 		.word	USBD_CDC_Init
@@ -11158,7 +11158,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6383 0024 01       		.byte	1
  6384 0025 07       		.byte	7
  6385 0026 05       		.byte	5
-ARM GAS  /tmp/ccZiPR2y.s 			page 187
+ARM GAS  /tmp/ccf4hwpD.s 			page 187
 
 
  6386 0027 82       		.byte	-126
@@ -11218,7 +11218,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6444 0008 83       		.byte	-125
  6445 0009 04       		.byte	4
  6446 000a 40       		.byte	64
-ARM GAS  /tmp/ccZiPR2y.s 			page 188
+ARM GAS  /tmp/ccf4hwpD.s 			page 188
 
 
  6447 000b 57       		.byte	87
@@ -11278,7 +11278,7 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6496              		.section	.rodata.USBD_FS_ManufacturerStrDescriptor.str1.4,"aMS",%progbits,1
  6497              		.align	2
  6498              	.LC1:
-ARM GAS  /tmp/ccZiPR2y.s 			page 189
+ARM GAS  /tmp/ccf4hwpD.s 			page 189
 
 
  6499 0000 53544D69 		.ascii	"STMicroelectronics\000"
@@ -11315,284 +11315,284 @@ ARM GAS  /tmp/ccZiPR2y.s 			page 1
  6522              		.file 19 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h"
  6523              		.file 20 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
  6524              		.file 21 "<built-in>"
-ARM GAS  /tmp/ccZiPR2y.s 			page 190
+ARM GAS  /tmp/ccf4hwpD.s 			page 190
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 usb-cdc-device.c
-     /tmp/ccZiPR2y.s:18     .text.CDC_DeInit_FS:0000000000000000 $t
-     /tmp/ccZiPR2y.s:25     .text.CDC_DeInit_FS:0000000000000000 CDC_DeInit_FS
-     /tmp/ccZiPR2y.s:40     .text.CDC_Control_FS:0000000000000000 $t
-     /tmp/ccZiPR2y.s:47     .text.CDC_Control_FS:0000000000000000 CDC_Control_FS
-     /tmp/ccZiPR2y.s:63     .text.CDC_TransmitCplt_FS:0000000000000000 $t
-     /tmp/ccZiPR2y.s:70     .text.CDC_TransmitCplt_FS:0000000000000000 CDC_TransmitCplt_FS
-     /tmp/ccZiPR2y.s:86     .text.USBD_CDC_EP0_RxReady:0000000000000000 $t
-     /tmp/ccZiPR2y.s:93     .text.USBD_CDC_EP0_RxReady:0000000000000000 USBD_CDC_EP0_RxReady
-     /tmp/ccZiPR2y.s:151    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:158    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000000 USBD_CDC_GetDeviceQualifierDescriptor
-     /tmp/ccZiPR2y.s:176    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000008 $d
-     /tmp/ccZiPR2y.s:181    .text.USBD_FS_DeviceDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:188    .text.USBD_FS_DeviceDescriptor:0000000000000000 USBD_FS_DeviceDescriptor
-     /tmp/ccZiPR2y.s:206    .text.USBD_FS_DeviceDescriptor:0000000000000008 $d
-     /tmp/ccZiPR2y.s:211    .text.USBD_FS_LangIDStrDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:218    .text.USBD_FS_LangIDStrDescriptor:0000000000000000 USBD_FS_LangIDStrDescriptor
-     /tmp/ccZiPR2y.s:236    .text.USBD_FS_LangIDStrDescriptor:0000000000000008 $d
-     /tmp/ccZiPR2y.s:241    .text.USBD_CDC_RegisterInterface:0000000000000000 $t
-     /tmp/ccZiPR2y.s:248    .text.USBD_CDC_RegisterInterface:0000000000000000 USBD_CDC_RegisterInterface
-     /tmp/ccZiPR2y.s:275    .text.USBD_CDC_SetTxBuffer:0000000000000000 $t
-     /tmp/ccZiPR2y.s:282    .text.USBD_CDC_SetTxBuffer:0000000000000000 USBD_CDC_SetTxBuffer
-     /tmp/ccZiPR2y.s:314    .text.USBD_CDC_SetRxBuffer:0000000000000000 $t
-     /tmp/ccZiPR2y.s:321    .text.USBD_CDC_SetRxBuffer:0000000000000000 USBD_CDC_SetRxBuffer
-     /tmp/ccZiPR2y.s:351    .text.CDC_Init_FS:0000000000000000 $t
-     /tmp/ccZiPR2y.s:358    .text.CDC_Init_FS:0000000000000000 CDC_Init_FS
-     /tmp/ccZiPR2y.s:387    .text.CDC_Init_FS:000000000000001c $d
+     /tmp/ccf4hwpD.s:18     .text.CDC_DeInit_FS:0000000000000000 $t
+     /tmp/ccf4hwpD.s:25     .text.CDC_DeInit_FS:0000000000000000 CDC_DeInit_FS
+     /tmp/ccf4hwpD.s:40     .text.CDC_Control_FS:0000000000000000 $t
+     /tmp/ccf4hwpD.s:47     .text.CDC_Control_FS:0000000000000000 CDC_Control_FS
+     /tmp/ccf4hwpD.s:63     .text.CDC_TransmitCplt_FS:0000000000000000 $t
+     /tmp/ccf4hwpD.s:70     .text.CDC_TransmitCplt_FS:0000000000000000 CDC_TransmitCplt_FS
+     /tmp/ccf4hwpD.s:86     .text.USBD_CDC_EP0_RxReady:0000000000000000 $t
+     /tmp/ccf4hwpD.s:93     .text.USBD_CDC_EP0_RxReady:0000000000000000 USBD_CDC_EP0_RxReady
+     /tmp/ccf4hwpD.s:151    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:158    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000000 USBD_CDC_GetDeviceQualifierDescriptor
+     /tmp/ccf4hwpD.s:176    .text.USBD_CDC_GetDeviceQualifierDescriptor:0000000000000008 $d
+     /tmp/ccf4hwpD.s:181    .text.USBD_FS_DeviceDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:188    .text.USBD_FS_DeviceDescriptor:0000000000000000 USBD_FS_DeviceDescriptor
+     /tmp/ccf4hwpD.s:206    .text.USBD_FS_DeviceDescriptor:0000000000000008 $d
+     /tmp/ccf4hwpD.s:211    .text.USBD_FS_LangIDStrDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:218    .text.USBD_FS_LangIDStrDescriptor:0000000000000000 USBD_FS_LangIDStrDescriptor
+     /tmp/ccf4hwpD.s:236    .text.USBD_FS_LangIDStrDescriptor:0000000000000008 $d
+     /tmp/ccf4hwpD.s:241    .text.USBD_CDC_RegisterInterface:0000000000000000 $t
+     /tmp/ccf4hwpD.s:248    .text.USBD_CDC_RegisterInterface:0000000000000000 USBD_CDC_RegisterInterface
+     /tmp/ccf4hwpD.s:275    .text.USBD_CDC_SetTxBuffer:0000000000000000 $t
+     /tmp/ccf4hwpD.s:282    .text.USBD_CDC_SetTxBuffer:0000000000000000 USBD_CDC_SetTxBuffer
+     /tmp/ccf4hwpD.s:314    .text.USBD_CDC_SetRxBuffer:0000000000000000 $t
+     /tmp/ccf4hwpD.s:321    .text.USBD_CDC_SetRxBuffer:0000000000000000 USBD_CDC_SetRxBuffer
+     /tmp/ccf4hwpD.s:351    .text.CDC_Init_FS:0000000000000000 $t
+     /tmp/ccf4hwpD.s:358    .text.CDC_Init_FS:0000000000000000 CDC_Init_FS
+     /tmp/ccf4hwpD.s:387    .text.CDC_Init_FS:000000000000001c $d
                             *COM*:00000000000002d4 hUsbDeviceFS
                             *COM*:0000000000000800 UserTxBufferFS
                             *COM*:0000000000000800 UserRxBufferFS
-     /tmp/ccZiPR2y.s:394    .text.USBD_RegisterClass:0000000000000000 $t
-     /tmp/ccZiPR2y.s:401    .text.USBD_RegisterClass:0000000000000000 USBD_RegisterClass
-     /tmp/ccZiPR2y.s:461    .text.USBD_Start:0000000000000000 $t
-     /tmp/ccZiPR2y.s:468    .text.USBD_Start:0000000000000000 USBD_Start
-     /tmp/ccZiPR2y.s:512    .text.USBD_SetClassConfig:0000000000000000 $t
-     /tmp/ccZiPR2y.s:519    .text.USBD_SetClassConfig:0000000000000000 USBD_SetClassConfig
-     /tmp/ccZiPR2y.s:544    .text.USBD_ClrClassConfig:0000000000000000 $t
-     /tmp/ccZiPR2y.s:551    .text.USBD_ClrClassConfig:0000000000000000 USBD_ClrClassConfig
-     /tmp/ccZiPR2y.s:580    .text.USBD_LL_SetSpeed:0000000000000000 $t
-     /tmp/ccZiPR2y.s:587    .text.USBD_LL_SetSpeed:0000000000000000 USBD_LL_SetSpeed
-     /tmp/ccZiPR2y.s:602    .text.USBD_LL_Suspend:0000000000000000 $t
-     /tmp/ccZiPR2y.s:609    .text.USBD_LL_Suspend:0000000000000000 USBD_LL_Suspend
-     /tmp/ccZiPR2y.s:632    .text.USBD_LL_Resume:0000000000000000 $t
-     /tmp/ccZiPR2y.s:639    .text.USBD_LL_Resume:0000000000000000 USBD_LL_Resume
-     /tmp/ccZiPR2y.s:668    .text.USBD_LL_SOF:0000000000000000 $t
-     /tmp/ccZiPR2y.s:675    .text.USBD_LL_SOF:0000000000000000 USBD_LL_SOF
-     /tmp/ccZiPR2y.s:715    .text.USBD_LL_IsoINIncomplete:0000000000000000 $t
-     /tmp/ccZiPR2y.s:722    .text.USBD_LL_IsoINIncomplete:0000000000000000 USBD_LL_IsoINIncomplete
-     /tmp/ccZiPR2y.s:783    .text.USBD_LL_IsoOUTIncomplete:0000000000000000 $t
-     /tmp/ccZiPR2y.s:790    .text.USBD_LL_IsoOUTIncomplete:0000000000000000 USBD_LL_IsoOUTIncomplete
-     /tmp/ccZiPR2y.s:835    .text.USBD_LL_DevConnected:0000000000000000 $t
-     /tmp/ccZiPR2y.s:842    .text.USBD_LL_DevConnected:0000000000000000 USBD_LL_DevConnected
-     /tmp/ccZiPR2y.s:858    .text.USBD_LL_DevDisconnected:0000000000000000 $t
-     /tmp/ccZiPR2y.s:865    .text.USBD_LL_DevDisconnected:0000000000000000 USBD_LL_DevDisconnected
-     /tmp/ccZiPR2y.s:908    .text.USBD_CoreFindEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:915    .text.USBD_CoreFindEP:0000000000000000 USBD_CoreFindEP
-ARM GAS  /tmp/ccZiPR2y.s 			page 191
+     /tmp/ccf4hwpD.s:394    .text.USBD_RegisterClass:0000000000000000 $t
+     /tmp/ccf4hwpD.s:401    .text.USBD_RegisterClass:0000000000000000 USBD_RegisterClass
+     /tmp/ccf4hwpD.s:461    .text.USBD_Start:0000000000000000 $t
+     /tmp/ccf4hwpD.s:468    .text.USBD_Start:0000000000000000 USBD_Start
+     /tmp/ccf4hwpD.s:512    .text.USBD_SetClassConfig:0000000000000000 $t
+     /tmp/ccf4hwpD.s:519    .text.USBD_SetClassConfig:0000000000000000 USBD_SetClassConfig
+     /tmp/ccf4hwpD.s:544    .text.USBD_ClrClassConfig:0000000000000000 $t
+     /tmp/ccf4hwpD.s:551    .text.USBD_ClrClassConfig:0000000000000000 USBD_ClrClassConfig
+     /tmp/ccf4hwpD.s:580    .text.USBD_LL_SetSpeed:0000000000000000 $t
+     /tmp/ccf4hwpD.s:587    .text.USBD_LL_SetSpeed:0000000000000000 USBD_LL_SetSpeed
+     /tmp/ccf4hwpD.s:602    .text.USBD_LL_Suspend:0000000000000000 $t
+     /tmp/ccf4hwpD.s:609    .text.USBD_LL_Suspend:0000000000000000 USBD_LL_Suspend
+     /tmp/ccf4hwpD.s:632    .text.USBD_LL_Resume:0000000000000000 $t
+     /tmp/ccf4hwpD.s:639    .text.USBD_LL_Resume:0000000000000000 USBD_LL_Resume
+     /tmp/ccf4hwpD.s:668    .text.USBD_LL_SOF:0000000000000000 $t
+     /tmp/ccf4hwpD.s:675    .text.USBD_LL_SOF:0000000000000000 USBD_LL_SOF
+     /tmp/ccf4hwpD.s:715    .text.USBD_LL_IsoINIncomplete:0000000000000000 $t
+     /tmp/ccf4hwpD.s:722    .text.USBD_LL_IsoINIncomplete:0000000000000000 USBD_LL_IsoINIncomplete
+     /tmp/ccf4hwpD.s:783    .text.USBD_LL_IsoOUTIncomplete:0000000000000000 $t
+     /tmp/ccf4hwpD.s:790    .text.USBD_LL_IsoOUTIncomplete:0000000000000000 USBD_LL_IsoOUTIncomplete
+     /tmp/ccf4hwpD.s:835    .text.USBD_LL_DevConnected:0000000000000000 $t
+     /tmp/ccf4hwpD.s:842    .text.USBD_LL_DevConnected:0000000000000000 USBD_LL_DevConnected
+     /tmp/ccf4hwpD.s:858    .text.USBD_LL_DevDisconnected:0000000000000000 $t
+     /tmp/ccf4hwpD.s:865    .text.USBD_LL_DevDisconnected:0000000000000000 USBD_LL_DevDisconnected
+     /tmp/ccf4hwpD.s:908    .text.USBD_CoreFindEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:915    .text.USBD_CoreFindEP:0000000000000000 USBD_CoreFindEP
+ARM GAS  /tmp/ccf4hwpD.s 			page 191
 
 
-     /tmp/ccZiPR2y.s:931    .text.USBD_GetNextDesc:0000000000000000 $t
-     /tmp/ccZiPR2y.s:938    .text.USBD_GetNextDesc:0000000000000000 USBD_GetNextDesc
-     /tmp/ccZiPR2y.s:962    .text.USBD_GetEpDesc:0000000000000000 $t
-     /tmp/ccZiPR2y.s:969    .text.USBD_GetEpDesc:0000000000000000 USBD_GetEpDesc
-     /tmp/ccZiPR2y.s:1042   .text.USBD_CDC_GetFSCfgDesc:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1049   .text.USBD_CDC_GetFSCfgDesc:0000000000000000 USBD_CDC_GetFSCfgDesc
-     /tmp/ccZiPR2y.s:1122   .text.USBD_CDC_GetFSCfgDesc:0000000000000044 $d
-     /tmp/ccZiPR2y.s:1127   .text.USBD_CDC_GetHSCfgDesc:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1134   .text.USBD_CDC_GetHSCfgDesc:0000000000000000 USBD_CDC_GetHSCfgDesc
-     /tmp/ccZiPR2y.s:1207   .text.USBD_CDC_GetHSCfgDesc:0000000000000044 $d
-     /tmp/ccZiPR2y.s:1212   .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1219   .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000000 USBD_CDC_GetOtherSpeedCfgDesc
-     /tmp/ccZiPR2y.s:1292   .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000044 $d
-     /tmp/ccZiPR2y.s:1297   .text.USBD_ParseSetupRequest:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1304   .text.USBD_ParseSetupRequest:0000000000000000 USBD_ParseSetupRequest
-     /tmp/ccZiPR2y.s:1374   .text.USBD_GetLen:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1381   .text.USBD_GetLen:0000000000000000 USBD_GetLen
-     /tmp/ccZiPR2y.s:1416   .text.USBD_GetString:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1423   .text.USBD_GetString:0000000000000000 USBD_GetString
-     /tmp/ccZiPR2y.s:1498   .text.USBD_FS_ProductStrDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1505   .text.USBD_FS_ProductStrDescriptor:0000000000000000 USBD_FS_ProductStrDescriptor
-     /tmp/ccZiPR2y.s:1544   .text.USBD_FS_ProductStrDescriptor:000000000000001c $d
+     /tmp/ccf4hwpD.s:931    .text.USBD_GetNextDesc:0000000000000000 $t
+     /tmp/ccf4hwpD.s:938    .text.USBD_GetNextDesc:0000000000000000 USBD_GetNextDesc
+     /tmp/ccf4hwpD.s:962    .text.USBD_GetEpDesc:0000000000000000 $t
+     /tmp/ccf4hwpD.s:969    .text.USBD_GetEpDesc:0000000000000000 USBD_GetEpDesc
+     /tmp/ccf4hwpD.s:1042   .text.USBD_CDC_GetFSCfgDesc:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1049   .text.USBD_CDC_GetFSCfgDesc:0000000000000000 USBD_CDC_GetFSCfgDesc
+     /tmp/ccf4hwpD.s:1122   .text.USBD_CDC_GetFSCfgDesc:0000000000000044 $d
+     /tmp/ccf4hwpD.s:1127   .text.USBD_CDC_GetHSCfgDesc:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1134   .text.USBD_CDC_GetHSCfgDesc:0000000000000000 USBD_CDC_GetHSCfgDesc
+     /tmp/ccf4hwpD.s:1207   .text.USBD_CDC_GetHSCfgDesc:0000000000000044 $d
+     /tmp/ccf4hwpD.s:1212   .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1219   .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000000 USBD_CDC_GetOtherSpeedCfgDesc
+     /tmp/ccf4hwpD.s:1292   .text.USBD_CDC_GetOtherSpeedCfgDesc:0000000000000044 $d
+     /tmp/ccf4hwpD.s:1297   .text.USBD_ParseSetupRequest:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1304   .text.USBD_ParseSetupRequest:0000000000000000 USBD_ParseSetupRequest
+     /tmp/ccf4hwpD.s:1374   .text.USBD_GetLen:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1381   .text.USBD_GetLen:0000000000000000 USBD_GetLen
+     /tmp/ccf4hwpD.s:1416   .text.USBD_GetString:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1423   .text.USBD_GetString:0000000000000000 USBD_GetString
+     /tmp/ccf4hwpD.s:1498   .text.USBD_FS_ProductStrDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1505   .text.USBD_FS_ProductStrDescriptor:0000000000000000 USBD_FS_ProductStrDescriptor
+     /tmp/ccf4hwpD.s:1544   .text.USBD_FS_ProductStrDescriptor:000000000000001c $d
                             *COM*:0000000000000200 USBD_StrDesc
-     /tmp/ccZiPR2y.s:1550   .text.USBD_FS_ManufacturerStrDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1557   .text.USBD_FS_ManufacturerStrDescriptor:0000000000000000 USBD_FS_ManufacturerStrDescriptor
-     /tmp/ccZiPR2y.s:1584   .text.USBD_FS_ManufacturerStrDescriptor:0000000000000014 $d
-     /tmp/ccZiPR2y.s:1590   .text.USBD_FS_ConfigStrDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1597   .text.USBD_FS_ConfigStrDescriptor:0000000000000000 USBD_FS_ConfigStrDescriptor
-     /tmp/ccZiPR2y.s:1636   .text.USBD_FS_ConfigStrDescriptor:000000000000001c $d
-     /tmp/ccZiPR2y.s:1642   .text.USBD_FS_InterfaceStrDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1649   .text.USBD_FS_InterfaceStrDescriptor:0000000000000000 USBD_FS_InterfaceStrDescriptor
-     /tmp/ccZiPR2y.s:1688   .text.USBD_FS_InterfaceStrDescriptor:000000000000001c $d
-     /tmp/ccZiPR2y.s:1694   .text.HAL_PCD_MspInit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1701   .text.HAL_PCD_MspInit:0000000000000000 HAL_PCD_MspInit
-     /tmp/ccZiPR2y.s:1801   .text.HAL_PCD_MspInit:000000000000007c $d
-     /tmp/ccZiPR2y.s:1807   .text.HAL_PCD_MspDeInit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1814   .text.HAL_PCD_MspDeInit:0000000000000000 HAL_PCD_MspDeInit
-     /tmp/ccZiPR2y.s:1855   .text.HAL_PCD_MspDeInit:0000000000000028 $d
-     /tmp/ccZiPR2y.s:1861   .text.HAL_PCD_SOFCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1868   .text.HAL_PCD_SOFCallback:0000000000000000 HAL_PCD_SOFCallback
-     /tmp/ccZiPR2y.s:1890   .text.HAL_PCD_SuspendCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1897   .text.HAL_PCD_SuspendCallback:0000000000000000 HAL_PCD_SuspendCallback
-     /tmp/ccZiPR2y.s:1934   .text.HAL_PCD_SuspendCallback:000000000000002c $d
-     /tmp/ccZiPR2y.s:1939   .text.HAL_PCD_ConnectCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1946   .text.HAL_PCD_ConnectCallback:0000000000000000 HAL_PCD_ConnectCallback
-     /tmp/ccZiPR2y.s:1959   .text.HAL_PCD_DisconnectCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1966   .text.HAL_PCD_DisconnectCallback:0000000000000000 HAL_PCD_DisconnectCallback
-     /tmp/ccZiPR2y.s:1989   .text.USBD_LL_Init:0000000000000000 $t
-     /tmp/ccZiPR2y.s:1996   .text.USBD_LL_Init:0000000000000000 USBD_LL_Init
-     /tmp/ccZiPR2y.s:2084   .text.USBD_LL_Init:0000000000000064 $d
+     /tmp/ccf4hwpD.s:1550   .text.USBD_FS_ManufacturerStrDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1557   .text.USBD_FS_ManufacturerStrDescriptor:0000000000000000 USBD_FS_ManufacturerStrDescriptor
+     /tmp/ccf4hwpD.s:1584   .text.USBD_FS_ManufacturerStrDescriptor:0000000000000014 $d
+     /tmp/ccf4hwpD.s:1590   .text.USBD_FS_ConfigStrDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1597   .text.USBD_FS_ConfigStrDescriptor:0000000000000000 USBD_FS_ConfigStrDescriptor
+     /tmp/ccf4hwpD.s:1636   .text.USBD_FS_ConfigStrDescriptor:000000000000001c $d
+     /tmp/ccf4hwpD.s:1642   .text.USBD_FS_InterfaceStrDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1649   .text.USBD_FS_InterfaceStrDescriptor:0000000000000000 USBD_FS_InterfaceStrDescriptor
+     /tmp/ccf4hwpD.s:1688   .text.USBD_FS_InterfaceStrDescriptor:000000000000001c $d
+     /tmp/ccf4hwpD.s:1694   .text.HAL_PCD_MspInit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1701   .text.HAL_PCD_MspInit:0000000000000000 HAL_PCD_MspInit
+     /tmp/ccf4hwpD.s:1801   .text.HAL_PCD_MspInit:000000000000007c $d
+     /tmp/ccf4hwpD.s:1807   .text.HAL_PCD_MspDeInit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1814   .text.HAL_PCD_MspDeInit:0000000000000000 HAL_PCD_MspDeInit
+     /tmp/ccf4hwpD.s:1855   .text.HAL_PCD_MspDeInit:0000000000000028 $d
+     /tmp/ccf4hwpD.s:1861   .text.HAL_PCD_SOFCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1868   .text.HAL_PCD_SOFCallback:0000000000000000 HAL_PCD_SOFCallback
+     /tmp/ccf4hwpD.s:1890   .text.HAL_PCD_SuspendCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1897   .text.HAL_PCD_SuspendCallback:0000000000000000 HAL_PCD_SuspendCallback
+     /tmp/ccf4hwpD.s:1934   .text.HAL_PCD_SuspendCallback:000000000000002c $d
+     /tmp/ccf4hwpD.s:1939   .text.HAL_PCD_ConnectCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1946   .text.HAL_PCD_ConnectCallback:0000000000000000 HAL_PCD_ConnectCallback
+     /tmp/ccf4hwpD.s:1959   .text.HAL_PCD_DisconnectCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1966   .text.HAL_PCD_DisconnectCallback:0000000000000000 HAL_PCD_DisconnectCallback
+     /tmp/ccf4hwpD.s:1989   .text.USBD_LL_Init:0000000000000000 $t
+     /tmp/ccf4hwpD.s:1996   .text.USBD_LL_Init:0000000000000000 USBD_LL_Init
+     /tmp/ccf4hwpD.s:2084   .text.USBD_LL_Init:0000000000000064 $d
                             *COM*:000000000000050c hpcd_USB_OTG_FS
-     /tmp/ccZiPR2y.s:2089   .text.USBD_Init:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2096   .text.USBD_Init:0000000000000000 USBD_Init
-     /tmp/ccZiPR2y.s:2151   .text.usb_device_init:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2158   .text.usb_device_init:0000000000000000 usb_device_init
-     /tmp/ccZiPR2y.s:2194   .text.usb_device_init:0000000000000028 $d
-     /tmp/ccZiPR2y.s:2202   .text.USBD_LL_Stop:0000000000000000 $t
-ARM GAS  /tmp/ccZiPR2y.s 			page 192
+     /tmp/ccf4hwpD.s:2089   .text.USBD_Init:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2096   .text.USBD_Init:0000000000000000 USBD_Init
+     /tmp/ccf4hwpD.s:2151   .text.usb_device_init:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2158   .text.usb_device_init:0000000000000000 usb_device_init
+     /tmp/ccf4hwpD.s:2194   .text.usb_device_init:0000000000000028 $d
+     /tmp/ccf4hwpD.s:2202   .text.USBD_LL_Stop:0000000000000000 $t
+ARM GAS  /tmp/ccf4hwpD.s 			page 192
 
 
-     /tmp/ccZiPR2y.s:2209   .text.USBD_LL_Stop:0000000000000000 USBD_LL_Stop
-     /tmp/ccZiPR2y.s:2232   .text.USBD_Stop:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2239   .text.USBD_Stop:0000000000000000 USBD_Stop
-     /tmp/ccZiPR2y.s:2272   .text.USBD_LL_OpenEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2279   .text.USBD_LL_OpenEP:0000000000000000 USBD_LL_OpenEP
-     /tmp/ccZiPR2y.s:2306   .text.USBD_LL_Reset:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2313   .text.USBD_LL_Reset:0000000000000000 USBD_LL_Reset
-     /tmp/ccZiPR2y.s:2399   .text.HAL_PCD_ResetCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2406   .text.HAL_PCD_ResetCallback:0000000000000000 HAL_PCD_ResetCallback
-     /tmp/ccZiPR2y.s:2456   .text.USBD_LL_CloseEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2463   .text.USBD_LL_CloseEP:0000000000000000 USBD_LL_CloseEP
-     /tmp/ccZiPR2y.s:2485   .text.USBD_CDC_DeInit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2492   .text.USBD_CDC_DeInit:0000000000000000 USBD_CDC_DeInit
-     /tmp/ccZiPR2y.s:2551   .text.USBD_LL_FlushEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2558   .text.USBD_LL_FlushEP:0000000000000000 USBD_LL_FlushEP
-     /tmp/ccZiPR2y.s:2580   .text.USBD_LL_StallEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2587   .text.USBD_LL_StallEP:0000000000000000 USBD_LL_StallEP
-     /tmp/ccZiPR2y.s:2609   .text.USBD_CtlError:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2616   .text.USBD_CtlError:0000000000000000 USBD_CtlError
-     /tmp/ccZiPR2y.s:2644   .text.USBD_LL_ClearStallEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2651   .text.USBD_LL_ClearStallEP:0000000000000000 USBD_LL_ClearStallEP
-     /tmp/ccZiPR2y.s:2673   .text.USBD_LL_IsStallEP:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2680   .text.USBD_LL_IsStallEP:0000000000000000 USBD_LL_IsStallEP
-     /tmp/ccZiPR2y.s:2721   .text.USBD_LL_SetUSBAddress:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2728   .text.USBD_LL_SetUSBAddress:0000000000000000 USBD_LL_SetUSBAddress
-     /tmp/ccZiPR2y.s:2750   .text.USBD_LL_Transmit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2757   .text.USBD_LL_Transmit:0000000000000000 USBD_LL_Transmit
-     /tmp/ccZiPR2y.s:2780   .text.usbd_transmit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2787   .text.usbd_transmit:0000000000000000 usbd_transmit
-     /tmp/ccZiPR2y.s:2837   .text.usbd_transmit:0000000000000034 $d
-     /tmp/ccZiPR2y.s:2842   .text.USBD_CDC_DataIn:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2849   .text.USBD_CDC_DataIn:0000000000000000 USBD_CDC_DataIn
-     /tmp/ccZiPR2y.s:2945   .text.USBD_CtlSendData:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2952   .text.USBD_CtlSendData:0000000000000000 USBD_CtlSendData
-     /tmp/ccZiPR2y.s:2984   .text.USBD_GetConfig:0000000000000000 $t
-     /tmp/ccZiPR2y.s:2991   .text.USBD_GetConfig:0000000000000000 USBD_GetConfig
-     /tmp/ccZiPR2y.s:3052   .text.USBD_GetStatus:0000000000000000 $t
-     /tmp/ccZiPR2y.s:3059   .text.USBD_GetStatus:0000000000000000 USBD_GetStatus
-     /tmp/ccZiPR2y.s:3115   .text.USBD_CtlContinueSendData:0000000000000000 $t
-     /tmp/ccZiPR2y.s:3122   .text.USBD_CtlContinueSendData:0000000000000000 USBD_CtlContinueSendData
-     /tmp/ccZiPR2y.s:3147   .text.USBD_CtlSendStatus:0000000000000000 $t
-     /tmp/ccZiPR2y.s:3154   .text.USBD_CtlSendStatus:0000000000000000 USBD_CtlSendStatus
-     /tmp/ccZiPR2y.s:3180   .text.USBD_StdItfReq:0000000000000000 $t
-     /tmp/ccZiPR2y.s:3187   .text.USBD_StdItfReq:0000000000000000 USBD_StdItfReq
-     /tmp/ccZiPR2y.s:3294   .text.USBD_StdEPReq:0000000000000000 $t
-     /tmp/ccZiPR2y.s:3301   .text.USBD_StdEPReq:0000000000000000 USBD_StdEPReq
-     /tmp/ccZiPR2y.s:3764   .text.USBD_GetDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:3771   .text.USBD_GetDescriptor:0000000000000000 USBD_GetDescriptor
-     /tmp/ccZiPR2y.s:3802   .text.USBD_GetDescriptor:000000000000001e $d
-     /tmp/ccZiPR2y.s:3896   .text.USBD_GetDescriptor:0000000000000096 $d
-     /tmp/ccZiPR2y.s:3902   .text.USBD_GetDescriptor:000000000000009c $t
-     /tmp/ccZiPR2y.s:4158   .text.USBD_SetAddress:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4165   .text.USBD_SetAddress:0000000000000000 USBD_SetAddress
-     /tmp/ccZiPR2y.s:4239   .text.USBD_SetConfig:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4246   .text.USBD_SetConfig:0000000000000000 USBD_SetConfig
-     /tmp/ccZiPR2y.s:4382   .text.USBD_SetFeature:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4389   .text.USBD_SetFeature:0000000000000000 USBD_SetFeature
-ARM GAS  /tmp/ccZiPR2y.s 			page 193
+     /tmp/ccf4hwpD.s:2209   .text.USBD_LL_Stop:0000000000000000 USBD_LL_Stop
+     /tmp/ccf4hwpD.s:2232   .text.USBD_Stop:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2239   .text.USBD_Stop:0000000000000000 USBD_Stop
+     /tmp/ccf4hwpD.s:2272   .text.USBD_LL_OpenEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2279   .text.USBD_LL_OpenEP:0000000000000000 USBD_LL_OpenEP
+     /tmp/ccf4hwpD.s:2306   .text.USBD_LL_Reset:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2313   .text.USBD_LL_Reset:0000000000000000 USBD_LL_Reset
+     /tmp/ccf4hwpD.s:2399   .text.HAL_PCD_ResetCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2406   .text.HAL_PCD_ResetCallback:0000000000000000 HAL_PCD_ResetCallback
+     /tmp/ccf4hwpD.s:2456   .text.USBD_LL_CloseEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2463   .text.USBD_LL_CloseEP:0000000000000000 USBD_LL_CloseEP
+     /tmp/ccf4hwpD.s:2485   .text.USBD_CDC_DeInit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2492   .text.USBD_CDC_DeInit:0000000000000000 USBD_CDC_DeInit
+     /tmp/ccf4hwpD.s:2551   .text.USBD_LL_FlushEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2558   .text.USBD_LL_FlushEP:0000000000000000 USBD_LL_FlushEP
+     /tmp/ccf4hwpD.s:2580   .text.USBD_LL_StallEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2587   .text.USBD_LL_StallEP:0000000000000000 USBD_LL_StallEP
+     /tmp/ccf4hwpD.s:2609   .text.USBD_CtlError:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2616   .text.USBD_CtlError:0000000000000000 USBD_CtlError
+     /tmp/ccf4hwpD.s:2644   .text.USBD_LL_ClearStallEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2651   .text.USBD_LL_ClearStallEP:0000000000000000 USBD_LL_ClearStallEP
+     /tmp/ccf4hwpD.s:2673   .text.USBD_LL_IsStallEP:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2680   .text.USBD_LL_IsStallEP:0000000000000000 USBD_LL_IsStallEP
+     /tmp/ccf4hwpD.s:2721   .text.USBD_LL_SetUSBAddress:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2728   .text.USBD_LL_SetUSBAddress:0000000000000000 USBD_LL_SetUSBAddress
+     /tmp/ccf4hwpD.s:2750   .text.USBD_LL_Transmit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2757   .text.USBD_LL_Transmit:0000000000000000 USBD_LL_Transmit
+     /tmp/ccf4hwpD.s:2780   .text.usbd_transmit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2787   .text.usbd_transmit:0000000000000000 usbd_transmit
+     /tmp/ccf4hwpD.s:2837   .text.usbd_transmit:0000000000000034 $d
+     /tmp/ccf4hwpD.s:2842   .text.USBD_CDC_DataIn:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2849   .text.USBD_CDC_DataIn:0000000000000000 USBD_CDC_DataIn
+     /tmp/ccf4hwpD.s:2945   .text.USBD_CtlSendData:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2952   .text.USBD_CtlSendData:0000000000000000 USBD_CtlSendData
+     /tmp/ccf4hwpD.s:2984   .text.USBD_GetConfig:0000000000000000 $t
+     /tmp/ccf4hwpD.s:2991   .text.USBD_GetConfig:0000000000000000 USBD_GetConfig
+     /tmp/ccf4hwpD.s:3052   .text.USBD_GetStatus:0000000000000000 $t
+     /tmp/ccf4hwpD.s:3059   .text.USBD_GetStatus:0000000000000000 USBD_GetStatus
+     /tmp/ccf4hwpD.s:3115   .text.USBD_CtlContinueSendData:0000000000000000 $t
+     /tmp/ccf4hwpD.s:3122   .text.USBD_CtlContinueSendData:0000000000000000 USBD_CtlContinueSendData
+     /tmp/ccf4hwpD.s:3147   .text.USBD_CtlSendStatus:0000000000000000 $t
+     /tmp/ccf4hwpD.s:3154   .text.USBD_CtlSendStatus:0000000000000000 USBD_CtlSendStatus
+     /tmp/ccf4hwpD.s:3180   .text.USBD_StdItfReq:0000000000000000 $t
+     /tmp/ccf4hwpD.s:3187   .text.USBD_StdItfReq:0000000000000000 USBD_StdItfReq
+     /tmp/ccf4hwpD.s:3294   .text.USBD_StdEPReq:0000000000000000 $t
+     /tmp/ccf4hwpD.s:3301   .text.USBD_StdEPReq:0000000000000000 USBD_StdEPReq
+     /tmp/ccf4hwpD.s:3764   .text.USBD_GetDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:3771   .text.USBD_GetDescriptor:0000000000000000 USBD_GetDescriptor
+     /tmp/ccf4hwpD.s:3802   .text.USBD_GetDescriptor:000000000000001e $d
+     /tmp/ccf4hwpD.s:3896   .text.USBD_GetDescriptor:0000000000000096 $d
+     /tmp/ccf4hwpD.s:3902   .text.USBD_GetDescriptor:000000000000009c $t
+     /tmp/ccf4hwpD.s:4158   .text.USBD_SetAddress:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4165   .text.USBD_SetAddress:0000000000000000 USBD_SetAddress
+     /tmp/ccf4hwpD.s:4239   .text.USBD_SetConfig:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4246   .text.USBD_SetConfig:0000000000000000 USBD_SetConfig
+     /tmp/ccf4hwpD.s:4382   .text.USBD_SetFeature:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4389   .text.USBD_SetFeature:0000000000000000 USBD_SetFeature
+ARM GAS  /tmp/ccf4hwpD.s 			page 193
 
 
-     /tmp/ccZiPR2y.s:4421   .text.USBD_ClrFeature:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4428   .text.USBD_ClrFeature:0000000000000000 USBD_ClrFeature
-     /tmp/ccZiPR2y.s:4472   .text.USBD_StdDevReq:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4479   .text.USBD_StdDevReq:0000000000000000 USBD_StdDevReq
-     /tmp/ccZiPR2y.s:4525   .text.USBD_StdDevReq:000000000000002e $d
-     /tmp/ccZiPR2y.s:4535   .text.USBD_StdDevReq:0000000000000038 $t
-     /tmp/ccZiPR2y.s:4609   .text.USBD_LL_SetupStage:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4616   .text.USBD_LL_SetupStage:0000000000000000 USBD_LL_SetupStage
-     /tmp/ccZiPR2y.s:4688   .text.HAL_PCD_SetupStageCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4695   .text.HAL_PCD_SetupStageCallback:0000000000000000 HAL_PCD_SetupStageCallback
-     /tmp/ccZiPR2y.s:4718   .text.USBD_LL_PrepareReceive:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4725   .text.USBD_LL_PrepareReceive:0000000000000000 USBD_LL_PrepareReceive
-     /tmp/ccZiPR2y.s:4748   .text.USBD_CDC_ReceivePacket:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4755   .text.USBD_CDC_ReceivePacket:0000000000000000 USBD_CDC_ReceivePacket
-     /tmp/ccZiPR2y.s:4812   .text.CDC_Receive_FS:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4819   .text.CDC_Receive_FS:0000000000000000 CDC_Receive_FS
-     /tmp/ccZiPR2y.s:4900   .text.CDC_Receive_FS:0000000000000064 $d
-     /tmp/ccZiPR2y.s:4906   .text.USBD_CtlPrepareRx:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4913   .text.USBD_CtlPrepareRx:0000000000000000 USBD_CtlPrepareRx
-     /tmp/ccZiPR2y.s:4945   .text.USBD_CDC_Setup:0000000000000000 $t
-     /tmp/ccZiPR2y.s:4952   .text.USBD_CDC_Setup:0000000000000000 USBD_CDC_Setup
-     /tmp/ccZiPR2y.s:5068   .text.USBD_CDC_Setup:000000000000008c $d
-     /tmp/ccZiPR2y.s:5080   .text.USBD_CDC_Setup:0000000000000098 $t
-     /tmp/ccZiPR2y.s:5189   .text.USBD_CtlContinueRx:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5196   .text.USBD_CtlContinueRx:0000000000000000 USBD_CtlContinueRx
-     /tmp/ccZiPR2y.s:5223   .text.USBD_LL_DataOutStage:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5230   .text.USBD_LL_DataOutStage:0000000000000000 USBD_LL_DataOutStage
-     /tmp/ccZiPR2y.s:5358   .text.HAL_PCD_DataOutStageCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5365   .text.HAL_PCD_DataOutStageCallback:0000000000000000 HAL_PCD_DataOutStageCallback
-     /tmp/ccZiPR2y.s:5391   .text.USBD_CtlReceiveStatus:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5398   .text.USBD_CtlReceiveStatus:0000000000000000 USBD_CtlReceiveStatus
-     /tmp/ccZiPR2y.s:5426   .text.USBD_LL_DataInStage:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5433   .text.USBD_LL_DataInStage:0000000000000000 USBD_LL_DataInStage
-     /tmp/ccZiPR2y.s:5582   .text.HAL_PCD_DataInStageCallback:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5589   .text.HAL_PCD_DataInStageCallback:0000000000000000 HAL_PCD_DataInStageCallback
-     /tmp/ccZiPR2y.s:5615   .text.USBD_LL_GetRxDataSize:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5622   .text.USBD_LL_GetRxDataSize:0000000000000000 USBD_LL_GetRxDataSize
-     /tmp/ccZiPR2y.s:5645   .text.USBD_CDC_DataOut:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5652   .text.USBD_CDC_DataOut:0000000000000000 USBD_CDC_DataOut
-     /tmp/ccZiPR2y.s:5697   .text.USBD_GetRxCount:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5704   .text.USBD_GetRxCount:0000000000000000 USBD_GetRxCount
-     /tmp/ccZiPR2y.s:5725   .text.USBD_static_malloc:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5732   .text.USBD_static_malloc:0000000000000000 USBD_static_malloc
-     /tmp/ccZiPR2y.s:5747   .text.USBD_static_malloc:0000000000000004 $d
-     /tmp/ccZiPR2y.s:5752   .text.USBD_CDC_Init:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5759   .text.USBD_CDC_Init:0000000000000000 USBD_CDC_Init
-     /tmp/ccZiPR2y.s:5909   .text.USBD_static_free:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5916   .text.USBD_static_free:0000000000000000 USBD_static_free
-     /tmp/ccZiPR2y.s:5929   .text.USBD_LL_Delay:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5936   .text.USBD_LL_Delay:0000000000000000 USBD_LL_Delay
-     /tmp/ccZiPR2y.s:5957   .text.USBD_Get_USB_Status:0000000000000000 $t
-     /tmp/ccZiPR2y.s:5964   .text.USBD_Get_USB_Status:0000000000000000 USBD_Get_USB_Status
-     /tmp/ccZiPR2y.s:5998   .text.USBD_LL_DeInit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:6005   .text.USBD_LL_DeInit:0000000000000000 USBD_LL_DeInit
-     /tmp/ccZiPR2y.s:6032   .text.USBD_DeInit:0000000000000000 $t
-     /tmp/ccZiPR2y.s:6039   .text.USBD_DeInit:0000000000000000 USBD_DeInit
-     /tmp/ccZiPR2y.s:6085   .text.USBD_LL_Start:0000000000000000 $t
-ARM GAS  /tmp/ccZiPR2y.s 			page 194
+     /tmp/ccf4hwpD.s:4421   .text.USBD_ClrFeature:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4428   .text.USBD_ClrFeature:0000000000000000 USBD_ClrFeature
+     /tmp/ccf4hwpD.s:4472   .text.USBD_StdDevReq:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4479   .text.USBD_StdDevReq:0000000000000000 USBD_StdDevReq
+     /tmp/ccf4hwpD.s:4525   .text.USBD_StdDevReq:000000000000002e $d
+     /tmp/ccf4hwpD.s:4535   .text.USBD_StdDevReq:0000000000000038 $t
+     /tmp/ccf4hwpD.s:4609   .text.USBD_LL_SetupStage:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4616   .text.USBD_LL_SetupStage:0000000000000000 USBD_LL_SetupStage
+     /tmp/ccf4hwpD.s:4688   .text.HAL_PCD_SetupStageCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4695   .text.HAL_PCD_SetupStageCallback:0000000000000000 HAL_PCD_SetupStageCallback
+     /tmp/ccf4hwpD.s:4718   .text.USBD_LL_PrepareReceive:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4725   .text.USBD_LL_PrepareReceive:0000000000000000 USBD_LL_PrepareReceive
+     /tmp/ccf4hwpD.s:4748   .text.USBD_CDC_ReceivePacket:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4755   .text.USBD_CDC_ReceivePacket:0000000000000000 USBD_CDC_ReceivePacket
+     /tmp/ccf4hwpD.s:4812   .text.CDC_Receive_FS:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4819   .text.CDC_Receive_FS:0000000000000000 CDC_Receive_FS
+     /tmp/ccf4hwpD.s:4900   .text.CDC_Receive_FS:0000000000000064 $d
+     /tmp/ccf4hwpD.s:4906   .text.USBD_CtlPrepareRx:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4913   .text.USBD_CtlPrepareRx:0000000000000000 USBD_CtlPrepareRx
+     /tmp/ccf4hwpD.s:4945   .text.USBD_CDC_Setup:0000000000000000 $t
+     /tmp/ccf4hwpD.s:4952   .text.USBD_CDC_Setup:0000000000000000 USBD_CDC_Setup
+     /tmp/ccf4hwpD.s:5068   .text.USBD_CDC_Setup:000000000000008c $d
+     /tmp/ccf4hwpD.s:5080   .text.USBD_CDC_Setup:0000000000000098 $t
+     /tmp/ccf4hwpD.s:5189   .text.USBD_CtlContinueRx:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5196   .text.USBD_CtlContinueRx:0000000000000000 USBD_CtlContinueRx
+     /tmp/ccf4hwpD.s:5223   .text.USBD_LL_DataOutStage:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5230   .text.USBD_LL_DataOutStage:0000000000000000 USBD_LL_DataOutStage
+     /tmp/ccf4hwpD.s:5358   .text.HAL_PCD_DataOutStageCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5365   .text.HAL_PCD_DataOutStageCallback:0000000000000000 HAL_PCD_DataOutStageCallback
+     /tmp/ccf4hwpD.s:5391   .text.USBD_CtlReceiveStatus:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5398   .text.USBD_CtlReceiveStatus:0000000000000000 USBD_CtlReceiveStatus
+     /tmp/ccf4hwpD.s:5426   .text.USBD_LL_DataInStage:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5433   .text.USBD_LL_DataInStage:0000000000000000 USBD_LL_DataInStage
+     /tmp/ccf4hwpD.s:5582   .text.HAL_PCD_DataInStageCallback:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5589   .text.HAL_PCD_DataInStageCallback:0000000000000000 HAL_PCD_DataInStageCallback
+     /tmp/ccf4hwpD.s:5615   .text.USBD_LL_GetRxDataSize:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5622   .text.USBD_LL_GetRxDataSize:0000000000000000 USBD_LL_GetRxDataSize
+     /tmp/ccf4hwpD.s:5645   .text.USBD_CDC_DataOut:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5652   .text.USBD_CDC_DataOut:0000000000000000 USBD_CDC_DataOut
+     /tmp/ccf4hwpD.s:5697   .text.USBD_GetRxCount:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5704   .text.USBD_GetRxCount:0000000000000000 USBD_GetRxCount
+     /tmp/ccf4hwpD.s:5725   .text.USBD_static_malloc:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5732   .text.USBD_static_malloc:0000000000000000 USBD_static_malloc
+     /tmp/ccf4hwpD.s:5747   .text.USBD_static_malloc:0000000000000004 $d
+     /tmp/ccf4hwpD.s:5752   .text.USBD_CDC_Init:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5759   .text.USBD_CDC_Init:0000000000000000 USBD_CDC_Init
+     /tmp/ccf4hwpD.s:5909   .text.USBD_static_free:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5916   .text.USBD_static_free:0000000000000000 USBD_static_free
+     /tmp/ccf4hwpD.s:5929   .text.USBD_LL_Delay:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5936   .text.USBD_LL_Delay:0000000000000000 USBD_LL_Delay
+     /tmp/ccf4hwpD.s:5957   .text.USBD_Get_USB_Status:0000000000000000 $t
+     /tmp/ccf4hwpD.s:5964   .text.USBD_Get_USB_Status:0000000000000000 USBD_Get_USB_Status
+     /tmp/ccf4hwpD.s:5998   .text.USBD_LL_DeInit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:6005   .text.USBD_LL_DeInit:0000000000000000 USBD_LL_DeInit
+     /tmp/ccf4hwpD.s:6032   .text.USBD_DeInit:0000000000000000 $t
+     /tmp/ccf4hwpD.s:6039   .text.USBD_DeInit:0000000000000000 USBD_DeInit
+     /tmp/ccf4hwpD.s:6085   .text.USBD_LL_Start:0000000000000000 $t
+ARM GAS  /tmp/ccf4hwpD.s 			page 194
 
 
-     /tmp/ccZiPR2y.s:6092   .text.USBD_LL_Start:0000000000000000 USBD_LL_Start
-     /tmp/ccZiPR2y.s:6119   .text.IntToUnicode:0000000000000000 $t
-     /tmp/ccZiPR2y.s:6126   .text.IntToUnicode:0000000000000000 IntToUnicode
-     /tmp/ccZiPR2y.s:6189   .text.Get_SerialNum:0000000000000000 $t
-     /tmp/ccZiPR2y.s:6196   .text.Get_SerialNum:0000000000000000 Get_SerialNum
-     /tmp/ccZiPR2y.s:6247   .text.Get_SerialNum:000000000000002c $d
-     /tmp/ccZiPR2y.s:6253   .text.USBD_FS_SerialStrDescriptor:0000000000000000 $t
-     /tmp/ccZiPR2y.s:6260   .text.USBD_FS_SerialStrDescriptor:0000000000000000 USBD_FS_SerialStrDescriptor
-     /tmp/ccZiPR2y.s:6284   .text.USBD_FS_SerialStrDescriptor:0000000000000010 $d
-     /tmp/ccZiPR2y.s:6480   .data.USBD_StringSerial:0000000000000000 USBD_StringSerial
-     /tmp/ccZiPR2y.s:6470   .data.USBD_LangIDDesc:0000000000000000 USBD_LangIDDesc
-     /tmp/ccZiPR2y.s:6435   .data.USBD_FS_DeviceDesc:0000000000000000 USBD_FS_DeviceDesc
-     /tmp/ccZiPR2y.s:6313   .data.FS_Desc:0000000000000000 FS_Desc
-     /tmp/ccZiPR2y.s:6459   .data.USBD_Interface_fops_FS:0000000000000000 USBD_Interface_fops_FS
-     /tmp/ccZiPR2y.s:6346   .data.USBD_CDC_CfgDesc:0000000000000000 USBD_CDC_CfgDesc
-     /tmp/ccZiPR2y.s:6326   .data.USBD_CDC:0000000000000000 USBD_CDC
-     /tmp/ccZiPR2y.s:6419   .data.USBD_CDC_DeviceQualifierDesc:0000000000000000 USBD_CDC_DeviceQualifierDesc
-     /tmp/ccZiPR2y.s:6302   .bss.mem.10250:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6306   .bss.mem.10250:0000000000000000 mem.10250
-     /tmp/ccZiPR2y.s:6309   .data.FS_Desc:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6322   .data.USBD_CDC:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6342   .data.USBD_CDC_CfgDesc:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6415   .data.USBD_CDC_DeviceQualifierDesc:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6431   .data.USBD_FS_DeviceDesc:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6455   .data.USBD_Interface_fops_FS:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6466   .data.USBD_LangIDDesc:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6476   .data.USBD_StringSerial:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6485   .rodata.CDC_Receive_FS.str1.4:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6489   .rodata.USBD_FS_ConfigStrDescriptor.str1.4:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6493   .rodata.USBD_FS_InterfaceStrDescriptor.str1.4:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6497   .rodata.USBD_FS_ManufacturerStrDescriptor.str1.4:0000000000000000 $d
-     /tmp/ccZiPR2y.s:6501   .rodata.USBD_FS_ProductStrDescriptor.str1.4:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6092   .text.USBD_LL_Start:0000000000000000 USBD_LL_Start
+     /tmp/ccf4hwpD.s:6119   .text.IntToUnicode:0000000000000000 $t
+     /tmp/ccf4hwpD.s:6126   .text.IntToUnicode:0000000000000000 IntToUnicode
+     /tmp/ccf4hwpD.s:6189   .text.Get_SerialNum:0000000000000000 $t
+     /tmp/ccf4hwpD.s:6196   .text.Get_SerialNum:0000000000000000 Get_SerialNum
+     /tmp/ccf4hwpD.s:6247   .text.Get_SerialNum:000000000000002c $d
+     /tmp/ccf4hwpD.s:6253   .text.USBD_FS_SerialStrDescriptor:0000000000000000 $t
+     /tmp/ccf4hwpD.s:6260   .text.USBD_FS_SerialStrDescriptor:0000000000000000 USBD_FS_SerialStrDescriptor
+     /tmp/ccf4hwpD.s:6284   .text.USBD_FS_SerialStrDescriptor:0000000000000010 $d
+     /tmp/ccf4hwpD.s:6480   .data.USBD_StringSerial:0000000000000000 USBD_StringSerial
+     /tmp/ccf4hwpD.s:6470   .data.USBD_LangIDDesc:0000000000000000 USBD_LangIDDesc
+     /tmp/ccf4hwpD.s:6435   .data.USBD_FS_DeviceDesc:0000000000000000 USBD_FS_DeviceDesc
+     /tmp/ccf4hwpD.s:6313   .data.FS_Desc:0000000000000000 FS_Desc
+     /tmp/ccf4hwpD.s:6459   .data.USBD_Interface_fops_FS:0000000000000000 USBD_Interface_fops_FS
+     /tmp/ccf4hwpD.s:6346   .data.USBD_CDC_CfgDesc:0000000000000000 USBD_CDC_CfgDesc
+     /tmp/ccf4hwpD.s:6326   .data.USBD_CDC:0000000000000000 USBD_CDC
+     /tmp/ccf4hwpD.s:6419   .data.USBD_CDC_DeviceQualifierDesc:0000000000000000 USBD_CDC_DeviceQualifierDesc
+     /tmp/ccf4hwpD.s:6302   .bss.mem.10250:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6306   .bss.mem.10250:0000000000000000 mem.10250
+     /tmp/ccf4hwpD.s:6309   .data.FS_Desc:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6322   .data.USBD_CDC:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6342   .data.USBD_CDC_CfgDesc:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6415   .data.USBD_CDC_DeviceQualifierDesc:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6431   .data.USBD_FS_DeviceDesc:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6455   .data.USBD_Interface_fops_FS:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6466   .data.USBD_LangIDDesc:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6476   .data.USBD_StringSerial:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6485   .rodata.CDC_Receive_FS.str1.4:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6489   .rodata.USBD_FS_ConfigStrDescriptor.str1.4:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6493   .rodata.USBD_FS_InterfaceStrDescriptor.str1.4:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6497   .rodata.USBD_FS_ManufacturerStrDescriptor.str1.4:0000000000000000 $d
+     /tmp/ccf4hwpD.s:6501   .rodata.USBD_FS_ProductStrDescriptor.str1.4:0000000000000000 $d
                      .debug_frame:0000000000000010 $d
-     /tmp/ccZiPR2y.s:3809   .text.USBD_GetDescriptor:0000000000000025 $d
-     /tmp/ccZiPR2y.s:3809   .text.USBD_GetDescriptor:0000000000000026 $t
+     /tmp/ccf4hwpD.s:3809   .text.USBD_GetDescriptor:0000000000000025 $d
+     /tmp/ccf4hwpD.s:3809   .text.USBD_GetDescriptor:0000000000000026 $t
 
 UNDEFINED SYMBOLS
 HAL_PCD_Start
@@ -11615,7 +11615,7 @@ HAL_PCD_SetAddress
 HAL_PCD_EP_Transmit
 HAL_PCD_EP_Receive
 memset
-ARM GAS  /tmp/ccZiPR2y.s 			page 195
+ARM GAS  /tmp/ccf4hwpD.s 			page 195
 
 
 memcpy
